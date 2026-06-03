@@ -1,0 +1,148 @@
+[
+  {
+    "id": "sa-001",
+    "name": "Oxbow Essentials Adult Rabbit Food — 10lb",
+    "slug": "oxbow-essentials-adult-rabbit-food-10lb",
+    "sku": "OB-SA-001",
+    "categorySlug": "small-animal",
+    "subcategorySlug": "food-hay",
+    "brand": "Oxbow",
+    "price": 24.99,
+    "compareAtPrice": 29.99,
+    "images": [
+      "/images/products/small-animal/oxbow-rabbit-food-1.jpg"
+    ],
+    "shortDescription": "Uniform pellet diet formulated to support the unique needs of adult rabbits.",
+    "description": "Oxbow Essentials Adult Rabbit Food is a nutritionally complete, uniform pellet diet made from pure timothy hay. Formulated for adult rabbits over 1 year of age, it delivers consistent nutrition in every bite and reduces selective feeding.",
+    "features": [
+      "Made from pure timothy hay",
+      "Uniform pellet prevents selective feeding",
+      "High fiber for digestive health",
+      "Fortified with vitamins & minerals",
+      "No artificial colors or flavors"
+    ],
+    "tags": ["rabbit food", "pellets", "adult", "timothy", "oxbow"],
+    "rating": 4.8,
+    "reviewCount": 612,
+    "reviews": [
+      {
+        "id": "rev-sa-001",
+        "userId": "usr-011",
+        "userName": "Grace L.",
+        "rating": 5,
+        "title": "My bunnies' favourite",
+        "body": "Both my Holland Lops have been on Oxbow for 2 years. Perfect weight, great gut health.",
+        "date": "2024-11-30",
+        "verified": true
+      }
+    ],
+    "stockStatus": "in_stock",
+    "stockCount": 40,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": true,
+    "weight": "10 lbs",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "sa-002",
+    "name": "Kaytee Clean & Cozy White Bedding — 49.2L",
+    "slug": "kaytee-clean-cozy-white-bedding-49l",
+    "sku": "KT-SA-002",
+    "categorySlug": "small-animal",
+    "subcategorySlug": "bedding-litter",
+    "brand": "Kaytee",
+    "price": 17.99,
+    "compareAtPrice": 22.99,
+    "images": [
+      "/images/products/small-animal/kaytee-clean-cozy-1.jpg"
+    ],
+    "shortDescription": "Ultra-absorbent paper bedding that absorbs 6x its weight in liquid — virtually dust-free.",
+    "description": "Kaytee Clean & Cozy Bedding is made from natural paper fiber and absorbs up to 6x its weight in liquid. The virtually dust-free formula is safe for small animals including hamsters, gerbils, rabbits, guinea pigs, and more.",
+    "features": [
+      "Absorbs 6x its weight in liquid",
+      "99.9% dust-free",
+      "Made from natural paper fiber",
+      "Controls odors for up to 2 weeks",
+      "Biodegradable and compostable"
+    ],
+    "tags": ["bedding", "paper", "small animal", "dust-free", "absorbent"],
+    "rating": 4.6,
+    "reviewCount": 934,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 55,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "sa-003",
+    "name": "Midwest Homes for Pets Guinea Habitat Plus",
+    "slug": "midwest-guinea-habitat-plus",
+    "sku": "MW-SA-003",
+    "categorySlug": "small-animal",
+    "subcategorySlug": "cages-habitats",
+    "brand": "Midwest Homes for Pets",
+    "price": 69.99,
+    "compareAtPrice": 84.99,
+    "images": [
+      "/images/products/small-animal/midwest-guinea-habitat-1.jpg",
+      "/images/products/small-animal/midwest-guinea-habitat-2.jpg"
+    ],
+    "shortDescription": "Spacious, easy-to-assemble guinea pig habitat with waterproof canvas bottom.",
+    "description": "The MidWest Guinea Habitat Plus includes everything you need to house two guinea pigs comfortably. The 8 sq ft floor space meets the recommended minimum for a pair of guinea pigs. Features a waterproof canvas bottom, a divider panel, a hay guard, and a PVC-lined canvas bottom.",
+    "features": [
+      "8 sq ft of floor space",
+      "Waterproof canvas bottom",
+      "Includes hay guard & divider",
+      "Easy no-tool assembly",
+      "Folds flat for storage or travel"
+    ],
+    "tags": ["cage", "guinea pig", "habitat", "spacious", "easy assembly"],
+    "rating": 4.5,
+    "reviewCount": 445,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 11,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "dimensions": "47 x 24 x 14 inches",
+    "createdAt": "2024-02-20"
+  },
+  {
+    "id": "sa-004",
+    "name": "Niteangel Wooden Hamster Wheel — 8.6 inch",
+    "slug": "niteangel-wooden-hamster-wheel-8-6inch",
+    "sku": "NA-SA-004",
+    "categorySlug": "small-animal",
+    "subcategorySlug": "toys-enrichment",
+    "brand": "Niteangel",
+    "price": 34.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/small-animal/niteangel-wheel-1.jpg"
+    ],
+    "shortDescription": "Silent, solid-surface wooden wheel — safe for Syrian hamsters and other small animals.",
+    "description": "The Niteangel Wooden Running Wheel has a solid wooden running surface that is safer for hamster feet than mesh or barred wheels. The ball-bearing mechanism runs virtually silently — perfect for night-time use.",
+    "features": [
+      "Solid wood running surface — paw safe",
+      "Whisper-quiet ball-bearing axle",
+      "8.6 inch diameter for Syrian hamsters",
+      "Natural materials — no harsh chemicals",
+      "Freestanding base included"
+    ],
+    "tags": ["wheel", "hamster", "silent", "wooden", "exercise"],
+    "rating": 4.8,
+    "reviewCount": 278,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 20,
+    "isNewArrival": true,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "createdAt": "2025-01-08"
+  }
+]

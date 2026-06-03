@@ -1,0 +1,12 @@
+[
+  { "id": "gal-001", "image": "/images/gallery/store-front.jpg", "caption": "Sierra Fish & Pets — Renton, WA", "categorySlug": null },
+  { "id": "gal-002", "image": "/images/gallery/aquatic-display-1.jpg", "caption": "Freshwater display tank — 200 gallon planted community", "categorySlug": "aquatic" },
+  { "id": "gal-003", "image": "/images/gallery/aquatic-display-2.jpg", "caption": "Saltwater reef display tank", "categorySlug": "aquatic" },
+  { "id": "gal-004", "image": "/images/gallery/reptile-section.jpg", "caption": "Reptile habitat displays", "categorySlug": "reptile" },
+  { "id": "gal-005", "image": "/images/gallery/bird-section.jpg", "caption": "Bird section — hand-tame parrots available", "categorySlug": "bird" },
+  { "id": "gal-006", "image": "/images/gallery/dog-adoption-event.jpg", "caption": "Dog adoption event — 4th weekend of January", "categorySlug": "dog" },
+  { "id": "gal-007", "image": "/images/gallery/small-animal-section.jpg", "caption": "Small animal section — guinea pigs & rabbits", "categorySlug": "small-animal" },
+  { "id": "gal-008", "image": "/images/gallery/custom-aquarium-install.jpg", "caption": "Custom 300 gallon installation — residential client", "categorySlug": "aquatic" },
+  { "id": "gal-009", "image": "/images/gallery/aquascape-display.jpg", "caption": "Award-winning aquascape display in store", "categorySlug": "aquatic" },
+  { "id": "gal-010", "image": "/images/gallery/cat-section.jpg", "caption": "Cat supplies aisle", "categorySlug": "cat" }
+]

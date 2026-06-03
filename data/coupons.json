@@ -1,0 +1,50 @@
+[
+  {
+    "id": "cpn-001",
+    "code": "WELCOME10",
+    "discountType": "percentage",
+    "discountValue": 10,
+    "minOrderAmount": 30,
+    "maxUses": 1000,
+    "usedCount": 243,
+    "expiresAt": "2025-12-31T23:59:59Z",
+    "isActive": true,
+    "applicableCategories": "all"
+  },
+  {
+    "id": "cpn-002",
+    "code": "AQUA10",
+    "discountType": "percentage",
+    "discountValue": 10,
+    "minOrderAmount": 50,
+    "maxUses": 500,
+    "usedCount": 89,
+    "expiresAt": "2025-06-30T23:59:59Z",
+    "isActive": true,
+    "applicableCategories": ["aquatic"]
+  },
+  {
+    "id": "cpn-003",
+    "code": "PETLOVE20",
+    "discountType": "flat",
+    "discountValue": 20,
+    "minOrderAmount": 100,
+    "maxUses": 200,
+    "usedCount": 55,
+    "expiresAt": "2025-03-31T23:59:59Z",
+    "isActive": true,
+    "applicableCategories": "all"
+  },
+  {
+    "id": "cpn-004",
+    "code": "FREESHIP",
+    "discountType": "flat",
+    "discountValue": 9.99,
+    "minOrderAmount": 49,
+    "maxUses": 9999,
+    "usedCount": 401,
+    "expiresAt": "2025-12-31T23:59:59Z",
+    "isActive": true,
+    "applicableCategories": "all"
+  }
+]

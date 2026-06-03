@@ -1,0 +1,115 @@
+[
+  {
+    "id": "bird-001",
+    "name": "Harrison's Adult Lifetime Fine Bird Food — 1lb",
+    "slug": "harrisons-adult-lifetime-fine-1lb",
+    "sku": "HR-BIRD-001",
+    "categorySlug": "bird",
+    "subcategorySlug": "bird-food",
+    "brand": "Harrison's",
+    "price": 22.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/bird/harrisons-adult-fine-1.jpg"
+    ],
+    "shortDescription": "Certified organic pellet diet for small to medium parrots — vet recommended.",
+    "description": "Harrison's Adult Lifetime Fine is a certified organic, non-GMO pellet diet developed by avian veterinarians. It provides complete nutrition for small to medium parrots including cockatiels, conures, and caiques. No artificial preservatives or colors.",
+    "features": [
+      "USDA Certified Organic",
+      "Formulated by avian veterinarians",
+      "Complete daily nutrition",
+      "Fine pellet size for small-medium birds",
+      "No artificial colors or preservatives"
+    ],
+    "tags": ["bird food", "organic", "pellets", "parrot", "vet recommended"],
+    "rating": 4.9,
+    "reviewCount": 347,
+    "reviews": [
+      {
+        "id": "rev-bird-001",
+        "userId": "usr-010",
+        "userName": "Anna P.",
+        "rating": 5,
+        "title": "Only food my vet recommends",
+        "body": "My African Grey has been on Harrison's for 5 years. Perfect feather condition and great energy.",
+        "date": "2024-11-20",
+        "verified": true
+      }
+    ],
+    "stockStatus": "in_stock",
+    "stockCount": 28,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": true,
+    "weight": "1 lb",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "bird-002",
+    "name": "Prevue Hendryx Flight Cage — 37 inch",
+    "slug": "prevue-hendryx-flight-cage-37inch",
+    "sku": "PH-BIRD-002",
+    "categorySlug": "bird",
+    "subcategorySlug": "cages-aviaries",
+    "brand": "Prevue Hendryx",
+    "price": 139.99,
+    "compareAtPrice": 169.99,
+    "images": [
+      "/images/products/bird/prevue-flight-cage-1.jpg",
+      "/images/products/bird/prevue-flight-cage-2.jpg"
+    ],
+    "shortDescription": "Spacious flight cage ideal for canaries, finches, and small parakeets.",
+    "description": "The Prevue Hendryx Flight Cage offers ample room for small birds to stretch their wings. Features a pull-out debris tray, two plastic cups, three wooden perches, and a removable bottom grille. The hammertone finish is non-toxic and easy to clean.",
+    "features": [
+      "Spacious 37 x 23 x 60 inch design",
+      "Pull-out debris tray",
+      "Non-toxic hammertone finish",
+      "3 wooden perches included",
+      "2 feeder cups included"
+    ],
+    "tags": ["cage", "flight cage", "finch", "canary", "parakeet"],
+    "rating": 4.4,
+    "reviewCount": 215,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 7,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "dimensions": "37 x 23 x 60 inches",
+    "createdAt": "2024-03-01"
+  },
+  {
+    "id": "bird-003",
+    "name": "Super Bird Creations Foraging Toy — Medium",
+    "slug": "super-bird-creations-foraging-toy-medium",
+    "sku": "SB-BIRD-003",
+    "categorySlug": "bird",
+    "subcategorySlug": "toys",
+    "brand": "Super Bird Creations",
+    "price": 12.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/bird/superbird-foraging-1.jpg"
+    ],
+    "shortDescription": "Colorful foraging toy that stimulates natural foraging behavior in parrots.",
+    "description": "Super Bird Creations foraging toys are designed to encourage natural foraging behaviors and provide mental enrichment for captive parrots. Made from bird-safe materials including vine balls, cork, and natural wood.",
+    "features": [
+      "Stimulates natural foraging behavior",
+      "Bird-safe materials",
+      "Colorful design for visual stimulation",
+      "Easy to hang with quick-link",
+      "Reduces boredom & feather plucking"
+    ],
+    "tags": ["toy", "foraging", "parrot", "enrichment", "mental stimulation"],
+    "rating": 4.6,
+    "reviewCount": 189,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 34,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": false,
+    "createdAt": "2024-02-15"
+  }
+]

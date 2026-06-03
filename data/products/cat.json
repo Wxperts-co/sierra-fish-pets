@@ -1,0 +1,219 @@
+[
+  {
+    "id": "cat-p-001",
+    "name": "Royal Canin Indoor Adult Dry Cat Food",
+    "slug": "royal-canin-indoor-adult-dry",
+    "sku": "RC-CAT-001",
+    "categorySlug": "cat",
+    "subcategorySlug": "cat-food",
+    "brand": "Royal Canin",
+    "price": 32.99,
+    "compareAtPrice": 38.99,
+    "images": [
+      "/images/products/cat/rc-indoor-adult-1.jpg",
+      "/images/products/cat/rc-indoor-adult-2.jpg"
+    ],
+    "shortDescription": "Precisely formulated for adult indoor cats to support healthy weight and digestion.",
+    "description": "Royal Canin Indoor Adult is specifically formulated for indoor cats aged 1–7 years. The formula helps manage weight, supports hairball elimination, and keeps your indoor cat's digestive system healthy with high-quality fibers.",
+    "features": [
+      "Supports healthy weight management",
+      "Helps reduce hairballs",
+      "Moderate fat content for indoor lifestyle",
+      "Highly digestible proteins",
+      "Enriched with antioxidants for immune health"
+    ],
+    "tags": ["dry food", "indoor", "adult", "hairball", "weight management"],
+    "rating": 4.6,
+    "reviewCount": 254,
+    "reviews": [
+      {
+        "id": "rev-cat-001",
+        "userId": "usr-007",
+        "userName": "Emily T.",
+        "rating": 5,
+        "title": "Perfect for my indoor tabby",
+        "body": "My cat's been on this for 3 years. Less hairballs, healthy weight, and she loves the taste.",
+        "date": "2024-11-15",
+        "verified": true
+      }
+    ],
+    "stockStatus": "in_stock",
+    "stockCount": 60,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": true,
+    "weight": "7 lbs",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "cat-p-002",
+    "name": "Purina Pro Plan Savor Adult Salmon & Rice",
+    "slug": "purina-pro-plan-savor-salmon-rice",
+    "sku": "PP-CAT-002",
+    "categorySlug": "cat",
+    "subcategorySlug": "cat-food",
+    "brand": "Purina Pro Plan",
+    "price": 28.49,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/cat/pp-salmon-rice-1.jpg"
+    ],
+    "shortDescription": "High-protein dry cat food with real salmon as the #1 ingredient.",
+    "description": "Purina Pro Plan Savor Adult features real salmon as the first ingredient, combined with rice for a nutritious, balanced meal. Fortified with live probiotics for digestive and immune health.",
+    "features": [
+      "Real salmon as #1 ingredient",
+      "Live probiotics for gut health",
+      "High protein to maintain lean muscle",
+      "Omega-6 fatty acids for shiny coat",
+      "No artificial colors or flavors"
+    ],
+    "tags": ["dry food", "salmon", "high-protein", "probiotics", "adult"],
+    "rating": 4.7,
+    "reviewCount": 389,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 45,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "weight": "16 lbs",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "cat-p-003",
+    "name": "Frisco Cat Tree with Condo — 72 inch",
+    "slug": "frisco-cat-tree-condo-72inch",
+    "sku": "FR-CAT-003",
+    "categorySlug": "cat",
+    "subcategorySlug": "beds-furniture",
+    "brand": "Frisco",
+    "price": 89.99,
+    "compareAtPrice": 109.99,
+    "images": [
+      "/images/products/cat/frisco-cat-tree-1.jpg",
+      "/images/products/cat/frisco-cat-tree-2.jpg"
+    ],
+    "shortDescription": "72-inch tall cat tree with multiple perches, condo, and sisal scratching posts.",
+    "description": "Give your cats the ultimate playground with this 72-inch tall cat tree. Features multiple levels, a cozy condo, two plush perches, and sisal-wrapped posts for healthy scratching. Sturdy base prevents tipping.",
+    "features": [
+      "72 inches tall — ideal for multiple cats",
+      "Plush-covered perches & condo",
+      "Sisal-wrapped scratching posts",
+      "Hanging toy for interactive play",
+      "Weighted base for stability"
+    ],
+    "tags": ["cat tree", "condo", "scratching post", "multi-level", "perch"],
+    "rating": 4.3,
+    "reviewCount": 167,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 14,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "dimensions": "22 x 22 x 72 inches",
+    "createdAt": "2024-02-10"
+  },
+  {
+    "id": "cat-p-004",
+    "name": "Tidy Cats Clumping Litter — Instant Action 35lb",
+    "slug": "tidy-cats-clumping-litter-instant-action-35lb",
+    "sku": "TC-CAT-004",
+    "categorySlug": "cat",
+    "subcategorySlug": "litter-accessories",
+    "brand": "Tidy Cats",
+    "price": 22.99,
+    "compareAtPrice": 27.99,
+    "images": [
+      "/images/products/cat/tidy-cats-35lb-1.jpg"
+    ],
+    "shortDescription": "Powerful clumping litter with instant odor control for multi-cat households.",
+    "description": "Tidy Cats Instant Action clumping litter forms tight clumps for easy scooping and fights litter box odors instantly. 99.9% dust-free formula is ideal for multi-cat homes.",
+    "features": [
+      "Instant odor elimination",
+      "Hard clumps for easy scooping",
+      "99.9% dust-free",
+      "TidyLock Protection technology",
+      "Suitable for multiple cats"
+    ],
+    "tags": ["litter", "clumping", "odor control", "multi-cat", "dust-free"],
+    "rating": 4.5,
+    "reviewCount": 820,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 75,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "weight": "35 lbs",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "cat-p-005",
+    "name": "Yeowww! Catnip Banana Toy",
+    "slug": "yeowww-catnip-banana-toy",
+    "sku": "YW-CAT-005",
+    "categorySlug": "cat",
+    "subcategorySlug": "toys",
+    "brand": "Yeowww!",
+    "price": 8.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/cat/yeowww-banana-1.jpg"
+    ],
+    "shortDescription": "Organic catnip-stuffed banana toy that drives cats wild.",
+    "description": "Stuffed 100% with certified organic Yeowww! catnip, this iconic banana toy is one of the most popular cat toys ever made. Made in the USA from durable cotton twill.",
+    "features": [
+      "100% organic catnip filling",
+      "Durable cotton twill fabric",
+      "Made in the USA",
+      "No fillers — pure catnip",
+      "Irresistible to most cats"
+    ],
+    "tags": ["toy", "catnip", "organic", "banana", "interactive"],
+    "rating": 4.8,
+    "reviewCount": 1100,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 92,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "cat-p-006",
+    "name": "Hepper Pod Cat Bed",
+    "slug": "hepper-pod-cat-bed",
+    "sku": "HP-CAT-006",
+    "categorySlug": "cat",
+    "subcategorySlug": "beds-furniture",
+    "brand": "Hepper",
+    "price": 129.00,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/cat/hepper-pod-1.jpg",
+      "/images/products/cat/hepper-pod-2.jpg"
+    ],
+    "shortDescription": "Modern egg-shaped cat pod with removable washable cushion.",
+    "description": "The Hepper Pod is a designer cat bed that blends into modern home décor. The enclosed design gives cats a secure, private hideaway. Features a removable, machine-washable inner cushion.",
+    "features": [
+      "Enclosed design for security",
+      "Removable, washable inner cushion",
+      "Modern aesthetic for any home",
+      "Scratch-resistant exterior",
+      "Available in multiple colors"
+    ],
+    "tags": ["bed", "pod", "enclosed", "modern", "washable"],
+    "rating": 4.2,
+    "reviewCount": 98,
+    "reviews": [],
+    "stockStatus": "low_stock",
+    "stockCount": 4,
+    "isNewArrival": true,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "dimensions": "19 x 19 x 20 inches",
+    "createdAt": "2025-01-20"
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "brand-001",
+    "name": "Blue Buffalo",
+    "slug": "blue-buffalo",
+    "logo": "/images/brands/blue-buffalo.png",
+    "description": "Premium natural pet food brand focused on the health and well-being of dogs and cats.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.bluebuffalo.com"
+  },
+  {
+    "id": "brand-002",
+    "name": "Royal Canin",
+    "slug": "royal-canin",
+    "logo": "/images/brands/royal-canin.png",
+    "description": "Science-based nutritional formulas tailored to the specific needs of dogs and cats.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.royalcanin.com"
+  },
+  {
+    "id": "brand-003",
+    "name": "Taste of the Wild",
+    "slug": "taste-of-the-wild",
+    "logo": "/images/brands/taste-of-the-wild.png",
+    "description": "Grain-free formulas inspired by the diet of wild ancestors.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.tasteofthewildpetfood.com"
+  },
+  {
+    "id": "brand-004",
+    "name": "Fluval",
+    "slug": "fluval",
+    "logo": "/images/brands/fluval.png",
+    "description": "World-leading manufacturer of aquarium filters, lighting, and accessories.",
+    "categories": ["aquatic"],
+    "featured": true,
+    "website": "https://www.fluvalaquatics.com"
+  },
+  {
+    "id": "brand-005",
+    "name": "Seachem",
+    "slug": "seachem",
+    "logo": "/images/brands/seachem.png",
+    "description": "Premium aquarium water care products trusted by hobbyists and professionals.",
+    "categories": ["aquatic"],
+    "featured": true,
+    "website": "https://www.seachem.com"
+  },
+  {
+    "id": "brand-006",
+    "name": "Zoo Med",
+    "slug": "zoo-med",
+    "logo": "/images/brands/zoo-med.png",
+    "description": "Leading manufacturer of reptile and amphibian lighting, heating, and habitats.",
+    "categories": ["reptile"],
+    "featured": true,
+    "website": "https://www.zoomed.com"
+  },
+  {
+    "id": "brand-007",
+    "name": "Exo Terra",
+    "slug": "exo-terra",
+    "logo": "/images/brands/exo-terra.png",
+    "description": "Innovative glass terrariums, lighting, and accessories for reptiles and amphibians.",
+    "categories": ["reptile"],
+    "featured": true,
+    "website": "https://www.exo-terra.com"
+  },
+  {
+    "id": "brand-008",
+    "name": "Harrison's",
+    "slug": "harrisons",
+    "logo": "/images/brands/harrisons.png",
+    "description": "Certified organic, veterinarian-formulated bird diets.",
+    "categories": ["bird"],
+    "featured": true,
+    "website": "https://www.harrisonsbirdfoods.com"
+  },
+  {
+    "id": "brand-009",
+    "name": "Oxbow",
+    "slug": "oxbow",
+    "logo": "/images/brands/oxbow.png",
+    "description": "Premium small animal food, hay, and supplements trusted by vets worldwide.",
+    "categories": ["small-animal"],
+    "featured": true,
+    "website": "https://www.oxbowanimalhealth.com"
+  },
+  {
+    "id": "brand-010",
+    "name": "KONG",
+    "slug": "kong",
+    "logo": "/images/brands/kong.png",
+    "description": "The world's #1 recommended toy brand by vets and dog trainers.",
+    "categories": ["dog"],
+    "featured": true,
+    "website": "https://www.kongcompany.com"
+  },
+  {
+    "id": "brand-011",
+    "name": "Hikari",
+    "slug": "hikari",
+    "logo": "/images/brands/hikari.png",
+    "description": "Science-based fish foods trusted by professional aquarists.",
+    "categories": ["aquatic"],
+    "featured": false,
+    "website": "https://www.hikari.info"
+  },
+  {
+    "id": "brand-012",
+    "name": "Purina Pro Plan",
+    "slug": "purina-pro-plan",
+    "logo": "/images/brands/purina-pro-plan.png",
+    "description": "Nutrition-forward pet food developed with input from over 400 scientists and veterinarians.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.purina.com/pro-plan"
+  },
+  {
+    "id": "brand-013",
+    "name": "Kaytee",
+    "slug": "kaytee",
+    "logo": "/images/brands/kaytee.png",
+    "description": "Over 150 years of experience in small animal and bird nutrition.",
+    "categories": ["bird", "small-animal"],
+    "featured": false,
+    "website": "https://www.kaytee.com"
+  },
+  {
+    "id": "brand-014",
+    "name": "Ruffwear",
+    "slug": "ruffwear",
+    "logo": "/images/brands/ruffwear.png",
+    "description": "Performance outdoor gear for dogs and their human companions.",
+    "categories": ["dog"],
+    "featured": false,
+    "website": "https://www.ruffwear.com"
+  }
+]

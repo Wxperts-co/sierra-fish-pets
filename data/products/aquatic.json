@@ -1,0 +1,217 @@
+[
+  {
+    "id": "aq-001",
+    "name": "Fluval 307 Canister Filter",
+    "slug": "fluval-307-canister-filter",
+    "sku": "FL-AQ-001",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "filters-pumps",
+    "brand": "Fluval",
+    "price": 149.99,
+    "compareAtPrice": 179.99,
+    "images": [
+      "/images/products/aquatic/fluval-307-1.jpg",
+      "/images/products/aquatic/fluval-307-2.jpg"
+    ],
+    "shortDescription": "High-performance canister filter for aquariums up to 70 gallons.",
+    "description": "The Fluval 307 Performance Canister Filter combines powerful filtration with whisper-quiet operation. Features an instant priming button, a multi-directional output nozzle, and a clog-proof intake strainer. Suitable for freshwater and saltwater aquariums up to 70 gallons.",
+    "features": [
+      "Up to 70 gallon capacity",
+      "Instant AquaStop priming",
+      "Multi-stage mechanical, chemical & biological filtration",
+      "Sound-dampening impeller design",
+      "Clog-proof intake strainer"
+    ],
+    "tags": ["filter", "canister", "freshwater", "saltwater", "fluval"],
+    "rating": 4.7,
+    "reviewCount": 312,
+    "reviews": [
+      {
+        "id": "rev-aq-001",
+        "userId": "usr-008",
+        "userName": "Mike D.",
+        "rating": 5,
+        "title": "Extremely quiet and efficient",
+        "body": "Running this on my 55 gallon planted tank. Crystal clear water and nearly silent. Best filter I've owned.",
+        "date": "2024-12-10",
+        "verified": true
+      }
+    ],
+    "stockStatus": "in_stock",
+    "stockCount": 18,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": true,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "aq-002",
+    "name": "Aqueon LED 20 Gallon Aquarium Starter Kit",
+    "slug": "aqueon-led-20-gallon-starter-kit",
+    "sku": "AQ-AQ-002",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "aquariums-tanks",
+    "brand": "Aqueon",
+    "price": 119.99,
+    "compareAtPrice": 149.99,
+    "images": [
+      "/images/products/aquatic/aqueon-20g-kit-1.jpg",
+      "/images/products/aquatic/aqueon-20g-kit-2.jpg"
+    ],
+    "shortDescription": "Complete 20-gallon freshwater starter kit with LED hood, filter, heater, and more.",
+    "description": "Everything you need to set up your first freshwater aquarium. Includes a glass tank, LED hood, Quietflow 20 power filter, 100W preset heater, fish net, thermometer, water conditioner sample, and setup guide.",
+    "features": [
+      "20-gallon glass aquarium",
+      "LED low-profile hood",
+      "Quietflow 20 internal power filter",
+      "100W preset heater",
+      "Includes starter guide & water conditioner sample"
+    ],
+    "tags": ["starter kit", "20 gallon", "freshwater", "LED", "beginner"],
+    "rating": 4.5,
+    "reviewCount": 578,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 10,
+    "isNewArrival": false,
+    "isFeatured": true,
+    "isBestSeller": true,
+    "dimensions": "24 x 12 x 16 inches",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "aq-003",
+    "name": "Java Fern Live Aquarium Plant",
+    "slug": "java-fern-live-aquarium-plant",
+    "sku": "JP-AQ-003",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "live-plants",
+    "brand": "Sierra Fish & Pets",
+    "price": 7.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/aquatic/java-fern-1.jpg"
+    ],
+    "shortDescription": "Hardy beginner-friendly live plant — perfect for freshwater tanks.",
+    "description": "Java Fern (Microsorum pteropus) is one of the most popular and hardy aquarium plants. It thrives in a wide range of conditions, requires no substrate to root, and is ideal for both beginner and expert aquascapers.",
+    "features": [
+      "Extremely hardy — great for beginners",
+      "Attaches to rocks and driftwood",
+      "Low light requirement",
+      "Natural hiding spot for fish",
+      "Grown in-store — pesticide-free"
+    ],
+    "tags": ["live plant", "java fern", "beginner", "low light", "freshwater"],
+    "rating": 4.6,
+    "reviewCount": 145,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 55,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "aq-004",
+    "name": "Seachem Prime Fresh & Saltwater Conditioner 500ml",
+    "slug": "seachem-prime-water-conditioner-500ml",
+    "sku": "SC-AQ-004",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "water-treatments",
+    "brand": "Seachem",
+    "price": 19.99,
+    "compareAtPrice": null,
+    "images": [
+      "/images/products/aquatic/seachem-prime-500ml-1.jpg"
+    ],
+    "shortDescription": "The most complete and concentrated dechlorinator available for freshwater and saltwater.",
+    "description": "Seachem Prime is the first and only conditioner that removes chlorine, chloramine, and ammonia. It converts ammonia into a safe, non-toxic form that is easily removed by the filter. Use with every water change.",
+    "features": [
+      "Removes chlorine, chloramine & ammonia",
+      "Works for fresh and saltwater",
+      "Extremely concentrated — 5ml treats 200L",
+      "Detoxifies nitrite and nitrate",
+      "Safe for invertebrates"
+    ],
+    "tags": ["water conditioner", "dechlorinator", "seachem", "prime", "essential"],
+    "rating": 4.9,
+    "reviewCount": 2100,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 88,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "aq-005",
+    "name": "Hikari Cichlid Gold Floating Pellets — Medium",
+    "slug": "hikari-cichlid-gold-floating-pellets-medium",
+    "sku": "HK-AQ-005",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-food",
+    "brand": "Hikari",
+    "price": 12.49,
+    "compareAtPrice": 15.99,
+    "images": [
+      "/images/products/aquatic/hikari-cichlid-gold-1.jpg"
+    ],
+    "shortDescription": "Premium color-enhancing floating pellets for cichlids.",
+    "description": "Hikari Cichlid Gold is a scientifically developed food offering your cichlid the nutrition needed for outstanding color and vigor. The unique color-enhancing formula develops brilliant coloration while promoting resistance to disease.",
+    "features": [
+      "Enhances natural coloration",
+      "Floating pellets reduce waste",
+      "Vitamin C enriched for immune support",
+      "Stabilized vitamin content",
+      "Won't cloud water"
+    ],
+    "tags": ["fish food", "cichlid", "color enhancing", "floating", "pellets"],
+    "rating": 4.7,
+    "reviewCount": 410,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 67,
+    "isNewArrival": false,
+    "isFeatured": false,
+    "isBestSeller": true,
+    "weight": "342g",
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": "aq-006",
+    "name": "Finnex Planted+ 24/7 HLC LED Aquarium Light — 24 inch",
+    "slug": "finnex-planted-plus-24-7-hlc-24inch",
+    "sku": "FN-AQ-006",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "lighting",
+    "brand": "Finnex",
+    "price": 84.99,
+    "compareAtPrice": 99.99,
+    "images": [
+      "/images/products/aquatic/finnex-planted-plus-1.jpg",
+      "/images/products/aquatic/finnex-planted-plus-2.jpg"
+    ],
+    "shortDescription": "Advanced planted aquarium LED with automated 24/7 sunrise/sunset cycle.",
+    "description": "The Finnex Planted+ 24/7 HLC features a fully automated 24-hour light cycle with realistic sunrise, afternoon, sunset, and moonlight modes. High-output LEDs provide full-spectrum light for demanding aquatic plants.",
+    "features": [
+      "Automated 24/7 light cycle",
+      "High-output planted spectrum LEDs",
+      "Customizable color & intensity",
+      "Fits tanks 24–36 inches",
+      "Extendable mounting brackets"
+    ],
+    "tags": ["lighting", "LED", "planted tank", "24/7", "automated"],
+    "rating": 4.6,
+    "reviewCount": 287,
+    "reviews": [],
+    "stockStatus": "in_stock",
+    "stockCount": 12,
+    "isNewArrival": true,
+    "isFeatured": true,
+    "isBestSeller": false,
+    "dimensions": "24 inches",
+    "createdAt": "2025-01-05"
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "cat-001",
+    "name": "Dog",
+    "slug": "dog",
+    "description": "Everything your dog needs — food, toys, beds, accessories, and more.",
+    "image": "/images/categories/dog.jpg",
+    "icon": "/icons/dog-icon.png",
+    "productCount": 120,
+    "subcategories": [
+      { "id": "sub-dog-001", "name": "Dog Food", "slug": "dog-food" },
+      { "id": "sub-dog-002", "name": "Treats & Chews", "slug": "treats-chews" },
+      { "id": "sub-dog-003", "name": "Beds & Furniture", "slug": "beds-furniture" },
+      { "id": "sub-dog-004", "name": "Toys", "slug": "toys" },
+      { "id": "sub-dog-005", "name": "Collars & Leashes", "slug": "collars-leashes" },
+      { "id": "sub-dog-006", "name": "Grooming", "slug": "grooming" },
+      { "id": "sub-dog-007", "name": "Health & Wellness", "slug": "health-wellness" },
+      { "id": "sub-dog-008", "name": "Carriers & Travel", "slug": "carriers-travel" }
+    ]
+  },
+  {
+    "id": "cat-002",
+    "name": "Cat",
+    "slug": "cat",
+    "description": "Premium cat food, litter, toys, and everything for your feline companion.",
+    "image": "/images/categories/cat.jpg",
+    "icon": "/icons/cat-icon.png",
+    "productCount": 95,
+    "subcategories": [
+      { "id": "sub-cat-001", "name": "Cat Food", "slug": "cat-food" },
+      { "id": "sub-cat-002", "name": "Treats", "slug": "treats" },
+      { "id": "sub-cat-003", "name": "Litter & Accessories", "slug": "litter-accessories" },
+      { "id": "sub-cat-004", "name": "Beds & Furniture", "slug": "beds-furniture" },
+      { "id": "sub-cat-005", "name": "Toys", "slug": "toys" },
+      { "id": "sub-cat-006", "name": "Grooming", "slug": "grooming" },
+      { "id": "sub-cat-007", "name": "Health & Wellness", "slug": "health-wellness" },
+      { "id": "sub-cat-008", "name": "Carriers", "slug": "carriers" }
+    ]
+  },
+  {
+    "id": "cat-003",
+    "name": "Aquatic",
+    "slug": "aquatic",
+    "description": "Live fish, aquariums, filters, plants, and all aquatic supplies.",
+    "image": "/images/categories/aquatic.jpg",
+    "icon": "/icons/aquatic-icon.png",
+    "productCount": 200,
+    "subcategories": [
+      { "id": "sub-aq-001", "name": "Freshwater Fish", "slug": "freshwater-fish" },
+      { "id": "sub-aq-002", "name": "Saltwater Fish", "slug": "saltwater-fish" },
+      { "id": "sub-aq-003", "name": "Aquariums & Tanks", "slug": "aquariums-tanks" },
+      { "id": "sub-aq-004", "name": "Filters & Pumps", "slug": "filters-pumps" },
+      { "id": "sub-aq-005", "name": "Lighting", "slug": "lighting" },
+      { "id": "sub-aq-006", "name": "Live Plants", "slug": "live-plants" },
+      { "id": "sub-aq-007", "name": "Decorations", "slug": "decorations" },
+      { "id": "sub-aq-008", "name": "Water Treatments", "slug": "water-treatments" },
+      { "id": "sub-aq-009", "name": "Fish Food", "slug": "fish-food" },
+      { "id": "sub-aq-010", "name": "CO2 & Fertilizers", "slug": "co2-fertilizers" }
+    ]
+  },
+  {
+    "id": "cat-004",
+    "name": "Reptile",
+    "slug": "reptile",
+    "description": "Terrariums, lighting, heating, and supplies for all reptile species.",
+    "image": "/images/categories/reptile.jpg",
+    "icon": "/icons/reptile-icon.png",
+    "productCount": 75,
+    "subcategories": [
+      { "id": "sub-rep-001", "name": "Reptile Food", "slug": "reptile-food" },
+      { "id": "sub-rep-002", "name": "Terrariums & Habitats", "slug": "terrariums-habitats" },
+      { "id": "sub-rep-003", "name": "Lighting & Heating", "slug": "lighting-heating" },
+      { "id": "sub-rep-004", "name": "Substrate & Bedding", "slug": "substrate-bedding" },
+      { "id": "sub-rep-005", "name": "Décor & Hides", "slug": "decor-hides" },
+      { "id": "sub-rep-006", "name": "Health & Supplements", "slug": "health-supplements" }
+    ]
+  },
+  {
+    "id": "cat-005",
+    "name": "Bird",
+    "slug": "bird",
+    "description": "Bird food, cages, perches, toys, and health supplies for your feathered friend.",
+    "image": "/images/categories/bird.jpg",
+    "icon": "/icons/bird-icon.png",
+    "productCount": 60,
+    "subcategories": [
+      { "id": "sub-bird-001", "name": "Bird Food", "slug": "bird-food" },
+      { "id": "sub-bird-002", "name": "Treats", "slug": "treats" },
+      { "id": "sub-bird-003", "name": "Cages & Aviaries", "slug": "cages-aviaries" },
+      { "id": "sub-bird-004", "name": "Perches & Stands", "slug": "perches-stands" },
+      { "id": "sub-bird-005", "name": "Toys", "slug": "toys" },
+      { "id": "sub-bird-006", "name": "Health & Grooming", "slug": "health-grooming" }
+    ]
+  },
+  {
+    "id": "cat-006",
+    "name": "Small Animal",
+    "slug": "small-animal",
+    "description": "Food, bedding, cages, and accessories for rabbits, hamsters, guinea pigs, and more.",
+    "image": "/images/categories/small-animal.jpg",
+    "icon": "/icons/rabbit-icon.png",
+    "productCount": 55,
+    "subcategories": [
+      { "id": "sub-sa-001", "name": "Food & Hay", "slug": "food-hay" },
+      { "id": "sub-sa-002", "name": "Treats", "slug": "treats" },
+      { "id": "sub-sa-003", "name": "Cages & Habitats", "slug": "cages-habitats" },
+      { "id": "sub-sa-004", "name": "Bedding & Litter", "slug": "bedding-litter" },
+      { "id": "sub-sa-005", "name": "Toys & Enrichment", "slug": "toys-enrichment" },
+      { "id": "sub-sa-006", "name": "Health & Grooming", "slug": "health-grooming" }
+    ]
+  }
+]

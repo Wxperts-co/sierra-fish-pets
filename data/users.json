@@ -1,0 +1,70 @@
+[
+  {
+    "id": "usr-001",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "hashed_password_here",
+    "phone": "425-555-0101",
+    "avatar": "/images/avatars/usr-001.jpg",
+    "loyaltyPoints": 245,
+    "isActive": true,
+    "createdAt": "2024-06-15T10:00:00Z",
+    "wishlist": ["dog-002", "aq-006", "cat-p-006"],
+    "addresses": [
+      {
+        "id": "addr-001",
+        "label": "Home",
+        "fullName": "John Doe",
+        "phone": "425-555-0101",
+        "addressLine1": "123 Main Street",
+        "addressLine2": "Apt 4B",
+        "city": "Renton",
+        "state": "WA",
+        "zipCode": "98057",
+        "country": "US",
+        "isDefault": true
+      },
+      {
+        "id": "addr-002",
+        "label": "Office",
+        "fullName": "John Doe",
+        "phone": "425-555-0202",
+        "addressLine1": "456 Corporate Blvd",
+        "addressLine2": "Suite 300",
+        "city": "Seattle",
+        "state": "WA",
+        "zipCode": "98101",
+        "country": "US",
+        "isDefault": false
+      }
+    ]
+  },
+  {
+    "id": "usr-002",
+    "firstName": "Sarah",
+    "lastName": "Mitchell",
+    "email": "sarah.m@example.com",
+    "password": "hashed_password_here",
+    "phone": "206-555-0303",
+    "avatar": null,
+    "loyaltyPoints": 80,
+    "isActive": true,
+    "createdAt": "2024-09-01T12:00:00Z",
+    "wishlist": ["cat-p-003", "dog-006"],
+    "addresses": [
+      {
+        "id": "addr-003",
+        "label": "Home",
+        "fullName": "Sarah Mitchell",
+        "phone": "206-555-0303",
+        "addressLine1": "789 Oak Avenue",
+        "city": "Bellevue",
+        "state": "WA",
+        "zipCode": "98004",
+        "country": "US",
+        "isDefault": true
+      }
+    ]
+  }
+]

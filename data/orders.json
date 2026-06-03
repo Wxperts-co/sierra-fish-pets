@@ -1,0 +1,145 @@
+[
+  {
+    "id": "ord-001",
+    "userId": "usr-001",
+    "orderNumber": "SFP-2025-0001",
+    "items": [
+      {
+        "productId": "dog-001",
+        "productName": "Blue Buffalo Life Protection Formula Adult Chicken & Brown Rice",
+        "productImage": "/images/products/dog/bb-chicken-rice-1.jpg",
+        "sku": "BB-DOG-001",
+        "quantity": 1,
+        "unitPrice": 54.99,
+        "totalPrice": 54.99
+      },
+      {
+        "productId": "dog-003",
+        "productName": "KONG Classic Dog Toy — Large",
+        "productImage": "/images/products/dog/kong-classic-large-1.jpg",
+        "sku": "KONG-DOG-003",
+        "quantity": 2,
+        "unitPrice": 14.99,
+        "totalPrice": 29.98
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "John Doe",
+      "phone": "425-555-0101",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "Renton",
+      "state": "WA",
+      "zipCode": "98057",
+      "country": "US"
+    },
+    "status": "delivered",
+    "paymentStatus": "paid",
+    "paymentMethod": "credit_card",
+    "subtotal": 84.97,
+    "discount": 0,
+    "shippingCost": 6.99,
+    "total": 91.96,
+    "couponCode": null,
+    "notes": "Please leave at the door.",
+    "placedAt": "2025-01-05T10:30:00Z",
+    "updatedAt": "2025-01-09T14:20:00Z",
+    "estimatedDelivery": "2025-01-10",
+    "trackingNumber": "1Z999AA10123456784"
+  },
+  {
+    "id": "ord-002",
+    "userId": "usr-001",
+    "orderNumber": "SFP-2025-0047",
+    "items": [
+      {
+        "productId": "aq-001",
+        "productName": "Fluval 307 Canister Filter",
+        "productImage": "/images/products/aquatic/fluval-307-1.jpg",
+        "sku": "FL-AQ-001",
+        "quantity": 1,
+        "unitPrice": 149.99,
+        "totalPrice": 149.99
+      },
+      {
+        "productId": "aq-003",
+        "productName": "Java Fern Live Aquarium Plant",
+        "productImage": "/images/products/aquatic/java-fern-1.jpg",
+        "sku": "JP-AQ-003",
+        "quantity": 3,
+        "unitPrice": 7.99,
+        "totalPrice": 23.97
+      },
+      {
+        "productId": "aq-004",
+        "productName": "Seachem Prime Fresh & Saltwater Conditioner 500ml",
+        "productImage": "/images/products/aquatic/seachem-prime-500ml-1.jpg",
+        "sku": "SC-AQ-004",
+        "quantity": 1,
+        "unitPrice": 19.99,
+        "totalPrice": 19.99
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "John Doe",
+      "phone": "425-555-0101",
+      "addressLine1": "123 Main Street",
+      "addressLine2": "Apt 4B",
+      "city": "Renton",
+      "state": "WA",
+      "zipCode": "98057",
+      "country": "US"
+    },
+    "status": "shipped",
+    "paymentStatus": "paid",
+    "paymentMethod": "paypal",
+    "subtotal": 193.95,
+    "discount": 10.00,
+    "shippingCost": 0,
+    "total": 183.95,
+    "couponCode": "AQUA10",
+    "notes": null,
+    "placedAt": "2025-01-18T15:45:00Z",
+    "updatedAt": "2025-01-20T09:10:00Z",
+    "estimatedDelivery": "2025-01-23",
+    "trackingNumber": "1Z999AA10987654321"
+  },
+  {
+    "id": "ord-003",
+    "userId": "usr-001",
+    "orderNumber": "SFP-2025-0089",
+    "items": [
+      {
+        "productId": "cat-p-001",
+        "productName": "Royal Canin Indoor Adult Dry Cat Food",
+        "productImage": "/images/products/cat/rc-indoor-adult-1.jpg",
+        "sku": "RC-CAT-001",
+        "quantity": 2,
+        "unitPrice": 32.99,
+        "totalPrice": 65.98
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "John Doe",
+      "phone": "425-555-0101",
+      "addressLine1": "123 Main Street",
+      "city": "Renton",
+      "state": "WA",
+      "zipCode": "98057",
+      "country": "US"
+    },
+    "status": "processing",
+    "paymentStatus": "paid",
+    "paymentMethod": "credit_card",
+    "subtotal": 65.98,
+    "discount": 0,
+    "shippingCost": 0,
+    "total": 65.98,
+    "couponCode": null,
+    "notes": null,
+    "placedAt": "2025-01-25T08:00:00Z",
+    "updatedAt": "2025-01-25T08:05:00Z",
+    "estimatedDelivery": "2025-01-30",
+    "trackingNumber": null
+  }
+]
