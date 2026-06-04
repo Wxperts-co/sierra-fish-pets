@@ -1,7 +1,7 @@
 [
   {
     "id": "dog-001",
-    "name": "Blue Buffalo Life Protection Formula Adult Chicken & Brown Rice",
+    "name": "Four Paws Wee-Wee Extra Large Dog Pads",
     "slug": "blue-buffalo-life-protection-adult-chicken-brown-rice",
     "sku": "BB-DOG-001",
     "categorySlug": "dog",
@@ -10,7 +10,7 @@
     "price": 54.99,
     "compareAtPrice": 64.99,
     "images": [
-      "/images/products/dog/bb-chicken-rice-1.jpg",
+      "/images/products/dog1.avif",
       "/images/products/dog/bb-chicken-rice-2.jpg"
     ],
     "shortDescription": "Real chicken is the first ingredient in this premium dry dog food for adult dogs.",
@@ -57,7 +57,7 @@
   },
   {
     "id": "dog-002",
-    "name": "Taste of the Wild High Prairie Grain-Free Dry Dog Food",
+    "name": "Tropiclean Fresh Breath Oral Care Water Additive Plus Digerstive Support, Bottle",
     "slug": "taste-of-the-wild-high-prairie-grain-free",
     "sku": "TOW-DOG-002",
     "categorySlug": "dog",
@@ -66,7 +66,7 @@
     "price": 62.99,
     "compareAtPrice": null,
     "images": [
-      "/images/products/dog/totw-high-prairie-1.jpg",
+      "/images/products/dog2.avif",
       "/images/products/dog/totw-high-prairie-2.jpg"
     ],
     "shortDescription": "Grain-free formula with real roasted bison and venison for optimal nutrition.",
@@ -148,7 +148,7 @@
   },
   {
     "id": "dog-004",
-    "name": "Ruffwear Front Range Dog Harness",
+    "name": "Petmate Replendish Charcoal Replacement Filter",
     "slug": "ruffwear-front-range-harness",
     "sku": "RW-DOG-004",
     "categorySlug": "dog",
@@ -157,7 +157,7 @@
     "price": 49.95,
     "compareAtPrice": null,
     "images": [
-      "/images/products/dog/ruffwear-harness-1.jpg",
+      "/images/products/dog3.avif",
       "/images/products/dog/ruffwear-harness-2.jpg"
     ],
     "shortDescription": "Everyday harness with padded chest and belly panel for all-day comfort.",
@@ -216,7 +216,7 @@
   },
   {
     "id": "dog-006",
-    "name": "FurHaven Orthopedic Sofa Dog Bed — XL",
+    "name": "Loving Pet Bella Pet Bowl Large Metallic Grape",
     "slug": "furhaven-orthopedic-sofa-bed-xl",
     "sku": "FH-DOG-006",
     "categorySlug": "dog",
@@ -225,7 +225,7 @@
     "price": 59.99,
     "compareAtPrice": 74.99,
     "images": [
-      "/images/products/dog/furhaven-sofa-bed-xl-1.jpg",
+      "/images/products/dog4.avif",
       "/images/products/dog/furhaven-sofa-bed-xl-2.jpg"
     ],
     "shortDescription": "Therapeutic egg-crate orthopedic foam sofa bed for large dogs.",

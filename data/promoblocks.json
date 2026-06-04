@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "title": "DoorDash Delivery",
+    "subtitle": "Now Available",
+    "image": "/images/promos/doordash.jpg",
+    "link": "/services/delivery"
+  },
+  {
+    "id": "2",
+    "title": "Monthly Offers",
+    "subtitle": "Frequent Buyer Program",
+    "image": "/images/promos/monthly-offers.jpg",
+    "link": "/offers"
+  },
+  {
+    "id": "3",
+    "title": "Dog Adoptions",
+    "subtitle": "Every 3rd Weekend",
+    "image": "/images/promos/promobanner1.jpg",
+    "link": "/events/adoption"
+  },
+  {
+    "id": "4",
+    "title": "Our Mission",
+    "subtitle": "Pleasing Customers & Pampering Pets",
+    "image": "/images/promos/promobanner2.jpg",
+    "link": "/about"
+  },
+  {
+    "id": "5",
+    "title": "Aquarium Services",
+    "subtitle": "Design & Installation",
+    "image": "/images/promos/aquarium-services.jpg",
+    "link": "/services/aquarium"
+  },
+  {
+    "id": "6",
+    "title": "Aquarium Philosophy",
+    "subtitle": "Professional Aquarium Husbandry",
+    "image": "/images/promos/aquarium-philosophy.jpg",
+    "link": "/about"
+  }
+]

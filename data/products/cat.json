@@ -1,7 +1,7 @@
 [
   {
     "id": "cat-p-001",
-    "name": "Royal Canin Indoor Adult Dry Cat Food",
+    "name": "Catit Dual Action Replacement Fountain Filter",
     "slug": "royal-canin-indoor-adult-dry",
     "sku": "RC-CAT-001",
     "categorySlug": "cat",
@@ -10,7 +10,7 @@
     "price": 32.99,
     "compareAtPrice": 38.99,
     "images": [
-      "/images/products/cat/rc-indoor-adult-1.jpg",
+      "/images/products/cat1.avif",
       "/images/products/cat/rc-indoor-adult-2.jpg"
     ],
     "shortDescription": "Precisely formulated for adult indoor cats to support healthy weight and digestion.",
@@ -81,7 +81,7 @@
   },
   {
     "id": "cat-p-003",
-    "name": "Frisco Cat Tree with Condo — 72 inch",
+    "name": "From The Field Fresh Leaf & Flower Catnip",
     "slug": "frisco-cat-tree-condo-72inch",
     "sku": "FR-CAT-003",
     "categorySlug": "cat",
@@ -90,7 +90,7 @@
     "price": 89.99,
     "compareAtPrice": 109.99,
     "images": [
-      "/images/products/cat/frisco-cat-tree-1.jpg",
+      "/images/products/cat2.avif",
       "/images/products/cat/frisco-cat-tree-2.jpg"
     ],
     "shortDescription": "72-inch tall cat tree with multiple perches, condo, and sisal scratching posts.",
@@ -183,7 +183,7 @@
   },
   {
     "id": "cat-p-006",
-    "name": "Hepper Pod Cat Bed",
+    "name": "Catit Pixi Fountain Cat Waterer Light Pink",
     "slug": "hepper-pod-cat-bed",
     "sku": "HP-CAT-006",
     "categorySlug": "cat",
@@ -192,7 +192,7 @@
     "price": 129.00,
     "compareAtPrice": null,
     "images": [
-      "/images/products/cat/hepper-pod-1.jpg",
+      "/images/products/cat3.avif",
       "/images/products/cat/hepper-pod-2.jpg"
     ],
     "shortDescription": "Modern egg-shaped cat pod with removable washable cushion.",

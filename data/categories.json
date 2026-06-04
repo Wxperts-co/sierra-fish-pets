@@ -4,7 +4,7 @@
     "name": "Dog",
     "slug": "dog",
     "description": "Everything your dog needs — food, toys, beds, accessories, and more.",
-    "image": "/images/categories/dog.jpg",
+    "image": "/images/categories/dog_category.png",
     "icon": "/icons/dog-icon.png",
     "productCount": 120,
     "subcategories": [
@@ -23,7 +23,7 @@
     "name": "Cat",
     "slug": "cat",
     "description": "Premium cat food, litter, toys, and everything for your feline companion.",
-    "image": "/images/categories/cat.jpg",
+    "image": "/images/categories/cat_category.png",
     "icon": "/icons/cat-icon.png",
     "productCount": 95,
     "subcategories": [
@@ -42,7 +42,7 @@
     "name": "Aquatic",
     "slug": "aquatic",
     "description": "Live fish, aquariums, filters, plants, and all aquatic supplies.",
-    "image": "/images/categories/aquatic.jpg",
+    "image": "/images/categories/aquatic_category.png",
     "icon": "/icons/aquatic-icon.png",
     "productCount": 200,
     "subcategories": [
@@ -63,7 +63,7 @@
     "name": "Reptile",
     "slug": "reptile",
     "description": "Terrariums, lighting, heating, and supplies for all reptile species.",
-    "image": "/images/categories/reptile.jpg",
+    "image": "/images/categories/reptile_category.png",
     "icon": "/icons/reptile-icon.png",
     "productCount": 75,
     "subcategories": [
@@ -80,7 +80,7 @@
     "name": "Bird",
     "slug": "bird",
     "description": "Bird food, cages, perches, toys, and health supplies for your feathered friend.",
-    "image": "/images/categories/bird.jpg",
+    "image": "/images/categories/bird_category.png",
     "icon": "/icons/bird-icon.png",
     "productCount": 60,
     "subcategories": [
@@ -97,7 +97,7 @@
     "name": "Small Animal",
     "slug": "small-animal",
     "description": "Food, bedding, cages, and accessories for rabbits, hamsters, guinea pigs, and more.",
-    "image": "/images/categories/small-animal.jpg",
+    "image": "/images/categories/small_animal_category.png",
     "icon": "/icons/rabbit-icon.png",
     "productCount": 55,
     "subcategories": [
