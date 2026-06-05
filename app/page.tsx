@@ -7,6 +7,7 @@ import PromoBlocksCarousel from '@/components/Home/PromoBlocksCarousel'
 import AmazonCTA from '@/components/Home/AmazonCTA'
 import FeaturesSection from '@/components/Home/FeaturesSection'
 import React from 'react'
+import TasteGuarantee from '@/components/Home/TasteGuarantee'
 import PopularBrands from '@/components/Home/PopularBrand'
 import InstagramGallery from '@/components/Home/InstagramGallery'
 
@@ -21,6 +22,7 @@ const page = () => {
       <AmazonCTA/>
       {/* <BestSellers/> */}
       <FeaturesSection/>
+      <TasteGuarantee/>
       <PopularBrands/>
       <InstagramGallery/>
     </>

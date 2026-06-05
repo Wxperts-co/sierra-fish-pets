@@ -10,7 +10,7 @@ export default function PopularBrands() {
         {/* Heading */}
         <div className="mb-12 text-center">
           <h2 className="text-4xl font-bold tracking-tight">
-            <span className="text-orange-500">Popular</span>{" "}
+            <span className="text-[#005AA9]">Popular</span>{" "}
             <span className="text-sierra-blue">Brands</span>
           </h2>
         </div>
