@@ -28,12 +28,12 @@ const promoBlocks = promoBlocksData as PromoBlock[];
 
 // Per-card config: solid background color + text color + CTA color
 const CARD_CONFIG: Record<string, { bg: string; textColor: string; subtitleColor: string; btnBg: string; btnText: string }> = {
-  "1": { bg: "#FF6B35",  textColor: "#1a0a00", subtitleColor: "#7a2e00", btnBg: "#fff",      btnText: "#FF6B35" }, // DoorDash – warm orange
-  "2": { bg: "#EBF7FF",  textColor: "#002244", subtitleColor: "#005AA9", btnBg: "#005AA9",   btnText: "#fff"    }, // Monthly Offers – light blue
-  "3": { bg: "#F5A623",  textColor: "#1a0a00", subtitleColor: "#7a3e00", btnBg: "#E85D2A",   btnText: "#fff"    }, // Dog Adoptions – amber
-  "4": { bg: "#E8F5E9",  textColor: "#1b3a2a", subtitleColor: "#2e7d52", btnBg: "#2e7d52",   btnText: "#fff"    }, // Our Mission – soft green
-  "5": { bg: "#E0F7FA",  textColor: "#003540", subtitleColor: "#006070", btnBg: "#006070",   btnText: "#fff"    }, // Aquarium Services – teal
-  "6": { bg: "#E8EAF6",  textColor: "#1a1e5a", subtitleColor: "#3040AA", btnBg: "#3040AA",   btnText: "#fff"    }, // Aquarium Philosophy – indigo
+  "1": { bg: "#FF6B35", textColor: "#1a0a00", subtitleColor: "#7a2e00", btnBg: "#fff", btnText: "#FF6B35" }, // DoorDash – warm orange
+  "2": { bg: "#EBF7FF", textColor: "#002244", subtitleColor: "#005AA9", btnBg: "#005AA9", btnText: "#fff" }, // Monthly Offers – light blue
+  "3": { bg: "#F5A623", textColor: "#1a0a00", subtitleColor: "#7a3e00", btnBg: "#E85D2A", btnText: "#fff" }, // Dog Adoptions – amber
+  "4": { bg: "#E8F5E9", textColor: "#1b3a2a", subtitleColor: "#2e7d52", btnBg: "#2e7d52", btnText: "#fff" }, // Our Mission – soft green
+  "5": { bg: "#E0F7FA", textColor: "#003540", subtitleColor: "#006070", btnBg: "#006070", btnText: "#fff" }, // Aquarium Services – teal
+  "6": { bg: "#E8EAF6", textColor: "#1a1e5a", subtitleColor: "#3040AA", btnBg: "#3040AA", btnText: "#fff" }, // Aquarium Philosophy – indigo
 };
 
 // ─── PromoCard ────────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ function DotIndicators({
             "h-2 rounded-full transition-all duration-300",
             i === selected
               ? "w-8 bg-[#005AA9]"
-              : "w-2 bg-slate-300 hover:bg-[#00AEEF] dark:bg-slate-600"
+              : "w-2 bg-slate-300 hover:bg-[#00AEEF]"
           )}
         />
       ))}
@@ -171,7 +171,7 @@ export default function PromoBlocksCarousel() {
   }, [api]);
 
   return (
-    <section className="bg-slate-50 py-16 dark:bg-slate-950">
+    <section className="py-0">
       <div className="container mx-auto px-4">
 
         {/* ── Carousel — buttons float absolutely over left/right edges ── */}

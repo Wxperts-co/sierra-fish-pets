@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function TopBar() {
   return (
@@ -68,10 +67,6 @@ export default function TopBar() {
           >
             FAQs
           </Link>
-
-          <span className="h-3 w-px bg-slate-700" />
-
-          <ThemeToggle />
 
         </div>
       </div>

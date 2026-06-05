@@ -7,19 +7,17 @@ import { usePathname } from "next/navigation";
 import { Search, User, Heart, ShoppingBag, X } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import MobileMenu from "@/components/layouts/MobileMenu";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Arrivals", href: "/arrivals" },
-  { label: "Brands", href: "/brands" },
-  { label: "Learn", href: "/edu" },
-  { label: "Blog", href: "/blog" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact", href: "/contact" },
+  { label: "Services", href: "#" },
+  { label: "Arrivals", href: "#" },
+  { label: "Brands", href: "#" },
+  { label: "Blog", href: "#" },
+  { label: "Gallery", href: "#" },
+  { label: "Contact", href: "#" },
 ] as const;
 
 export default function Header() {
@@ -84,9 +82,8 @@ export default function Header() {
           />
         </Link>
 
-        {/* Right — theme toggle + search + cart */}
+        {/* Right — search + cart */}
         <div className="flex items-center gap-1">
-          <ThemeToggle minimal={true} />
 
           <button
             onClick={() => setSearchOpen((v) => !v)}
@@ -118,25 +115,25 @@ export default function Header() {
         className={cn(
           "z-50 hidden transition-all duration-300 lg:block font-lato",
           showSolidBackground
-            ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d] dark:border-slate-800 dark:bg-slate-950"
+            ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d]"
             : "absolute top-0 inset-x-0 bg-transparent border-b border-transparent"
         )}
       >
         <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between gap-4">
+          <div className="flex h-25 items-center justify-between gap-4">
             {/* Left — logo */}
             <Link href="/" className="flex h-16 shrink-0 items-center overflow-visible">
               <Image
-                src={showSolidBackground ? "/images/logo/logo6.png": "/images/logo/logo3.png"}
+                src={showSolidBackground ? "/images/logo/logo6.png" : "/images/logo/logo3.png"}
                 alt="Sierra Fish & Pets"
-                width={140}
-                height={44}
+                width={400}
+                height={100}
                 priority
                 className={cn(
-                  "block h-auto w-auto object-contain object-center px-3 transition-all duration-300",
+                  "block h-auto w-[300px] object-contain object-center px-3 transition-all duration-300",
                   showSolidBackground
-                    ? "max-h-36 pt-3"
-                    : "max-h-38 rounded-lg pt-3"
+                    ? "pt-3"
+                    : "rounded-lg pt-3"
                 )}
               />
             </Link>
@@ -149,11 +146,11 @@ export default function Header() {
 
               {NAV_LINKS.map((link) => (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
                   className={cn(
-                    "relative px-3.5 py-3 text-[20px] font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                    showSolidBackground ? "text-white hover:text-white/80" : "text-[#003DA5] hover:text-[#003DA5]/80"
+                    "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
                   )}
                 >
                   {link.label}
@@ -215,10 +212,10 @@ export default function Header() {
                 )}
               </Link>
 
-            
+
 
               {/* Theme Toggle */}
-           
+
             </div>
           </div>
         </div>
@@ -228,7 +225,7 @@ export default function Header() {
       {searchOpen && (
         <div
           className={cn(
-            "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 dark:border-slate-800 dark:bg-slate-900 transition-all duration-300",
+            "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 transition-all duration-300",
             isHome ? "fixed top-[56px] lg:top-16 inset-x-0" : "sticky top-[56px] lg:top-16 inset-x-0"
           )}
         >

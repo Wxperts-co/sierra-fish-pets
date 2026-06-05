@@ -58,7 +58,7 @@ export default function MobileMenu() {
         className="flex w-[300px] flex-col overflow-y-auto p-0 sm:w-[340px]"
       >
         {/* ── Header ── */}
-        <SheetHeader className="border-b border-slate-100 bg-gradient-to-r from-[#004d8f] to-[#005AA9] px-5 py-4 dark:border-slate-800">
+        <SheetHeader className="border-b border-slate-100 bg-gradient-to-r from-[#004d8f] to-[#005AA9] px-5 py-4">
           <SheetTitle className="flex items-center gap-3">
             <Image
               src="/images/logo/logo.png"
@@ -71,22 +71,22 @@ export default function MobileMenu() {
         </SheetHeader>
 
         {/* ── Main nav links ── */}
-        <nav className="flex flex-col border-b border-slate-100 dark:border-slate-800">
+        <nav className="flex flex-col border-b border-slate-100">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center justify-between border-b border-slate-50 px-5 py-3.5 text-[13px] font-semibold tracking-wide text-slate-700 transition-colors last:border-0 hover:bg-slate-50 hover:text-[#005AA9] dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-cyan-400"
+              className="flex items-center justify-between border-b border-slate-50 px-5 py-3.5 text-[13px] font-semibold tracking-wide text-slate-700 transition-colors last:border-0 hover:bg-slate-50 hover:text-[#005AA9]"
             >
               {link.label}
-              <ChevronRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600" />
+              <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
             </Link>
           ))}
         </nav>
 
         {/* ── Shop by category accordion ── */}
         <div className="px-5 py-4">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
             Shop by Category
           </p>
 
@@ -95,9 +95,9 @@ export default function MobileMenu() {
               <AccordionItem
                 key={category.id}
                 value={category.id}
-                className="border-b border-slate-100 dark:border-slate-800"
+                className="border-b border-slate-100"
               >
-                <AccordionTrigger className="py-3 text-[13px] font-semibold tracking-wide text-slate-700 hover:text-[#005AA9] hover:no-underline dark:text-slate-200 dark:hover:text-cyan-400">
+                <AccordionTrigger className="py-3 text-[13px] font-semibold tracking-wide text-slate-700 hover:text-[#005AA9] hover:no-underline">
                   <span className="flex items-center gap-2.5">
                     <span className="text-base">
                       {CATEGORY_EMOJI[category.slug] ?? "🐾"}
@@ -110,7 +110,7 @@ export default function MobileMenu() {
                   <div className="flex flex-col gap-0.5">
                     <Link
                       href={`/shop/${category.slug}`}
-                      className="rounded-md px-3 py-2 text-[12px] font-semibold text-[#005AA9] transition-colors hover:bg-[#005AA9]/5 dark:text-cyan-400"
+                      className="rounded-md px-3 py-2 text-[12px] font-semibold text-[#005AA9] transition-colors hover:bg-[#005AA9]/5"
                     >
                       View All {category.name} →
                     </Link>
@@ -118,7 +118,7 @@ export default function MobileMenu() {
                       <Link
                         key={sub.id}
                         href={`/shop/${category.slug}/${sub.slug}`}
-                        className="rounded-md px-3 py-2 text-[12px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#005AA9] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-cyan-400"
+                        className="rounded-md px-3 py-2 text-[12px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#005AA9]"
                       >
                         {sub.name}
                       </Link>

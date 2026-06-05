@@ -1,26 +1,20 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Lato, Lexend } from "next/font/google";
+import { Geist_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/provider";
 import TopBar from "@/components/layouts/Topbar";
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
-import ThemeProvider from "@/components/ui/ThemeProvider";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-const lato = Lato({
-  weight: ["300", "400", "700", "900"],
+const nunito = Nunito({
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-  variable: "--font-lato",
-});
-
-const lexend = Lexend({
-  subsets: ["latin"],
-  variable: "--font-lexend",
+  variable: "--font-nunito",
   display: "swap",
 });
 
@@ -37,17 +31,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistMono.variable} ${lato.variable} ${lexend.variable} h-full antialiased`}
+      className={`${geistMono.variable} ${nunito.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-[family-name:var(--font-lexend)]">
-        <ThemeProvider>
-          <ReduxProvider>
-            {/* <TopBar /> */}
-            <Header />
-            {children}
-            <Footer />
-          </ReduxProvider>
-        </ThemeProvider>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-nunito)]">
+        <ReduxProvider>
+          {/* <TopBar /> */}
+          <Header />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

@@ -83,7 +83,7 @@ const SOCIAL = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800">
+    <footer className="mt-auto bg-white border-t border-slate-100">
 
       {/* ── Newsletter strip ─────────────────────────────────── */}
       <div className="relative overflow-hidden bg-gradient-to-r from-[#003d73] via-[#005AA9] to-[#0077cc]">
@@ -137,7 +137,7 @@ export default function Footer() {
           <div className="col-span-2 lg:col-span-4">
             <Link
               href="/"
-              className="inline-flex items-center rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700 transition-opacity hover:opacity-80"
+              className="inline-flex items-center rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-slate-100 transition-opacity hover:opacity-80"
             >
               <Image
                 src="/images/logo/logo.png"
@@ -148,12 +148,12 @@ export default function Footer() {
               />
             </Link>
 
-            <p className="mt-3 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-[13px] leading-relaxed text-slate-500">
               Yuba City's premier destination for aquatic life &amp; pets.
               Family-owned, expert care since 2005.{" "}
               <a
                 href="mailto:info@sierrafishandpets.com"
-                className="font-medium text-[#005AA9] hover:underline dark:text-cyan-400"
+                className="font-medium text-[#005AA9] hover:underline"
               >
                 info@sierrafishandpets.com
               </a>
@@ -165,13 +165,13 @@ export default function Footer() {
                 href="https://maps.google.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600 transition-colors hover:border-[#005AA9] hover:text-[#005AA9] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-cyan-400"
+                className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600 transition-colors hover:border-[#005AA9] hover:text-[#005AA9]"
               >
                 <MapPin className="h-3 w-3" /> Yuba City, CA 95991
               </a>
               <a
                 href="tel:5306711147"
-                className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600 transition-colors hover:border-[#005AA9] hover:text-[#005AA9] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-cyan-400"
+                className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600 transition-colors hover:border-[#005AA9] hover:text-[#005AA9]"
               >
                 <Phone className="h-3 w-3" /> (530) 671-1147
               </a>
@@ -201,7 +201,7 @@ export default function Footer() {
             { title: "Services", links: SERVICES },
           ].map(({ title, links }) => (
             <div key={title} className="col-span-1 lg:col-span-2 xl:col-span-2">
-              <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-800 dark:text-slate-200">
+              <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-800">
                 {title}
               </h3>
               <ul className="space-y-2">
@@ -209,9 +209,9 @@ export default function Footer() {
                   <li key={l.label}>
                     <Link
                       href={l.href}
-                      className="group flex items-center gap-1.5 text-[13px] text-slate-500 transition-colors hover:text-[#005AA9] dark:text-slate-400 dark:hover:text-cyan-400"
+                      className="group flex items-center gap-1.5 text-[13px] text-slate-500 transition-colors hover:text-[#005AA9]"
                     >
-                      <span className="h-px w-0 bg-[#005AA9] transition-all duration-200 group-hover:w-3 dark:bg-cyan-400" />
+                      <span className="h-px w-0 bg-[#005AA9] transition-all duration-200 group-hover:w-3" />
                       {l.label}
                     </Link>
                   </li>
@@ -264,7 +264,7 @@ export default function Footer() {
             </div>
 
             {/* PayPal */}
-            <div title="PayPal" className="flex h-7 items-center rounded-md border border-slate-200 bg-white px-2 dark:border-slate-700 dark:bg-slate-800">
+            <div title="PayPal" className="flex h-7 items-center rounded-md border border-slate-200 bg-white px-2">
               <span className="text-[11px] font-bold">
                 <span className="text-[#003087]">Pay</span><span className="text-[#009CDE]">Pal</span>
               </span>

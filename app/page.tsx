@@ -1,4 +1,3 @@
-
 import CategoryCards from '@/components/Home/CategoryCard'
 import FeaturedProducts from '@/components/Home/FeaturedProduct'
 import BestSellers from '@/components/Home/BestSellers'
@@ -9,19 +8,21 @@ import AmazonCTA from '@/components/Home/AmazonCTA'
 import FeaturesSection from '@/components/Home/FeaturesSection'
 import React from 'react'
 import PopularBrands from '@/components/Home/PopularBrand'
+import InstagramGallery from '@/components/Home/InstagramGallery'
 
 const page = () => {
   return (
     <>
       <HeroBanner/>
       <CategoryCards/>
-      <NewArrivals/>
-      <PromoBlocksCarousel/>
+            <PromoBlocksCarousel/>
+      {/* <NewArrivals/> */}
       <FeaturedProducts/>
       <AmazonCTA/>
-      <BestSellers/>
+      {/* <BestSellers/> */}
       <FeaturesSection/>
       <PopularBrands/>
+      <InstagramGallery/>
     </>
   )
 }

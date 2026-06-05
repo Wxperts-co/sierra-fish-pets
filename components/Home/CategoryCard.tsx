@@ -5,23 +5,23 @@ import { Plus } from "lucide-react";
 import categories from "@/data/categories.json";
 
 const CATEGORY_BACKGROUNDS: Record<string, string> = {
-  dog: "bg-[#FFF0ED] dark:bg-rose-950/40",
-  cat: "bg-[#F6EFFF] dark:bg-purple-950/40",
-  aquatic: "bg-[#EBF7FF] dark:bg-blue-950/40",
-  reptile: "bg-[#EEFBF0] dark:bg-green-950/40",
-  bird: "bg-[#FFFBE5] dark:bg-amber-950/40",
-  "small-animal": "bg-[#F5F5F7] dark:bg-slate-800/60",
+  dog: "bg-[#FFF0ED]",
+  cat: "bg-[#F6EFFF]",
+  aquatic: "bg-[#EBF7FF]",
+  reptile: "bg-[#EEFBF0]",
+  bird: "bg-[#FFFBE5]",
+  "small-animal": "bg-[#F5F5F7]",
 };
 
 export default function CategoryCards() {
   return (
-    <section className="py-16 bg-white dark:bg-slate-900">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
 
         {/* Header Title */}
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-            <span className="text-[#FF5A36]">Top</span> categories
+          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <span className="text-[#005AA9]">Top</span> categories
           </h2>
         </div>
 
@@ -59,7 +59,7 @@ export default function CategoryCards() {
 
               {/* Label Text below Card */}
               <div className="mt-4 text-center">
-                <h3 className="text-[17px] font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#005AA9] dark:group-hover:text-cyan-400 transition-colors">
+                <h3 className="text-[17px] font-bold text-slate-800 group-hover:text-[#005AA9] transition-colors">
                   {category.name}
                 </h3>
               </div>

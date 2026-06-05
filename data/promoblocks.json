@@ -1,19 +1,5 @@
 [
   {
-    "id": "1",
-    "title": "DoorDash Delivery",
-    "subtitle": "Now Available",
-    "image": "/images/promos/doordash.jpg",
-    "link": "/services/delivery"
-  },
-  {
-    "id": "2",
-    "title": "Monthly Offers",
-    "subtitle": "Frequent Buyer Program",
-    "image": "/images/promos/promobanner9.png",
-    "link": "/offers"
-  },
-  {
     "id": "3",
     "title": "Dog Adoptions",
     "subtitle": "Every 3rd Weekend",

@@ -47,13 +47,13 @@ export default function HeroBanner() {
               <div className="relative w-full h-[100vh]">
 
                 {/* Banner Image */}
-                <Image
-                  src={banner.image}
-                  alt={banner.title ?? "Banner"}
-                  fill
-                  priority
+      <Image
+        src={banner.image}
+        alt={banner.title ?? "Banner"}
+        fill
+        priority
                   className="object-cover select-none"
-                />
+      />
 
                 {/* Content */}
                 <div className="absolute inset-0 flex items-center">
@@ -74,18 +74,18 @@ export default function HeroBanner() {
                       )}
 
                       {banner.ctaLabel && (
-                        <Link
+                <Link
                           href={banner.ctaLink ?? "/"}
                           className="inline-flex items-center justify-center rounded-full bg-[#005AA9] hover:bg-[#004b8d] text-white px-8 py-4 text-base font-bold shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                        >
+                >
                           {banner.ctaLabel}
-                        </Link>
+                </Link>
                       )}
-                    
-                    </div>
+
+            </div>
 
                   </div>
-                </div>
+      </div>
 
               </div>
             </CarouselItem>
@@ -96,6 +96,19 @@ export default function HeroBanner() {
         <CarouselPrevious className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-[#005AA9] border-none text-white hover:text-white backdrop-blur-sm h-11 w-11 rounded-full transition-all focus:ring-0 active:scale-95" />
         <CarouselNext className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-[#005AA9] border-none text-white hover:text-white backdrop-blur-sm h-11 w-11 rounded-full transition-all focus:ring-0 active:scale-95" />
       </Carousel>
+
+      {/* Wave shape divider */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-none w-full overflow-hidden select-none translate-y-[1px]">
+        <svg
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          className="relative block w-full h-[50px] sm:h-[80px] md:h-[100px] lg:h-[120px] fill-white text-white"
+        >
+          <path
+            d="M0,80 C150,80 350,20 500,40 C650,60 850,120 1000,110 C1150,100 1300,70 1440,60 L1440,120 L0,120 Z"
+          />
+        </svg>
+      </div>
     </section>
   );
 }

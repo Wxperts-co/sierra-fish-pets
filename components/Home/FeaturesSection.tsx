@@ -134,18 +134,18 @@ function FeatureCard({ feature }: { feature: Feature }) {
               className="h-28 w-28 object-contain"
             />
           ) : (
-            <IconComponent className="h-24 w-24 text-[#F97316]" strokeWidth={1.5} />
+            <IconComponent className="h-24 w-24 text-[#005AA9]" strokeWidth={1.5} />
           )}
         </div>
       </motion.div>
 
       {/* Title */}
-      <h3 className="mb-3 text-2xl font-semibold text-slate-900 dark:text-slate-50">
+      <h3 className="mb-3 text-2xl font-semibold text-slate-900">
         {feature.title}
       </h3>
 
       {/* Description */}
-      <p className="text-slate-600 leading-relaxed dark:text-slate-400">
+      <p className="text-slate-600 leading-relaxed">
         {feature.description}
       </p>
     </motion.div>
@@ -166,7 +166,7 @@ export default function FeaturesSection() {
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={sectionVariants}
-      className="relative bg-white py-12 overflow-hidden dark:bg-slate-950 md:py-16"
+      className="relative bg-white py-12 overflow-hidden md:py-16"
     >
       {/* ─── Decorative Background Elements ─── */}
       
@@ -190,8 +190,8 @@ export default function FeaturesSection() {
         {/* ─── Main Heading ─── */}
         <motion.div variants={headingVariants} className="text-center mb-12">
           <h2 className="text-4xl font-bold leading-tight md:text-5xl">
-            <span className="text-[#F97316]">What your pet needs</span>
-            <span className="text-slate-900 dark:text-slate-50">,
+            <span className="text-[#005AA9]">What your pet needs</span>
+            <span className="text-slate-900">,
               when they need it.</span>
           </h2>
         </motion.div>
