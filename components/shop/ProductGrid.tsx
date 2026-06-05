@@ -4,10 +4,12 @@ import { Product } from "@/types";
 
 interface ProductGridProps {
   products: Product[];
+  cardClassName?: string;
 }
 
 export default function ProductGrid({
   products,
+  cardClassName,
 }: ProductGridProps) {
   if (!products.length) {
     return (
@@ -34,6 +36,7 @@ export default function ProductGrid({
         <ProductCard
           key={product.id}
           product={product}
+          className={cardClassName}
         />
       ))}
     </div>

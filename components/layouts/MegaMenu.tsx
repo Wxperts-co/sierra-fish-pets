@@ -35,7 +35,7 @@ export default function MegaMenu({ textClass = "text-[#003DA5]" }: MegaMenuProps
         className="pointer-events-none absolute left-0 top-full z-50 mt-0 w-[760px] opacity-0 transition-all duration-200 group-hover/shop:pointer-events-auto group-hover/shop:opacity-100"
         style={{ paddingTop: "2px" }}
       >
-        <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl ring-1 ring-black/5">
+        <div className="font-lato overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl ring-1 ring-black/5">
 
           {/* Header strip */}
           <div className="flex items-center justify-between border-b border-slate-100 bg-gradient-to-r from-[#005AA9] to-[#0077cc] px-6 py-3">

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "title": "Weekly Fish Arrivals",
+    "description": "Freshwater and saltwater fish added every week.",
+    "icon": "/images/logo/fishicon.png"
+  },
+  {
+    "id": "2",
+    "title": "Same-Day Delivery",
+    "description": "Local delivery available through DoorDash.",
+    "icon": "/images/logo/busicon.png"
+  },
+  {
+    "id": "3",
+    "title": "Pet Adoption Events",
+    "description": "Find your new companion every month.",
+    "icon": "/images/logo/adopticon.png"
+  },
+  {
+    "id": "4",
+    "title": "Aquarium Services",
+    "description": "Design, installation, and maintenance.",
+    "icon": "/images/logo/aquariumicon.png"
+  }
+]

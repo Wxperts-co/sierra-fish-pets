@@ -10,7 +10,7 @@
     "id": "2",
     "title": "Monthly Offers",
     "subtitle": "Frequent Buyer Program",
-    "image": "/images/promos/monthly-offers.jpg",
+    "image": "/images/promos/promobanner9.png",
     "link": "/offers"
   },
   {
@@ -31,14 +31,14 @@
     "id": "5",
     "title": "Aquarium Services",
     "subtitle": "Design & Installation",
-    "image": "/images/promos/aquarium-services.jpg",
+    "image": "/images/promos/promobanner4.png",
     "link": "/services/aquarium"
   },
   {
     "id": "6",
     "title": "Aquarium Philosophy",
     "subtitle": "Professional Aquarium Husbandry",
-    "image": "/images/promos/aquarium-philosophy.jpg",
+    "image": "/images/promos/promobanner3.png",
     "link": "/about"
   }
 ]

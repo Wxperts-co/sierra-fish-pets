@@ -1,29 +1,12 @@
 [
-  {
-    "id": "banner-001",
-    "image": "/images/banner/banner8.png",
-    "title": "Fresh Fish Arrivals Every Week",
-    "subtitle": "Explore our stunning collection of freshwater & saltwater fish",
-    "ctaLabel": "Shop Aquatic",
-    "ctaLink": "/shop/aquatic",
-    "order": 1
-  },
+ 
   {
     "id": "banner-002",
-    "image": "/images/banner/banner8.png",
+    "image": "/images/banner/banner.png",
     "title": "Everything Your Pet Needs",
     "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
     "ctaLabel": "Shop Now",
     "ctaLink": "/shop",
     "order": 2
-  },
-  {
-    "id": "banner-003",
-    "image": "/images/banner/banner8.png",
-    "title": "Aquarium Setup Experts",
-    "subtitle": "Free in-store consultation for your dream aquarium",
-    "ctaLabel": "Learn More",
-    "ctaLink": "/services",
-    "order": 3
   }
 ]

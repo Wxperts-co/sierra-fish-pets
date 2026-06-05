@@ -14,8 +14,8 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import RunningDog from "../ui/RunningDog";
 
-import { Button } from "@/components/ui/button";
 
 export default function HeroBanner() {
   const [api, setApi] = useState<CarouselApi>();
@@ -74,16 +74,14 @@ export default function HeroBanner() {
                       )}
 
                       {banner.ctaLabel && (
-                        <Button
-                          asChild
-                          size="lg"
-                          className="rounded-full bg-[#005AA9] hover:bg-[#004b8d] text-white px-8 py-6 text-base font-bold shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95"
+                        <Link
+                          href={banner.ctaLink ?? "/"}
+                          className="inline-flex items-center justify-center rounded-full bg-[#005AA9] hover:bg-[#004b8d] text-white px-8 py-4 text-base font-bold shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
                         >
-                          <Link href={banner.ctaLink ?? "/"}>
-                            {banner.ctaLabel}
-                          </Link>
-                        </Button>
+                          {banner.ctaLabel}
+                        </Link>
                       )}
+                    
                     </div>
 
                   </div>

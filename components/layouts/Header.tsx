@@ -80,7 +80,7 @@ export default function Header() {
             width={120}
             height={40}
             priority
-            className="h-auto w-auto max-h-9 rounded-lg bg-white object-contain px-2 py-1"
+            className="h-auto w-auto max-h-9 object-contain px-2 py-1"
           />
         </Link>
 
@@ -125,17 +125,17 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between gap-4">
             {/* Left — logo */}
-            <Link href="/" className="flex shrink-0 items-center">
+            <Link href="/" className="flex h-16 shrink-0 items-center overflow-visible">
               <Image
-                src={showSolidBackground ? "/images/logo/logo.png": "/images/logo/logo3.png"}
+                src={showSolidBackground ? "/images/logo/logo6.png": "/images/logo/logo3.png"}
                 alt="Sierra Fish & Pets"
                 width={140}
                 height={44}
                 priority
                 className={cn(
-                  "h-auto w-auto object-contain px-3 transition-all duration-300",
+                  "block h-auto w-auto object-contain object-center px-3 transition-all duration-300",
                   showSolidBackground
-                    ? "max-h-11 rounded-lg bg-white py-1.5"
+                    ? "max-h-36 pt-3"
                     : "max-h-38 rounded-lg pt-3"
                 )}
               />

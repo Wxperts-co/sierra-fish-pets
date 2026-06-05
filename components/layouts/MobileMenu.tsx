@@ -90,7 +90,7 @@ export default function MobileMenu() {
             Shop by Category
           </p>
 
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion className="w-full">
             {categories.map((category) => (
               <AccordionItem
                 key={category.id}
