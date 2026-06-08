@@ -4,26 +4,46 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Search, User, Heart, ShoppingBag, X } from "lucide-react";
+import { Search, User, Heart, ShoppingBag, X, ChevronDown, ChevronRight, MapPin } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import MobileMenu from "@/components/layouts/MobileMenu";
 import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
+import categories from "@/data/categories.json";
 
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "#" },
-  { label: "Arrivals", href: "#" },
-  { label: "Brands", href: "#" },
-  { label: "Blog", href: "#" },
-  { label: "Gallery", href: "#" },
-  { label: "Contact", href: "#" },
-] as const;
+const CATEGORY_EMOJI: Record<string, string> = {
+  dog: "🐕",
+  cat: "🐈",
+  aquatic: "🐠",
+  reptile: "🦎",
+  bird: "🦜",
+  "small-animal": "🐹",
+};
 
 export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [activeDropdown, setActiveDropdown] = useState<"shop" | "arrivals" | "blogs" | "page" | null>(null);
+
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setActiveDropdown(null);
+  }
+
+  // Click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (activeDropdown && !target.closest(".nav-dropdown-container")) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [activeDropdown]);
 
   const cartCount = useAppSelector((state) => state.cart.items.length);
   const wishlistCount = useAppSelector(
@@ -59,51 +79,109 @@ export default function Header() {
           MOBILE HEADER  (hidden on lg+)
           Layout: [hamburger] [centered logo] [cart]
       ════════════════════════════════════════════════════ */}
-      <header
-        className={cn(
-          "z-50 flex items-center justify-between px-3 py-2.5 transition-all duration-300 lg:hidden font-lato",
-          showSolidBackground
-            ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d]"
-            : "absolute top-0 inset-x-0 bg-transparent border-b border-transparent"
-        )}
-      >
-        {/* Left — hamburger */}
-        <MobileMenu />
+      <header className="z-50 sticky top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d] lg:hidden font-lato w-full">
+        {/* Row 1: Logo and Search Input, plus Menu and Cart */}
+        <div className="flex items-center justify-between px-3 py-2 gap-3">
+          {/* Left: Hamburger menu + Logo */}
+          <div className="flex items-center gap-2 shrink-0">
+            <MobileMenu />
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/logo/white-logo.png"
+                alt="Sierra Fish & Pets"
+                width={100}
+                height={32}
+                priority
+                className="h-7 w-auto object-contain"
+              />
+            </Link>
+          </div>
 
-        {/* Center — logo */}
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-          <Image
-            src="/images/logo/logo.png"
-            alt="Sierra Fish & Pets"
-            width={120}
-            height={40}
-            priority
-            className="h-auto w-auto max-h-9 object-contain px-2 py-1"
-          />
-        </Link>
+          {/* Right: Search Input + Cart icon */}
+          <div className="flex-1 flex items-center gap-2 justify-end">
+            <div className="relative flex-1 max-w-[200px]">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="w-full pl-8 pr-2.5 py-1.5 bg-white text-slate-800 placeholder:text-slate-400 text-xs rounded-lg border-0 focus:ring-2 focus:ring-cyan-400 outline-none transition-all shadow-inner font-medium"
+              />
+            </div>
 
-        {/* Right — search + cart */}
-        <div className="flex items-center gap-1">
+            <Link
+              href="/cart"
+              className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
+            >
+              <ShoppingBag className="h-4.5 w-4.5" />
+              {cartCount > 0 && (
+                <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[8px] font-black text-[#005AA9] shadow-sm">
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
+        </div>
 
-          <button
-            onClick={() => setSearchOpen((v) => !v)}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
-            aria-label="Search"
-          >
-            {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+        {/* Row 2: Location Selector */}
+        <div className="flex items-center gap-1.5 px-3 py-2 bg-[#004b8d]/50 text-white text-xs border-t border-[#004b8d]/30">
+          <MapPin className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+          <span className="text-white/80">Location not set</span>
+          <button className="flex items-center gap-0.5 text-cyan-300 font-bold hover:underline transition-all">
+            Select delivery location
+            <ChevronDown className="h-3 w-3" />
           </button>
+        </div>
 
+        {/* Row 3: Horizontal Scrollable Categories */}
+        <div
+          className="bg-white py-2.5 overflow-x-auto scrollbar-none flex items-center gap-6 px-4 border-t border-[#004b8d]/20 border-b border-slate-200"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {/* For You Tab */}
           <Link
-            href="/cart"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
+            href="/"
+            className="flex flex-col items-center shrink-0 relative pb-1 group"
           >
-            <ShoppingBag className="h-5 w-5" />
-            {cartCount > 0 && (
-              <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-[#005AA9]">
-                {cartCount > 9 ? "9+" : cartCount}
-              </span>
+            <span
+              className={cn(
+                "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
+                pathname === "/"
+                  ? "text-[#005AA9]"
+                  : "text-slate-600 group-hover:text-[#005AA9]"
+              )}
+            >
+              For You
+            </span>
+            {pathname === "/" && (
+              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
             )}
           </Link>
+
+          {categories.map((category) => {
+            const href = `/shop/${category.slug}`;
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={category.id}
+                href={href}
+                className="flex flex-col items-center shrink-0 relative pb-1 group"
+              >
+                <span
+                  className={cn(
+                    "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
+                    isActive
+                      ? "text-[#005AA9]"
+                      : "text-slate-600 group-hover:text-[#005AA9]"
+                  )}
+                >
+                  {category.name}
+                </span>
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
+                )}
+              </Link>
+            );
+          })}
         </div>
       </header>
 
@@ -140,22 +218,357 @@ export default function Header() {
 
             {/* Center — Navigation links */}
             <div className="flex items-center">
-              <MegaMenu textClass={showSolidBackground ? "text-white" : "text-[#003DA5]"} />
+              <MegaMenu
+                textClass={showSolidBackground ? "text-white" : "text-[#003DA5]"}
+                isOpen={activeDropdown === "shop"}
+                onToggle={() => setActiveDropdown(activeDropdown === "shop" ? null : "shop")}
+                onClose={() => setActiveDropdown(null)}
+              />
 
               <span className={cn("mx-2 h-4 w-px transition-colors duration-300", showSolidBackground ? "bg-white/20" : "bg-[#003DA5]")} />
 
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
+              {/* Home */}
+              <Link
+                href="/"
+                className={cn(
+                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                )}
+              >
+                Home
+              </Link>
+
+             
+               {/* Arrivals Dropdown */}
+               <div className="relative py-3 px-3.5 nav-dropdown-container">
+                 <button
+                   onClick={() => setActiveDropdown(activeDropdown === "arrivals" ? null : "arrivals")}
+                   className={cn(
+                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                     showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                   )}
+                 >
+                   Arrivals
+                   <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "arrivals" && "rotate-180")} />
+                 </button>
+
+                 {/* Dropdown Menu */}
+                 <div
+                   onClick={() => setActiveDropdown(null)}
+                   className={cn(
+                     "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                     activeDropdown === "arrivals"
+                       ? "opacity-100 visible scale-100 pointer-events-auto"
+                       : "opacity-0 invisible scale-95 pointer-events-none"
+                   )}
+                 >
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Bird Arrivals
+                   </Link>
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Freshwater Arrivals
+                   </Link>
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Saltwater Arrivals
+                   </Link>
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Reptile Arrivals
+                   </Link>
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Small Animal Arrivals
+                   </Link>
+                   <Link
+                     href="#"
+                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                   >
+                     Cat Arrivals
+                   </Link>
+                 </div>
+               </div>
+
+              
+
+               {/* Blog Dropdown */}
+              <div className="relative py-3 px-3.5 nav-dropdown-container">
+                <button
+                  onClick={() => setActiveDropdown(activeDropdown === "blogs" ? null : "blogs")}
                   className={cn(
-                    "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
                     showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
                   )}
                 >
-                  {link.label}
-                </Link>
-              ))}
+                  Blogs
+                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "blogs" && "rotate-180")} />
+                </button>
+
+                {/* Dropdown Menu */}
+                <div
+                  onClick={() => setActiveDropdown(null)}
+                  className={cn(
+                    "absolute top-full left-0 z-50 min-w-[160px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                    activeDropdown === "blogs"
+                      ? "opacity-100 visible scale-100 pointer-events-auto"
+                      : "opacity-0 invisible scale-95 pointer-events-none"
+                  )}
+                >
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Dog
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Cat
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Aquatic
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Reptile
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Bird
+                  </Link>
+                  <Link
+                    href="#"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Small animal
+                  </Link>
+                </div>
+              </div>
+               {/* Page Dropdown */}
+              <div className="relative py-3 px-3.5 nav-dropdown-container">
+                <button
+                  onClick={() => setActiveDropdown(activeDropdown === "page" ? null : "page")}
+                  className={cn(
+                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  )}
+                >
+                  Pages
+                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "page" && "rotate-180")} />
+                </button>
+
+                {/* Dropdown Menu */}
+                <div
+                  className={cn(
+                    "absolute top-full left-0 z-50 min-w-[170px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                    activeDropdown === "page"
+                      ? "opacity-100 visible scale-100 pointer-events-auto"
+                      : "opacity-0 invisible scale-95 pointer-events-none"
+                  )}
+                >
+                  <Link
+                    href="#"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    About us
+                  </Link>
+
+                  {/* Services Submenu */}
+                  <div className="relative group/submenu">
+                    <Link
+                      href="/services"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                    >
+                      Services
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    </Link>
+                    {/* Submenu Panel */}
+                    <div className="absolute left-full top-0 z-50 min-w-[220px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                      <Link
+                        href="/services#aquarium-design"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Aquarium Consulting & Design
+                      </Link>
+                      <Link
+                        href="/services#custom-aquariums"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Custom Aquariums
+                      </Link>
+                      <Link
+                        href="/services#installation"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Aquarium Installation
+                      </Link>
+                      <Link
+                        href="/services#water-testing"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Water Testing
+                      </Link>
+                      <Link
+                        href="/services#fish-club"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Fish of the Month Club
+                      </Link>
+                      <Link
+                        href="/services#pet-care"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Pet Nail & Wing Trims
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Brands Submenu */}
+                  <div className="relative group/submenu">
+                    <Link
+                      href="/brands"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                    >
+                      Brands
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    </Link>
+                    {/* Submenu Panel */}
+                    <div className="absolute left-full top-0 z-50 min-w-[180px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                      <Link
+                        href="/brands?category=dog"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Dog Brands
+                      </Link>
+                      <Link
+                        href="/brands?category=cat"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Cat Brands
+                      </Link>
+                      <Link
+                        href="/brands?category=aquatic"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Aquatic Brands
+                      </Link>
+                      <Link
+                        href="/brands?category=reptile"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Reptile Brands
+                      </Link>
+                    </div>
+                  </div>
+                  {/* Sierra Edu Submenu */}
+                  <div className="relative group/submenu">
+                    <Link
+                      href="/edu"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                    >
+                      Sierra Edu
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    </Link>
+                    {/* Submenu Panel */}
+                    <div className="absolute left-full top-0 z-50 min-w-[180px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                      <Link
+                        href="/edu/dogs"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Dog Care Guides
+                      </Link>
+                      <Link
+                        href="/edu/cats"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Cat Care Guides
+                      </Link>
+                      <Link
+                        href="/edu/aquariums"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Aquarium Education
+                      </Link>
+                      <Link
+                        href="/edu/reptiles"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Reptile Care
+                      </Link>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/gallery"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Gallery
+                  </Link>
+                  <Link
+                    href="#"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Gift card
+                  </Link>
+
+
+                  <Link
+                    href="/contact"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Contact us
+                  </Link>
+                  <Link
+                    href="#"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Event calender
+                  </Link>
+                </div>
+              </div>
+
             </div>
 
             {/* Right — Actions */}
@@ -179,7 +592,7 @@ export default function Header() {
               </Link>
 
               {/* Wishlist */}
-              <Link
+              {/* <Link
                 href="/account/wishlist"
                 className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
                 aria-label="Wishlist"
@@ -193,7 +606,7 @@ export default function Header() {
                     {wishlistCount > 9 ? "9+" : wishlistCount}
                   </span>
                 )}
-              </Link>
+              </Link> */}
 
               {/* Cart */}
               <Link
@@ -225,8 +638,8 @@ export default function Header() {
       {searchOpen && (
         <div
           className={cn(
-            "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 transition-all duration-300",
-            isHome ? "fixed top-[56px] lg:top-16 inset-x-0" : "sticky top-[56px] lg:top-16 inset-x-0"
+            "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 transition-all duration-300 hidden lg:block",
+            isHome ? "fixed top-16 inset-x-0" : "sticky top-16 inset-x-0"
           )}
         >
           <div className="container mx-auto max-w-4xl">

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import {
   Fish,
@@ -19,7 +20,6 @@ import {
   LucideIcon,
 } from "lucide-react";
 import featuresData from "@/data/features.json";
-
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface Feature {
@@ -134,7 +134,10 @@ function FeatureCard({ feature }: { feature: Feature }) {
               className="h-28 w-28 object-contain"
             />
           ) : (
-            <IconComponent className="h-24 w-24 text-[#005AA9]" strokeWidth={1.5} />
+            <IconComponent
+              className="h-24 w-24 text-[#005AA9]"
+              strokeWidth={1.5}
+            />
           )}
         </div>
       </motion.div>
@@ -145,12 +148,37 @@ function FeatureCard({ feature }: { feature: Feature }) {
       </h3>
 
       {/* Description */}
-      <p className="text-slate-600 leading-relaxed">
-        {feature.description}
-      </p>
+      <p className="text-slate-600 leading-relaxed">{feature.description}</p>
     </motion.div>
   );
 }
+
+const SPOTLIGHT_ITEMS = [
+  {
+    image: "/images/categories/bird-toy.avif",
+    label: "Popular",
+    title: "Special offer",
+    href: "/shop/bird/toys",
+  },
+  {
+    image: "/images/categories/catfood.avif",
+    label: "Don't Miss",
+    title: "Top Rated",
+    href: "/shop/cat/cat-food",
+  },
+  {
+    image: "/images/categories/aquaticcategory.avif",
+    label: "Trending",
+    title: "Min. 30% Off",
+    href: "/shop/aquatic",
+  },
+  {
+    image: "/images/categories/reptilecategory.avif",
+    label: "Popular",
+    title: "Special offer",
+    href: "/shop/reptile",
+  },
+];
 
 // ─── Main FeaturesSection Component ───────────────────────────────────────────
 export default function FeaturesSection() {
@@ -161,52 +189,85 @@ export default function FeaturesSection() {
   }
 
   return (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={sectionVariants}
-      className="relative bg-white py-12 overflow-hidden md:py-16"
-    >
-      {/* ─── Decorative Background Elements ─── */}
-      
+    <>
+      {/* Desktop view — original layout */}
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionVariants}
+        className="relative bg-white py-12 overflow-hidden md:py-16 hidden md:block"
+      >
+        {/* ─── Content Container ─── */}
+        <div className="container relative z-10 mx-auto px-4">
+          {/* ─── Top Icon ─── */}
+          <motion.div
+            variants={iconVariants}
+            className="mb-4 flex justify-center"
+          >
+            <Image
+              src="/images/logo/dogicon.png"
+              alt="Dog icon"
+              width={130}
+              height={130}
+              className="h-28 w-28 object-contain md:h-32 md:w-32"
+            />
+          </motion.div>
 
-      {/* ─── Content Container ─── */}
-      <div className="container relative z-10 mx-auto px-4">
-        {/* ─── Top Icon ─── */}
-        <motion.div
-          variants={iconVariants}
-          className="mb-8 flex justify-center"
-        >
-          <Image
-            src="/images/logo/dogicon.png"
-            alt="Dog icon"
-            width={130}
-            height={130}
-            className="h-28 w-28 object-contain md:h-32 md:w-32"
-          />
-        </motion.div>
+          {/* ─── Main Heading ─── */}
+          <motion.div variants={headingVariants} className="text-center">
+            <h2 className="text-4xl font-bold leading-tight md:text-5xl">
+              <span className="text-[#005AA9]">What your pet needs</span>
+              <span className="text-slate-900">, when they need it.</span>
+            </h2>
+          </motion.div>
 
-        {/* ─── Main Heading ─── */}
-        <motion.div variants={headingVariants} className="text-center mb-12">
-          <h2 className="text-4xl font-bold leading-tight md:text-5xl">
-            <span className="text-[#005AA9]">What your pet needs</span>
-            <span className="text-slate-900">,
-              when they need it.</span>
+          {/* ─── Features Grid ─── */}
+          <motion.div
+            variants={featuresContainerVariants}
+            className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4"
+          >
+            {features.map((feature) => (
+              <FeatureCard key={feature.id} feature={feature} />
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Mobile view — "Spotlight's on" layout */}
+      <div className="block md:hidden px-4 py-8 bg-white">
+        <div className="bg-[#a7d7f8] rounded-[28px] p-5 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+          {/* Section Header */}
+          <h2 className="text-xl font-black text-slate-900 mb-4 tracking-tight">
+            Spotlight's on
           </h2>
-        </motion.div>
 
-        {/* ─── Features Grid ─── */}
-        <motion.div
-          variants={featuresContainerVariants}
-          className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4"
-        >
-          {features.map((feature) => (
-            <FeatureCard key={feature.id} feature={feature} />
-          ))}
-        </motion.div>
+          {/* 2x2 Grid */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+            {SPOTLIGHT_ITEMS.map((item, idx) => (
+              <Link key={idx} href={item.href} className="flex flex-col group">
+                {/* Image Card */}
+                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#f8f9fa] flex items-center justify-center p-3 shadow-[0_4px_12px_rgba(0,0,0,0.02)] border border-slate-100">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-contain  group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Info */}
+                <span className="text-[11px] font-bold text-slate-500 mt-2">
+                  {item.label}
+                </span>
+                <span className="text-sm font-black text-slate-900 leading-snug mt-0.5">
+                  {item.title}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-    </motion.section>
+    </>
   );
 }
-

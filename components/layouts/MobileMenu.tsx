@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { usePathname } from "next/navigation";
 import categories from "@/data/categories.json";
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -29,17 +30,75 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Shop All", href: "/shop" },
-  { label: "Services", href: "/services" },
-  { label: "New Arrivals", href: "/arrivals" },
-  { label: "Brands", href: "/brands" },
-  { label: "Learn", href: "/edu" },
-  { label: "Blog", href: "/blog" },
+
+  {
+    label: "Services",
+    href: "/services",
+    children: [
+      {
+        label: "Aquarium Consulting & Design",
+        href: "/services#aquarium-design",
+      },
+      { label: "Custom Aquariums", href: "/services#custom-aquariums" },
+      { label: "Aquarium Installation", href: "/services#installation" },
+      { label: "Water Testing", href: "/services#water-testing" },
+      { label: "Fish of the Month Club", href: "/services#fish-club" },
+      { label: "Pet Nail & Wing Trims", href: "/services#pet-care" },
+    ],
+  },
+
+  {
+    label: "New Arrivals",
+    href: "/arrivals",
+    children: [
+      { label: "New Fish", href: "/arrivals/fish" },
+      { label: "New Reptiles", href: "/arrivals/reptiles" },
+      { label: "New Birds", href: "/arrivals/birds" },
+      { label: "New Small Animals", href: "/arrivals/small-animals" },
+    ],
+  },
+
+  {
+    label: "Brands",
+    href: "/brands",
+    children: [
+      { label: "Dog Brands", href: "/brands?category=dog" },
+      { label: "Cat Brands", href: "/brands?category=cat" },
+      { label: "Aquatic Brands", href: "/brands?category=aquatic" },
+      { label: "Reptile Brands", href: "/brands?category=reptile" },
+    ],
+  },
+
+  {
+    label: "Learn",
+    href: "/edu",
+    children: [
+      { label: "Dog Care Guides", href: "/edu/dogs" },
+      { label: "Cat Care Guides", href: "/edu/cats" },
+      { label: "Aquarium Education", href: "/edu/aquariums" },
+      { label: "Reptile Care", href: "/edu/reptiles" },
+    ],
+  },
+
+  {
+    label: "Blog",
+    href: "/blog",
+    children: [
+      { label: "Latest Articles", href: "/blog" },
+      { label: "Pet Health", href: "/blog/category/pet-health" },
+      { label: "Aquariums", href: "/blog/category/aquariums" },
+      { label: "Events & News", href: "/blog/category/events" },
+    ],
+  },
+
   { label: "Gallery", href: "/gallery" },
+  { label: "Gift Cards", href: "/gift-cards" },
   { label: "Contact", href: "/contact" },
 ];
 
 export default function MobileMenu() {
+  const pathname = usePathname();
+
   return (
     <Sheet>
       <SheetTrigger
@@ -61,27 +120,71 @@ export default function MobileMenu() {
         <SheetHeader className="border-b border-slate-100 bg-gradient-to-r from-[#004d8f] to-[#005AA9] px-5 py-4">
           <SheetTitle className="flex items-center gap-3">
             <Image
-              src="/images/logo/logo.png"
+              src="/images/logo/white-logo.png"
               alt="Sierra Fish & Pets"
               width={130}
               height={42}
-              className="h-auto w-auto max-h-9 rounded-lg bg-white object-contain px-1.5 py-1"
+              className="h-auto w-auto max-h-9 rounded-lg object-contain px-1.5 py-1"
             />
           </SheetTitle>
         </SheetHeader>
 
         {/* ── Main nav links ── */}
-        <nav className="flex flex-col border-b border-slate-100">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="flex items-center justify-between border-b border-slate-50 px-5 py-3.5 text-[13px] font-semibold tracking-wide text-slate-700 transition-colors last:border-0 hover:bg-slate-50 hover:text-[#005AA9]"
-            >
-              {link.label}
-              <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
-            </Link>
-          ))}
+        <nav className="border-b border-slate-100">
+          <Accordion multiple className="w-full">
+            {NAV_LINKS.map((link) => {
+              if (link.children) {
+                return (
+                  <AccordionItem
+                    key={link.label}
+                    value={link.label}
+                    className="border-b border-slate-50"
+                  >
+                    <AccordionTrigger className="px-5 py-2.5 text-[13px] font-semibold tracking-wide text-slate-700 hover:text-[#005AA9] hover:no-underline">
+                      {link.label}
+                    </AccordionTrigger>
+
+                    <AccordionContent>
+                      <div className="flex flex-col pb-2">
+                        {link.children.map((child) => {
+                          const isActive = pathname === child.href;
+                          return (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className={`mx-2 pl-8 pr-5 py-2 text-[12px] font-medium rounded-md transition-all duration-200 ${
+                                isActive
+                                  ? "bg-blue-50/60 text-[#005AA9] font-semibold"
+                                  : "text-slate-600 hover:bg-blue-50/50 hover:text-[#005AA9]"
+                              }`}
+                            >
+                              {child.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              }
+
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center justify-between border-b border-slate-50 px-5 py-2.5 text-[13px] font-semibold tracking-wide transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-50/60 text-[#005AA9] font-semibold"
+                      : "text-slate-700 hover:bg-blue-50/50 hover:text-[#005AA9]"
+                  }`}
+                >
+                  {link.label}
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+                </Link>
+              );
+            })}
+          </Accordion>
         </nav>
 
         {/* ── Shop by category accordion ── */}
@@ -97,7 +200,7 @@ export default function MobileMenu() {
                 value={category.id}
                 className="border-b border-slate-100"
               >
-                <AccordionTrigger className="py-3 text-[13px] font-semibold tracking-wide text-slate-700 hover:text-[#005AA9] hover:no-underline">
+                <AccordionTrigger className="py-2.5 text-[13px] font-semibold tracking-wide text-slate-700 hover:text-[#005AA9] hover:no-underline">
                   <span className="flex items-center gap-2.5">
                     <span className="text-base">
                       {CATEGORY_EMOJI[category.slug] ?? "🐾"}
@@ -107,29 +210,30 @@ export default function MobileMenu() {
                 </AccordionTrigger>
 
                 <AccordionContent className="pb-2 pl-2">
-                  <div className="flex flex-col gap-0.5">
-                    <Link
-                      href={`/shop/${category.slug}`}
-                      className="rounded-md px-3 py-2 text-[12px] font-semibold text-[#005AA9] transition-colors hover:bg-[#005AA9]/5"
-                    >
-                      View All {category.name} →
-                    </Link>
-                    {category.subcategories.map((sub) => (
-                      <Link
-                        key={sub.id}
-                        href={`/shop/${category.slug}/${sub.slug}`}
-                        className="rounded-md px-3 py-2 text-[12px] font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#005AA9]"
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
+                  <div className="flex flex-col gap-0.5 pr-2">
+                    {category.subcategories.map((sub) => {
+                      const href = `/shop/${category.slug}/${sub.slug}`;
+                      const isActive = pathname === href;
+                      return (
+                        <Link
+                          key={sub.id}
+                          href={href}
+                          className={`rounded-md px-3 py-2 text-[12px] font-medium transition-all duration-200 ${
+                            isActive
+                              ? "bg-blue-50/60 text-[#005AA9] font-semibold"
+                              : "text-slate-600 hover:bg-blue-50/50 hover:text-[#005AA9]"
+                          }`}
+                        >
+                          {sub.name}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
-
       </SheetContent>
     </Sheet>
   );

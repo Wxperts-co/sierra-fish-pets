@@ -17,22 +17,38 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 interface MegaMenuProps {
   textClass?: string;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  onClose?: () => void;
 }
 
-export default function MegaMenu({ textClass = "text-[#003DA5]" }: MegaMenuProps) {
+export default function MegaMenu({
+  textClass = "text-[#003DA5]",
+  isOpen = false,
+  onToggle,
+  onClose,
+}: MegaMenuProps) {
   const cats = categories as Category[];
 
   return (
-    <div className="group/shop relative">
+    <div className="relative nav-dropdown-container">
       {/* Trigger */}
-      <button className={`flex items-center gap-1.5 px-3 py-2 text-[20px] font-semibold transition-colors hover:text-cyan-300 focus:outline-none ${textClass}`}>
+      <button
+        onClick={onToggle}
+        className={`flex items-center gap-1.5 px-3 py-2 text-[20px] font-semibold transition-colors hover:text-white/80 focus:outline-none ${textClass}`}
+      >
         Shop All
-        <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover/shop:rotate-180" />
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {/* Dropdown panel */}
       <div
-        className="pointer-events-none absolute left-0 top-full z-50 mt-0 w-[760px] opacity-0 transition-all duration-200 group-hover/shop:pointer-events-auto group-hover/shop:opacity-100"
+        onClick={onClose}
+        className={`absolute left-0 top-full z-50 mt-0 w-[760px] transition-all duration-200 origin-top-left ${
+          isOpen
+            ? "opacity-100 visible scale-100 pointer-events-auto"
+            : "opacity-0 invisible scale-95 pointer-events-none"
+        }`}
         style={{ paddingTop: "2px" }}
       >
         <div className="font-lato overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl ring-1 ring-black/5">

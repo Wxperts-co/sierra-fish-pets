@@ -16,13 +16,13 @@ const page = () => {
     <>
       <HeroBanner/>
       <CategoryCards/>
-            <PromoBlocksCarousel/>
+      <PromoBlocksCarousel/>
       {/* <NewArrivals/> */}
       <FeaturedProducts/>
       <AmazonCTA/>
-      {/* <BestSellers/> */}
       <FeaturesSection/>
       <TasteGuarantee/>
+      <BestSellers/>
       <PopularBrands/>
       <InstagramGallery/>
     </>

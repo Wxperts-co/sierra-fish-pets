@@ -113,7 +113,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                 src={imgError ? getFallbackImage() : product.images[0]}
                 alt={product.name}
                 fill
-                className={`object-contain p-4 transition-transform duration-500 ease-out ${
+                className={`object-contain p-1 transition-transform duration-500 ease-out ${
                   hovered ? "scale-108" : "scale-100"
                 }`}
                 onError={() => setImgError(true)}
@@ -144,7 +144,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             {/* Secondary actions */}
             <div className="flex items-center gap-4">
               {/* Wishlist */}
-              <button
+              {/* <button
                 onClick={handleWishlist}
                 className="flex flex-col items-center gap-1 group/btn"
                 title="Add to Wishlist"
@@ -153,7 +153,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                   <Heart className="h-5 w-5 fill-[#e8473f]" />
                 </span>
                 <span className="text-[11px] font-semibold text-white/90">Wishlist</span>
-              </button>
+              </button> */}
 
               {/* Quick View */}
               <Link
@@ -204,7 +204,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         </div>
 
         {/* Divider */}
-        <div className="my-3 h-px bg-gray-100" />
+        <div className="my-1 h-px bg-gray-100" />
 
         {/* Price + stock row */}
         <div className="flex items-center justify-between">

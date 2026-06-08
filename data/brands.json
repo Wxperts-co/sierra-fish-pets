@@ -48,6 +48,96 @@
     "categories": ["dog", "cat"],
     "featured": true,
     "website": "https://www.seachem.com"
+  },
+   {
+    "id": "brand-006",
+    "name": "Taste of the Wild",
+    "slug": "taste-of-the-wild",
+    "logo": "/images/brands/tasteofwild.png",
+    "description": "Protein-rich recipes inspired by the ancestral diet of dogs and cats.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.tasteofthewildpetfood.com"
+  },
+  {
+    "id": "brand-007",
+    "name": "Taste of the Wild PREY",
+    "slug": "taste-of-the-wild-prey",
+    "logo": "/images/brands/tasteofprey.png",
+    "description": "Limited-ingredient pet food recipes made with premium proteins and simplified nutrition.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://www.tasteofthewildpetfood.com"
+  },
+  {
+    "id": "brand-008",
+    "name": "Acana",
+    "slug": "acana",
+    "logo": "/images/brands/acana.png",
+    "description": "Premium pet food crafted with quality animal ingredients and balanced nutrition.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://acana.com"
+  },
+  {
+    "id": "brand-009",
+    "name": "AvoDerm",
+    "slug": "avoderm",
+    "logo": "/images/brands/avoderm.jpeg",
+    "description": "Pet nutrition enriched with avocados to support healthy skin and coat.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://avodermnatural.com"
+  },
+  {
+    "id": "brand-010",
+    "name": "Evanger's",
+    "slug": "evangers",
+    "logo": "/images/brands/evangers.jpeg",
+    "description": "Family-owned pet food company offering high-quality canned and dry food recipes.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://evangersdogfood.com"
+  },
+  {
+    "id": "brand-011",
+    "name": "Canine Caviar",
+    "slug": "canine-caviar",
+    "logo": "/images/brands/canine-cavier.jpeg",
+    "description": "Holistic pet food focused on alkaline-based nutrition for dogs.",
+    "categories": ["dog"],
+    "featured": true,
+    "website": "https://caninecaviar.com"
+  },
+  {
+    "id": "brand-012",
+    "name": "Northwest Naturals",
+    "slug": "northwest-naturals",
+    "logo": "/images/brands/northwest-naturals.png",
+    "description": "Raw frozen and freeze-dried pet foods made from premium natural ingredients.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://nw-naturals.net"
+  },
+  {
+    "id": "brand-013",
+    "name": "Primal",
+    "slug": "primal",
+    "logo": "/images/brands/Primal.jpeg",
+    "description": "Raw and fresh pet nutrition crafted with responsibly sourced ingredients.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://primalpetfoods.com"
+  },
+  {
+    "id": "brand-014",
+    "name": "Redbarn",
+    "slug": "redbarn",
+    "logo": "/images/brands/Redbarn.jpeg",
+    "description": "Premium pet food, treats, and chews made with high-quality ingredients.",
+    "categories": ["dog", "cat"],
+    "featured": true,
+    "website": "https://redbarn.com"
   }
  
 ]

@@ -1,0 +1,26 @@
+[
+  {
+    "image": "/images/banner/hero1.jpg",
+    "alt": "Aquarium Services",
+    "title": "Aquarium Services",
+    "description": "Consulting, custom aquarium design, installation, and maintenance for every aquatic setup.",
+    "buttonText": "Explore Services",
+    "buttonLink": "/services"
+  },
+  {
+    "image": "/images/banner/hero2.png",
+    "alt": "In-Store Services",
+    "title": "In-Store Services",
+    "description": "Aquarium water testing, Fish of the Month Club, and pet nail & wing trims.",
+    "buttonText": "Learn More",
+    "buttonLink": "/services"
+  },
+  {
+    "image": "/images/banner/hero7.png",
+    "alt": "Dog Adoption Events",
+    "title": "Dog Adoption Events",
+    "description": "Meet your future best friend at our adoption events and community gatherings.",
+    "buttonText": "View Events",
+    "buttonLink": "/services"
+  }
+]

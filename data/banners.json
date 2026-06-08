@@ -1,7 +1,25 @@
 [
   {
-    "id": "banner-002",
+    "id": "banner-001",
     "image": "/images/banner/hero1.jpg",
+    "title": "Everything Your Pet Needs",
+    "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
+    "ctaLabel": "Shop Now",
+    "ctaLink": "/shop",
+    "order": 2
+  },
+  {
+    "id": "banner-002",
+    "image": "/images/banner/hero2.png",
+    "title": "Everything Your Pet Needs",
+    "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
+    "ctaLabel": "Shop Now",
+    "ctaLink": "/shop",
+    "order": 2
+  },
+  {
+    "id": "banner-003",
+    "image": "/images/banner/hero7.png",
     "title": "Everything Your Pet Needs",
     "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
     "ctaLabel": "Shop Now",

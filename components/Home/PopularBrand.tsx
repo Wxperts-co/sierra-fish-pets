@@ -15,21 +15,17 @@ export default function PopularBrands() {
           </h2>
         </div>
 
-        {/* Brand Grid */}
-        <div className="overflow-hidden rounded-2xl border bg-card">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {brands.map((brand, index) => (
+        {/* Brand Marquee */}
+        <div className="overflow-hidden rounded-2xl border bg-card ">
+          <div
+            className="flex w-max flex-nowrap items-center gap-10 px-6 py-8 animate-marquee bg-gradient-to-r from-[#EAF4FF] via-white to-[#EAF4FF]"
+          >
+            {[...brands, ...brands].map((brand, index) => (
               <div
-                key={brand.id}
-                className={`
-                  flex h-52 items-center justify-center
-                  transition-all duration-300
-                  hover:bg-muted/40
-                  hover:scale-[1.02]
-                  ${index !== brands.length - 1 ? "border-r" : ""}
-                `}
+                key={`${brand.id}-${index}`}
+                className="inline-flex items-center justify-center h-52 w-48 shrink-0 rounded-2xl bg-white/80 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:bg-muted/20"
               >
-                <div className="relative h-28 w-40 transition-all duration-300 hover:grayscale-0">
+                <div className="relative h-24 w-32">
                   <Image
                     src={brand.logo}
                     alt={brand.name}

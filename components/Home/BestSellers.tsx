@@ -23,9 +23,10 @@ import { getBestSellers } from "@/data/products";
 import { Product } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
 import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { motion } from "framer-motion";
 
 // ─── Custom Flat Product Card matching reference image ───
-function BestSellerCard({ product }: { product: Product }) {
+function BestSellerCard({ product, index }: { product: Product; index: number }) {
   const dispatch = useAppDispatch();
   const [imgError, setImgError] = useState(false);
 
@@ -98,16 +99,29 @@ function BestSellerCard({ product }: { product: Product }) {
           </span>
         )}
 
-        <Link href={`/product/${product.id}`} className="block w-full h-full relative">
-          <Image
-            src={imgError ? getFallbackImage() : product.images[0]}
-            alt={product.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 25vw"
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
-            onError={() => setImgError(true)}
-            priority
-          />
+        <Link href={`/product/${product.id}`} className="block w-full h-full relative overflow-hidden">
+          <motion.div
+            initial={{ x: 120, opacity: 0, scale: 0.95 }}
+            whileInView={{ x: 0, opacity: 1, scale: 1 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{
+              type: "spring",
+              stiffness: 60,
+              damping: 14,
+              delay: index * 0.08,
+            }}
+            className="w-full h-full relative"
+          >
+            <Image
+              src={imgError ? getFallbackImage() : product.images[0]}
+              alt={product.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 25vw"
+              className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+              onError={() => setImgError(true)}
+              priority
+            />
+          </motion.div>
         </Link>
       </div>
 
@@ -185,10 +199,10 @@ export default function BestSellers() {
   }
 
   return (
-    <section className="py-20 bg-[#fbf9f6] border-b border-slate-100">
+    <section className="py-8 bg-[#fbf9f6] border-b border-slate-100">
       <div className="container mx-auto px-4">
         {/* Centered Heading */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-4">
           <h2 className="text-4xl md:text-5xl font-extrabold leading-tight font-lato">
             <span className="text-[#FF5A36]">Best</span> <span className="text-[#002244]">Sellers</span>
           </h2>
@@ -201,19 +215,19 @@ export default function BestSellers() {
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {bestSellers.map((product) => (
+            {bestSellers.map((product, index) => (
               <CarouselItem
                 key={product.id}
                 className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
               >
-                <BestSellerCard product={product} />
+                <BestSellerCard product={product} index={index} />
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
 
         {/* Centered Navigation Buttons Below Carousel */}
-        <div className="flex items-center justify-center gap-3 mt-12">
+        <div className="flex items-center justify-center gap-3 mt-4">
           <button
             onClick={scrollPrev}
             disabled={!canPrev}

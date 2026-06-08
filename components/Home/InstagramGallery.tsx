@@ -29,7 +29,7 @@ export default function InstagramGallery() {
 
   return (
     <section className="w-full bg-slate-50 border-t border-slate-100">
-      <div className="py-12 text-center">
+      <div className="py-8 text-center">
         <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-2 block">
           Follow Our Journey
         </span>
