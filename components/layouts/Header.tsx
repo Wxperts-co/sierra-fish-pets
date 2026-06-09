@@ -431,7 +431,7 @@ export default function Header() {
 
               {/* Contact us */}
               <Link
-                href="/contact"
+                href="#"
                 className={cn(
                   "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
                   showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
@@ -451,7 +451,7 @@ export default function Header() {
                     showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
                   )}
                 >
-                  Page
+                  More
                   <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "page" && "rotate-180")} />
                 </button>
 
@@ -615,6 +615,20 @@ export default function Header() {
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
                         Reptile Care
+                      </Link>
+                      <Link
+                        href="/edu/reptiles"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Bird Care Guides
+                      </Link>
+                      <Link
+                        href="/edu/reptiles"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Small Animal Care Guides
                       </Link>
                     </div>
                   </div>

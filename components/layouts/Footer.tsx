@@ -16,7 +16,6 @@ import {
 const CORPORATE = [
   { label: "About Us", href: "/about" },
   { label: "Careers", href: "/careers" },
-  { label: "Blog", href: "/blog" },
   { label: "Gallery", href: "/gallery" },
   { label: "Brands We Carry", href: "/brands" },
   { label: "Affiliate Program", href: "/affiliate" },
@@ -34,9 +33,7 @@ const CUSTOMER_SERVICE = [
 const SERVICES = [
   { label: "Aquarium Setup", href: "/services" },
   { label: "Live Fish Consultation", href: "/services" },
-  { label: "New Arrivals", href: "/arrivals" },
   { label: "Pet Adoption", href: "/services" },
-  { label: "Learn Center", href: "/edu" },
   { label: "In-Store Events", href: "/events" },
 ];
 
