@@ -51,10 +51,12 @@ export default function Header() {
   );
 
   const isHome = pathname === "/";
+  const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
+  const isTransparentPage = isHome || isShopHero;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
-    if (!isHome) {
+    if (!isTransparentPage) {
       setScrolled(false);
       return;
     }
@@ -68,10 +70,11 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   // Determine if header should have a solid background or be transparent overlay
-  const showSolidBackground = !isHome || scrolled || searchOpen;
+  const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
 
   return (
     <>

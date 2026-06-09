@@ -73,7 +73,7 @@ export default function MegaMenu({
 
                 {/* Category heading */}
                 <Link
-                  href={`/shop/${cat.slug}`}
+                  href={`/shop/?category=${cat.slug}`}
                   className="group/cat mb-3 flex items-center gap-2.5"
                 >
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#005AA9]/10 to-cyan-500/10 text-xl transition-transform duration-200 group-hover/cat:scale-110">

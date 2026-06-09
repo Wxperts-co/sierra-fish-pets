@@ -87,7 +87,7 @@ export default function CategoryCards() {
                 className="w-full"
               >
                 <Link
-                  href={`/shop/${category.slug}`}
+                  href={`/shop/?category=${category.slug}`}
                   className="group flex flex-col items-center w-full"
                 >
                   {/* Rounded Card with pastel BG — image fills the entire card */}

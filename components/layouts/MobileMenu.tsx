@@ -44,6 +44,7 @@ const NAV_LINKS = [
       { label: "Water Testing", href: "/services#water-testing" },
       { label: "Fish of the Month Club", href: "/services#fish-club" },
       { label: "Pet Nail & Wing Trims", href: "/services#pet-care" },
+      { label: "Dog adoption events", href: "#" },
     ],
   },
 
@@ -54,7 +55,9 @@ const NAV_LINKS = [
       { label: "New Fish", href: "/arrivals/fish" },
       { label: "New Reptiles", href: "/arrivals/reptiles" },
       { label: "New Birds", href: "/arrivals/birds" },
-      { label: "New Small Animals", href: "/arrivals/small-animals" },
+      { label: "New Small Animals", href: "#" },
+      { label: "Fresh water arrival", href: "#" },
+      { label: "Salt water arrival", href: "#" },
     ],
   },
 
@@ -62,6 +65,7 @@ const NAV_LINKS = [
     label: "Brands",
     href: "/brands",
     children: [
+      { label: "All Brands", href: "#" },
       { label: "Dog Brands", href: "/brands?category=dog" },
       { label: "Cat Brands", href: "/brands?category=cat" },
       { label: "Aquatic Brands", href: "/brands?category=aquatic" },
@@ -77,6 +81,8 @@ const NAV_LINKS = [
       { label: "Cat Care Guides", href: "/edu/cats" },
       { label: "Aquarium Education", href: "/edu/aquariums" },
       { label: "Reptile Care", href: "/edu/reptiles" },
+      { label: "Bird Cares Guides", href: "/edu/reptiles" },
+      { label: "Small Animal Care", href: "/edu/reptiles" },
     ],
   },
 
@@ -84,10 +90,13 @@ const NAV_LINKS = [
     label: "Blog",
     href: "/blog",
     children: [
-      { label: "Latest Articles", href: "/blog" },
-      { label: "Pet Health", href: "/blog/category/pet-health" },
-      { label: "Aquariums", href: "/blog/category/aquariums" },
-      { label: "Events & News", href: "/blog/category/events" },
+      { label: "All Pets", href: "/blog" },
+      { label: "Dogs", href: "/blog/category/dogs" },
+      { label: "Cats", href: "/blog/category/cats" },
+      { label: "Birds", href: "/blog/category/birds" },
+      { label: "Aquatic", href: "/blog/category/aquatic" },
+      { label: "Small Animals", href: "/blog/category/small-animals" },
+      { label: "Reptiles", href: "/blog/category/reptiles" },
     ],
   },
 
