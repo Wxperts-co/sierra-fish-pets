@@ -204,7 +204,7 @@ export default function BestSellers() {
         {/* Centered Heading */}
         <div className="text-center mb-4">
           <h2 className="text-4xl md:text-5xl font-extrabold leading-tight font-lato">
-            <span className="text-[#FF5A36]">Best</span> <span className="text-[#002244]">Sellers</span>
+            <span className="text-[#005AA9]">Best</span> <span className="text-[#002244]">Sellers</span>
           </h2>
         </div>
 

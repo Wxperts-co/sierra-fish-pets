@@ -37,7 +37,7 @@ export default function InstagramGallery() {
           Join Us on <span className="text-[#005AA9]">Instagram</span>
         </h2>
         <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-          Share your pet moments with us using #SierraPets Yuba City
+          Share your pet moments with us using #SierraFish&Pets
         </p>
       </div>
 

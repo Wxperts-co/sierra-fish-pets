@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useScroll, useTransform, useSpring } from "framer-motion";
 import {
   Fish,
   Truck,
@@ -183,6 +183,24 @@ const SPOTLIGHT_ITEMS = [
 // ─── Main FeaturesSection Component ───────────────────────────────────────────
 export default function FeaturesSection() {
   const features = featuresData as Feature[];
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Track scroll position of the features section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Map the scroll progress to a 360-degree rotation
+  const rotateValue = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  
+  // Apply physics-based spring smoothing to make the rotation feel premium and fluid
+  const smoothRotate = useSpring(rotateValue, {
+    stiffness: 90,
+    damping: 30,
+    mass: 0.2,
+    restDelta: 0.001,
+  });
 
   if (!features.length) {
     return null;
@@ -192,6 +210,7 @@ export default function FeaturesSection() {
     <>
       {/* Desktop view — original layout */}
       <motion.section
+        ref={sectionRef}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
@@ -203,6 +222,7 @@ export default function FeaturesSection() {
           {/* ─── Top Icon ─── */}
           <motion.div
             variants={iconVariants}
+            style={{ rotate: smoothRotate }}
             className="mb-4 flex justify-center"
           >
             <Image
