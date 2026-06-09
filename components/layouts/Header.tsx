@@ -24,7 +24,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const [activeDropdown, setActiveDropdown] = useState<"shop" | "arrivals" | "blogs" | "page" | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<"shop" | "arrivals" | "blogs" | "page" | "services" | "brands" | null>(null);
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
@@ -239,173 +239,40 @@ export default function Header() {
               </Link>
 
              
-               {/* Arrivals Dropdown */}
-               <div className="relative py-3 px-3.5 nav-dropdown-container">
-                 <button
-                   onClick={() => setActiveDropdown(activeDropdown === "arrivals" ? null : "arrivals")}
-                   className={cn(
-                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                     showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
-                   )}
-                 >
-                   Arrivals
-                   <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "arrivals" && "rotate-180")} />
-                 </button>
-
-                 {/* Dropdown Menu */}
-                 <div
-                   onClick={() => setActiveDropdown(null)}
-                   className={cn(
-                     "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                     activeDropdown === "arrivals"
-                       ? "opacity-100 visible scale-100 pointer-events-auto"
-                       : "opacity-0 invisible scale-95 pointer-events-none"
-                   )}
-                 >
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Bird Arrivals
-                   </Link>
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Freshwater Arrivals
-                   </Link>
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Saltwater Arrivals
-                   </Link>
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Reptile Arrivals
-                   </Link>
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Small Animal Arrivals
-                   </Link>
-                   <Link
-                     href="#"
-                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                   >
-                     Cat Arrivals
-                   </Link>
-                 </div>
-               </div>
-
-              
-
-               {/* Blog Dropdown */}
+              {/* Services Dropdown */}
               <div className="relative py-3 px-3.5 nav-dropdown-container">
                 <button
-                  onClick={() => setActiveDropdown(activeDropdown === "blogs" ? null : "blogs")}
+                  onClick={() => setActiveDropdown(activeDropdown === "services" ? null : "services")}
                   className={cn(
                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
                     showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
                   )}
                 >
-                  Blogs
-                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "blogs" && "rotate-180")} />
-                </button>
-
-                {/* Dropdown Menu */}
-                <div
-                  onClick={() => setActiveDropdown(null)}
-                  className={cn(
-                    "absolute top-full left-0 z-50 min-w-[160px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                    activeDropdown === "blogs"
-                      ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none"
-                  )}
-                >
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Dog
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Cat
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Aquatic
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Reptile
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Bird
-                  </Link>
-                  <Link
-                    href="#"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Small animal
-                  </Link>
-                </div>
-              </div>
-               {/* Page Dropdown */}
-              <div className="relative py-3 px-3.5 nav-dropdown-container">
-                <button
-                  onClick={() => setActiveDropdown(activeDropdown === "page" ? null : "page")}
-                  className={cn(
-                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
-                  )}
-                >
-                  Pages
-                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "page" && "rotate-180")} />
+                  Services
+                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "services" && "rotate-180")} />
                 </button>
 
                 {/* Dropdown Menu */}
                 <div
                   className={cn(
-                    "absolute top-full left-0 z-50 min-w-[170px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                    activeDropdown === "page"
+                    "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                    activeDropdown === "services"
                       ? "opacity-100 visible scale-100 pointer-events-auto"
                       : "opacity-0 invisible scale-95 pointer-events-none"
                   )}
                 >
-                  <Link
-                    href="#"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    About us
-                  </Link>
-
-                  {/* Services Submenu */}
+                  {/* Aquarium Services Submenu */}
                   <div className="relative group/submenu">
                     <Link
                       href="/services"
                       onClick={() => setActiveDropdown(null)}
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                     >
-                      Services
+                      Aquarium Services
                       <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                     </Link>
                     {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[220px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                    <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
                       <Link
                         href="/services#aquarium-design"
                         onClick={() => setActiveDropdown(null)}
@@ -427,12 +294,27 @@ export default function Header() {
                       >
                         Aquarium Installation
                       </Link>
+                    </div>
+                  </div>
+
+                  {/* In-Store Services Submenu */}
+                  <div className="relative group/submenu">
+                    <Link
+                      href="/services"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                    >
+                      In-Store Services
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    </Link>
+                    {/* Submenu Panel */}
+                    <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
                       <Link
                         href="/services#water-testing"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
-                        Water Testing
+                        Aquarium Water Testing
                       </Link>
                       <Link
                         href="/services#fish-club"
@@ -446,53 +328,254 @@ export default function Header() {
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
-                        Pet Nail & Wing Trims
+                        Pet Nails and Wing Trim
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Store Tour & Loyalty Program
                       </Link>
                     </div>
                   </div>
 
-                  {/* Brands Submenu */}
+                  {/* Dog Adoption Events */}
+                  <Link
+                    href="#"
+                    onClick={() => setActiveDropdown(null)}
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                  >
+                    Dog Adoption Events
+                  </Link>
+                </div>
+              </div>
+
+              {/* Brands Dropdown */}
+              <div className="relative py-3 px-3.5 nav-dropdown-container">
+                <button
+                  onClick={() => setActiveDropdown(activeDropdown === "brands" ? null : "brands")}
+                  className={cn(
+                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  )}
+                >
+                  Brands
+                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "brands" && "rotate-180")} />
+                </button>
+
+                {/* Dropdown Menu */}
+                <div
+                  onClick={() => setActiveDropdown(null)}
+                  className={cn(
+                    "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                    activeDropdown === "brands"
+                      ? "opacity-100 visible scale-100 pointer-events-auto"
+                      : "opacity-0 invisible scale-95 pointer-events-none"
+                  )}
+                >
+                  <Link
+                    href="/brands"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    All Brands
+                  </Link>
+                  <Link
+                    href="/brands?category=dog"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Dog Brands
+                  </Link>
+                  <Link
+                    href="/brands?category=cat"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Cat Brands
+                  </Link>
+                  <Link
+                    href="/brands?category=aquatic"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Aquatic Brands
+                  </Link>
+                  <Link
+                    href="/brands?category=reptile"
+                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                  >
+                    Reptile Brands
+                  </Link>
+                </div>
+              </div>
+
+               {/* Event calender */}
+              <Link
+                href="#"
+                className={cn(
+                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                )}
+              >
+                Event calender
+              </Link>
+
+              {/* About us */}
+              <Link
+                href="#"
+                className={cn(
+                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                )}
+              >
+                About us
+              </Link>
+
+              {/* Contact us */}
+              <Link
+                href="/contact"
+                className={cn(
+                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                )}
+              >
+                Contact us
+              </Link>
+
+             
+
+              {/* Page Dropdown */}
+              <div className="relative py-3 px-3.5 nav-dropdown-container">
+                <button
+                  onClick={() => setActiveDropdown(activeDropdown === "page" ? null : "page")}
+                  className={cn(
+                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  )}
+                >
+                  Page
+                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "page" && "rotate-180")} />
+                </button>
+
+                {/* Dropdown Menu */}
+                <div
+                  className={cn(
+                    "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                    activeDropdown === "page"
+                      ? "opacity-100 visible scale-100 pointer-events-auto"
+                      : "opacity-0 invisible scale-95 pointer-events-none"
+                  )}
+                >
+                  {/* Arrivals Submenu */}
                   <div className="relative group/submenu">
                     <Link
-                      href="/brands"
-                      onClick={() => setActiveDropdown(null)}
+                      href="#"
                       className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                     >
-                      Brands
+                      Arrivals
                       <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                     </Link>
                     {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[180px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                    <div className="absolute left-full top-0 z-50 min-w-[200px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
                       <Link
-                        href="/brands?category=dog"
+                        href="#"
                         onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                       >
-                        Dog Brands
+                        Bird Arrivals
                       </Link>
                       <Link
-                        href="/brands?category=cat"
+                        href="#"
                         onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                       >
-                        Cat Brands
+                        Freshwater Arrivals
                       </Link>
                       <Link
-                        href="/brands?category=aquatic"
+                        href="#"
                         onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                       >
-                        Aquatic Brands
+                        Saltwater Arrivals
                       </Link>
                       <Link
-                        href="/brands?category=reptile"
+                        href="#"
                         onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                       >
-                        Reptile Brands
+                        Reptile Arrivals
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                      >
+                        Small Animal Arrivals
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                      >
+                        Cat Arrivals
                       </Link>
                     </div>
                   </div>
+
+                  {/* Blogs Submenu */}
+                  <div className="relative group/submenu">
+                    <Link
+                      href="#"
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                    >
+                      Blogs
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    </Link>
+                    {/* Submenu Panel */}
+                    <div className="absolute left-full top-0 z-50 min-w-[160px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Dog
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Cat
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Aquatic
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Reptile
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Bird
+                      </Link>
+                      <Link
+                        href="#"
+                        onClick={() => setActiveDropdown(null)}
+                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      >
+                        Small animal
+                      </Link>
+                    </div>
+                  </div>
+
                   {/* Sierra Edu Submenu */}
                   <div className="relative group/submenu">
                     <Link
@@ -536,6 +619,7 @@ export default function Header() {
                     </div>
                   </div>
 
+                  {/* Gallery Link */}
                   <Link
                     href="/gallery"
                     onClick={() => setActiveDropdown(null)}
@@ -543,28 +627,14 @@ export default function Header() {
                   >
                     Gallery
                   </Link>
+
+                  {/* Gift card Link */}
                   <Link
                     href="#"
                     onClick={() => setActiveDropdown(null)}
                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                   >
                     Gift card
-                  </Link>
-
-
-                  <Link
-                    href="/contact"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Contact us
-                  </Link>
-                  <Link
-                    href="#"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Event calender
                   </Link>
                 </div>
               </div>
