@@ -94,7 +94,7 @@ export default function MegaMenu({
                   {cat.subcategories.slice(0, 5).map((sub) => (
                     <li key={sub.id}>
                       <Link
-                        href={`/shop/${cat.slug}/${sub.slug}`}
+                        href={`/shop/?category=${cat.slug}&subcategory=${sub.slug}`}
                         className="block truncate rounded-md px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-50 hover:text-[#005AA9]"
                       >
                         {sub.name}
@@ -104,7 +104,7 @@ export default function MegaMenu({
                   {cat.subcategories.length > 5 && (
                     <li>
                       <Link
-                        href={`/shop/${cat.slug}`}
+                        href="#"
                         className="block px-2 py-1 text-xs font-medium text-cyan-600 hover:text-cyan-700"
                       >
                         +{cat.subcategories.length - 5} more →
@@ -124,7 +124,7 @@ export default function MegaMenu({
               (tag) => (
                 <Link
                   key={tag}
-                  href={`/shop?q=${encodeURIComponent(tag)}`}
+                  href="#"
                   className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm transition-all hover:border-[#005AA9] hover:text-[#005AA9]"
                 >
                   {tag}

@@ -1,45 +1,52 @@
 "use client";
 
-type SubCategory = {
+type Brand = {
   id: string;
   name: string;
   slug: string;
 };
 
-interface SubCategoryFilterProps {
-  subcategories: SubCategory[];
-  selectedSubcategories: string[];
+interface BrandFilterProps {
+  brands: Brand[];
+  selectedBrands: string[];
   onToggle: (slug: string) => void;
 }
 
-export default function SubCategoryFilter({
-  subcategories,
-  selectedSubcategories,
+export default function BrandFilter({
+  brands,
+  selectedBrands,
   onToggle,
-}: SubCategoryFilterProps) {
-  if (!subcategories.length) return null;
+}: BrandFilterProps) {
+  if (!brands.length) return null;
 
   return (
-    <div className="space-y-1 pb-1">
-      {subcategories.map((subcategory) => {
-        const isChecked = selectedSubcategories.includes(subcategory.slug);
+    <div className="space-y-1 pb-1 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
+      {brands.map((brand) => {
+        const isChecked = selectedBrands.includes(
+          brand.slug
+        );
+
         return (
           <label
-            key={subcategory.id}
+            key={brand.id}
             className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors ${
               isChecked
                 ? "bg-[#379ae5]/10 text-[#005ca5]"
-                : "hover:bg-slate-50 text-slate-600"
+                : "text-slate-600 hover:bg-slate-50"
             }`}
           >
-            {/* Custom styled checkbox */}
+            {/* Custom Checkbox */}
             <span
-              className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+              className={`flex shrink-0 items-center justify-center rounded border-2 transition-colors ${
                 isChecked
                   ? "border-[#379ae5] bg-[#379ae5]"
                   : "border-slate-300 bg-white"
               }`}
-              style={{ width: 18, height: 18, minWidth: 18 }}
+              style={{
+                width: 18,
+                height: 18,
+                minWidth: 18,
+              }}
             >
               {isChecked && (
                 <svg
@@ -59,16 +66,22 @@ export default function SubCategoryFilter({
               )}
             </span>
 
-            {/* Hidden native checkbox for a11y */}
+            {/* Hidden Checkbox */}
             <input
               type="checkbox"
               checked={isChecked}
-              onChange={() => onToggle(subcategory.slug)}
+              onChange={() => onToggle(brand.slug)}
               className="sr-only"
             />
 
-            <span className={`text-sm font-medium ${isChecked ? "text-[#005ca5]" : "text-slate-600"}`}>
-              {subcategory.name}
+            <span
+              className={`text-sm font-medium ${
+                isChecked
+                  ? "text-[#005ca5]"
+                  : "text-slate-600"
+              }`}
+            >
+              {brand.name}
             </span>
           </label>
         );

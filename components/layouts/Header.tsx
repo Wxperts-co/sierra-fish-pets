@@ -52,7 +52,8 @@ export default function Header() {
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
-  const isTransparentPage = isHome || isShopHero;
+  const isAboutUs = pathname ==="/about";
+  const isTransparentPage = isHome || isShopHero || isAboutUs;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -423,7 +424,7 @@ export default function Header() {
 
               {/* About us */}
               <Link
-                href="#"
+                href="/about"
                 className={cn(
                   "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
                   showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getProductById } from "@/services/productService";
+import { getProductById } from "@/data";
+import ProductActions from "@/components/shop/ProductActions";
+
 
 interface ProductPageProps {
   params: Promise<{
@@ -32,7 +34,7 @@ export default async function ProductPage({
       : "bg-red-100 text-red-700";
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-32">
       <div className="grid gap-12 lg:grid-cols-2">
 
         {/* Product Image */}
@@ -103,38 +105,8 @@ export default async function ProductPage({
             </p>
           </div>
 
-          {/* Buttons */}
-          <div className="flex flex-wrap gap-4">
-            <button
-              className="
-                rounded-xl
-                bg-[#005AA9]
-                px-8
-                py-3
-                font-semibold
-                text-white
-                transition
-                hover:bg-[#00488a]
-              "
-            >
-              Add To Cart
-            </button>
-
-            <button
-              className="
-                rounded-xl
-                border
-                border-gray-300
-                px-8
-                py-3
-                font-semibold
-                transition
-                hover:bg-gray-50
-              "
-            >
-              Add To Wishlist
-            </button>
-          </div>
+          {/* Buttons — client component wired to Redux */}
+          <ProductActions product={product} />
 
           {/* Extra Info */}
           <div className="mt-10 space-y-3 border-t pt-6">

@@ -23,7 +23,7 @@
       "Available in 5lb, 15lb, and 30lb bags"
     ],
     "tags": ["dry food", "chicken", "adult", "grain-inclusive", "premium"],
-    "rating": 4.7,
+    "rating": 4,
     "reviewCount": 312,
     "reviews": [
       {
@@ -40,7 +40,7 @@
         "id": "rev-dog-002",
         "userId": "usr-004",
         "userName": "James R.",
-        "rating": 4,
+        "rating": 3,
         "title": "Good quality food",
         "body": "High quality ingredients, my picky eater actually finishes his bowl every time.",
         "date": "2024-10-22",
@@ -124,7 +124,7 @@
       "Bounces unpredictably for added fun"
     ],
     "tags": ["toy", "chew", "rubber", "stuffable", "enrichment"],
-    "rating": 4.9,
+    "rating": 2,
     "reviewCount": 876,
     "reviews": [
       {
@@ -138,7 +138,7 @@
         "verified": true
       }
     ],
-    "stockStatus": "in_stock",
+    "stockStatus": "out_of_stock",
     "stockCount": 85,
     "isNewArrival": false,
     "isFeatured": false,

@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import categories from "@/data/categories.json";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCategory } from "@/store/slices/filtersSlice";
+import type { CategorySlug } from "@/types";
 
 export default function CategoryTabs() {
-  const [activeCategory, setActiveCategory] =
-    useState("all");
+  const dispatch = useAppDispatch();
+  const activeCategory = useAppSelector(
+    (state) => state.filters.category ?? "all"
+  );
 
   return (
     <div className="flex flex-wrap justify-center gap-4">
       <button
-        onClick={() => setActiveCategory("all")}
+        onClick={() => dispatch(setCategory(null))}
+        className={activeCategory === null ? "font-bold" : ""}
       >
         All
       </button>
@@ -19,8 +24,9 @@ export default function CategoryTabs() {
         <button
           key={category.id}
           onClick={() =>
-            setActiveCategory(category.slug)
+            dispatch(setCategory(category.slug as CategorySlug))
           }
+          className={activeCategory === category.slug ? "font-bold" : ""}
         >
           {category.name}
         </button>

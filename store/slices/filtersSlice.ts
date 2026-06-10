@@ -15,7 +15,7 @@ export type SortOption =
 interface FiltersState {
   category: CategorySlug | null;
   subcategory: string | null;
-  brand: string | null;
+  brands: string[];
 
   search: string;
 
@@ -23,22 +23,22 @@ interface FiltersState {
   maxPrice: number;
 
   stockStatus: StockStatus | null;
-
+  minRating: number | null;
   sortBy: SortOption;
 }
 
 const initialState: FiltersState = {
   category: null,
   subcategory: null,
-  brand: null,
+  brands: [],
 
   search: "",
 
   minPrice: 0,
-  maxPrice: 10000,
+  maxPrice: 400,
 
   stockStatus: null,
-
+  minRating: null,
   sortBy: "featured",
 };
 
@@ -52,7 +52,11 @@ const filtersSlice = createSlice({
       state,
       action: PayloadAction<CategorySlug | null>
     ) => {
-      state.category = action.payload;
+      if (state.category !== action.payload) {
+        state.category = action.payload;
+        state.subcategory = null;
+        state.brands = [];
+      }
     },
 
     setSubcategory: (
@@ -62,12 +66,26 @@ const filtersSlice = createSlice({
       state.subcategory = action.payload;
     },
 
-    setBrand: (
-      state,
-      action: PayloadAction<string | null>
-    ) => {
-      state.brand = action.payload;
-    },
+    toggleBrand: (
+        state,
+        action: PayloadAction<string>
+      ) => {
+        const brand = action.payload;
+
+        if (state.brands.includes(brand)) {
+          state.brands = state.brands.filter(
+            (item) => item !== brand
+          );
+        } else {
+          state.brands.push(brand);
+        }
+      },
+      setBrands: (
+        state,
+        action: PayloadAction<string[]>
+      ) => {
+        state.brands = action.payload;
+      },
 
     setSearch: (
       state,
@@ -101,18 +119,24 @@ const filtersSlice = createSlice({
       state.sortBy = action.payload;
     },
 
+    setMinRating: (
+      state,
+      action: PayloadAction<number | null>
+    ) => {
+      state.minRating = action.payload;
+    },
+
     clearFilters: (state) => {
-      state.category = null;
       state.subcategory = null;
-      state.brand = null;
+      state.brands = [];
 
       state.search = "";
 
       state.minPrice = 0;
-      state.maxPrice = 10000;
+      state.maxPrice = 400;
 
       state.stockStatus = null;
-
+      state.minRating = null;
       state.sortBy = "featured";
     },
   },
@@ -121,12 +145,14 @@ const filtersSlice = createSlice({
 export const {
   setCategory,
   setSubcategory,
-  setBrand,
+  toggleBrand,
+  setBrands,
   setSearch,
   setPriceRange,
   setStockStatus,
   setSortBy,
   clearFilters,
+  setMinRating,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

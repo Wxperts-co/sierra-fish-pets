@@ -20,7 +20,7 @@ const orderedCategories = [...categories].sort(
 );
 
 interface ShopHeroProps {
-  selectedCategory: string;
+  selectedCategory: string | null;
   setSelectedCategory: (slug: string) => void;
   breadcrumb?: { label: string; href?: string }[];
 }
@@ -125,7 +125,7 @@ export default function ShopHero({
                 <span
                   className={`block rounded-full p-[3px] transition-all duration-[250ms] bg-white ${
                     isActive
-                      ? "border-[3px] border-teal-500 shadow-[0_0_0_3px_rgba(10,147,150,0.18),0_8px_24px_rgba(10,147,150,0.28)]"
+                      ? "border-[3px] border-[#379ae5] ring-4 ring-[#379ae5]/25 shadow-lg"
                       : "border-[3px] border-white shadow-[0_4px_18px_rgba(0,0,0,0.13)]"
                   }`}
                 >
@@ -158,7 +158,7 @@ export default function ShopHero({
             <span
               key={cat.id}
               className={`w-[118px] text-center text-[0.85rem] tracking-[0.01em] transition-colors duration-200 md:w-[96px] sm:w-[80px] ${
-                isActive ? "font-bold text-teal-600" : "font-semibold text-slate-500"
+                isActive ? "font-bold text-[#005ca5]" : "font-semibold text-slate-500"
               }`}
             >
               {cat.name}

@@ -1,45 +1,52 @@
 "use client";
 
-type SubCategory = {
-  id: string;
-  name: string;
-  slug: string;
-};
+import { StockStatus } from "@/types";
 
-interface SubCategoryFilterProps {
-  subcategories: SubCategory[];
-  selectedSubcategories: string[];
-  onToggle: (slug: string) => void;
+interface StockStatusFilterProps {
+  selectedStatus: StockStatus | null;
+  onSelect: (status: StockStatus | null) => void;
 }
 
-export default function SubCategoryFilter({
-  subcategories,
-  selectedSubcategories,
-  onToggle,
-}: SubCategoryFilterProps) {
-  if (!subcategories.length) return null;
+const options: {
+  label: string;
+  value: StockStatus;
+}[] = [
+  {
+    label: "In Stock",
+    value: "in_stock",
+  },
+  {
+    label: "Out of Stock",
+    value: "out_of_stock",
+  },
+];
 
+export default function StockStatusFilter({
+  selectedStatus,
+  onSelect,
+}: StockStatusFilterProps) {
   return (
     <div className="space-y-1 pb-1">
-      {subcategories.map((subcategory) => {
-        const isChecked = selectedSubcategories.includes(subcategory.slug);
+      {options.map((option) => {
+        const isChecked =
+          selectedStatus === option.value;
+
         return (
           <label
-            key={subcategory.id}
+            key={option.value}
             className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors ${
               isChecked
                 ? "bg-[#379ae5]/10 text-[#005ca5]"
                 : "hover:bg-slate-50 text-slate-600"
             }`}
           >
-            {/* Custom styled checkbox */}
+            {/* Checkbox */}
             <span
-              className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+              className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded border-2 transition-colors ${
                 isChecked
                   ? "border-[#379ae5] bg-[#379ae5]"
                   : "border-slate-300 bg-white"
               }`}
-              style={{ width: 18, height: 18, minWidth: 18 }}
             >
               {isChecked && (
                 <svg
@@ -59,16 +66,27 @@ export default function SubCategoryFilter({
               )}
             </span>
 
-            {/* Hidden native checkbox for a11y */}
             <input
               type="checkbox"
               checked={isChecked}
-              onChange={() => onToggle(subcategory.slug)}
+              onChange={() =>
+                onSelect(
+                  isChecked
+                    ? null
+                    : option.value
+                )
+              }
               className="sr-only"
             />
 
-            <span className={`text-sm font-medium ${isChecked ? "text-[#005ca5]" : "text-slate-600"}`}>
-              {subcategory.name}
+            <span
+              className={`text-sm font-medium ${
+                isChecked
+                  ? "text-[#005ca5]"
+                  : "text-slate-600"
+              }`}
+            >
+              {option.label}
             </span>
           </label>
         );
