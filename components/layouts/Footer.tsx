@@ -26,8 +26,8 @@ const CUSTOMER_SERVICE = [
   { label: "Returns & Refunds", href: "/returns" },
   { label: "Shipping Info", href: "/shipping" },
   { label: "FAQs", href: "/faqs" },
-  { label: "Pet Store Locator", href: "/contact" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Pet Store Locator", href: "/contact-us" },
+  { label: "Contact Us", href: "/contact-us" },
 ];
 
 const SERVICES = [
@@ -77,7 +77,7 @@ const SOCIAL = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto bg-white border-t border-slate-100">
+    <footer className="mt-auto bg-white border-t border-slate-100 relative z-20">
 
       {/* ── Newsletter strip ─────────────────────────────────── */}
       <div className="relative overflow-hidden bg-gradient-to-r from-[#003d73] via-[#005AA9] to-[#0077cc]">

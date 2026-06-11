@@ -4,7 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Search, User, Heart, ShoppingBag, X, ChevronDown, ChevronRight, MapPin } from "lucide-react";
+import {
+  Search,
+  User,
+  Heart,
+  ShoppingBag,
+  X,
+  ChevronDown,
+  ChevronRight,
+  MapPin,
+} from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 import MobileMenu from "@/components/layouts/MobileMenu";
 import MegaMenu from "./MegaMenu";
@@ -24,7 +33,9 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const [activeDropdown, setActiveDropdown] = useState<"shop" | "arrivals" | "blogs" | "page" | "services" | "brands" | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<
+    "shop" | "arrivals" | "blogs" | "page" | "services" | "brands" | null
+  >(null);
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
@@ -47,13 +58,17 @@ export default function Header() {
 
   const cartCount = useAppSelector((state) => state.cart.items.length);
   const wishlistCount = useAppSelector(
-    (state) => state.wishlist.productIds.length
+    (state) => state.wishlist.productIds.length,
   );
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
-  const isAboutUs = pathname ==="/about";
-  const isTransparentPage = isHome || isShopHero || isAboutUs;
+  const isAboutUs = pathname === "/about";
+  const isContactUs = pathname === "/contact-us";
+  const isEventCalendar = pathname === "/event-calendar";
+  const isServiceDetail = pathname ? pathname.startsWith("/services/") : false;
+  const isBrandsPage = pathname === "/brands" || (pathname ? pathname.startsWith("/brands/") : false);
+  const isTransparentPage = isHome || isShopHero || isAboutUs || isContactUs || isEventCalendar || isServiceDetail || isBrandsPage;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -71,11 +86,14 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Determine if header should have a solid background or be transparent overlay
   const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
+
+  const isDarkTransparentPage = isAboutUs || isContactUs || isEventCalendar || isServiceDetail || isBrandsPage;
+  const useWhiteText = showSolidBackground || isDarkTransparentPage;
 
   return (
     <>
@@ -151,7 +169,7 @@ export default function Header() {
                 "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
                 pathname === "/"
                   ? "text-[#005AA9]"
-                  : "text-slate-600 group-hover:text-[#005AA9]"
+                  : "text-slate-600 group-hover:text-[#005AA9]",
               )}
             >
               For You
@@ -175,7 +193,7 @@ export default function Header() {
                     "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
                     isActive
                       ? "text-[#005AA9]"
-                      : "text-slate-600 group-hover:text-[#005AA9]"
+                      : "text-slate-600 group-hover:text-[#005AA9]",
                   )}
                 >
                   {category.name}
@@ -198,24 +216,36 @@ export default function Header() {
           "z-50 hidden transition-all duration-300 lg:block font-lato",
           showSolidBackground
             ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d]"
-            : "absolute top-0 inset-x-0 bg-transparent border-b border-transparent"
+            : cn(
+                "absolute top-0 inset-x-0 bg-transparent border-b",
+                isDarkTransparentPage
+                  ? "border-white/10"
+                  : (isHome || isEventCalendar)
+                  ? "border-slate-200/60"
+                  : "border-transparent"
+              )
         )}
       >
         <div className="container mx-auto px-4">
           <div className="flex h-25 items-center justify-between gap-4">
             {/* Left — logo */}
-            <Link href="/" className="flex h-16 shrink-0 items-center overflow-visible">
+            <Link
+              href="/"
+              className="flex h-16 shrink-0 items-center overflow-visible"
+            >
               <Image
-                src={showSolidBackground ? "/images/logo/logo6.png" : "/images/logo/logo3.png"}
+                src={
+                  useWhiteText
+                    ? "/images/logo/logo6.png"
+                    : "/images/logo/logo3.png"
+                }
                 alt="Sierra Fish & Pets"
                 width={400}
                 height={100}
                 priority
                 className={cn(
                   "block h-auto w-[300px] object-contain object-center px-3 transition-all duration-300",
-                  showSolidBackground
-                    ? "pt-3"
-                    : "rounded-lg pt-3"
+                  useWhiteText ? "pt-3" : "rounded-lg pt-3",
                 )}
               />
             </Link>
@@ -223,37 +253,56 @@ export default function Header() {
             {/* Center — Navigation links */}
             <div className="flex items-center">
               <MegaMenu
-                textClass={showSolidBackground ? "text-white" : "text-[#003DA5]"}
+                textClass={useWhiteText ? "text-white" : "text-[#003DA5]"}
                 isOpen={activeDropdown === "shop"}
-                onToggle={() => setActiveDropdown(activeDropdown === "shop" ? null : "shop")}
+                onToggle={() =>
+                  setActiveDropdown(activeDropdown === "shop" ? null : "shop")
+                }
                 onClose={() => setActiveDropdown(null)}
               />
 
-              <span className={cn("mx-2 h-4 w-px transition-colors duration-300", showSolidBackground ? "bg-white/20" : "bg-[#003DA5]")} />
+              <span
+                className={cn(
+                  "mx-2 h-4 w-px transition-colors duration-300",
+                  useWhiteText ? "bg-white/20" : "bg-[#003DA5]",
+                )}
+              />
 
               {/* Home */}
               <Link
                 href="/"
                 className={cn(
                   "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  useWhiteText
+                    ? "text-white hover:text-white/80"
+                    : "text-black/70 hover:text-[#003DA5]/80",
                 )}
               >
                 Home
               </Link>
 
-             
               {/* Services Dropdown */}
               <div className="relative py-3 px-3.5 nav-dropdown-container">
                 <button
-                  onClick={() => setActiveDropdown(activeDropdown === "services" ? null : "services")}
+                  onClick={() =>
+                    setActiveDropdown(
+                      activeDropdown === "services" ? null : "services",
+                    )
+                  }
                   className={cn(
                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                    useWhiteText
+                      ? "text-white hover:text-white/80"
+                      : "text-black/70 hover:text-[#003DA5]/80",
                   )}
                 >
                   Services
-                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "services" && "rotate-180")} />
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      activeDropdown === "services" && "rotate-180",
+                    )}
+                  />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -262,37 +311,35 @@ export default function Header() {
                     "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
                     activeDropdown === "services"
                       ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none"
+                      : "opacity-0 invisible scale-95 pointer-events-none",
                   )}
                 >
                   {/* Aquarium Services Submenu */}
                   <div className="relative group/submenu">
-                    <Link
-                      href="/services"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                    <div
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none"
                     >
                       Aquarium Services
                       <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </Link>
+                    </div>
                     {/* Submenu Panel */}
                     <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                      <Link
-                        href="/services#aquarium-design"
+                       <Link
+                        href="/services/aquarium/aquarium-consulting-design"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
                         Aquarium Consulting & Design
                       </Link>
                       <Link
-                        href="/services#custom-aquariums"
+                        href="/services/aquarium/custom-aquariums"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
                         Custom Aquariums
                       </Link>
                       <Link
-                        href="/services#installation"
+                        href="/services/aquarium/aquarium-installation"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
@@ -303,32 +350,30 @@ export default function Header() {
 
                   {/* In-Store Services Submenu */}
                   <div className="relative group/submenu">
-                    <Link
-                      href="/services"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                    <div
+                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none"
                     >
                       In-Store Services
                       <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </Link>
+                    </div>
                     {/* Submenu Panel */}
                     <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                      <Link
-                        href="/services#water-testing"
+                       <Link
+                        href="/services/in-store/aquarium-water-testing"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
                         Aquarium Water Testing
                       </Link>
                       <Link
-                        href="/services#fish-club"
+                        href="/services/in-store/fish-of-month-club"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
                         Fish of the Month Club
                       </Link>
                       <Link
-                        href="/services#pet-care"
+                        href="/services/in-store/pet-nail-wing-trims"
                         onClick={() => setActiveDropdown(null)}
                         className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
                       >
@@ -346,7 +391,7 @@ export default function Header() {
 
                   {/* Dog Adoption Events */}
                   <Link
-                    href="#"
+                    href="/services/dog-adoption"
                     onClick={() => setActiveDropdown(null)}
                     className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                   >
@@ -358,14 +403,25 @@ export default function Header() {
               {/* Brands Dropdown */}
               <div className="relative py-3 px-3.5 nav-dropdown-container">
                 <button
-                  onClick={() => setActiveDropdown(activeDropdown === "brands" ? null : "brands")}
+                  onClick={() =>
+                    setActiveDropdown(
+                      activeDropdown === "brands" ? null : "brands",
+                    )
+                  }
                   className={cn(
                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                    useWhiteText
+                      ? "text-white hover:text-white/80"
+                      : "text-black/70 hover:text-[#003DA5]/80",
                   )}
                 >
                   Brands
-                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "brands" && "rotate-180")} />
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      activeDropdown === "brands" && "rotate-180",
+                    )}
+                  />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -375,7 +431,7 @@ export default function Header() {
                     "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
                     activeDropdown === "brands"
                       ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none"
+                      : "opacity-0 invisible scale-95 pointer-events-none",
                   )}
                 >
                   <Link
@@ -411,52 +467,67 @@ export default function Header() {
                 </div>
               </div>
 
-               {/* Event calender */}
-              <Link
-                href="#"
-                className={cn(
-                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
-                )}
-              >
-                Event calender
-              </Link>
+             
 
               {/* About us */}
               <Link
                 href="/about"
                 className={cn(
                   "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  useWhiteText
+                    ? "text-white hover:text-white/80"
+                    : "text-black/70 hover:text-[#003DA5]/80",
                 )}
               >
-                About us
+                About Us
+              </Link>
+
+               {/* Event calender */}
+              <Link
+                href="/event-calendar"
+                className={cn(
+                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                  useWhiteText
+                    ? "text-white hover:text-white/80"
+                    : "text-black/70 hover:text-[#003DA5]/80",
+                )}
+              >
+                Event calender
               </Link>
 
               {/* Contact us */}
               <Link
-                href="#"
+                href="/contact-us"
                 className={cn(
                   "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                  useWhiteText
+                    ? "text-white hover:text-white/80"
+                    : "text-black/70 hover:text-[#003DA5]/80",
                 )}
               >
-                Contact us
+                Contact Us
               </Link>
-
-             
 
               {/* Page Dropdown */}
               <div className="relative py-3 px-3.5 nav-dropdown-container">
                 <button
-                  onClick={() => setActiveDropdown(activeDropdown === "page" ? null : "page")}
+                  onClick={() =>
+                    setActiveDropdown(activeDropdown === "page" ? null : "page")
+                  }
                   className={cn(
                     "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    showSolidBackground ? "text-white hover:text-white/80" : "text-black/70 hover:text-[#003DA5]/80"
+                    useWhiteText
+                      ? "text-white hover:text-white/80"
+                      : "text-black/70 hover:text-[#003DA5]/80",
                   )}
                 >
                   More
-                  <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", activeDropdown === "page" && "rotate-180")} />
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      activeDropdown === "page" && "rotate-180",
+                    )}
+                  />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -465,7 +536,7 @@ export default function Header() {
                     "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
                     activeDropdown === "page"
                       ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none"
+                      : "opacity-0 invisible scale-95 pointer-events-none",
                   )}
                 >
                   {/* Arrivals Submenu */}
@@ -656,18 +727,26 @@ export default function Header() {
                   </Link>
                 </div>
               </div>
-
             </div>
 
             {/* Right — Actions */}
-            <div className={cn("flex items-center gap-1.5 transition-colors duration-300", showSolidBackground ? "text-white" : "text-[#003DA5]")}>
+            <div
+              className={cn(
+                "flex items-center gap-1.5 transition-colors duration-300",
+                useWhiteText ? "text-white" : "text-[#003DA5]",
+              )}
+            >
               {/* Search Toggle */}
               <button
                 onClick={() => setSearchOpen((v) => !v)}
                 className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15 focus:outline-none"
                 aria-label="Search"
               >
-                {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+                {searchOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Search className="h-5 w-5" />
+                )}
               </button>
 
               {/* Account */}
@@ -704,19 +783,20 @@ export default function Header() {
               >
                 <ShoppingBag className="h-5 w-5" />
                 {cartCount > 0 && (
-                  <span className={cn(
-                    "absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black",
-                    showSolidBackground ? "bg-white text-[#005AA9]" : "bg-[#003DA5] text-white"
-                  )}>
+                  <span
+                    className={cn(
+                      "absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black",
+                      useWhiteText
+                        ? "bg-white text-[#005AA9]"
+                        : "bg-[#003DA5] text-white",
+                    )}
+                  >
                     {cartCount > 9 ? "9+" : cartCount}
                   </span>
                 )}
               </Link>
 
-
-
               {/* Theme Toggle */}
-
             </div>
           </div>
         </div>
@@ -727,7 +807,7 @@ export default function Header() {
         <div
           className={cn(
             "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 transition-all duration-300 hidden lg:block",
-            isHome ? "fixed top-16 inset-x-0" : "sticky top-16 inset-x-0"
+            isHome ? "fixed top-16 inset-x-0" : "sticky top-16 inset-x-0",
           )}
         >
           <div className="container mx-auto max-w-4xl">

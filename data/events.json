@@ -3,55 +3,100 @@
     "id": "evt-001",
     "title": "Dog Adoption Event",
     "description": "Partner rescue organizations bring adoptable dogs to our store every 2nd and 4th weekend of the month. All adopted dogs come with a vet check, flea treatment, and first shots.",
-    "type": "adoption",
+    "category": "adoption",
+    "petType": ["dog"],
     "image": "/images/events/dog-adoption.jpg",
-    "startDate": "2025-02-08T11:00:00Z",
-    "endDate": "2025-02-08T17:00:00Z",
-    "isRecurring": true,
-    "recurrenceNote": "Every 2nd and 4th weekend of the month"
+    "location": "Sierra Fish Pets Store",
+    "startDate": "2026-07-08T11:00:00Z",
+    "endDate": "2026-07-08T17:00:00Z",
+    "status": "upcoming",
+    "featured": true,
+    "ctaText": "View Details",
+    "ctaLink": "/events/dog-adoption-event",
+    "recurrence": {
+      "enabled": true,
+      "frequency": "monthly",
+      "rule": "2nd-and-4th-weekend"
+    }
   },
   {
     "id": "evt-002",
     "title": "Low-Cost Vaccination Clinic",
     "description": "Affordable vaccinations for dogs and cats provided by a licensed mobile vet clinic. No appointment needed. Vaccines include rabies, DHPP, FVRCP, and more.",
-    "type": "vaccination",
+    "category": "vaccination",
+    "petType": ["dog", "cat"],
     "image": "/images/events/vaccination-clinic.jpg",
-    "startDate": "2025-02-15T10:00:00Z",
-    "endDate": "2025-02-15T15:00:00Z",
-    "isRecurring": true,
-    "recurrenceNote": "3rd Saturday of each month"
+    "location": "Sierra Fish Pets Store",
+    "startDate": "2026-08-15T10:00:00Z",
+    "endDate": "2026-08-15T15:00:00Z",
+    "status": "upcoming",
+    "featured": true,
+    "ctaText": "Register Now",
+    "ctaLink": "/events/vaccination-clinic",
+    "recurrence": {
+      "enabled": true,
+      "frequency": "monthly",
+      "rule": "third-saturday"
+    }
   },
   {
     "id": "evt-003",
     "title": "Aquarium Setup Workshop",
     "description": "Learn how to set up and cycle a freshwater aquarium from scratch. Our aquatic specialists will walk you through choosing a tank, adding substrate, live plants, and fish.",
-    "type": "workshop",
+    "category": "workshop",
+    "petType": ["fish"],
     "image": "/images/events/aquarium-workshop.jpg",
-    "startDate": "2025-02-22T13:00:00Z",
-    "endDate": "2025-02-22T15:00:00Z",
-    "isRecurring": false,
-    "recurrenceNote": null
+    "location": "Aquatics Learning Center",
+    "startDate": "2026-02-22T13:00:00Z",
+    "endDate": "2026-02-22T15:00:00Z",
+    "status": "upcoming",
+    "featured": true,
+    "ctaText": "Reserve Seat",
+    "ctaLink": "/events/aquarium-setup-workshop",
+    "recurrence": {
+      "enabled": false,
+      "frequency": null,
+      "rule": null
+    }
   },
   {
     "id": "evt-004",
     "title": "Valentine's Day Pet Sale",
     "description": "Celebrate Valentine's Day with your pets! Enjoy 20% off all toys, treats, and beds across all categories.",
-    "type": "sale",
+    "category": "sale",
+    "petType": ["dog", "cat", "fish", "bird", "small-animal", "reptile"],
     "image": "/images/events/valentines-sale.jpg",
-    "startDate": "2025-02-14T11:00:00Z",
-    "endDate": "2025-02-14T19:00:00Z",
-    "isRecurring": false,
-    "recurrenceNote": null
+    "location": "All Sierra Fish Pets Stores",
+    "startDate": "2026-02-14T11:00:00Z",
+    "endDate": "2026-02-14T19:00:00Z",
+    "status": "upcoming",
+    "featured": false,
+    "ctaText": "Shop Sale",
+    "ctaLink": "/sale/valentines-day",
+    "recurrence": {
+      "enabled": false,
+      "frequency": null,
+      "rule": null
+    }
   },
   {
     "id": "evt-005",
     "title": "Store Tour — Aquatic Section",
     "description": "Guided tours of our world-class aquatic section led by our senior aquarist. See our display tanks, talk about fish care, and get expert advice on your setup.",
-    "type": "tour",
+    "category": "tour",
+    "petType": ["fish"],
     "image": "/images/events/store-tour.jpg",
-    "startDate": "2025-03-01T14:00:00Z",
-    "endDate": "2025-03-01T15:30:00Z",
-    "isRecurring": true,
-    "recurrenceNote": "First Saturday of each month"
+    "location": "Sierra Fish Pets Store",
+    "startDate": "2026-03-01T14:00:00Z",
+    "endDate": "2026-03-01T15:30:00Z",
+    "status": "upcoming",
+    "featured": false,
+    "ctaText": "Book Tour",
+    "ctaLink": "/events/store-tour-aquatic-section",
+    "recurrence": {
+      "enabled": true,
+      "frequency": "monthly",
+      "rule": "first-saturday"
+    }
   }
 ]

@@ -37,14 +37,14 @@ const NAV_LINKS = [
     children: [
       {
         label: "Aquarium Consulting & Design",
-        href: "/services#aquarium-design",
+        href: "/services/aquarium/aquarium-consulting-design",
       },
-      { label: "Custom Aquariums", href: "/services#custom-aquariums" },
-      { label: "Aquarium Installation", href: "/services#installation" },
-      { label: "Water Testing", href: "/services#water-testing" },
-      { label: "Fish of the Month Club", href: "/services#fish-club" },
-      { label: "Pet Nail & Wing Trims", href: "/services#pet-care" },
-      { label: "Dog adoption events", href: "#" },
+      { label: "Custom Aquariums", href: "/services/aquarium/custom-aquariums" },
+      { label: "Aquarium Installation", href: "/services/aquarium/aquarium-installation" },
+      { label: "Water Testing", href: "/services/in-store/aquarium-water-testing" },
+      { label: "Fish of the Month Club", href: "/services/in-store/fish-of-month-club" },
+      { label: "Pet Nail & Wing Trims", href: "/services/in-store/pet-nail-wing-trims" },
+      { label: "Dog adoption events", href: "/services/dog-adoption/dog-adoption-events" },
     ],
   },
 
@@ -102,7 +102,8 @@ const NAV_LINKS = [
 
   { label: "Gallery", href: "/gallery" },
   { label: "Gift Cards", href: "/gift-cards" },
-  { label: "Contact", href: "/contact" },
+  { label: "Event Calendar", href: "/event-calendar" },
+  { label: "Contact", href: "/contact-us" },
 ];
 
 export default function MobileMenu() {

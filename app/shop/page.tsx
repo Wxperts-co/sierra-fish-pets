@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -32,7 +32,7 @@ const sortOptions = [
 
 const ITEMS_PER_PAGE = 4;
 
-export default function ShopPage() {
+function ShopPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
@@ -468,5 +468,19 @@ const handleSortChange = (
         </div>
       </div>
     </>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#005AA9]"></div>
+        </div>
+      }
+    >
+      <ShopPageContent />
+    </Suspense>
   );
 }

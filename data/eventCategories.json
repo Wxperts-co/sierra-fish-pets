@@ -1,0 +1,27 @@
+[
+  {
+    "id": "adoption",
+    "label": "Adoption",
+    "color": "#A8D5A2"
+  },
+  {
+    "id": "vaccination",
+    "label": "Vaccination",
+    "color": "#FFD4B2"
+  },
+  {
+    "id": "workshop",
+    "label": "Workshop",
+    "color": "#A9D6FF"
+  },
+  {
+    "id": "sale",
+    "label": "Sale",
+    "color": "#FFB6C1"
+  },
+  {
+    "id": "tour",
+    "label": "Tour",
+    "color": "#D9C2FF"
+  }
+]
