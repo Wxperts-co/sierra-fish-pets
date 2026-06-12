@@ -38,7 +38,7 @@ export default function AmazonCTA() {
           {/* Logo – rendered white via CSS filter on blue bg */}
           <div className="relative mb-8">
             <Image
-              src="/images/logo/white-logo.png"
+              src="/images/logo/logo3.png"
               alt="Sierra Fish & Pets"
               width={400}
               height={100}

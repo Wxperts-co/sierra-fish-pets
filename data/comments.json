@@ -1,0 +1,76 @@
+{
+  "aquatic": [
+    {
+      "id": "c-1",
+      "name": "Jessica Miller",
+      "date": "January 22, 2025",
+      "avatar": "/images/testimonial/EverestC.png",
+      "text": "This guide was extremely helpful! I just set up my first aquarium and the care tips on water cycling made it much less intimidating.",
+      "replies": [
+        {
+          "id": "r-1",
+          "name": "Sierra Team",
+          "role": "Aquatics Specialist",
+          "date": "January 23, 2025",
+          "avatar": "/images/team/sierra-team.jpg",
+          "text": "We are so glad to hear that, Jessica! Welcome to the hobby. Don't hesitate to visit the Renton store if you need your water tested for free."
+        }
+      ]
+    },
+    {
+      "id": "c-2",
+      "name": "David K.",
+      "date": "January 21, 2025",
+      "avatar": "/images/testimonial/ChrisSwanson.png",
+      "text": "Are these new fish arrivals already quarantined, or should I quarantine them at home first?",
+      "replies": [
+        {
+          "id": "r-2",
+          "name": "Sierra Aquatics Team",
+          "role": "Store Specialist",
+          "date": "January 21, 2025",
+          "avatar": "/images/testimonial/EverestC.png",
+          "text": "Hi David! All our incoming fish go through an initial holding period, but we always recommend quarantining new arrivals in a separate tank for at least 2 weeks to safeguard your active display."
+        }
+      ]
+    }
+  ],
+  "dog": [
+    {
+      "id": "c-1",
+      "name": "Marcus Vance",
+      "date": "January 14, 2025",
+      "avatar": "/images/testimonial/GabrielDavis.png",
+      "text": "My senior golden retriever has been struggling with joint pain, and switching to a diet high in glucosamine has made a world of difference.",
+      "replies": [
+        {
+          "id": "r-1",
+          "name": "Sierra Team",
+          "role": "Canine Specialist",
+          "date": "January 15, 2025",
+          "avatar": "/images/team/sierra-team.jpg",
+          "text": "That is fantastic news, Marcus! Nutrition plays a key role in joint longevity. If you ever want dry food brand comparisons, our specialists in store are always here to chat."
+        }
+      ]
+    }
+  ],
+  "default": [
+    {
+      "id": "c-1",
+      "name": "Alex Johnson",
+      "date": "January 20, 2025",
+      "avatar": "/images/testimonial/MichaelSavage.png",
+      "text": "Thanks for this write up! It's so helpful to get expert pet guidance directly from the local store team.",
+      "replies": [
+        {
+          "id": "r-1",
+          "name": "Sierra Team",
+          "role": "Pet Care Specialist",
+          "date": "January 21, 2025",
+          "avatar": "/images/team/sierra-team.jpg",
+          "text": "We appreciate your kind words, Alex! Happy pet parenting!"
+        }
+      ]
+    }
+  ]
+}

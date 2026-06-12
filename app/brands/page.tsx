@@ -10,13 +10,41 @@ export const metadata = {
     "Explore trusted pet food, aquatic, and pet care brands available at Sierra Fish & Pets.",
 };
 
-export default function BrandsPage() {
+const CATEGORY_LABELS: Record<string, string> = {
+  dog: "Dog",
+  cat: "Cat",
+  aquatic: "Aquatic",
+  reptile: "Reptile",
+  bird: "Bird",
+  "small-animal": "Small Animal",
+};
+
+interface BrandsPageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
+export default async function BrandsPage({ searchParams }: BrandsPageProps) {
+  const { category } = await searchParams;
+  const activeCategory = category ?? "all";
+
+  const breadcrumbs: { label: string; href?: string }[] = [
+    { label: "Home", href: "/" },
+  ];
+
+  if (activeCategory === "all") {
+    breadcrumbs.push({ label: "Brands" });
+  } else {
+    breadcrumbs.push({ label: "Brands", href: "/brands" });
+    breadcrumbs.push({ label: CATEGORY_LABELS[activeCategory] ?? activeCategory });
+  }
+
   return (
     <main>
       <BrandHero
         title="Brands We Trust"
         subtitle="Explore premium pet nutrition, aquatic supplies, and trusted pet care brands carefully selected by Sierra Fish & Pets."
-        image="/images/banner/contact.png"
+        image="/images/banner/shophero3.png"
+        breadcrumbs={breadcrumbs}
       />
 
       <Suspense

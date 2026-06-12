@@ -419,47 +419,17 @@ export default async function ServiceDetailPage({
         <section className="relative py-20 bg-[#001830] overflow-hidden">
           
           <div className="container mx-auto px-6 max-w-5xl relative z-10">
-            <div className="relative overflow-hidden rounded-[40px] bg-gradient-to-r from-[#eaf5ff] to-[#f4faff] border border-blue-100 p-10 md:p-16 text-slate-800 shadow-2xl">
-              
-
-
-              {/* Betta Fish SVG - Right of the Card (Hidden on mobile/tablet) */}
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-0 pointer-events-none select-none w-48 h-36 md:w-64 md:h-48 opacity-90 hidden lg:block">
-                <svg viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <path d="M120,85 C160,30 220,20 230,60 C240,100 210,130 225,165 C190,175 150,150 120,95 Z" fill="url(#betta-tail-grad-1)" opacity="0.85" />
-                  <path d="M125,90 C170,50 205,40 215,75 C225,110 195,125 205,150 C180,158 150,138 125,98 Z" fill="url(#betta-tail-grad-2)" opacity="0.95" />
-                  <path d="M75,65 C100,20 140,25 125,80 C95,60 85,65 75,65 Z" fill="url(#betta-dorsal-grad)" />
-                  <path d="M85,95 C115,145 150,135 125,90 C95,95 85,95 85,95 Z" fill="url(#betta-ventral-grad)" />
-                  <path d="M40,85 C55,65 95,60 125,85 C135,90 140,100 130,105 C110,115 80,110 50,95 C40,91 35,88 40,85 Z" fill="url(#betta-body-grad)" />
-                  <path d="M65,92 C75,92 82,102 78,110 C74,118 66,102 65,92 Z" fill="#ff4d4d" opacity="0.9" />
-                  <circle cx="55" cy="78" r="3.5" fill="white" />
-                  <circle cx="55" cy="78" r="1.5" fill="#0c1a30" />
-                  <defs>
-                    <linearGradient id="betta-body-grad" x1="40" y1="85" x2="130" y2="105" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#00ccff" />
-                      <stop offset="50%" stopColor="#005AA9" />
-                      <stop offset="100%" stopColor="#001830" />
-                    </linearGradient>
-                    <linearGradient id="betta-tail-grad-1" x1="120" y1="30" x2="225" y2="165" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#ff4d4d" />
-                      <stop offset="50%" stopColor="#e53e3e" />
-                      <stop offset="100%" stopColor="#9b2c2c" />
-                    </linearGradient>
-                    <linearGradient id="betta-tail-grad-2" x1="125" y1="40" x2="205" y2="150" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#ff7a00" />
-                      <stop offset="50%" stopColor="#ff3b30" />
-                      <stop offset="100%" stopColor="#7f1d1d" />
-                    </linearGradient>
-                    <linearGradient id="betta-dorsal-grad" x1="75" y1="30" x2="125" y2="80" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#ff4d4d" />
-                      <stop offset="100%" stopColor="#005AA9" />
-                    </linearGradient>
-                    <linearGradient id="betta-ventral-grad" x1="85" y1="90" x2="150" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#00ccff" />
-                      <stop offset="100%" stopColor="#e53e3e" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+            <div className="relative overflow-hidden rounded-[40px] border border-blue-100 p-10 md:p-16 text-slate-800 shadow-2xl">
+              {/* Background Image inside Card */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="/images/banner/servicecta.png"
+                  alt="CTA Card background"
+                  fill
+                  className="object-cover object-center"
+                />
+                {/* Overlay to keep text perfectly readable while showing the image */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#eaf5ff]/45 to-[#f4faff]/45" />
               </div>
 
               {/* Card Content */}

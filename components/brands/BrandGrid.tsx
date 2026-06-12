@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import BrandCard from "./BrandCard";
 
 interface Brand {
@@ -53,10 +54,58 @@ export default function BrandGrid({ brands }: BrandGridProps) {
   "small-animal",
 ];
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
   const filtered = useMemo(() => {
     if (activeCategory === "all") return brands;
     return brands.filter((b) => b.categories.includes(activeCategory));
   }, [brands, activeCategory]);
+
+  // Reset page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+
+  const paginatedBrands = useMemo(() => {
+    return filtered.slice(
+      (currentPage - 1) * ITEMS_PER_PAGE,
+      currentPage * ITEMS_PER_PAGE
+    );
+  }, [filtered, currentPage]);
+
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+      if (currentPage > 3) {
+        pages.push("...");
+      }
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+      if (currentPage < totalPages - 2) {
+        pages.push("...");
+      }
+      pages.push(totalPages);
+    }
+    return pages;
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  };
 
   // Update the URL when a category pill is clicked
   function handleCategoryChange(cat: string) {
@@ -120,11 +169,58 @@ export default function BrandGrid({ brands }: BrandGridProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-              {filtered.map((brand) => (
-                <BrandCard key={brand.id} brand={brand} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                {paginatedBrands.map((brand) => (
+                  <BrandCard key={brand.id} brand={brand} />
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex justify-center items-center gap-2">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:border-[#005ca5] hover:text-[#005ca5] disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all cursor-pointer bg-white"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  {getPageNumbers().map((page, index) => {
+                    if (page === "...") {
+                      return (
+                        <span key={`dots-${index}`} className="px-2 text-slate-400 select-none">
+                          ...
+                        </span>
+                      );
+                    }
+                    const isActive = page === currentPage;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page as number)}
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                          isActive
+                            ? "bg-[#379ae5] text-white shadow-md shadow-[#379ae5]/30"
+                            : "border border-slate-200 text-slate-600 hover:border-[#005ca5] hover:text-[#005ca5] bg-white"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:border-[#005ca5] hover:text-[#005ca5] disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all cursor-pointer bg-white"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

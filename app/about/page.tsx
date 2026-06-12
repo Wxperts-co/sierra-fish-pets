@@ -137,55 +137,53 @@ export default function AboutPage() {
 
   return (
     <main className="relative bg-slate-50 text-slate-800 overflow-x-hidden">
-      <section className="relative h-[100vh] w-full flex items-center justify-center overflow-hidden">
-        {/* Fixed Viewport Background Image */}
-        <div className="fixed inset-0 z-0">
+      
+
+      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+        {/* Image — clipped to banner bounds */}
+        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden">
           <Image
-            src="/images/banner/about5.png"
-            alt="Sierra Fish & Pets store interior background"
+            src="/images/banner/shophero3.png"
+            alt="About us banner"
             fill
-            className="object-cover filter brightness-[0.9]"
             priority
+            className="object-cover object-[center_40%]"
+            sizes="100vw"
           />
-          {/* <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/50" /> */}
         </div>
 
-        {/* Centered Glassmorphic Text Card */}
-        {/* <div className="container relative z-10 mx-auto px-6 flex justify-center">
+        {/* Centered text block */}
+        <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-3xl text-center backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 md:p-12"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center justify-center"
           >
-            <span className="text-sm font-bold uppercase tracking-[0.25em] text-[#00aaff] mb-3 block">
-              Established & Trusted
-            </span>
-            <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              SIERRA FISH & PETS
+            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
+              About Us
             </h1>
-            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
-              Family-owned and delivering expert, pet-first care solutions in
-              the Renton community for generations.
-            </p>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 bg-[#005AA9] hover:bg-[#004b8d] text-white px-8 py-3.5 rounded-full font-bold transition-all duration-300 shadow-lg shadow-blue-500/20 hover:scale-105 active:scale-95 text-sm uppercase tracking-wider"
-              >
-                Explore Shop
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a
-                href="#our-story"
-                className="inline-flex items-center gap-2 border border-white/40 hover:border-white bg-white/5 hover:bg-white/10 text-white px-8 py-3.5 rounded-full font-bold transition-all duration-300 hover:scale-105 active:scale-95 text-sm uppercase tracking-wider"
-              >
-                Our Story
-              </a>
-            </div>
+            {/* Breadcrumb */}
+            <nav
+              aria-label="breadcrumb"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500"
+            >
+              <span className="flex items-center gap-0.5">
+                <Link
+                  href="/"
+                  className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                >
+                  Home
+                </Link>
+                <span className="px-0.5 text-slate-400"> › </span>
+              </span>
+              <span className="flex items-center gap-0.5">
+                <span className="font-bold text-[#0d1b2a]">About Us</span>
+              </span>
+            </nav>
           </motion.div>
-        </div> */}
+        </div>
       </section>
 
       {/* ─── OUR STORY / WELCOME SECTION ─── */}

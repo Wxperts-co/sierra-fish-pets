@@ -387,28 +387,57 @@ export default function EventCalendarPage() {
   return (
     <main className="relative min-h-screen bg-[#fafbfd] pb-8 text-slate-800">
       {/* ─── 1. SEA LIFE HEADER BANNER ─── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#002244] via-[#003d73] to-[#005AA9] min-h-[40vh] flex items-center justify-center text-center text-white">
-        
-        {/* Header Text */}
-        <div className="container relative z-10 mx-auto px-4">
+      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+        {/* Image — clipped to banner bounds */}
+        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          <Image
+            src="/images/banner/shophero3.png"
+            alt="Event calendar banner"
+            fill
+            priority
+            className="object-cover object-[center_40%]"
+            sizes="100vw"
+          />
+        </div>
+
+        {/* Centered text block */}
+        <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="flex flex-col items-center justify-center"
           >
-            <div className="flex items-center gap-2 mb-3 text-[#00aaff] font-bold text-xs uppercase tracking-widest bg-[#00aaff]/10 px-4 py-1.5 rounded-full select-none">
+            <div className="flex items-center gap-2 mb-3 text-[#005AA9] font-bold text-xs uppercase tracking-widest bg-[#eef6ff] px-4 py-1.5 rounded-full select-none border border-[#005AA9]/10">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Sierra Events Hub</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center justify-center gap-3">
+            <h1 className="text-4xl md:text-5xl font-black text-[#0d1b2a] tracking-tight flex items-center justify-center gap-3 drop-shadow-sm">
               <span className="animate-bounce">🐟</span>
-              Event Calendar
+              <span className="bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent">Event Calendar</span>
+              
               <span className="animate-bounce" style={{ animationDelay: "0.2s" }}>🐟</span>
             </h1>
-            <p className="mt-3.5 text-blue-100 max-w-lg mx-auto text-sm md:text-base font-light leading-relaxed">
-              Stay updated with exciting events, workshops, and community meetups.
-            </p>
+         
+
+            {/* Breadcrumb */}
+            <nav
+              aria-label="breadcrumb"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500 mt-4"
+            >
+              <span className="flex items-center gap-0.5">
+                <Link
+                  href="/"
+                  className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                >
+                  Home
+                </Link>
+                <span className="px-0.5 text-slate-400"> › </span>
+              </span>
+              <span className="flex items-center gap-0.5">
+                <span className="font-bold text-[#0d1b2a]">Event Calendar</span>
+              </span>
+            </nav>
           </motion.div>
         </div>
       </section>
@@ -791,165 +820,7 @@ export default function EventCalendarPage() {
         )}
       </AnimatePresence>
 
-      {/* ─── 4. ADD EVENT MODAL POPUP ─── */}
-      <AnimatePresence>
-        {isAddModalOpen && clickedDate && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              onClick={() => {
-                setIsAddModalOpen(false);
-                setClickedDate(null);
-              }}
-              className="fixed inset-0 z-50 bg-black"
-            />
-
-            {/* Modal Dialog */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-x-4 top-[10%] bottom-[10%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-[500px] md:h-fit max-h-[80vh] z-50 overflow-y-auto bg-white border border-slate-100 rounded-3xl shadow-2xl p-6 md:p-8 flex flex-col"
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => {
-                  setIsAddModalOpen(false);
-                  setClickedDate(null);
-                }}
-                className="absolute right-4 top-4 p-2 border border-slate-100 rounded-full hover:bg-slate-50 transition-colors text-slate-400 hover:text-slate-600 active:scale-90"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <h3 className="font-extrabold text-2xl text-slate-800 leading-tight">
-                Add Event
-              </h3>
-              <p className="text-xs text-[#005AA9] font-bold mt-1.5 uppercase tracking-wider">
-                For {clickedDate.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-              </p>
-
-              <form onSubmit={handleAddEventSubmit} className="mt-5 flex flex-col gap-4">
-                {/* Title */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Event Title
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="e.g. Aquarium Aquascaping Workshop"
-                    className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] rounded-xl text-sm font-semibold outline-none transition-colors"
-                  />
-                </div>
-
-                {/* Category & Location */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Category
-                    </label>
-                    <select
-                      value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] bg-white rounded-xl text-sm font-semibold outline-none transition-colors"
-                    >
-                      {categoriesData.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Location
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={newLocation}
-                      onChange={(e) => setNewLocation(e.target.value)}
-                      placeholder="e.g. Sierra Fish Pets Store"
-                      className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] rounded-xl text-sm font-semibold outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Time Range */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Start Time
-                    </label>
-                    <input
-                      type="time"
-                      required
-                      value={newStartTime}
-                      onChange={(e) => setNewStartTime(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] rounded-xl text-sm font-semibold outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      End Time
-                    </label>
-                    <input
-                      type="time"
-                      required
-                      value={newEndTime}
-                      onChange={(e) => setNewEndTime(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] rounded-xl text-sm font-semibold outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={newDescription}
-                    onChange={(e) => setNewDescription(e.target.value)}
-                    placeholder="Enter short description about this event..."
-                    className="w-full px-4 py-2.5 border border-slate-200 focus:border-[#005AA9] rounded-xl text-sm font-semibold outline-none transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Form Actions */}
-                <div className="mt-4 flex gap-3">
-                  <button
-                    type="submit"
-                    className="flex-1 inline-flex items-center justify-center bg-[#005AA9] hover:bg-[#004b8d] text-white py-3 rounded-2xl text-sm font-bold shadow-md shadow-blue-500/10 transition-colors active:scale-95"
-                  >
-                    Save Event
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddModalOpen(false);
-                      setClickedDate(null);
-                    }}
-                    className="px-5 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm rounded-2xl transition-colors active:scale-95"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   MapPin,
@@ -70,58 +71,50 @@ export default function ContactUsPage() {
   return (
     <main className="relative text-slate-800 min-h-screen overflow-x-hidden pb-24">
       {/* ─── HERO HEADER SECTION ─── */}
-      {/* <section className="relative py-32 text-white overflow-hidden h-[50vh] min-h-[50vh]">
-        <div className="absolute inset-0 -z-20 ">
+      
+      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+        {/* Image — clipped to banner bounds */}
+        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden">
           <Image
-            src="/images/banner/contact.png"
-            alt=""
+            src="/images/banner/shophero3.png"
+            alt="Contact us banner"
             fill
-            className="object-cover object-center"
             priority
+            className="object-cover object-[center_40%]"
+            sizes="100vw"
           />
         </div>
-     
-        <div className="absolute inset-0 bg-black/30" />
 
-        <div className="container mx-auto px-6 max-w-6xl text-center relative z-10">
+        {/* Centered text block */}
+        <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="flex flex-col items-center justify-center"
           >
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#00aaff] mb-3 block">
-              We're Here for You
-            </span>
-
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Contact Our Team
+            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
+              Contact Us
             </h1>
 
-            <p className="text-base md:text-lg text-blue-100 max-w-2xl mx-auto font-light leading-relaxed">
-              Have questions about custom aquarium setup, online orders, or raw
-              food nutrition? Let us guide you to the perfect solutions for your
-              pets.
-            </p>
-          </motion.div>
-        </div>
-      </section> */}
-      <section className="relative bg-gradient-to-br from-[#002244] via-[#003d73] to-[#005AA9] py-32 text-white overflow-hidden">
-
-        <div className="container mx-auto px-6 max-w-6xl text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#00aaff] mb-3 block">
-              We're Here for You
-            </span>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Contact Our Team
-            </h1>
-            <p className="text-base md:text-lg text-blue-100 max-w-2xl mx-auto font-light leading-relaxed">
-              Have questions about custom aquarium setup, online orders, or raw food nutrition? Let us guide you to the perfect solutions for your pets.
-            </p>
+            {/* Breadcrumb */}
+            <nav
+              aria-label="breadcrumb"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500"
+            >
+              <span className="flex items-center gap-0.5">
+                <Link
+                  href="/"
+                  className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                >
+                  Home
+                </Link>
+                <span className="px-0.5 text-slate-400"> › </span>
+              </span>
+              <span className="flex items-center gap-0.5">
+                <span className="font-bold text-[#0d1b2a]">Contact Us</span>
+              </span>
+            </nav>
           </motion.div>
         </div>
       </section>

@@ -49,6 +49,12 @@ export default async function BrandPage({
       <BrandHero
         title={brand.name}
         subtitle={`Trusted ${brand.categories.join(" & ")} brand available at Sierra Fish & Pets`}
+        image="/images/banner/shophero3.png"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Brands", href: "/brands" },
+          { label: brand.name },
+        ]}
       />
 
       <BrandDetail brand={brand} relatedBrands={relatedBrands} />

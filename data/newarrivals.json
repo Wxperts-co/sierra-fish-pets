@@ -1,0 +1,330 @@
+[
+  {
+    "id": "DOG001",
+    "name": "Golden Retriever Puppy",
+    "slug": "golden-retriever-puppy",
+    "category": "dogs",
+    "breed": "Golden Retriever",
+
+    "gender": "Male",
+    "age": "3 Months",
+    "size": "Small",
+
+    "price": 1200,
+    "discountPrice": 1050,
+
+    "arrivalDate": "2026-06-10",
+
+    "status": "available",
+    "featured": true,
+
+    "vaccinated": true,
+    "dewormed": true,
+    "microchipped": true,
+
+    "description": "Healthy and playful Golden Retriever puppy with excellent temperament and family-friendly bloodline.",
+
+    "highlights": [
+      "Friendly Nature",
+      "Vaccinated",
+      "Pedigree Bloodline",
+      "Good With Children"
+    ],
+
+    "images": [
+      "/images/adoption/max.jpg",
+      "/images/adoption/bella.jpg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 2,
+
+    "seo": {
+      "title": "Golden Retriever Puppy Available in Renton, WA",
+      "description": "Healthy Golden Retriever puppy available for adoption at Sierra Fish & Pets in Renton, WA."
+    }
+  },
+
+  {
+    "id": "CAT001",
+    "name": "Persian Kitten",
+    "slug": "persian-cat",
+    "category": "cats",
+    "breed": "Persian",
+
+    "gender": "Female",
+    "age": "4 Months",
+    "size": "Small",
+
+    "price": 850,
+    "discountPrice": 799,
+
+    "arrivalDate": "2026-06-08",
+
+    "status": "available",
+    "featured": true,
+
+    "vaccinated": true,
+    "dewormed": true,
+    "microchipped": false,
+
+    "description": "Beautiful Persian kitten with a fluffy white coat and calm, affectionate personality.",
+
+    "highlights": [
+      "Long Hair Coat",
+      "Indoor Friendly",
+      "Vaccinated",
+      "Healthy"
+    ],
+
+    "images": [
+      "/images/newarrivals/cat1.jpeg",
+      "/images/newarrivals/cat2.jpeg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 1,
+
+    "seo": {
+      "title": "Persian Kitten Available in Renton, WA",
+      "description": "Premium Persian kitten available for loving homes at Sierra Fish & Pets."
+    }
+  },
+
+  {
+    "id": "BIRD001",
+    "name": "African Grey Parrot",
+    "slug": "african-grey-parrot",
+    "category": "birds",
+    "breed": "African Grey",
+
+    "gender": "Unknown",
+    "age": "8 Months",
+    "size": "Medium",
+
+    "price": 1800,
+    "discountPrice": null,
+
+    "arrivalDate": "2026-06-05",
+
+    "status": "available",
+    "featured": false,
+
+    "vaccinated": false,
+    "dewormed": true,
+    "microchipped": true,
+
+    "description": "Highly intelligent parrot known for mimicry, speech, and active social interaction.",
+
+    "highlights": [
+      "Talking Bird",
+      "Hand Raised",
+      "Healthy",
+      "Social"
+    ],
+
+    "images": [
+      "/images/newarrivals/bird1.jpeg",
+      "/images/newarrivals/bird2.jpeg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 1,
+
+    "seo": {
+      "title": "African Grey Parrot Available in Renton, WA",
+      "description": "Healthy hand-raised African Grey Parrot available now at Sierra Fish & Pets."
+    }
+  },
+
+  {
+    "id": "FISH001",
+    "name": "Flowerhorn Cichlid",
+    "slug": "flowerhorn-cichlid",
+    "category": "freshwater",
+    "breed": "Flowerhorn",
+
+    "gender": "Male",
+    "age": "6 Months",
+    "size": "Medium",
+
+    "price": 150,
+    "discountPrice": 125,
+
+    "arrivalDate": "2026-06-12",
+
+    "status": "available",
+    "featured": true,
+
+    "vaccinated": false,
+    "dewormed": false,
+    "microchipped": false,
+
+    "description": "Premium Flowerhorn cichlid with vibrant coloration, large nuchal hump, and active behavior.",
+
+    "highlights": [
+      "Premium Grade",
+      "Bright Color",
+      "Healthy",
+      "Active"
+    ],
+
+    "images": [
+      "/images/products/aqua1.avif",
+      "/images/products/aqua2.avif"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 5,
+
+    "seo": {
+      "title": "Flowerhorn Fish Available in Renton, WA",
+      "description": "Premium Flowerhorn cichlid available for aquarists at Sierra Fish & Pets."
+    }
+  },
+
+  {
+    "id": "FISH002",
+    "name": "Ocellaris Clownfish",
+    "slug": "ocellaris-clownfish",
+    "category": "saltwater",
+    "breed": "Ocellaris Clownfish",
+
+    "gender": "Unknown",
+    "age": "2 Months",
+    "size": "Small",
+
+    "price": 35,
+    "discountPrice": 29,
+
+    "arrivalDate": "2026-06-11",
+
+    "status": "available",
+    "featured": false,
+
+    "vaccinated": false,
+    "dewormed": false,
+    "microchipped": false,
+
+    "description": "Vibrant and healthy captive-bred Ocellaris Clownfish, perfect for marine nano tanks.",
+
+    "highlights": [
+      "Captive Bred",
+      "Vibrant Color",
+      "Reef Safe",
+      "Active"
+    ],
+
+    "images": [
+      "/images/newarrivals/saltwater1.jpeg",
+      "/images/newarrivals/saltwater2.jpeg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 10,
+
+    "seo": {
+      "title": "Ocellaris Clownfish Available in Renton, WA",
+      "description": "Captive-bred Clownfish available at Sierra Fish & Pets."
+    }
+  },
+
+  {
+    "id": "SMALL001",
+    "name": "Syrian Hamster",
+    "slug": "syrian-hamster",
+    "category": "small-animals",
+    "breed": "Syrian",
+
+    "gender": "Female",
+    "age": "2 Months",
+    "size": "Small",
+
+    "price": 25,
+    "discountPrice": null,
+
+    "arrivalDate": "2026-06-09",
+
+    "status": "available",
+    "featured": false,
+
+    "vaccinated": false,
+    "dewormed": true,
+    "microchipped": false,
+
+    "description": "Friendly, active hamster suitable for beginners and kids looking for a fun pocket pet.",
+
+    "highlights": [
+      "Easy Care",
+      "Friendly",
+      "Healthy",
+      "Playful"
+    ],
+
+    "images": [
+      "/images/newarrivals/small1.jpeg",
+      "/images/newarrivals/small2.jpeg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 6,
+
+    "seo": {
+      "title": "Syrian Hamster Available in Renton, WA",
+      "description": "Healthy Syrian Hamster available now at Sierra Fish & Pets."
+    }
+  },
+
+  {
+    "id": "EXOTIC001",
+    "name": "Bearded Dragon",
+    "slug": "bearded-dragon",
+    "category": "reptiles",
+    "breed": "Pogona Vitticeps",
+
+    "gender": "Male",
+    "age": "5 Months",
+    "size": "Medium",
+
+    "price": 120,
+    "discountPrice": 99,
+
+    "arrivalDate": "2026-06-07",
+
+    "status": "available",
+    "featured": true,
+
+    "vaccinated": false,
+    "dewormed": false,
+    "microchipped": false,
+
+    "description": "Healthy, alert Bearded Dragon with a calm temperament, perfect for reptile lovers.",
+
+    "highlights": [
+      "Captive Bred",
+      "Healthy",
+      "Easy Handling",
+      "Active"
+    ],
+
+    "images": [
+      "/images/newarrivals/reptile1.jpeg",
+      "/images/newarrivals/reptile2.jpeg"
+    ],
+
+    "location": "Renton Store",
+
+    "stock": 2,
+
+    "seo": {
+      "title": "Bearded Dragon Available in Renton, WA",
+      "description": "Healthy Bearded Dragon available for reptile enthusiasts at Sierra Fish & Pets."
+    }
+  }
+]

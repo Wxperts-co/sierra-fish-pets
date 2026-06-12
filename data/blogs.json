@@ -4,97 +4,244 @@
     "title": "New Freshwater Fish Arrivals — January 2025",
     "slug": "new-freshwater-fish-arrivals-january-2025",
     "excerpt": "We just received a stunning shipment of freshwater fish including rare wild-caught Discus, Apistogramma cacatuoides, and a beautiful selection of Rainbow fish.",
-    "body": "This week's freshwater arrivals are some of the best we've seen in months...",
-    "coverImage": "/images/blog/fw-arrivals-jan-2025.jpg",
+    "content": "New Freshwater Fish Arrivals\n\nWe're excited to announce one of our most impressive freshwater fish shipments of the season. This latest arrival features a carefully selected collection of healthy, vibrant, and highly sought-after species that are perfect for both beginner and experienced aquarists.\n\nAmong the highlights are stunning Discus varieties known for their brilliant colors and graceful swimming patterns. We've also received Apistogramma cacatuoides, a popular dwarf cichlid admired for its unique appearance and fascinating behavior. In addition, our Rainbow Fish selection showcases a variety of species with shimmering colors that truly come alive under proper aquarium lighting.\n\nEvery fish in this shipment has undergone a thorough acclimation and health observation process to ensure they arrive in excellent condition. Our team has carefully monitored water parameters, feeding schedules, and overall health to provide customers with strong and active specimens.\n\nWhether you're looking to add a centerpiece fish to your display aquarium, build a colorful community tank, or explore rare freshwater species, this new arrival offers something for every hobbyist. Visit our store soon, as many of these premium fish are available in limited quantities and are expected to sell quickly.",
+    "coverImage": "/images/blogs/aquatic1.jpeg",
+    "thumbnailAlt": "Freshwater fish arrivals including Discus and Rainbow Fish",
     "author": "Sierra Team",
+    "authorRole": "Aquatics Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Aquatic",
     "categorySlug": "aquatic",
     "tags": ["freshwater", "arrivals", "discus", "apistogramma"],
+    "featured": true,
     "isArrival": true,
+    "status": "published",
     "publishedAt": "2025-01-20T09:00:00Z",
-    "readingTime": 3
+    "updatedAt": "2025-01-20T09:00:00Z",
+    "readingTime": 3,
+    "relatedIds": ["blog-002", "blog-004"],
+    "seo": {
+      "title": "New Freshwater Fish Arrivals January 2025 | Sierra Fish Pets",
+      "description": "Discover our latest freshwater fish arrivals including Discus, Apistogramma, and Rainbow Fish.",
+      "keywords": ["freshwater fish", "fish arrivals", "discus fish"]
+    },
+    "specialistQuote": {
+      "quote": "A healthy aquarium starts with patience. Allowing your tank to properly cycle before adding new freshwater species ensures a thriving, low-stress environment for your new pets.",
+      "author": "SIERRA AQUATICS TEAM"
+    },
+    "galleryImages": [
+      "/images/blogs/aquatic1.jpeg",
+      "/images/blogs/aquatic2.jpeg"
+    ]
   },
   {
     "id": "blog-002",
     "title": "New Saltwater Fish Arrivals — January 2025",
     "slug": "new-saltwater-fish-arrivals-january-2025",
     "excerpt": "Fresh saltwater arrivals this week include Flame Angels, Mandarin Dragonets, Clownfish pairs, and a gorgeous Regal Tang.",
-    "body": "Our saltwater section just got a major refresh...",
-    "coverImage": "/images/blog/sw-arrivals-jan-2025.jpg",
+    "content": "# New Saltwater Fish Arrivals\n\nOur saltwater section has just received an exciting new shipment featuring a wide variety of colorful and highly sought-after marine fish. Whether you're an experienced reef keeper or just starting your saltwater aquarium journey, these new arrivals offer something special for every hobbyist.\n\nAmong the highlights are beautiful Clownfish pairs, vibrant Flame Angelfish, elegant Regal Tangs, and fascinating Mandarin Dragonets. These species are known for their striking colors, unique personalities, and ability to become the centerpiece of any marine aquarium. Each fish has been carefully sourced from trusted suppliers and handled with the utmost care during transportation.\n\nUpon arrival, all specimens undergo a comprehensive acclimation and observation process to ensure they are healthy, active, and feeding well before being offered for sale. Our aquatics team closely monitors water quality, behavior, and overall condition to maintain the highest standards of fish health.\n\nIn addition to these new fish, we have restocked a variety of marine aquarium essentials, making it easier than ever to maintain a thriving reef or fish-only setup. Visit our store to explore the latest arrivals in person and receive expert guidance from our team. Many of these premium marine species are available in limited numbers and are expected to sell quickly.",
+    "coverImage": "/images/blogs/aquatic2.jpeg",
+    "thumbnailAlt": "New saltwater fish arrivals including clownfish and regal tang",
     "author": "Sierra Team",
+    "authorRole": "Aquatics Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Aquatic",
     "categorySlug": "aquatic",
     "tags": ["saltwater", "arrivals", "angelfish", "clownfish"],
+    "featured": true,
     "isArrival": true,
+    "status": "published",
     "publishedAt": "2025-01-20T09:30:00Z",
-    "readingTime": 3
+    "updatedAt": "2025-01-20T09:30:00Z",
+    "readingTime": 3,
+    "relatedIds": ["blog-001"],
+    "seo": {
+      "title": "New Saltwater Fish Arrivals January 2025 | Sierra Fish Pets",
+      "description": "Latest saltwater fish arrivals including clownfish, tangs and angelfish.",
+      "keywords": ["saltwater fish", "clownfish", "marine fish"]
+    },
+    "specialistQuote": {
+      "quote": "Acclimation is the critical bridge between transit stress and home reef stability. Always take your time drip-acclimating sensitive marine specimens like flame angels and wrasses.",
+      "author": "SIERRA REEF SPECIALISTS"
+    },
+    "galleryImages": [
+      "/images/blogs/aquatic2.jpeg",
+      "/images/blogs/aquatic1.jpeg"
+    ]
   },
   {
     "id": "blog-003",
     "title": "Bird Arrivals — January 2025",
     "slug": "bird-arrivals-january-2025",
     "excerpt": "New bird arrivals include Hand-fed baby Cockatiels, Green Cheek Conures, and Lineolated Parakeets.",
-    "body": "Our bird section has some wonderful new additions...",
-    "coverImage": "/images/blog/bird-arrivals-jan-2025.jpg",
+   "content": "# Bird Arrivals\n\nWe are delighted to announce the latest additions to our bird section, featuring a wonderful selection of healthy, hand-raised, and carefully cared-for companion birds. Whether you're a first-time bird owner or an experienced enthusiast looking to expand your aviary, our newest arrivals offer a variety of personalities, colors, and species to suit every preference.\n\nThis shipment includes adorable hand-fed Cockatiels, playful Green Cheek Conures, charming Lineolated Parakeets, and several other popular pet bird species. Each bird has been selected for its health, temperament, and overall quality, ensuring that customers have access to happy and well-socialized companions.\n\nBefore becoming available for their new homes, all birds undergo a thorough health assessment and acclimation process. Our team carefully monitors feeding habits, activity levels, and general well-being to ensure that every bird is thriving. We also focus on proper socialization, helping young birds become comfortable with human interaction and daily handling.\n\nBirds are intelligent, affectionate pets that can provide years of companionship when given the proper care and attention. Whether you're interested in a bird that enjoys learning tricks, mimicking sounds, or simply providing cheerful company, our latest arrivals include options for a wide range of lifestyles and experience levels.\n\nOur knowledgeable staff is always available to help you choose the right bird, recommend suitable housing and nutrition, and answer any questions about long-term care. Visit our store today to meet these beautiful new arrivals in person. Many of these birds are available in limited quantities, so don't miss the opportunity to find your perfect feathered companion.",
+    "coverImage": "/images/blogs/bird1.jpeg",
+    "thumbnailAlt": "New bird arrivals including cockatiels and conures",
     "author": "Sierra Team",
+    "authorRole": "Bird Care Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Bird",
     "categorySlug": "bird",
     "tags": ["bird", "arrivals", "cockatiel", "conure"],
+    "featured": false,
     "isArrival": true,
+    "status": "published",
     "publishedAt": "2025-01-19T10:00:00Z",
-    "readingTime": 2
+    "updatedAt": "2025-01-19T10:00:00Z",
+    "readingTime": 2,
+    "relatedIds": [],
+    "seo": {
+      "title": "Bird Arrivals January 2025 | Sierra Fish Pets",
+      "description": "Latest bird arrivals including cockatiels, conures and parakeets.",
+      "keywords": ["bird arrivals", "cockatiel", "conure"]
+    },
+    "specialistQuote": {
+      "quote": "Socialization in early development forms the foundation of a bird's lifelong temperament. Hand-fed baby cockatiels thrive on daily, gentle positive reinforcement.",
+      "author": "SIERRA AVIAN CARE TEAM"
+    },
+    "galleryImages": [
+      "/images/blogs/bird1.jpeg",
+      "/images/blogs/bird2.jpeg"
+    ]
   },
   {
     "id": "blog-004",
     "title": "How to Set Up Your First Freshwater Aquarium",
     "slug": "how-to-set-up-first-freshwater-aquarium",
     "excerpt": "Starting a freshwater aquarium can feel overwhelming. This step-by-step guide walks you through everything — from choosing the right tank to adding your first fish.",
-    "body": "Setting up your first freshwater aquarium is one of the most rewarding experiences...",
-    "coverImage": "/images/blog/fw-aquarium-setup-guide.jpg",
+   "content": "# Freshwater Aquarium Setup Guide\n\nSetting up your first freshwater aquarium is one of the most rewarding experiences for any pet or aquatic enthusiast. A well-planned aquarium not only creates a beautiful centerpiece for your home or office but also provides a healthy and comfortable environment for your fish to thrive.\n\nThe first step is selecting the right aquarium size. Beginners are often surprised to learn that larger tanks are generally easier to maintain because water parameters remain more stable. Once you've chosen a suitable tank, you'll need essential equipment such as a quality filter, heater (if required for your chosen fish species), lighting, substrate, and decorations.\n\nBefore adding fish, it's important to establish the nitrogen cycle. This process allows beneficial bacteria to grow within the aquarium, helping break down harmful waste products like ammonia and nitrites. Cycling your tank properly is one of the most critical steps in creating a healthy aquatic environment and can significantly reduce stress and illness among fish.\n\nAfter the tank is cycled, start by introducing a small number of compatible fish. Avoid overcrowding and research each species carefully to ensure they have similar water requirements and temperaments. Regular maintenance, including partial water changes, filter cleaning, and water testing, will help keep your aquarium in excellent condition.\n\nFeeding your fish a balanced diet and monitoring their behavior daily are also important parts of successful aquarium keeping. Healthy fish are active, display vibrant colors, and interact naturally with their surroundings.\n\nWith patience, proper planning, and consistent care, your freshwater aquarium can become a thriving ecosystem that brings enjoyment and relaxation for years to come.",
+    "coverImage": "/images/blogs/aquatic1.jpeg",
+    "thumbnailAlt": "Freshwater aquarium setup guide",
     "author": "Sierra Team",
+    "authorRole": "Aquatics Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Aquatic",
     "categorySlug": "aquatic",
     "tags": ["beginner", "freshwater", "guide", "setup", "cycling"],
+    "featured": true,
     "isArrival": false,
+    "status": "published",
     "publishedAt": "2024-12-10T08:00:00Z",
-    "readingTime": 8
+    "updatedAt": "2025-01-05T08:00:00Z",
+    "readingTime": 8,
+    "relatedIds": ["blog-001"],
+    "seo": {
+      "title": "How to Set Up Your First Freshwater Aquarium",
+      "description": "A complete beginner guide to setting up and cycling a freshwater aquarium.",
+      "keywords": ["aquarium setup", "freshwater aquarium", "fish tank guide"]
+    },
+    "specialistQuote": {
+      "quote": "Never wash aquarium gravel or filters with tap water—the chlorine will instantly destroy the beneficial bacterial colonies you worked so hard to cycle.",
+      "author": "SIERRA AQUATICS SPECIALISTS"
+    },
+    "galleryImages": [
+      "/images/blogs/aquatic1.jpeg",
+      "/images/blogs/aquatic2.jpeg"
+    ]
   },
   {
     "id": "blog-005",
     "title": "Top 5 Dog Foods for Senior Dogs in 2025",
     "slug": "top-5-dog-foods-for-senior-dogs-2025",
     "excerpt": "As dogs age, their nutritional needs change. We break down the best senior dog foods available in our store and what to look for on the label.",
-    "body": "Senior dogs deserve food tailored to their changing bodies...",
-    "coverImage": "/images/blog/senior-dog-food-guide.jpg",
+    "content": "# Senior Dog Food Guide\n\nAs dogs grow older, their nutritional requirements begin to change. Senior dogs often experience reduced activity levels, slower metabolism, joint stiffness, and age-related health concerns that make proper nutrition more important than ever. Choosing the right food can help support their overall health, maintain a healthy weight, and improve their quality of life.\n\nOne of the most important factors to consider when selecting food for a senior dog is high-quality protein. Protein helps maintain muscle mass, which naturally declines with age. Look for foods that list real meat, fish, or poultry as the primary ingredient while avoiding excessive fillers and artificial additives.\n\nJoint support is another key consideration. Many premium senior dog foods include ingredients such as glucosamine and chondroitin, which may help support joint health and mobility. Omega-3 fatty acids, commonly found in fish oil, can also contribute to healthy joints, skin, and coat condition.\n\nSenior dogs may also benefit from foods that contain added vitamins, antioxidants, and fiber. Antioxidants support immune health, while fiber can aid digestion and help maintain a healthy gastrointestinal system. If your dog has specific health concerns such as kidney disease, diabetes, or food sensitivities, consult your veterinarian for tailored dietary recommendations.\n\nIn addition to selecting the right food, monitoring portion sizes and maintaining regular exercise are essential for preventing obesity in older dogs. Every dog ages differently, so it's important to observe changes in energy levels, appetite, and overall health.\n\nWith the right nutrition and proper care, senior dogs can continue to live happy, active, and comfortable lives well into their golden years.",
+    "coverImage": "/images/blogs/dog1.jpeg",
+    "thumbnailAlt": "Best senior dog food guide",
     "author": "Sierra Team",
+    "authorRole": "Canine Nutrition Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Dog",
     "categorySlug": "dog",
     "tags": ["dog food", "senior", "nutrition", "guide", "2025"],
+    "featured": true,
     "isArrival": false,
+    "status": "published",
     "publishedAt": "2025-01-12T09:00:00Z",
-    "readingTime": 6
+    "updatedAt": "2025-01-12T09:00:00Z",
+    "readingTime": 6,
+    "relatedIds": [],
+    "seo": {
+      "title": "Top 5 Dog Foods for Senior Dogs in 2025",
+      "description": "Learn which dog foods are best for senior dogs and why.",
+      "keywords": ["senior dog food", "dog nutrition", "dog care"]
+    },
+    "specialistQuote": {
+      "quote": "Senior dogs need highly digestible proteins and joint support supplements like glucosamine to maintain their muscle mass and vitality into their golden years.",
+      "author": "SIERRA NUTRITION TEAM"
+    },
+    "galleryImages": [
+      "/images/blogs/dog1.jpeg",
+      "/images/blogs/dog2.jpeg"
+    ]
   },
   {
     "id": "blog-006",
     "title": "Reptile Arrivals — January 2025",
     "slug": "reptile-arrivals-january-2025",
     "excerpt": "New reptile arrivals this week: Veiled Chameleons, Crested Geckos, Panther Chameleons, and Blue-Tongued Skinks.",
-    "body": "Exciting new arrivals in our reptile section...",
-    "coverImage": "/images/blog/reptile-arrivals-jan-2025.jpg",
+   "content": "# Reptile Arrivals\n\nWe are excited to introduce the latest additions to our reptile collection, featuring a variety of healthy, captive-bred reptiles that are perfect for both experienced keepers and those new to the fascinating world of reptile care. This new shipment includes some of the most sought-after species, each selected for its excellent health, temperament, and overall quality.\n\nAmong the highlights are beautiful Crested Geckos, vibrant Panther Chameleons, impressive Blue-Tongued Skinks, and charming Veiled Chameleons. These species are known for their unique appearances, interesting behaviors, and ability to become engaging long-term companions when provided with proper care and habitat conditions.\n\nEvery reptile that arrives at our facility undergoes a careful acclimation and health assessment process before being made available. Our team monitors feeding responses, activity levels, hydration, and overall condition to ensure that each animal is thriving. We also work to minimize stress during the transition period, helping our reptiles settle comfortably into their new environment.\n\nWhether you're looking to start your first reptile enclosure or expand an existing collection, our latest arrivals offer a wide range of options to suit different experience levels and housing setups. Our knowledgeable staff can assist with habitat recommendations, lighting requirements, temperature management, nutrition, and ongoing care.\n\nWe invite you to visit our store and explore these incredible new arrivals in person. Many of these reptiles are available in limited quantities, and popular species are expected to find new homes quickly. Don't miss the opportunity to add one of these remarkable reptiles to your collection.",
+    "coverImage": "/images/blogs/reptile1.jpeg",
+    "thumbnailAlt": "New reptile arrivals including geckos and chameleons",
     "author": "Sierra Team",
+    "authorRole": "Exotic Pet Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Reptile",
     "categorySlug": "reptile",
     "tags": ["reptile", "arrivals", "chameleon", "gecko"],
+    "featured": false,
     "isArrival": true,
+    "status": "published",
     "publishedAt": "2025-01-18T11:00:00Z",
-    "readingTime": 2
+    "updatedAt": "2025-01-18T11:00:00Z",
+    "readingTime": 2,
+    "relatedIds": [],
+    "seo": {
+      "title": "Reptile Arrivals January 2025",
+      "description": "Latest reptile arrivals including geckos, skinks and chameleons.",
+      "keywords": ["reptile arrivals", "gecko", "chameleon"]
+    },
+    "specialistQuote": {
+      "quote": "Proper temperature gradients and precise UVB placement are non-negotiable for reptiles. A veiled chameleon's health is directly tied to its thermal cycles.",
+      "author": "SIERRA HERPETOLOGY TEAM"
+    },
+    "galleryImages": [
+      "/images/blogs/reptile1.jpeg",
+      "/images/blogs/reptile2.jpeg"
+    ]
   },
   {
     "id": "blog-007",
     "title": "Cat Care 101 — Everything New Cat Owners Need to Know",
     "slug": "cat-care-101-new-cat-owners-guide",
     "excerpt": "Bringing a new cat or kitten home? This comprehensive guide covers feeding, litter training, veterinary care, and enrichment.",
-    "body": "Welcoming a new cat into your home is exciting...",
-    "coverImage": "/images/blog/cat-care-guide.jpg",
+   "content": "# Cat Care Guide\n\nWelcoming a new cat into your home is an exciting and rewarding experience. Whether you've adopted a playful kitten or an adult cat, providing the right environment and care from the beginning will help your feline companion feel safe, comfortable, and happy in their new home.\n\nOne of the first things to prepare is a dedicated space where your cat can adjust at their own pace. This area should include a comfortable bed, fresh water, food bowls, a litter box, and a few toys. Cats can be sensitive to new surroundings, so giving them a quiet place to explore and relax can reduce stress during the transition period.\n\nNutrition plays a vital role in your cat's overall health. Choose a high-quality cat food appropriate for your cat's age, size, and activity level. Fresh water should always be available, and treats should be offered in moderation. Regular veterinary checkups are equally important for vaccinations, parasite prevention, and early detection of potential health issues.\n\nMental and physical stimulation are essential for a happy cat. Interactive toys, scratching posts, climbing trees, and regular play sessions help prevent boredom and encourage healthy exercise. Cats also benefit from consistent routines and positive interactions with their owners.\n\nMaintaining a clean litter box, grooming your cat regularly, and monitoring changes in behavior or appetite can help ensure their well-being. Every cat has a unique personality, so patience and understanding are key as you build trust and strengthen your bond.\n\nWith proper care, attention, and affection, your cat can become a loving companion and cherished member of your family for many years to come.",
+    "coverImage": "/images/blogs/cat1.jpeg",
+    "thumbnailAlt": "Complete cat care guide for beginners",
     "author": "Sierra Team",
+    "authorRole": "Feline Care Specialist",
+    "authorImage": "/images/team/sierra-team.jpg",
+    "category": "Cat",
     "categorySlug": "cat",
     "tags": ["cat care", "beginner", "kitten", "guide", "new owner"],
+    "featured": true,
     "isArrival": false,
+    "status": "published",
     "publishedAt": "2024-11-20T08:00:00Z",
-    "readingTime": 7
+    "updatedAt": "2024-11-20T08:00:00Z",
+    "readingTime": 7,
+    "relatedIds": [],
+    "seo": {
+      "title": "Cat Care 101 Guide for New Cat Owners",
+      "description": "Everything new cat owners need to know about feeding, litter training and care.",
+      "keywords": ["cat care", "kitten care", "new cat owner"]
+    },
+    "specialistQuote": {
+      "quote": "Kittens learn through play. Providing scratching posts and interactive toys in their first months prevents unwanted behaviors and builds high confidence.",
+      "author": "SIERRA FELINE EXPERTS"
+    },
+    "galleryImages": [
+      "/images/blogs/cat1.jpeg",
+      "/images/blogs/cat1.jpeg"
+    ]
   }
 ]

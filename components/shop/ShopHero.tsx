@@ -69,14 +69,14 @@ export default function ShopHero({
             alt="Shop hero – pets in outfits"
             fill
             priority
-            className="object-cover object-[center_20%]"
+            className="object-cover object-[center_40%]"
             sizes="100vw"
           />
         </div>
 
         {/* ── Centered text block — occupies upper 2/3 of banner ── */}
         <div className="absolute inset-x-0 top-0 z-[3] mt-6 flex h-[calc(100%-50px)] flex-col items-center justify-center px-4 text-center">
-          <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-[#0d1b2a] drop-shadow-sm">
+          <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
             {headingPrefix} Products
           </h1>
 

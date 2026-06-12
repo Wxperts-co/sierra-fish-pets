@@ -57,7 +57,7 @@
     "category": "in-store",
     "shortDescription": "Free in-store water testing for pH, ammonia, nitrite, nitrate, and more.",
     "description": "Bring in a sample of your aquarium water and our experts will test it for all key parameters including pH, ammonia, nitrite, nitrate, hardness, and salinity (saltwater tanks). We'll explain the results and recommend treatments.",
-    "image": "/images/services/water-testing.jpg",
+    "image": "/images/services/water-testing.png",
     "price": "Free",
     "features": [
       "Tests pH, ammonia, nitrite, nitrate",
@@ -73,8 +73,8 @@
     "slug": "fish-of-month-club",
     "category": "in-store",
     "shortDescription": "Monthly exclusive fish at member-only pricing for club members.",
-    "description": "Join the Sierra Fish of the Month Club and receive access to exclusive fish species at special pricing. Each month features a hand-picked species with full care information and priority purchasing rights.",
-    "image": "/images/services/fish-month-club.jpg",
+    "description": "Discover something new every month with the Sierra Fish of the Month Club, designed for aquarium enthusiasts who love expanding their aquatic collections. As a club member, you'll gain exclusive access to carefully selected fish species available at special member-only pricing. Each featured fish is hand-picked by our aquatic experts based on uniqueness, beauty, and compatibility with a variety of aquarium setups. Members receive priority purchasing rights before these species become available to the general public, ensuring you never miss out on limited arrivals. To help you provide the best care, every monthly selection includes detailed care sheets covering habitat requirements, feeding recommendations, temperament, and maintenance tips. You'll also receive email notifications announcing new arrivals and important updates. Best of all, membership is completely free, making it the perfect opportunity to discover exciting new species while enjoying exclusive benefits and expert guidance from the Sierra Fish & Pets team.",
+    "image": "/images/services/s1.png",
     "price": "Free to join",
     "features": [
       "Exclusive monthly fish species",
@@ -91,7 +91,7 @@
     "category": "in-store",
     "shortDescription": "Quick and affordable nail trimming for dogs and cats, and wing trims for birds.",
     "description": "Our trained staff provide safe and stress-free nail trims for dogs and cats, and wing trims for pet birds. No appointment needed for most services — just walk in.",
-    "image": "/images/services/nail-trim.jpg",
+    "image": "/images/services/s2.png",
     "price": "$10–$20",
     "features": [
       "Dog & cat nail trims",

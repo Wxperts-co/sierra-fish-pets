@@ -113,10 +113,10 @@ export default function BrandDetail({
                   Official Website
                 </a>
                 <Link
-                  href="/contact-us"
+                  href={`/shop?brand=${brand.slug}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-[#005AA9] text-[#005AA9] font-bold hover:bg-blue-50 transition-all duration-200"
                 >
-                  Ask In-Store
+                  Check In-Store
                 </Link>
               </div>
             </div>

@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   Search,
@@ -19,6 +19,7 @@ import MobileMenu from "@/components/layouts/MobileMenu";
 import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
 import categories from "@/data/categories.json";
+import navbarData from "@/data/navbar.json";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -33,14 +34,14 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const [activeDropdown, setActiveDropdown] = useState<
-    "shop" | "arrivals" | "blogs" | "page" | "services" | "brands" | null
-  >(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
     setActiveDropdown(null);
+    setActiveSubmenu(null);
   }
 
   // Click outside to close dropdowns
@@ -49,6 +50,7 @@ export default function Header() {
       const target = event.target as HTMLElement;
       if (activeDropdown && !target.closest(".nav-dropdown-container")) {
         setActiveDropdown(null);
+        setActiveSubmenu(null);
       }
     };
 
@@ -66,9 +68,32 @@ export default function Header() {
   const isAboutUs = pathname === "/about";
   const isContactUs = pathname === "/contact-us";
   const isEventCalendar = pathname === "/event-calendar";
+  const isGallery = pathname === "/gallery";
+  const isGiftCards = pathname === "/gift-cards";
   const isServiceDetail = pathname ? pathname.startsWith("/services/") : false;
-  const isBrandsPage = pathname === "/brands" || (pathname ? pathname.startsWith("/brands/") : false);
-  const isTransparentPage = isHome || isShopHero || isAboutUs || isContactUs || isEventCalendar || isServiceDetail || isBrandsPage;
+  const isBrandsPage =
+    pathname === "/brands" ||
+    (pathname ? pathname.startsWith("/brands/") : false);
+  const isArrivals =
+    pathname === "/arrivals" ||
+    (pathname ? pathname.startsWith("/arrivals/") : false);
+  const isBlogs =
+    pathname === "/blogs" ||
+    (pathname ? pathname.startsWith("/blogs/") : false);
+
+
+  const isTransparentPage =
+    isHome ||
+    isShopHero ||
+    isAboutUs ||
+    isContactUs ||
+    isEventCalendar ||
+    isServiceDetail ||
+    isGallery ||
+    isGiftCards ||
+    isBrandsPage ||
+    isArrivals ||
+    isBlogs;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -92,7 +117,16 @@ export default function Header() {
   // Determine if header should have a solid background or be transparent overlay
   const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
 
-  const isDarkTransparentPage = isAboutUs || isContactUs || isEventCalendar || isServiceDetail || isBrandsPage;
+  const isDarkTransparentPage =
+    isAboutUs ||
+    isContactUs ||
+    isEventCalendar ||
+    isServiceDetail ||
+    isGallery ||
+    isGiftCards ||
+    isBrandsPage ||
+    isArrivals ||
+    isBlogs;
   const useWhiteText = showSolidBackground || isDarkTransparentPage;
 
   return (
@@ -107,14 +141,14 @@ export default function Header() {
           {/* Left: Hamburger menu + Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <MobileMenu />
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="inline-flex items-center justify-center bg-white rounded-lg px-2 py-1">
               <Image
-                src="/images/logo/white-logo.png"
+                src="/images/logo/logo.png"
                 alt="Sierra Fish & Pets"
                 width={100}
                 height={32}
                 priority
-                className="h-7 w-auto object-contain"
+                className="h-7 w-auto object-contain rounded-lg"
               />
             </Link>
           </div>
@@ -220,10 +254,10 @@ export default function Header() {
                 "absolute top-0 inset-x-0 bg-transparent border-b",
                 isDarkTransparentPage
                   ? "border-white/10"
-                  : (isHome || isEventCalendar)
-                  ? "border-slate-200/60"
-                  : "border-transparent"
-              )
+                  : isHome || isEventCalendar
+                    ? "border-slate-200/60"
+                    : "border-transparent",
+              ),
         )}
       >
         <div className="container mx-auto px-4">
@@ -234,499 +268,192 @@ export default function Header() {
               className="flex h-16 shrink-0 items-center overflow-visible"
             >
               <Image
-                src={
-                  useWhiteText
-                    ? "/images/logo/logo6.png"
-                    : "/images/logo/logo3.png"
-                }
+                src={showSolidBackground ? "/images/logo/logo.png" : "/images/logo/logo3.png"}
                 alt="Sierra Fish & Pets"
                 width={400}
                 height={100}
                 priority
                 className={cn(
-                  "block h-auto w-[300px] object-contain object-center px-3 transition-all duration-300",
-                  useWhiteText ? "pt-3" : "rounded-lg pt-3",
+                  "block h-auto w-[260px] object-contain object-center transition-all duration-300",
+                  showSolidBackground ? "rounded-xl" : ""
                 )}
               />
             </Link>
 
             {/* Center — Navigation links */}
             <div className="flex items-center">
-              <MegaMenu
-                textClass={useWhiteText ? "text-white" : "text-[#003DA5]"}
-                isOpen={activeDropdown === "shop"}
-                onToggle={() =>
-                  setActiveDropdown(activeDropdown === "shop" ? null : "shop")
+              {navbarData.map((item: any) => {
+                if (item.type === "megamenu") {
+                  return (
+                    <React.Fragment key={item.label}>
+                      <MegaMenu
+                        textClass={useWhiteText ? "text-white" : "text-[#003DA5]"}
+                        isOpen={activeDropdown === "shop"}
+                        onToggle={() =>
+                          setActiveDropdown(activeDropdown === "shop" ? null : "shop")
+                        }
+                        onClose={() => setActiveDropdown(null)}
+                      />
+                      <span
+                        className={cn(
+                          "mx-2 h-4 w-px transition-colors duration-300",
+                          useWhiteText ? "bg-white/20" : "bg-[#003DA5]",
+                        )}
+                      />
+                    </React.Fragment>
+                  );
                 }
-                onClose={() => setActiveDropdown(null)}
-              />
 
-              <span
-                className={cn(
-                  "mx-2 h-4 w-px transition-colors duration-300",
-                  useWhiteText ? "bg-white/20" : "bg-[#003DA5]",
-                )}
-              />
-
-              {/* Home */}
-              <Link
-                href="/"
-                className={cn(
-                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  useWhiteText
-                    ? "text-white hover:text-white/80"
-                    : "text-black/70 hover:text-[#003DA5]/80",
-                )}
-              >
-                Home
-              </Link>
-
-              {/* Services Dropdown */}
-              <div className="relative py-3 px-3.5 nav-dropdown-container">
-                <button
-                  onClick={() =>
-                    setActiveDropdown(
-                      activeDropdown === "services" ? null : "services",
-                    )
-                  }
-                  className={cn(
-                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    useWhiteText
-                      ? "text-white hover:text-white/80"
-                      : "text-black/70 hover:text-[#003DA5]/80",
-                  )}
-                >
-                  Services
-                  <ChevronDown
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200",
-                      activeDropdown === "services" && "rotate-180",
-                    )}
-                  />
-                </button>
-
-                {/* Dropdown Menu */}
-                <div
-                  className={cn(
-                    "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                    activeDropdown === "services"
-                      ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none",
-                  )}
-                >
-                  {/* Aquarium Services Submenu */}
-                  <div className="relative group/submenu">
-                    <div
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none"
-                    >
-                      Aquarium Services
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </div>
-                    {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                       <Link
-                        href="/services/aquarium/aquarium-consulting-design"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Aquarium Consulting & Design
-                      </Link>
-                      <Link
-                        href="/services/aquarium/custom-aquariums"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Custom Aquariums
-                      </Link>
-                      <Link
-                        href="/services/aquarium/aquarium-installation"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Aquarium Installation
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* In-Store Services Submenu */}
-                  <div className="relative group/submenu">
-                    <div
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none"
-                    >
-                      In-Store Services
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </div>
-                    {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                       <Link
-                        href="/services/in-store/aquarium-water-testing"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Aquarium Water Testing
-                      </Link>
-                      <Link
-                        href="/services/in-store/fish-of-month-club"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Fish of the Month Club
-                      </Link>
-                      <Link
-                        href="/services/in-store/pet-nail-wing-trims"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Pet Nails and Wing Trim
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Store Tour & Loyalty Program
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Dog Adoption Events */}
-                  <Link
-                    href="/services/dog-adoption"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                  >
-                    Dog Adoption Events
-                  </Link>
-                </div>
-              </div>
-
-              {/* Brands Dropdown */}
-              <div className="relative py-3 px-3.5 nav-dropdown-container">
-                <button
-                  onClick={() =>
-                    setActiveDropdown(
-                      activeDropdown === "brands" ? null : "brands",
-                    )
-                  }
-                  className={cn(
-                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    useWhiteText
-                      ? "text-white hover:text-white/80"
-                      : "text-black/70 hover:text-[#003DA5]/80",
-                  )}
-                >
-                  Brands
-                  <ChevronDown
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200",
-                      activeDropdown === "brands" && "rotate-180",
-                    )}
-                  />
-                </button>
-
-                {/* Dropdown Menu */}
-                <div
-                  onClick={() => setActiveDropdown(null)}
-                  className={cn(
-                    "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                    activeDropdown === "brands"
-                      ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none",
-                  )}
-                >
-                  <Link
-                    href="/brands"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    All Brands
-                  </Link>
-                  <Link
-                    href="/brands?category=dog"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Dog Brands
-                  </Link>
-                  <Link
-                    href="/brands?category=cat"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Cat Brands
-                  </Link>
-                  <Link
-                    href="/brands?category=aquatic"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Aquatic Brands
-                  </Link>
-                  <Link
-                    href="/brands?category=reptile"
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Reptile Brands
-                  </Link>
-                </div>
-              </div>
-
-             
-
-              {/* About us */}
-              <Link
-                href="/about"
-                className={cn(
-                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  useWhiteText
-                    ? "text-white hover:text-white/80"
-                    : "text-black/70 hover:text-[#003DA5]/80",
-                )}
-              >
-                About Us
-              </Link>
-
-               {/* Event calender */}
-              <Link
-                href="/event-calendar"
-                className={cn(
-                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  useWhiteText
-                    ? "text-white hover:text-white/80"
-                    : "text-black/70 hover:text-[#003DA5]/80",
-                )}
-              >
-                Event calender
-              </Link>
-
-              {/* Contact us */}
-              <Link
-                href="/contact-us"
-                className={cn(
-                  "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
-                  useWhiteText
-                    ? "text-white hover:text-white/80"
-                    : "text-black/70 hover:text-[#003DA5]/80",
-                )}
-              >
-                Contact Us
-              </Link>
-
-              {/* Page Dropdown */}
-              <div className="relative py-3 px-3.5 nav-dropdown-container">
-                <button
-                  onClick={() =>
-                    setActiveDropdown(activeDropdown === "page" ? null : "page")
-                  }
-                  className={cn(
-                    "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
-                    useWhiteText
-                      ? "text-white hover:text-white/80"
-                      : "text-black/70 hover:text-[#003DA5]/80",
-                  )}
-                >
-                  More
-                  <ChevronDown
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200",
-                      activeDropdown === "page" && "rotate-180",
-                    )}
-                  />
-                </button>
-
-                {/* Dropdown Menu */}
-                <div
-                  className={cn(
-                    "absolute top-full left-0 z-50 min-w-[180px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                    activeDropdown === "page"
-                      ? "opacity-100 visible scale-100 pointer-events-auto"
-                      : "opacity-0 invisible scale-95 pointer-events-none",
-                  )}
-                >
-                  {/* Arrivals Submenu */}
-                  <div className="relative group/submenu">
+                if (item.type === "link") {
+                  return (
                     <Link
-                      href="#"
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                      href={item.href}
+                      key={item.label}
+                      className={cn(
+                        "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                        useWhiteText
+                          ? "text-white hover:text-white/80"
+                          : "text-black/70 hover:text-[#003DA5]/80",
+                      )}
                     >
-                      Arrivals
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                      {item.label}
                     </Link>
-                    {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[200px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                  );
+                }
+
+                if (item.type === "dropdown") {
+                  const dropKey = item.label.toLowerCase();
+                  return (
+                    <div key={item.label} className="relative py-3 px-3.5 nav-dropdown-container">
+                      <button
+                        onClick={() =>
+                          setActiveDropdown(activeDropdown === dropKey ? null : dropKey)
+                        }
+                        className={cn(
+                          "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                          useWhiteText
+                            ? "text-white hover:text-white/80"
+                            : "text-black/70 hover:text-[#003DA5]/80",
+                        )}
                       >
-                        Bird Arrivals
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
+                        {item.label}
+                        <ChevronDown
+                          className={cn(
+                            "h-4 w-4 transition-transform duration-200",
+                            activeDropdown === dropKey && "rotate-180",
+                          )}
+                        />
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      <div
+                        className={cn(
+                          "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                          activeDropdown === dropKey
+                            ? "opacity-100 visible scale-100 pointer-events-auto"
+                            : "opacity-0 invisible scale-95 pointer-events-none",
+                        )}
                       >
-                        Freshwater Arrivals
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                      >
-                        Saltwater Arrivals
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                      >
-                        Reptile Arrivals
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                      >
-                        Small Animal Arrivals
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
-                      >
-                        Cat Arrivals
-                      </Link>
+                        {item.menuItems?.map((menuItem: any, idx: number) => {
+                          if (menuItem.type === "submenu") {
+                            return (
+                              <div key={idx} className="relative group/submenu">
+                                <div className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none">
+                                  {menuItem.label}
+                                  <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                                </div>
+                                
+                                {/* Submenu Panel */}
+                                <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                                  {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
+                                    const isSierraEdu = menuItem.label === "Sierra Edu";
+                                    const isSubOpen = activeSubmenu === subItem.label;
+
+                                    return (
+                                      <div key={sIdx} className="relative group/edu-submenu">
+                                        {subItem.items ? (
+                                          <>
+                                            {isSierraEdu ? (
+                                              <button
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  setActiveSubmenu(isSubOpen ? null : subItem.label);
+                                                }}
+                                                className="w-full text-left flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-pointer select-none focus:outline-none"
+                                              >
+                                                {subItem.label}
+                                                <ChevronRight className={cn("h-3.5 w-3.5 text-slate-400 transition-transform duration-200", isSubOpen && "rotate-90")} />
+                                              </button>
+                                            ) : (
+                                              <div className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none">
+                                                {subItem.label}
+                                                <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                                              </div>
+                                            )}
+                                            
+                                            {/* Third Level Submenu */}
+                                            <div
+                                              className={cn(
+                                                "absolute left-full top-0 z-50 min-w-[220px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
+                                                isSierraEdu
+                                                  ? (isSubOpen ? "opacity-100 visible scale-100 pointer-events-auto" : "opacity-0 invisible scale-95 pointer-events-none")
+                                                  : "opacity-0 invisible scale-95 pointer-events-none group-hover/edu-submenu:opacity-100 group-hover/edu-submenu:visible group-hover/edu-submenu:scale-100"
+                                              )}
+                                            >
+                                              {subItem.items.map((nestedItem: any, nIdx: number) => (
+                                                <Link
+                                                  key={nIdx}
+                                                  href={nestedItem.href}
+                                                  onClick={() => {
+                                                    setActiveDropdown(null);
+                                                    setActiveSubmenu(null);
+                                                  }}
+                                                  className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                                >
+                                                  {nestedItem.label}
+                                                </Link>
+                                              ))}
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <Link
+                                            href={subItem.href}
+                                            onClick={() => {
+                                              setActiveDropdown(null);
+                                              setActiveSubmenu(null);
+                                            }}
+                                            className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                          >
+                                            {subItem.label}
+                                          </Link>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          // Standard Link
+                          return (
+                            <Link
+                              key={idx}
+                              href={menuItem.href}
+                              onClick={() => setActiveDropdown(null)}
+                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                            >
+                              {menuItem.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  );
+                }
 
-                  {/* Blogs Submenu */}
-                  <div className="relative group/submenu">
-                    <Link
-                      href="#"
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                    >
-                      Blogs
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </Link>
-                    {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[160px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Dog
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Cat
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Aquatic
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Reptile
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Bird
-                      </Link>
-                      <Link
-                        href="#"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Small animal
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Sierra Edu Submenu */}
-                  <div className="relative group/submenu">
-                    <Link
-                      href="/edu"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                    >
-                      Sierra Edu
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                    </Link>
-                    {/* Submenu Panel */}
-                    <div className="absolute left-full top-0 z-50 min-w-[180px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
-                      <Link
-                        href="/edu/dogs"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Dog Care Guides
-                      </Link>
-                      <Link
-                        href="/edu/cats"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Cat Care Guides
-                      </Link>
-                      <Link
-                        href="/edu/aquariums"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Aquarium Education
-                      </Link>
-                      <Link
-                        href="/edu/reptiles"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Reptile Care
-                      </Link>
-                      <Link
-                        href="/edu/reptiles"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Bird Care Guides
-                      </Link>
-                      <Link
-                        href="/edu/reptiles"
-                        onClick={() => setActiveDropdown(null)}
-                        className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                      >
-                        Small Animal Care Guides
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Gallery Link */}
-                  <Link
-                    href="/gallery"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Gallery
-                  </Link>
-
-                  {/* Gift card Link */}
-                  <Link
-                    href="#"
-                    onClick={() => setActiveDropdown(null)}
-                    className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                  >
-                    Gift card
-                  </Link>
-                </div>
-              </div>
+                return null;
+              })}
             </div>
 
             {/* Right — Actions */}
