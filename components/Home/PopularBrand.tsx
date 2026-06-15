@@ -9,7 +9,7 @@ export default function PopularBrands() {
       <div className="container mx-auto px-4">
         {/* Heading */}
         <div className="mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <h2 className="text-2xl md:text-5xl font-bold tracking-tight">
             <span className="text-[#005AA9]">Popular</span>{" "}
             <span className="text-sierra-blue">Brands</span>
           </h2>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, ChevronRight } from "lucide-react";
@@ -31,9 +32,10 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 export default function MobileMenu() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
           <button
@@ -53,7 +55,7 @@ export default function MobileMenu() {
         <SheetHeader className="border-b border-slate-100 bg-gradient-to-r from-[#004d8f] to-[#005AA9] px-5 py-4">
           <SheetTitle className="flex items-center gap-3">
             <Image
-              src="/images/logo/logo3.png"
+              src="/images/logo/logo.png"
               alt="Sierra Fish & Pets"
               width={130}
               height={42}
@@ -86,63 +88,73 @@ export default function MobileMenu() {
                             const isSierraEdu = menuItem.label === "Sierra Edu";
                             return (
                               <div key={idx} className="py-1">
-                                <div className="px-8 py-1.5 text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">
-                                  {menuItem.label}
-                                </div>
-                                {isSierraEdu ? (
-                                  <Accordion type="single" collapsible className="w-full">
-                                    {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
-                                      return (
-                                        <AccordionItem
-                                          key={sIdx}
-                                          value={subItem.label}
-                                          className="border-b-0"
-                                        >
-                                          <AccordionTrigger className="mx-2 pl-12 pr-5 py-2 text-[12px] font-medium text-slate-600 hover:text-[#005AA9] hover:no-underline border-b-0 focus:outline-none">
-                                            {subItem.label}
-                                          </AccordionTrigger>
-                                          <AccordionContent className="pb-1">
-                                            <div className="flex flex-col gap-0.5">
-                                              {subItem.items?.map((nestedItem: any, nIdx: number) => {
-                                                const isNestedActive = pathname === nestedItem.href;
-                                                return (
-                                                  <Link
-                                                    key={nIdx}
-                                                    href={nestedItem.href}
-                                                    className={`mx-2 pl-16 pr-5 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 block ${
-                                                      isNestedActive
-                                                        ? "bg-blue-50/60 text-[#005AA9] font-semibold"
-                                                        : "text-slate-500 hover:bg-blue-50/50 hover:text-[#005AA9]"
-                                                    }`}
-                                                  >
-                                                    {nestedItem.label}
-                                                  </Link>
-                                                );
-                                              })}
-                                            </div>
-                                          </AccordionContent>
-                                        </AccordionItem>
-                                      );
-                                    })}
-                                  </Accordion>
-                                ) : (
-                                  menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
-                                    const isActive = pathname === subItem.href;
-                                    return (
-                                      <Link
-                                        key={sIdx}
-                                        href={subItem.href}
-                                        className={`mx-2 pl-12 pr-5 py-2 text-[12px] font-medium rounded-md transition-all duration-200 block ${
-                                          isActive
-                                            ? "bg-blue-50/60 text-[#005AA9] font-semibold"
-                                            : "text-slate-600 hover:bg-blue-50/50 hover:text-[#005AA9]"
-                                        }`}
-                                      >
-                                        {subItem.label}
-                                      </Link>
-                                    );
-                                  })
-                                )}
+                                <Accordion className="w-full">
+                                  <AccordionItem value={menuItem.label} className="border-b-0">
+                                    <AccordionTrigger className="px-8 pr-5 py-1.5 text-[10px] font-extrabold uppercase text-slate-400 hover:text-[#005AA9] tracking-wider hover:no-underline border-b-0 focus:outline-none">
+                                      {menuItem.label}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="pb-1">
+                                      {isSierraEdu ? (
+                                        <Accordion className="w-full">
+                                          {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
+                                            return (
+                                              <AccordionItem
+                                                key={sIdx}
+                                                value={subItem.label}
+                                                className="border-b-0"
+                                              >
+                                                <AccordionTrigger className="mx-2 pl-12 pr-5 py-2 text-[12px] font-medium text-slate-600 hover:text-[#005AA9] hover:no-underline border-b-0 focus:outline-none">
+                                                  {subItem.label}
+                                                </AccordionTrigger>
+                                                <AccordionContent className="pb-1">
+                                                  <div className="flex flex-col gap-0.5">
+                                                    {subItem.items?.map((nestedItem: any, nIdx: number) => {
+                                                      const isNestedActive = pathname === nestedItem.href;
+                                                      return (
+                                                        <Link
+                                                          key={nIdx}
+                                                          href={nestedItem.href}
+                                                          onClick={() => setOpen(false)}
+                                                          className={`mx-2 pl-16 pr-5 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 block ${
+                                                            isNestedActive
+                                                              ? "bg-blue-50/60 text-[#005AA9] font-semibold"
+                                                              : "text-slate-500 hover:bg-blue-50/50 hover:text-[#005AA9]"
+                                                          }`}
+                                                        >
+                                                          {nestedItem.label}
+                                                        </Link>
+                                                      );
+                                                    })}
+                                                  </div>
+                                                </AccordionContent>
+                                              </AccordionItem>
+                                            );
+                                          })}
+                                        </Accordion>
+                                      ) : (
+                                        <div className="flex flex-col gap-0.5">
+                                          {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
+                                            const isActive = pathname === subItem.href;
+                                            return (
+                                              <Link
+                                                key={sIdx}
+                                                href={subItem.href}
+                                                onClick={() => setOpen(false)}
+                                                className={`mx-2 pl-12 pr-5 py-2 text-[12px] font-medium rounded-md transition-all duration-200 block ${
+                                                  isActive
+                                                    ? "bg-blue-50/60 text-[#005AA9] font-semibold"
+                                                    : "text-slate-600 hover:bg-blue-50/50 hover:text-[#005AA9]"
+                                                }`}
+                                              >
+                                                {subItem.label}
+                                              </Link>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                    </AccordionContent>
+                                  </AccordionItem>
+                                </Accordion>
                               </div>
                             );
                           }
@@ -153,6 +165,7 @@ export default function MobileMenu() {
                             <Link
                               key={idx}
                               href={menuItem.href}
+                              onClick={() => setOpen(false)}
                               className={`mx-2 pl-8 pr-5 py-2 text-[12px] font-medium rounded-md transition-all duration-200 block ${
                                 isActive
                                   ? "bg-blue-50/60 text-[#005AA9] font-semibold"
@@ -175,6 +188,7 @@ export default function MobileMenu() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => setOpen(false)}
                   className={`flex items-center justify-between border-b border-slate-50 px-5 py-2.5 text-[13px] font-semibold tracking-wide transition-all duration-200 ${
                     isActive
                       ? "bg-blue-50/60 text-[#005AA9] font-semibold"
@@ -214,12 +228,13 @@ export default function MobileMenu() {
                 <AccordionContent className="pb-2 pl-2">
                   <div className="flex flex-col gap-0.5 pr-2">
                     {category.subcategories.map((sub) => {
-                      const href = `/shop/${category.slug}/${sub.slug}`;
-                      const isActive = pathname === href;
+                      const href = `/shop?category=${category.slug}&subcategory=${sub.slug}`;
+                      const isActive = pathname.startsWith("/shop") && pathname.includes(sub.slug);
                       return (
                         <Link
                           key={sub.id}
                           href={href}
+                          onClick={() => setOpen(false)}
                           className={`rounded-md px-3 py-2 text-[12px] font-medium transition-all duration-200 ${
                             isActive
                               ? "bg-blue-50/60 text-[#005AA9] font-semibold"

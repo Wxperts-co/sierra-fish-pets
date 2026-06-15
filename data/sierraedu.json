@@ -1,0 +1,277 @@
+[
+  {
+    "id": "edu-001",
+    "title": "Puppy Care Basics",
+    "slug": "puppy-care-basics",
+    "excerpt": "Learn the fundamentals of raising a healthy, happy, and well-socialized puppy, including feeding, training, healthcare, and daily care routines.",
+    "content": "# Puppy Care Basics\n\nBringing home a new puppy is an exciting experience, but it also comes with important responsibilities. The first few months of a puppy's life are crucial for building healthy habits, proper socialization, and a strong bond between you and your new companion.\n\nOne of the most important aspects of puppy care is providing a balanced and nutritious diet. Choose a high-quality puppy food formulated for your dog's breed size and age. Fresh water should always be available, and feeding schedules should remain consistent to help establish a routine.\n\nTraining should begin as early as possible. Basic commands such as sit, stay, come, and leave it can help create a well-behaved dog. Positive reinforcement techniques, including treats and praise, are often the most effective methods for encouraging desired behaviors. House training and crate training are also essential during the early stages.\n\nSocialization is another key component of puppy development. Exposing your puppy to different people, environments, sounds, and other animals can help reduce fear and anxiety later in life. Always ensure these experiences are positive and age-appropriate.\n\nRegular veterinary care is essential for maintaining your puppy's health. Vaccinations, deworming, parasite prevention, and routine checkups help protect against common illnesses and ensure proper growth and development.\n\nExercise and playtime are equally important. Interactive toys, short walks, and supervised play sessions help burn energy and stimulate your puppy both mentally and physically.\n\nWith patience, consistency, and plenty of love, your puppy can grow into a confident, healthy, and loyal companion for many years to come.",
+    "coverImage": "/images/sierra-edu/dog.jpeg",
+    "featured": true,
+    "readingTime": 5,
+    "publishedAt": "2026-01-10",
+    "tags": ["dogs", "puppy", "care", "training", "health"]
+    },
+  {
+    "id": "edu-002",
+    "title": "Dog Nutrition Guide",
+    "slug": "dog-nutrition-guide",
+    "category": "Dog Care Guides",
+    "categorySlug": "dogs"
+  },
+  {
+    "id": "edu-003",
+    "title": "Dog Training Essentials",
+    "slug": "dog-training-essentials",
+    "category": "Dog Care Guides",
+    "categorySlug": "dogs"
+  },
+  {
+    "id": "edu-004",
+    "title": "Dog Vaccination Schedule",
+    "slug": "dog-vaccination-schedule",
+    "category": "Dog Care Guides",
+    "categorySlug": "dogs"
+  },
+
+ {
+    "id": "edu-005",
+    "title": "Cat Care",
+    "slug": "cat-care",
+    "excerpt": "Discover the essentials of cat care, including nutrition, grooming, healthcare, enrichment, and creating a safe and comfortable environment for your feline companion.",
+    "content": "# Cat Care\n\nCats are independent, intelligent, and affectionate companions that can bring years of joy to your home. Providing proper care from the beginning is essential to ensure your cat remains healthy, happy, and comfortable throughout its life.\n\nOne of the most important aspects of cat care is nutrition. Cats are obligate carnivores, meaning they require a diet rich in animal-based proteins to thrive. Choose a high-quality cat food that is appropriate for your cat's age, size, and activity level. Fresh water should always be available, and treats should be offered in moderation.\n\nCreating a safe and enriching environment is equally important. Cats enjoy having places to climb, scratch, hide, and observe their surroundings. Providing scratching posts, cat trees, interactive toys, and comfortable resting areas helps support both physical activity and mental stimulation.\n\nMaintaining good hygiene is another key responsibility. Litter boxes should be cleaned daily and placed in a quiet, accessible location. Regular grooming can help reduce shedding, prevent matting, and strengthen the bond between you and your cat. Long-haired breeds may require more frequent brushing than short-haired cats.\n\nRoutine veterinary care plays a vital role in your cat's well-being. Vaccinations, parasite prevention, dental care, and annual health checkups help detect and prevent potential health issues before they become serious.\n\nCats also benefit from consistent routines and positive interactions with their owners. Spending time playing, grooming, and simply relaxing together helps build trust and strengthen your relationship.\n\nWith proper nutrition, healthcare, enrichment, and affection, your cat can enjoy a long, healthy, and fulfilling life as a beloved member of your family.",
+    "coverImage": "/images/sierra-edu/cat.jpg",
+    "featured": true,
+    "readingTime": 5,
+    "publishedAt": "2026-01-10",
+    "tags": ["cats", "cat care", "feline health", "nutrition", "pet care"]
+    },
+  {
+    "id": "edu-006",
+    "title": "Litter Train Kitten",
+    "slug": "litter-train-kitten",
+    "category": "Cat Care Guides",
+    "categorySlug": "cats"
+  },
+
+ {
+  "id": "edu-007",
+  "title": "Setting Up A FW Aquarium",
+  "slug": "setting-up-a-fw-aquarium",
+  "excerpt": "A beginner-friendly guide to setting up a successful freshwater aquarium, from choosing the right tank and equipment to cycling the aquarium and introducing fish safely.",
+  "content": "# Setting Up A Freshwater Aquarium\n\nSetting up a freshwater aquarium is an exciting and rewarding hobby that allows you to create a beautiful underwater environment while caring for a variety of aquatic life. Whether you're new to fishkeeping or upgrading your current setup, following the proper steps from the beginning can help ensure long-term success.\n\nThe first step is choosing an appropriately sized aquarium. Many beginners assume smaller tanks are easier to maintain, but larger aquariums often provide more stable water conditions and are generally more forgiving. Once you've selected your tank, you'll need essential equipment such as a filter, heater (if required), lighting system, substrate, decorations, and a water conditioner.\n\nAfter setting up the aquarium, it's important to fill it with treated water and begin the cycling process. Cycling establishes beneficial bacteria that convert harmful ammonia and nitrites into less harmful nitrates. This biological filtration system is critical for maintaining a healthy environment for fish. Rushing this step can lead to poor water quality and unnecessary stress on aquatic life.\n\nOnce the tank is fully cycled, introduce fish gradually rather than adding too many at once. Research species compatibility, water requirements, and adult sizes before making purchasing decisions. Overcrowding can quickly lead to water quality issues and fish health problems.\n\nRegular maintenance is essential for a thriving aquarium. Weekly water changes, filter maintenance, water testing, and proper feeding routines help maintain stable conditions and prevent common issues.\n\nWith patience, proper planning, and consistent care, your freshwater aquarium can become a healthy, vibrant ecosystem that provides enjoyment and relaxation for years to come.",
+  "coverImage": "/images/sierra-edu/aquatic.jpeg",
+  "featured": true,
+  "readingTime": 6,
+  "publishedAt": "2026-01-10",
+  "tags": [
+    "aquarium",
+    "freshwater",
+    "fishkeeping",
+    "tank setup",
+    "beginner guide"
+  ]
+},
+  {
+    "id": "edu-008",
+    "title": "Types Of FW Fish",
+    "slug": "types-of-fw-fish",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-009",
+    "title": "FW Aquarium Checklist",
+    "slug": "fw-aquarium-checklist",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-010",
+    "title": "FW Care",
+    "slug": "fw-care",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-011",
+    "title": "Goldfish In A Fishbowl",
+    "slug": "goldfish-in-a-fishbowl",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-012",
+    "title": "Betta Fish Care",
+    "slug": "betta-fish-care",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-013",
+    "title": "Aquarium Water Change",
+    "slug": "aquarium-water-change",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-014",
+    "title": "Live Plant Care",
+    "slug": "live-plant-care",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+  {
+    "id": "edu-015",
+    "title": "Axolotl Care",
+    "slug": "axolotl-care",
+    "category": "Aquarium Education",
+    "categorySlug": "aquariums"
+  },
+
+  {
+  "id": "edu-016",
+  "title": "Purchasing Reptiles",
+  "slug": "purchasing-reptiles",
+  "excerpt": "Learn the key factors to consider before purchasing a reptile, including species selection, habitat requirements, long-term commitment, and responsible ownership.",
+  "content": "# Purchasing Reptiles\n\nPurchasing a reptile can be an exciting experience, but it is important to understand that reptiles have unique care requirements and can be a long-term commitment. Before bringing a reptile home, prospective owners should take the time to research different species and determine which one best matches their experience level, lifestyle, and available space.\n\nOne of the first considerations is selecting the right species. Some reptiles, such as Leopard Geckos and Corn Snakes, are often recommended for beginners due to their manageable care requirements and generally calm temperaments. Other species may require specialized lighting, larger enclosures, or advanced husbandry knowledge, making them better suited for experienced keepers.\n\nBefore making a purchase, ensure that you have the proper habitat fully prepared. Most reptiles require specific temperature gradients, humidity levels, UVB lighting, and secure enclosures to remain healthy. Setting up the habitat in advance allows you to stabilize environmental conditions before introducing your new pet.\n\nIt is also important to purchase reptiles from reputable sources that prioritize animal health and welfare. Healthy reptiles should appear alert, active, and free from visible signs of illness such as discharge, injuries, or abnormal behavior. Don't hesitate to ask questions about feeding history, age, origin, and care requirements.\n\nReptiles can live for many years, with some species reaching decades of age. Understanding the long-term responsibility, ongoing costs, and care commitments involved is essential before making a decision.\n\nBy researching carefully, preparing properly, and choosing a healthy animal from a trusted source, you can provide your reptile with a safe and comfortable home while enjoying a rewarding and educational pet ownership experience.",
+  "coverImage": "/images/sierra-edu/reptile.jpeg",
+  "featured": true,
+  "readingTime": 5,
+  "publishedAt": "2026-01-10",
+  "tags": [
+    "reptiles",
+    "reptile care",
+    "beginner reptiles",
+    "pet ownership",
+    "reptile habitat"
+  ]
+},
+  {
+    "id": "edu-017",
+    "title": "Aquatic Turtle Care",
+    "slug": "aquatic-turtle-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+  {
+    "id": "edu-018",
+    "title": "Box Turtle Care",
+    "slug": "box-turtle-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+  {
+    "id": "edu-019",
+    "title": "Bearded Dragon Care",
+    "slug": "bearded-dragon-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+  {
+    "id": "edu-020",
+    "title": "Boa Care",
+    "slug": "boa-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+  {
+    "id": "edu-021",
+    "title": "Corn Snake Care",
+    "slug": "corn-snake-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+  {
+    "id": "edu-022",
+    "title": "Emperor Scorpion Care",
+    "slug": "emperor-scorpion-care",
+    "category": "Reptile Care",
+    "categorySlug": "reptiles"
+  },
+
+  {
+  "id": "edu-023",
+  "title": "Basic Bird Care",
+  "slug": "basic-bird-care",
+  "excerpt": "Learn the fundamentals of bird care, including proper housing, nutrition, socialization, grooming, and healthcare to keep your feathered companion healthy and happy.",
+  "content": "# Basic Bird Care\n\nBirds are intelligent, social, and highly interactive pets that can provide years of companionship when given proper care and attention. Whether you own a parakeet, cockatiel, conure, or another companion bird species, understanding their basic needs is essential for maintaining their health and well-being.\n\nOne of the most important aspects of bird care is providing a suitable cage. The enclosure should be large enough for your bird to stretch its wings, move comfortably, and engage in natural behaviors. Perches of varying sizes, toys, and enrichment activities should be included to encourage exercise and mental stimulation.\n\nProper nutrition is equally important. A balanced diet typically includes high-quality pellets, fresh vegetables, fruits, and species-appropriate treats. Fresh water should always be available and changed daily. Avoid feeding birds foods that may be harmful, such as chocolate, avocado, caffeine, and alcohol.\n\nBirds are highly social animals and thrive on regular interaction. Spending time talking, playing, and training with your bird helps build trust and strengthens your bond. Many species enjoy learning tricks and responding to positive reinforcement training techniques.\n\nRoutine cleaning and grooming are also essential. Food dishes, water containers, and cage surfaces should be cleaned regularly to prevent the buildup of bacteria. Depending on the species, birds may also benefit from bathing opportunities to help maintain healthy feathers.\n\nRegular veterinary checkups are recommended to monitor overall health and detect potential problems early. Changes in appetite, behavior, feather condition, or activity levels should never be ignored.\n\nWith proper nutrition, enrichment, social interaction, and healthcare, your bird can enjoy a long, healthy, and fulfilling life as a cherished member of your family.",
+  "coverImage": "/images/sierra-edu/bird.jpeg",
+  "featured": true,
+  "readingTime": 5,
+  "publishedAt": "2026-01-10",
+  "tags": [
+    "birds",
+    "bird care",
+    "pet birds",
+    "bird nutrition",
+    "bird health"
+  ]
+},
+  {
+    "id": "edu-024",
+    "title": "Bird Foods To Avoid",
+    "slug": "bird-foods-to-avoid",
+    "category": "Bird Care Guides",
+    "categorySlug": "birds"
+  },
+  {
+    "id": "edu-025",
+    "title": "Bird Training",
+    "slug": "bird-training",
+    "category": "Bird Care Guides",
+    "categorySlug": "birds"
+  },
+{
+  "id": "edu-026",
+  "title": "Chinchilla Care",
+  "slug": "chinchilla-care",
+  "excerpt": "A complete guide to caring for pet chinchillas, including housing, nutrition, enrichment, grooming, and health considerations for a happy and healthy companion.",
+  "content": "# Chinchilla Care\n\nChinchillas are intelligent, active, and incredibly soft small animals that make wonderful companions for dedicated pet owners. Native to the Andes Mountains of South America, chinchillas have specific care requirements that differ from many other small pets. Understanding these needs is essential for ensuring their long-term health and well-being.\n\nOne of the most important aspects of chinchilla care is providing a spacious and secure enclosure. Chinchillas are highly active animals that love to climb, jump, and explore. A multi-level cage with platforms, hiding spots, and safe chew toys helps keep them physically and mentally stimulated. Because their teeth continuously grow throughout life, access to chew-safe materials is essential.\n\nNutrition plays a critical role in maintaining a healthy chinchilla. Their diet should primarily consist of high-quality chinchilla pellets and unlimited grass hay, which supports proper digestion and dental health. Fresh water should always be available. Sugary treats, fruits, and foods high in moisture should be limited, as chinchillas have sensitive digestive systems.\n\nUnlike many pets, chinchillas should never be bathed in water. Instead, they require regular dust baths using special chinchilla dust to keep their dense fur clean and healthy. Dust baths help remove excess oils and maintain the condition of their unique coat.\n\nChinchillas thrive in cool environments and are highly sensitive to heat and humidity. Temperatures above their comfort range can lead to serious health problems, including heat stress.\n\nWith proper housing, nutrition, enrichment, and routine veterinary care, chinchillas can live for 10 to 15 years or more. Their playful personalities, curiosity, and gentle nature make them rewarding companions for owners willing to provide the specialized care they need.",
+  "coverImage": "/images/sierra-edu/small-animal.jpeg",
+  "featured": true,
+  "readingTime": 5,
+  "publishedAt": "2026-01-10",
+  "tags": [
+    "chinchilla",
+    "small animals",
+    "pet care",
+    "chinchilla diet",
+    "chinchilla habitat"
+  ]
+},
+  {
+    "id": "edu-027",
+    "title": "Gerbil Care",
+    "slug": "gerbil-care",
+    "category": "Small Animal Care",
+    "categorySlug": "small-animals"
+  },
+  {
+    "id": "edu-028",
+    "title": "Guinea Pig Care",
+    "slug": "guinea-pig-care",
+    "category": "Small Animal Care",
+    "categorySlug": "small-animals"
+  },
+  {
+    "id": "edu-029",
+    "title": "Hamster Care",
+    "slug": "hamster-care",
+    "category": "Small Animal Care",
+    "categorySlug": "small-animals"
+  },
+  {
+    "id": "edu-030",
+    "title": "Rabbit Care",
+    "slug": "rabbit-care",
+    "category": "Small Animal Care",
+    "categorySlug": "small-animals"
+  },
+  {
+    "id": "edu-031",
+    "title": "Rat Care",
+    "slug": "rat-care",
+    "category": "Small Animal Care",
+    "categorySlug": "small-animals"
+  }
+]

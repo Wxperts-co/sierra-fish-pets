@@ -14,12 +14,13 @@ import {
   ChevronRight,
   MapPin,
 } from "lucide-react";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import MobileMenu from "@/components/layouts/MobileMenu";
 import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
 import categories from "@/data/categories.json";
 import navbarData from "@/data/navbar.json";
+import { openLoginModal } from "@/store/slices/authModalSlice";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -31,6 +32,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
 };
 
 export default function Header() {
+  const dispatch = useAppDispatch();
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -62,6 +64,7 @@ export default function Header() {
   const wishlistCount = useAppSelector(
     (state) => state.wishlist.productIds.length,
   );
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
@@ -80,6 +83,9 @@ export default function Header() {
   const isBlogs =
     pathname === "/blogs" ||
     (pathname ? pathname.startsWith("/blogs/") : false);
+  const isSierraEdu =
+    pathname === "/sierra-edu" ||
+    (pathname ? pathname.startsWith("/edu/") : false);
 
 
   const isTransparentPage =
@@ -93,7 +99,8 @@ export default function Header() {
     isGiftCards ||
     isBrandsPage ||
     isArrivals ||
-    isBlogs;
+    isBlogs ||
+    isSierraEdu;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -126,7 +133,8 @@ export default function Header() {
     isGiftCards ||
     isBrandsPage ||
     isArrivals ||
-    isBlogs;
+    isBlogs ||
+    isSierraEdu;
   const useWhiteText = showSolidBackground || isDarkTransparentPage;
 
   return (
@@ -214,8 +222,8 @@ export default function Header() {
           </Link>
 
           {categories.map((category) => {
-            const href = `/shop/${category.slug}`;
-            const isActive = pathname === href;
+            const href = `/shop?category=${category.slug}`;
+            const isActive = pathname.startsWith("/shop");
             return (
               <Link
                 key={category.id}
@@ -348,7 +356,8 @@ export default function Header() {
                       {/* Dropdown Menu */}
                       <div
                         className={cn(
-                          "absolute top-full left-0 z-50 min-w-[200px] translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                          "absolute top-full left-0 z-50 translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
+                          dropKey === "more" ? "min-w-[140px]" : "min-w-[200px]",
                           activeDropdown === dropKey
                             ? "opacity-100 visible scale-100 pointer-events-auto"
                             : "opacity-0 invisible scale-95 pointer-events-none",
@@ -364,7 +373,12 @@ export default function Header() {
                                 </div>
                                 
                                 {/* Submenu Panel */}
-                                <div className="absolute left-full top-0 z-50 min-w-[240px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left">
+                                <div
+                                  className={cn(
+                                    "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left",
+                                    dropKey === "more" ? "min-w-[170px]" : "min-w-[240px]"
+                                  )}
+                                >
                                   {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
                                     const isSierraEdu = menuItem.label === "Sierra Edu";
                                     const isSubOpen = activeSubmenu === subItem.label;
@@ -394,7 +408,8 @@ export default function Header() {
                                             {/* Third Level Submenu */}
                                             <div
                                               className={cn(
-                                                "absolute left-full top-0 z-50 min-w-[220px] ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
+                                                "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
+                                                dropKey === "more" ? "min-w-[180px]" : "min-w-[220px]",
                                                 isSierraEdu
                                                   ? (isSubOpen ? "opacity-100 visible scale-100 pointer-events-auto" : "opacity-0 invisible scale-95 pointer-events-none")
                                                   : "opacity-0 invisible scale-95 pointer-events-none group-hover/edu-submenu:opacity-100 group-hover/edu-submenu:visible group-hover/edu-submenu:scale-100"
@@ -477,13 +492,23 @@ export default function Header() {
               </button>
 
               {/* Account */}
-              <Link
-                href="/account"
-                className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
-                aria-label="Account"
-              >
-                <User className="h-5 w-5" />
-              </Link>
+              {isAuthenticated ? (
+                <Link
+                  href="/account"
+                  className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
+                  aria-label="Account"
+                >
+                  <User className="h-5 w-5" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => dispatch(openLoginModal())}
+                  className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15 cursor-pointer focus:outline-none"
+                  aria-label="Account"
+                >
+                  <User className="h-5 w-5" />
+                </button>
+              )}
 
               {/* Wishlist */}
               {/* <Link
@@ -531,20 +556,31 @@ export default function Header() {
 
       {/* Slide-down Search Bar (Unified) */}
       {searchOpen && (
-        <div
-          className={cn(
-            "z-40 border-b border-[#004b8d] bg-[#004b8d] px-4 py-3 transition-all duration-300 hidden lg:block",
-            isHome ? "fixed top-16 inset-x-0" : "sticky top-16 inset-x-0",
-          )}
-        >
-          <div className="container mx-auto max-w-4xl">
-            <div className="flex items-center gap-2.5 overflow-hidden rounded-full bg-white/10 px-4 py-2.5 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-cyan-400 transition-all">
-              <Search className="h-5 w-5 shrink-0 text-white/70" />
+        <div className="fixed inset-0 z-50 bg-[#005AA9] text-white transition-all duration-300 hidden lg:block">
+          <div className="container mx-auto px-4 pt-32 pb-16 max-w-6xl">
+            {/* Top Row: what are you looking for? / CLOSE ✕ */}
+            <div className="flex items-center justify-between mb-8 select-none">
+              <span className="text-sm font-extrabold tracking-wide text-white/80 lowercase">
+                what are you looking for?
+              </span>
+              <button
+                onClick={() => setSearchOpen(false)}
+                className="flex items-center gap-1.5 text-xs font-black tracking-widest text-white hover:opacity-80 transition-opacity uppercase cursor-pointer"
+              >
+                <span>close</span>
+                <span className="text-sm font-bold">✕</span>
+              </button>
+            </div>
+
+            {/* Input Row with Bottom Border and Search Icon */}
+            <div className="relative flex items-center border-b border-white pb-3">
               <input
                 autoFocus
-                placeholder="Search fish, pets, food, supplies…"
-                className="flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/50 tracking-wide"
+                type="text"
+                placeholder="Search..."
+                className="w-full bg-transparent text-3xl sm:text-5xl font-normal text-white placeholder:text-white/40 outline-none pr-12 tracking-wide"
               />
+              <Search className="absolute right-1 h-7 w-7 text-white stroke-[1.5px]" />
             </div>
           </div>
         </div>

@@ -203,7 +203,7 @@ export default function BestSellers() {
       <div className="container mx-auto px-4">
         {/* Centered Heading */}
         <div className="text-center mb-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold leading-tight font-lato">
+          <h2 className="text-2xl md:text-5xl font-extrabold leading-tight font-lato">
             <span className="text-[#005AA9]">Best</span> <span className="text-[#002244]">Sellers</span>
           </h2>
         </div>
@@ -218,7 +218,7 @@ export default function BestSellers() {
             {bestSellers.map((product, index) => (
               <CarouselItem
                 key={product.id}
-                className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                className="pl-4 basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
               >
                 <BestSellerCard product={product} index={index} />
               </CarouselItem>

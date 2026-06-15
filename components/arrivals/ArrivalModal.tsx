@@ -52,7 +52,7 @@ export default function ArrivalModal({ pet, onClose }: ArrivalModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-6 sm:px-6">
+      <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center overflow-y-auto px-4 py-6 sm:px-6">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -68,7 +68,7 @@ export default function ArrivalModal({ pet, onClose }: ArrivalModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="relative z-10 w-full max-w-5xl rounded-3xl border border-slate-100 bg-white shadow-2xl overflow-hidden max-h-[90vh] flex flex-col md:flex-row"
+          className="relative z-10 w-full max-w-5xl rounded-3xl border border-slate-100 bg-white shadow-2xl overflow-hidden max-h-none md:max-h-[90vh] flex flex-col md:flex-row"
         >
           {/* Close Button */}
           <button
@@ -163,7 +163,7 @@ export default function ArrivalModal({ pet, onClose }: ArrivalModalProps) {
           </div>
 
           {/* Right Column: Details Content */}
-          <div className="w-full md:w-1/2 p-6 md:p-8 overflow-y-auto max-h-[50vh] md:max-h-[90vh] flex flex-col justify-between">
+          <div className="w-full md:w-1/2 p-6 md:p-8 overflow-visible md:overflow-y-auto md:max-h-[90vh] flex flex-col justify-between">
             <div>
               {/* Category & Breed */}
               <div className="flex items-center gap-2 mb-2">

@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getProductById } from "@/data";
+import { getProductById, getProductsByCategory } from "@/data";
 import ProductActions from "@/components/shop/ProductActions";
+import ProductCard from "@/components/shop/ProductCard";
+import ProductDetailsTabs from "@/components/shop/ProductDetailsTabs";
+import ProductImageViewer from "@/components/shop/ProductImageViewer";
 
 
 interface ProductPageProps {
@@ -22,6 +25,10 @@ export default async function ProductPage({
     notFound();
   }
 
+  const relatedProducts = getProductsByCategory(product.categorySlug)
+    .filter((p) => p.id !== product.id)
+    .slice(0, 4);
+
   const hasDiscount =
     product.compareAtPrice &&
     product.compareAtPrice > product.price;
@@ -34,21 +41,11 @@ export default async function ProductPage({
       : "bg-red-100 text-red-700";
 
   return (
-    <div className="container mx-auto px-4 py-32">
+    <div className="container mx-auto px-4 md:py-32 py-8">
       <div className="grid gap-12 lg:grid-cols-2">
 
-        {/* Product Image */}
-        <div className="relative overflow-hidden rounded-2xl border bg-white">
-          <div className="relative h-[500px] w-full">
-            <Image
-              src={product.images?.[0]}
-              alt={product.name}
-              fill
-              priority
-              className="object-contain p-6"
-            />
-          </div>
-        </div>
+        {/* Product Image Viewer */}
+        <ProductImageViewer product={product} />
 
         {/* Product Details */}
         <div>
@@ -59,7 +56,7 @@ export default async function ProductPage({
           </span>
 
           {/* Title */}
-          <h1 className="mb-4 text-4xl font-bold text-slate-900">
+          <h1 className="mb-4 text-2xl md:text-4xl font-bold text-slate-900">
             {product.name}
           </h1>
 
@@ -69,19 +66,19 @@ export default async function ProductPage({
               ⭐ {product.rating}
             </span>
 
-            <span className="text-gray-500">
+            <span className="text-gray-500 ">
               ({product.reviewCount} Reviews)
             </span>
           </div>
 
           {/* Price */}
           <div className="mb-6 flex items-center gap-4">
-            <span className="text-4xl font-bold text-[#005AA9]">
+            <span className="text-2xl md:text-4xl font-bold text-[#005AA9]">
               ${product.price.toFixed(2)}
             </span>
 
             {hasDiscount && (
-              <span className="text-xl text-gray-400 line-through">
+              <span className="text-1xl text-gray-400 line-through">
                 ${product.compareAtPrice?.toFixed(2)}
               </span>
             )}
@@ -90,7 +87,7 @@ export default async function ProductPage({
           {/* Stock */}
           <div className="mb-6">
             <span
-              className={`rounded-full px-4 py-2 text-sm font-medium ${stockColor}`}
+              className={`rounded-full px-4 py-2 md:text-sm text-[10px] font-medium ${stockColor}`}
             >
               {product.stockStatus
                 .replace("_", " ")
@@ -100,7 +97,7 @@ export default async function ProductPage({
 
           {/* Description */}
           <div className="mb-8">
-            <p className="leading-7 text-gray-600">
+            <p className="leading-7 text-gray-600 text-[13px] md:text-xl">
               {product.description}
             </p>
           </div>
@@ -116,7 +113,7 @@ export default async function ProductPage({
               </span>{" "}
               {product.id}
             </p>
-
+            
             <p>
               <span className="font-semibold">
                 Category:
@@ -135,6 +132,21 @@ export default async function ProductPage({
           </div>
         </div>
       </div>
+
+      <ProductDetailsTabs product={product} relatedProducts={relatedProducts} />
+
+      {relatedProducts.length > 0 && (
+        <div className="md:mt-20 border-t border-slate-100 pt-16">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] mb-8">
+            Related <span className="text-[#005AA9]">Products</span>
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((rp) => (
+              <ProductCard key={rp.id} product={rp} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

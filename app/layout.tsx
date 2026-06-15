@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/store/provider";
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
+import AuthModal from "@/components/auth/AuthModal";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -37,6 +38,7 @@ export default function RootLayout({
           {/* <TopBar /> */}
           <Header />
           {children}
+          <AuthModal />
           <Footer />
         </ReduxProvider>
       </body>

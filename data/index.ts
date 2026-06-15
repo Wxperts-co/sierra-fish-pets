@@ -12,6 +12,7 @@ export { default as services } from "./services.json";
 export { default as banners } from "./banners.json";
 export { default as coupons } from "./coupons.json";
 export { default as gallery } from "./gallery.json";
+export { default as faq } from "./faq.json";
 
 // Utility helpers
 export const getCategoryBySlug = (slug: string) => {

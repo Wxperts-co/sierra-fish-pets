@@ -387,18 +387,31 @@ export default function EventCalendarPage() {
   return (
     <main className="relative min-h-screen bg-[#fafbfd] pb-8 text-slate-800">
       {/* ─── 1. SEA LIFE HEADER BANNER ─── */}
-      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+      <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
         {/* Image — clipped to banner bounds */}
-        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+        <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          {/* Mobile image */}
+          <Image
+            src="/images/banner/shophero5.png"
+            alt="Event calendar banner"
+            fill
+            priority
+            className="object-cover object-[center_60%] block md:hidden"
+            sizes="100vw"
+          />
+          {/* Desktop image */}
           <Image
             src="/images/banner/shophero3.png"
             alt="Event calendar banner"
             fill
             priority
-            className="object-cover object-[center_40%]"
+            className="object-cover object-[center_40%] hidden md:block"
             sizes="100vw"
           />
         </div>
+
+        {/* Mobile overlay — darkens image so text is readable */}
+        <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
 
         {/* Centered text block */}
         <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
@@ -408,11 +421,11 @@ export default function EventCalendarPage() {
             transition={{ duration: 0.6 }}
             className="flex flex-col items-center justify-center"
           >
-            <div className="flex items-center gap-2 mb-3 text-[#005AA9] font-bold text-xs uppercase tracking-widest bg-[#eef6ff] px-4 py-1.5 rounded-full select-none border border-[#005AA9]/10">
+            <div className="flex items-center gap-2 mb-3 text-[#005AA9] font-bold text-xs uppercase tracking-widest bg-[#eef6ff] md:bg-[#eef6ff] bg-opacity-90 px-4 py-1.5 rounded-full select-none border border-[#005AA9]/10">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Sierra Events Hub</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-[#0d1b2a] tracking-tight flex items-center justify-center gap-3 drop-shadow-sm">
+            <h1 className="text-4xl md:text-5xl font-black text-white md:text-[#0d1b2a] tracking-tight flex items-center justify-center gap-3 drop-shadow-sm">
               <span className="animate-bounce">🐟</span>
               <span className="bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent">Event Calendar</span>
               
@@ -423,19 +436,19 @@ export default function EventCalendarPage() {
             {/* Breadcrumb */}
             <nav
               aria-label="breadcrumb"
-              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500 mt-4"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none mt-4"
             >
               <span className="flex items-center gap-0.5">
                 <Link
                   href="/"
-                  className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                  className="text-white md:text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
                 >
                   Home
                 </Link>
-                <span className="px-0.5 text-slate-400"> › </span>
+                <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
               </span>
               <span className="flex items-center gap-0.5">
-                <span className="font-bold text-[#0d1b2a]">Event Calendar</span>
+                <span className="font-bold text-[#0d1b2a] md:text-[#0d1b2a] text-white">Event Calendar</span>
               </span>
             </nav>
           </motion.div>
@@ -447,11 +460,11 @@ export default function EventCalendarPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT: CALENDAR VIEW */}
-          <div className="lg:col-span-8 bg-white border border-slate-100 rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.02)] p-6 mt-8">
+          <div className="lg:col-span-8 bg-white border border-slate-100 rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.02)] p-4 md:p-6 mt-8">
             
             {/* Calendar Header Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b border-slate-100 pb-5">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2 sm:gap-3">
                 <button
                   id="btn-prev-month"
                   onClick={prevMonth}
@@ -461,8 +474,8 @@ export default function EventCalendarPage() {
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 
-                <h2 className="text-xl font-extrabold text-[#032B53] min-w-[140px] text-center flex items-center justify-center gap-2.5">
-                  <Calendar className="w-5 h-5 text-sky-500" />
+                <h2 className="text-lg md:text-xl font-extrabold text-[#032B53] min-w-[140px] text-center flex items-center justify-center gap-2.5">
+                  <Calendar className="w-5 h-5 text-sky-500 hidden sm:block" />
                   <span>{monthNames[currentMonth]} {currentYear}</span>
                 </h2>
 
@@ -479,11 +492,11 @@ export default function EventCalendarPage() {
             </div>
 
             {/* Days of Week Header */}
-            <div className="grid grid-cols-7 gap-px bg-[#005AA9] rounded-2xl overflow-hidden border border-[#005AA9] mb-4">
+            <div className="grid grid-cols-7 gap-1 md:gap-px bg-[#005AA9] rounded-2xl overflow-hidden border border-[#005AA9] mb-4">
               {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
                 <div
                   key={day}
-                  className="text-center py-3 text-xs font-black text-white/90 select-none tracking-wider font-semibold"
+                  className="text-center py-2.5 md:py-3 text-[10px] md:text-xs font-black text-white/90 select-none tracking-wider font-semibold"
                 >
                   {day}
                 </div>
@@ -491,10 +504,11 @@ export default function EventCalendarPage() {
             </div>
 
             {/* Days Grid */}
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1 md:gap-2">
               {calendarCells.map((cell, idx) => {
                 const dayEvents = getEventsForDate(cell.date, selectedCategory);
                 const isToday = isSameDay(cell.date, new Date());
+                const hasEvents = dayEvents.length > 0;
 
                 return (
                   <div
@@ -503,16 +517,16 @@ export default function EventCalendarPage() {
                       setClickedDate(cell.date);
                       setIsAddModalOpen(true);
                     }}
-                    className={`min-h-[105px] border border-slate-100 rounded-2xl p-2.5 flex flex-col justify-between transition-all cursor-pointer ${
+                    className={`min-h-[90px] md:min-h-[105px] border border-slate-100 rounded-xl md:rounded-2xl p-1.5 md:p-2.5 flex flex-col justify-between transition-all cursor-pointer ${
                       cell.isCurrentMonth
                         ? "bg-white hover:border-sky-200 hover:shadow-sm hover:bg-sky-50/10"
                         : "bg-slate-50/50 text-slate-400 border-dashed hover:bg-slate-100/30"
-                    }`}
+                    } ${hasEvents ? "ring-1 ring-sky-200 bg-sky-50/50" : ""}`}
                   >
                     {/* Day Number */}
-                    <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center justify-between mb-1">
                       <span
-                        className={`text-xs font-black h-6 w-6 flex items-center justify-center rounded-full ${
+                        className={`text-xs md:text-sm font-black h-6 w-6 md:h-7 md:w-7 flex items-center justify-center rounded-full flex-shrink-0 ${
                           isToday
                             ? "bg-[#005AA9] text-white"
                             : cell.isCurrentMonth
@@ -522,11 +536,12 @@ export default function EventCalendarPage() {
                       >
                         {cell.dayNumber}
                       </span>
+                    
                     </div>
 
                     {/* Events list in Day */}
-                    <div className="flex-1 flex flex-col gap-1 overflow-y-auto max-h-[70px] scrollbar-none">
-                      {dayEvents.map((evt) => {
+                    <div className="flex-1 flex flex-col gap-0.5 md:gap-1 overflow-y-auto max-h-[60px] md:max-h-[70px] scrollbar-none">
+                      {dayEvents.slice(0, 2).map((evt) => {
                         const style = categoryStyles[evt.category] || {
                           bg: "bg-slate-100",
                           text: "text-slate-800",
@@ -542,20 +557,23 @@ export default function EventCalendarPage() {
                               e.stopPropagation();
                               setActiveEvent(evt);
                             }}
-                            className={`w-full text-left rounded-lg border p-1 px-1.5 flex flex-col gap-0.5 transition-transform duration-100 hover:scale-[1.02] active:scale-[0.98] ${style.bg} ${style.border}`}
+                            className={`w-full text-left rounded-lg border p-1 px-1 md:px-1.5 flex items-center gap-1 transition-transform duration-100 hover:scale-[1.02] active:scale-[0.98] group ${style.bg} ${style.border}`}
+                            title={evt.title}
                           >
-                            <span className={`text-[9px] font-black leading-none truncate ${style.text}`}>
-                              {style.emoji} {evt.title}
+                            <span className={`text-[9px] md:text-xs font-black shrink-0 ${style.text}`}>
+                              {style.emoji}
                             </span>
-                            <span className="text-[8px] font-semibold text-slate-500 leading-none">
-                              {new Date(evt.startDate).toLocaleTimeString([], {
-                                hour: "numeric",
-                                minute: "2-digit",
-                              })}
+                            <span className={`text-[8px] md:text-[9px] font-semibold truncate ${style.text}`}>
+                              {evt.title}
                             </span>
                           </button>
                         );
                       })}
+                      {dayEvents.length > 2 && (
+                        <div className="text-[8px] md:text-[9px] font-semibold text-sky-600 px-1 py-0.5">
+                          +{dayEvents.length - 2} more
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

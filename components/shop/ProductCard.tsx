@@ -108,7 +108,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             className="absolute inset-0 rounded-t-2xl overflow-hidden bg-[#f8f9fb]"
             style={{ backfaceVisibility: "hidden" }}
           >
-            <Link href={`/product/${product.id}`} className="block w-full h-full">
+            <Link href={`/product/${product.id}`} className="relative block w-full h-full">
               <Image
                 src={imgError ? getFallbackImage() : product.images[0]}
                 alt={product.name}
@@ -218,7 +218,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
               </span>
             )}
           </div>
-          <span className={`text-xs font-semibold ${stockColor}`}>
+          <span className={`text-xs  font-semibold ${stockColor}`}>
             {stockLabel}
           </span>
         </div>

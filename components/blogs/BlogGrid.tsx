@@ -96,17 +96,35 @@ export default function BlogGrid({ posts, activeCategory, onCategoryChange }: Bl
           
           {/* SIDEBAR (Left on desktop: spans 4 columns) */}
           <div className="lg:col-span-4">
-            <BlogSidebar
-              posts={posts}
-              activeCategory={activeCategory}
-              activeTag={activeTag}
-              activeArchive={activeArchive}
-              searchQuery={searchQuery}
-              onCategoryChange={onCategoryChange}
-              onTagChange={setActiveTag}
-              onArchiveChange={setActiveArchive}
-              onSearchChange={setSearchQuery}
-            />
+            {/* Desktop View: Show all widgets */}
+            <div className="hidden lg:block">
+              <BlogSidebar
+                posts={posts}
+                activeCategory={activeCategory}
+                activeTag={activeTag}
+                activeArchive={activeArchive}
+                searchQuery={searchQuery}
+                onCategoryChange={onCategoryChange}
+                onTagChange={setActiveTag}
+                onArchiveChange={setActiveArchive}
+                onSearchChange={setSearchQuery}
+              />
+            </div>
+            {/* Mobile View: Show only Search and Categories at the top */}
+            <div className="block lg:hidden">
+              <BlogSidebar
+                posts={posts}
+                activeCategory={activeCategory}
+                activeTag={activeTag}
+                activeArchive={activeArchive}
+                searchQuery={searchQuery}
+                onCategoryChange={onCategoryChange}
+                onTagChange={setActiveTag}
+                onArchiveChange={setActiveArchive}
+                onSearchChange={setSearchQuery}
+                showSearchAndCategoriesOnly={true}
+              />
+            </div>
           </div>
 
           {/* LIST SECTION (Right on desktop: spans 8 columns) */}
@@ -225,6 +243,22 @@ export default function BlogGrid({ posts, activeCategory, onCategoryChange }: Bl
             )}
 
           </main>
+
+          {/* Mobile View Bottom Sidebar: Show only Recent Posts, Archives, and Tags at the bottom */}
+          <div className="block lg:hidden lg:col-span-4">
+            <BlogSidebar
+              posts={posts}
+              activeCategory={activeCategory}
+              activeTag={activeTag}
+              activeArchive={activeArchive}
+              searchQuery={searchQuery}
+              onCategoryChange={onCategoryChange}
+              onTagChange={setActiveTag}
+              onArchiveChange={setActiveArchive}
+              onSearchChange={setSearchQuery}
+              showRecentArchivesTagsOnly={true}
+            />
+          </div>
 
         </div>
       </div>

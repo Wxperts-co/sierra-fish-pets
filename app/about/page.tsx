@@ -139,18 +139,31 @@ export default function AboutPage() {
     <main className="relative bg-slate-50 text-slate-800 overflow-x-hidden">
       
 
-      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+      <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
         {/* Image — clipped to banner bounds */}
-        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden">
+        <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          {/* Mobile image */}
+          <Image
+            src="/images/banner/shophero5.png"
+            alt="About us banner"
+            fill
+            priority
+            className="object-cover object-[center_60%] block md:hidden"
+            sizes="100vw"
+          />
+          {/* Desktop image */}
           <Image
             src="/images/banner/shophero3.png"
             alt="About us banner"
             fill
             priority
-            className="object-cover object-[center_40%]"
+            className="object-cover object-[center_40%] hidden md:block"
             sizes="100vw"
           />
         </div>
+
+        {/* Mobile overlay — darkens image so text is readable */}
+        <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
 
         {/* Centered text block */}
         <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
@@ -167,19 +180,19 @@ export default function AboutPage() {
             {/* Breadcrumb */}
             <nav
               aria-label="breadcrumb"
-              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none"
             >
               <span className="flex items-center gap-0.5">
                 <Link
                   href="/"
-                  className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                  className="text-white md:text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
                 >
                   Home
                 </Link>
-                <span className="px-0.5 text-slate-400"> › </span>
+                <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
               </span>
               <span className="flex items-center gap-0.5">
-                <span className="font-bold text-[#0d1b2a]">About Us</span>
+                <span className="font-bold text-[#0d1b2a] md:text-[#0d1b2a] text-white">About Us</span>
               </span>
             </nav>
           </motion.div>
@@ -189,7 +202,7 @@ export default function AboutPage() {
       {/* ─── OUR STORY / WELCOME SECTION ─── */}
       <section
         id="our-story"
-        className="relative bg-white py-16 z-10 border-t border-slate-100"
+        className="relative bg-white md:py-16 py-4 z-10 border-t border-slate-100"
       >
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -224,10 +237,10 @@ export default function AboutPage() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
                 Who We Are
               </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-[#002244] leading-tight mb-8">
+              <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244] leading-tight mb-8">
                 A Legacy of Pet-First Care & Family Ownership
               </h2>
-              <div className="space-y-6 text-slate-600 leading-relaxed text-lg">
+              <div className="space-y-6 text-slate-600 leading-relaxed md:text-lg text-[12px]">
                 <p>
                   At Sierra Fish & Pets, we believe that pets are core members
                   of the family. Since our founding, we have committed ourselves
@@ -256,13 +269,13 @@ export default function AboutPage() {
       </section>
 
       {/* ─── CORE VALUES SECTION ─── */}
-      <section className="relative bg-slate-50 py-16 z-10">
+      <section className="relative bg-slate-50 md:py-16 py-8 z-10">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
               Our Values
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-[#002244]">
+            <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244]">
               What Guides Our Service
             </h2>
             <p className="mt-4 text-slate-500 max-w-2xl mx-auto text-lg">
@@ -276,19 +289,19 @@ export default function AboutPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-2 md:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
             {/* Value Card 1 */}
             <motion.div
               variants={fadeInUpVariants}
               whileHover="hover"
               custom={0}
-              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="bg-white rounded-3xl p-2 md:p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
             >
               <div className="p-4 bg-[#EBF7FF] rounded-2xl mb-6 text-[#005AA9]">
                 <Heart className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
                 Pet-First Philosophy
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm">
@@ -307,7 +320,7 @@ export default function AboutPage() {
               <div className="p-4 bg-orange-50 rounded-2xl mb-6 text-[#FF6B35]">
                 <Shield className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
                 Premium Quality
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm">
@@ -326,7 +339,7 @@ export default function AboutPage() {
               <div className="p-4 bg-purple-50 rounded-2xl mb-6 text-purple-600">
                 <Compass className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-[14px] md:text-xlfont-bold text-slate-900 mb-3">
                 Expert Care Team
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm">
@@ -345,7 +358,7 @@ export default function AboutPage() {
               <div className="p-4 bg-emerald-50 rounded-2xl mb-6 text-emerald-600">
                 <Sparkles className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
                 Community Hub
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm">
@@ -378,7 +391,7 @@ export default function AboutPage() {
             transition={{ duration: 0.7 }}
             className="w-full lg:max-w-[50%] bg-black/45 backdrop-blur-md border border-white/10 rounded-[32px] p-8 md:p-12 shadow-2xl text-white text-left"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-6 tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-extrabold mb-6 tracking-tight">
               We're Always Here for Our Customers
             </h2>
 
@@ -431,12 +444,12 @@ export default function AboutPage() {
       </section>
 
       {/* ─── TESTIMONIALS (EMBLA-BASED CAROUSEL) ─── */}
-      <section className="relative bg-white py-16 z-10 border-b border-slate-100">
+      <section className="relative bg-white md:py-16 py-8 z-10 border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
             Client Testimonials
           </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-[#002244] mb-4">
+          <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244] mb-4">
             What Pet Parents Say
           </h2>
 
@@ -471,7 +484,7 @@ export default function AboutPage() {
                       </div>
 
                       {/* Review Paragraph */}
-                      <p className="text-xl md:text-2xl font-medium text-slate-700 leading-relaxed italic max-w-2xl mx-auto mb-4 font-nunito">
+                      <p className="text-[12px] md:text-2xl font-medium text-slate-700 leading-relaxed italic max-w-2xl mx-auto mb-4 font-nunito">
                         "{item.review}"
                       </p>
 

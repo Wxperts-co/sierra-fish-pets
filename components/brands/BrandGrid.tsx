@@ -55,7 +55,16 @@ export default function BrandGrid({ brands }: BrandGridProps) {
 ];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(window.innerWidth < 768 ? 2 : 10);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const filtered = useMemo(() => {
     if (activeCategory === "all") return brands;
@@ -67,14 +76,14 @@ export default function BrandGrid({ brands }: BrandGridProps) {
     setCurrentPage(1);
   }, [activeCategory]);
 
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   const paginatedBrands = useMemo(() => {
     return filtered.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
     );
-  }, [filtered, currentPage]);
+  }, [filtered, currentPage, itemsPerPage]);
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -121,13 +130,13 @@ export default function BrandGrid({ brands }: BrandGridProps) {
   return (
     <div>
       {/* ── Main Grid Section ── */}
-      <section className="py-16 bg-white">
+      <section className="py-4 sm:py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-6">
 
           {/* Header + Filter Tabs */}
-          <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="mb-4 md:mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl md:text-4xl font-black text-[#002244]">
+              <h2 className="text-2xl md:text-4xl font-black text-[#002244]">
                 {activeCategory === "all"
                   ? "All Brands"
                   : `${CATEGORY_LABELS[activeCategory] ?? activeCategory} Brands`}
@@ -137,8 +146,8 @@ export default function BrandGrid({ brands }: BrandGridProps) {
               </p>
             </div>
 
-            {/* Category Pills */}
-            <div className="flex flex-wrap gap-2">
+            {/* Category Pills (Desktop) */}
+            <div className="hidden md:flex flex-wrap gap-2">
               {availableCategories.map((cat) => (
                 <button
                   key={cat}
@@ -152,6 +161,22 @@ export default function BrandGrid({ brands }: BrandGridProps) {
                   {CATEGORY_LABELS[cat] ?? cat}
                 </button>
               ))}
+            </div>
+
+            {/* Category Dropdown (Mobile) */}
+            <div className="relative block md:hidden w-full">
+              <select
+                value={activeCategory}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                className="w-full appearance-none rounded-full border border-slate-200 bg-white pl-4 pr-10 py-2.5 text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#005AA9]/20 cursor-pointer"
+              >
+                {availableCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {CATEGORY_LABELS[cat] ?? cat}
+                  </option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">▼</span>
             </div>
           </div>
 
@@ -170,7 +195,7 @@ export default function BrandGrid({ brands }: BrandGridProps) {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
                 {paginatedBrands.map((brand) => (
                   <BrandCard key={brand.id} brand={brand} />
                 ))}

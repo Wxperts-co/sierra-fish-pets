@@ -55,19 +55,31 @@ export default async function ServiceDetailPage({
     <>
       <main className="min-h-screen bg-slate-950">
         {/* ─── Hero Banner Section ─── */}
-        <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+        <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
           {/* Background Image with Premium Overlay (Fixed Parallax) */}
-          <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+            {/* Mobile image */}
+            <Image
+              src="/images/banner/shophero5.png"
+              alt={service.name}
+              fill
+              priority
+              className="object-cover object-[center_60%] block md:hidden filter brightness-[0.9]"
+              sizes="100vw"
+            />
+            {/* Desktop image */}
             <Image
               src={service.image}
               alt={service.name}
               fill
               priority
-              className="object-cover object-center filter brightness-[0.9]"
+              className="object-cover object-center hidden md:block filter brightness-[0.9]"
               sizes="100vw"
             />
-            {/* <div className="absolute inset-0 bg-gradient-to-br from-[#002244]/30 via-[#003d73]/70 to-[#005AA9]/20 z-10" /> */}
           </div>
+
+          {/* Mobile overlay — darkens image so text is readable */}
+          <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
 
           {/* Centered text block */}
           <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
@@ -78,28 +90,28 @@ export default async function ServiceDetailPage({
               {/* Breadcrumb */}
               <nav
                 aria-label="breadcrumb"
-                className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-300 mb-4"
+                className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-300 md:drop-shadow-none mb-4"
               >
                 <span className="flex items-center gap-0.5">
                   <Link
                     href="/"
-                    className="text-slate-300 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
+                    className="text-white md:text-slate-300 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
                   >
                     Home
                   </Link>
-                  <span className="px-0.5 text-slate-400"> › </span>
+                  <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
                 </span>
                 <span className="flex items-center gap-0.5">
                   <Link
                     href="/services"
-                    className="text-slate-300 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
+                    className="text-white md:text-slate-300 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
                   >
                     Services
                   </Link>
-                  <span className="px-0.5 text-slate-400"> › </span>
+                  <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
                 </span>
                 <span className="flex items-center gap-0.5">
-                  <span className="font-bold text-white">{service.name}</span>
+                  <span className="font-bold text-white md:text-white">{service.name}</span>
                 </span>
               </nav>
 

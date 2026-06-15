@@ -17,12 +17,12 @@ export default function BrandCTA() {
           Find Your Favourite Brand
         </span>
 
-        <h2 className="text-4xl md:text-5xl font-black text-white mb-5 leading-tight">
+        <h2 className="text-2xl md:text-5xl font-black text-white mb-5 leading-tight">
           Shop All Premium Brands <br className="hidden md:block" />
           In One Place
         </h2>
 
-        <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-blue-100 text-[12px] max-w-2xl mx-auto mb-10 leading-relaxed">
           Visit Sierra Fish &amp; Pets and explore our full range of trusted brands for dogs, cats, aquatics, reptiles, birds, and small animals — all under one roof.
         </p>
 

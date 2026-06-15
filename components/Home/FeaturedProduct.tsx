@@ -116,7 +116,7 @@ export default function FeaturedProducts() {
             <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#005AA9]">
               Freshly Stocked
             </p>
-            <h2 className="text-4xl md:text-5xl font-extrabold leading-tight font-lato text-[#002244]">
+            <h2 className="text-2xl md:text-5xl font-extrabold leading-tight font-lato text-[#002244]">
               New Arrivals by <span className="text-[#005AA9]">Category</span>
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-gray-500">

@@ -41,18 +41,31 @@ export default function GalleryPage() {
   return (
     <main className="relative text-slate-800 min-h-screen overflow-x-hidden pb-24 bg-slate-50">
       {/* ─── HERO HEADER SECTION ─── */}
-      <section className="relative overflow-hidden w-full h-[380px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+      <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
         {/* Image — clipped to banner bounds */}
-        <div className="fixed inset-x-0 top-0 w-full h-[380px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden">
+        <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          {/* Mobile image */}
+          <Image
+            src="/images/banner/shophero5.png"
+            alt="Gallery banner"
+            fill
+            priority
+            className="object-cover object-[center_60%] block md:hidden"
+            sizes="100vw"
+          />
+          {/* Desktop image */}
           <Image
             src="/images/banner/shophero3.png"
             alt="Gallery banner"
             fill
             priority
-            className="object-cover object-[center_40%]"
+            className="object-cover object-[center_40%] hidden md:block"
             sizes="100vw"
           />
         </div>
+
+        {/* Mobile overlay — darkens image so text is readable */}
+        <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
 
         {/* Centered text block */}
         <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
@@ -69,19 +82,19 @@ export default function GalleryPage() {
             {/* Breadcrumb */}
             <nav
               aria-label="breadcrumb"
-              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none"
             >
               <span className="flex items-center gap-0.5">
                 <Link
                   href="/"
-                  className="text-slate-500 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
+                  className="text-white md:text-slate-500 transition-colors duration-150 hover:text-[#00aaff] hover:underline"
                 >
                   Home
                 </Link>
-                <span className="px-0.5 text-slate-400"> › </span>
+                <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
               </span>
               <span className="flex items-center gap-0.5">
-                <span className="font-bold text-[#0d1b2a]">Gallery</span>
+                <span className="font-bold text-[#0d1b2a] md:text-[#0d1b2a] text-white">Gallery</span>
               </span>
             </nav>
           </motion.div>

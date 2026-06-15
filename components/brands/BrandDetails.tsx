@@ -52,7 +52,7 @@ export default function BrandDetail({
           <div className="grid lg:grid-cols-2 gap-12 items-center">
 
             {/* Logo Card — Apple-style zoom on hover */}
-            <div className="group h-[280px] lg:h-[360px] bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-center p-10 overflow-hidden">
+            <div className="group h-[250px] lg:h-[360px] bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-center p-10 overflow-hidden">
               <Image
                 src={brand.logo}
                 alt={brand.name}
@@ -71,7 +71,7 @@ export default function BrandDetail({
                 </div>
               )}
 
-              <h1 className="text-4xl md:text-5xl font-black text-[#002244] mb-4 leading-tight">
+              <h1 className="text-2xl md:text-5xl font-black text-[#002244] mb-4 leading-tight">
                 {brand.name}
               </h1>
 
@@ -126,7 +126,7 @@ export default function BrandDetail({
 
       {/* ── Related Brands ── */}
       {relatedBrands.length > 0 && (
-        <section className="py-16 bg-slate-50 border-t border-slate-100">
+        <section className="py-4 md:py-16 bg-slate-50 border-t border-slate-100">
           <div className="container mx-auto px-6 max-w-6xl">
 
             <div className="flex items-end justify-between mb-8">
@@ -147,7 +147,7 @@ export default function BrandDetail({
             </div>
 
 
-            <div className="flex gap-5">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-5">
               {relatedBrands.map((item) => (
                 <Link
                   key={item.id}

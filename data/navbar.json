@@ -229,165 +229,161 @@
         "submenuItems": [
           {
             "label": "Dog Care Guides",
-            "href": "/edu/dogs",
+            "href": "/sierra-edu?category=dogs",
             "items": [
               {
                 "label": "Puppy Care Basics",
-                "href": "/edu/puppy-care-basics"
+                "href": "/sierra-edu?slug=puppy-care-basics"
               },
               {
                 "label": "Dog Nutrition Guide",
-                "href": "/edu/dog-nutrition-guide"
+                "href": "/sierra-edu?slug=dog-nutrition-guide"
               },
               {
                 "label": "Dog Training Essentials",
-                "href": "/edu/dog-training-essentials"
+                "href": "/sierra-edu?slug=dog-training-essentials"
               },
               {
                 "label": "Dog Vaccination Schedule",
-                "href": "/edu/dog-vaccination-schedule"
+                "href": "/sierra-edu?slug=dog-vaccination-schedule"
               }
             ]
           },
           {
             "label": "Cat Care Guides",
-            "href": "/edu/cats",
+            "href": "/sierra-edu?category=cats",
             "items": [
               {
                 "label": "Cat Care",
-                "href": "/edu/cat-care"
+                "href": "/sierra-edu?slug=cat-care"
               },
               {
                 "label": "Litter Train Kitten",
-                "href": "/edu/litter-train-kitten"
+                "href": "/sierra-edu?slug=litter-train-kitten"
               }
             ]
           },
           {
             "label": "Aquarium Education",
-            "href": "/edu/aquariums",
+            "href": "/sierra-edu?category=aquariums",
             "items": [
               {
                 "label": "Setting Up A FW Aquarium",
-                "href": "/edu/setting-up-a-fw-aquarium"
+                "href": "/sierra-edu?slug=setting-up-a-fw-aquarium"
               },
               {
                 "label": "Types Of FW Fish",
-                "href": "/edu/types-of-fw-fish"
+                "href": "/sierra-edu?slug=types-of-fw-fish"
               },
               {
                 "label": "FW Aquarium Checklist",
-                "href": "/edu/fw-aquarium-checklist"
+                "href": "/sierra-edu?slug=fw-aquarium-checklist"
               },
               {
                 "label": "FW Care",
-                "href": "/edu/fw-care"
+                "href": "/sierra-edu?slug=fw-care"
               },
               {
                 "label": "Goldfish In A Fishbowl",
-                "href": "/edu/goldfish-in-a-fishbowl"
+                "href": "/sierra-edu?slug=goldfish-in-a-fishbowl"
               },
               {
                 "label": "Betta Fish Care",
-                "href": "/edu/betta-fish-care"
+                "href": "/sierra-edu?slug=betta-fish-care"
               },
               {
                 "label": "Aquarium Water Change",
-                "href": "/edu/aquarium-water-change"
+                "href": "/sierra-edu?slug=aquarium-water-change"
               },
               {
                 "label": "Live Plant Care",
-                "href": "/edu/live-plant-care"
+                "href": "/sierra-edu?slug=live-plant-care"
               },
               {
                 "label": "Axolotl Care",
-                "href": "/edu/axolotl-care"
+                "href": "/sierra-edu?slug=axolotl-care"
               }
             ]
           },
           {
             "label": "Reptile Care",
-            "href": "/edu/reptiles",
+            "href": "/sierra-edu?category=reptiles",
             "items": [
               {
                 "label": "Purchasing Reptiles",
-                "href": "/edu/purchasing-reptiles"
+                "href": "/sierra-edu?slug=purchasing-reptiles"
               },
               {
                 "label": "Aquatic Turtle Care",
-                "href": "/edu/aquatic-turtle-care"
+                "href": "/sierra-edu?slug=aquatic-turtle-care"
               },
               {
                 "label": "Box Turtle Care",
-                "href": "/edu/box-turtle-care"
+                "href": "/sierra-edu?slug=box-turtle-care"
               },
               {
                 "label": "Bearded Dragon Care",
-                "href": "/edu/bearded-dragon-care"
+                "href": "/sierra-edu?slug=bearded-dragon-care"
               },
               {
                 "label": "Boa Care",
-                "href": "/edu/boa-care"
+                "href": "/sierra-edu?slug=boa-care"
               },
               {
                 "label": "Corn Snake Care",
-                "href": "/edu/corn-snake-care"
+                "href": "/sierra-edu?slug=corn-snake-care"
               },
               {
                 "label": "Emperor Scorpion Care",
-                "href": "/edu/emperor-scorpion-care"
-              },
-              {
-                "label": "Axolotl Care",
-                "href": "/edu/axolotl-care"
+                "href": "/sierra-edu?slug=emperor-scorpion-care"
               }
             ]
           },
           {
             "label": "Bird Care Guides",
-            "href": "/edu/reptiles",
+            "href": "/sierra-edu?category=birds",
             "items": [
               {
                 "label": "Basic Bird Care",
-                "href": "/edu/basic-bird-care"
+                "href": "/sierra-edu?slug=basic-bird-care"
               },
               {
                 "label": "Bird Foods To Avoid",
-                "href": "/edu/bird-foods-to-avoid"
+                "href": "/sierra-edu?slug=bird-foods-to-avoid"
               },
               {
                 "label": "Bird Training",
-                "href": "/edu/bird-training"
+                "href": "/sierra-edu?slug=bird-training"
               }
             ]
           },
           {
             "label": "Small Animal Care",
-            "href": "/edu/reptiles",
+            "href": "/sierra-edu?category=small-animals",
             "items": [
               {
                 "label": "Chinchilla Care",
-                "href": "/edu/chinchilla-care"
+                "href": "/sierra-edu?slug=chinchilla-care"
               },
               {
                 "label": "Gerbil Care",
-                "href": "/edu/gerbil-care"
+                "href": "/sierra-edu?slug=gerbil-care"
               },
               {
                 "label": "Guinea Pig Care",
-                "href": "/edu/guinea-pig-care"
+                "href": "/sierra-edu?slug=guinea-pig-care"
               },
               {
                 "label": "Hamster Care",
-                "href": "/edu/hamster-care"
+                "href": "/sierra-edu?slug=hamster-care"
               },
               {
                 "label": "Rabbit Care",
-                "href": "/edu/rabbit-care"
+                "href": "/sierra-edu?slug=rabbit-care"
               },
               {
                 "label": "Rat Care",
-                "href": "/edu/rat-care"
+                "href": "/sierra-edu?slug=rat-care"
               }
             ]
           }

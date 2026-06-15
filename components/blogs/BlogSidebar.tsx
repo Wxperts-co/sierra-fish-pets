@@ -17,6 +17,8 @@ interface BlogSidebarProps {
   onTagChange?: (tag: string | null) => void;
   onArchiveChange?: (archive: string | null) => void;
   onSearchChange?: (query: string) => void;
+  showSearchAndCategoriesOnly?: boolean;
+  showRecentArchivesTagsOnly?: boolean;
 }
 
 const categories = [
@@ -39,6 +41,8 @@ export default function BlogSidebar({
   onTagChange,
   onArchiveChange,
   onSearchChange,
+  showSearchAndCategoriesOnly = false,
+  showRecentArchivesTagsOnly = false,
 }: BlogSidebarProps) {
   const router = useRouter();
   const [localSearch, setLocalSearch] = useState(searchQuery);
@@ -116,7 +120,9 @@ export default function BlogSidebar({
 
   return (
     <aside className="space-y-8 shrink-0">
-      {/* Search Widget */}
+      {!showRecentArchivesTagsOnly && (
+        <>
+          {/* Search Widget */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
         <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
           Search
@@ -170,8 +176,12 @@ export default function BlogSidebar({
           })}
         </div>
       </div>
+    </>
+  )}
 
-      {/* Recent Posts Widget */}
+      {!showSearchAndCategoriesOnly && (
+        <>
+          {/* Recent Posts Widget */}
       <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
         <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
           Recent Posts
@@ -270,6 +280,8 @@ export default function BlogSidebar({
           })}
         </div>
       </div>
+    </>
+  )}
     </aside>
   );
 }

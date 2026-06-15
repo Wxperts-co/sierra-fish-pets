@@ -121,14 +121,14 @@ export default function TasteGuarantee() {
           <div className="lg:col-span-6 xl:col-span-5 md:block hidden" />
 
           {/* Right Column: Content */}
-          <div className="lg:col-span-6 xl:col-span-7 flex flex-col items-center text-center  lg:pt-0 bg-white/60 backdrop-blur-md  sm:p-8 rounded-3xl lg:bg-transparent lg:p-0 lg:backdrop-blur-none lg:rounded-none shadow-xl shadow-slate-900/5 lg:shadow-none max-w-xl lg:max-w-none ">
+          <div className="lg:col-span-6 xl:col-span-7 flex flex-col items-center text-center lg:pt-0 bg-white/60 backdrop-blur-md p-6 sm:p-8 rounded-3xl lg:bg-transparent lg:p-0 lg:backdrop-blur-none lg:rounded-none shadow-xl shadow-slate-900/5 lg:shadow-none max-w-xl lg:max-w-none">
             {/* Taste Guarantee Badge */}
             <motion.div
               initial="hidden"
               animate={showBadge ? "visible" : "hidden"}
               custom={isScrollingUp}
               variants={bounceVariants}
-              className="flex items-center select-none text-slate-900"
+              className="flex items-center gap-3 select-none text-slate-900"
             >
               <div className="relative w-36 shrink-0">
                 <Image

@@ -8,6 +8,7 @@ import ShopHero from "@/components/shop/ShopHero";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 import ProductGrid from "@/components/shop/ProductGrid";
 import { getProductsByCategory, brands,    allProducts      } from "@/data";
+import categories from "@/data/categories.json";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   setCategory,
@@ -361,9 +362,60 @@ const handleSortChange = (
         setSelectedCategory={handleCategoryChange}
       />
 
-      <div className="container mx-auto py-10">
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-3">
+      {/* ═══════════════════════════════════════════════════
+          MOBILE FILTER ROW — hidden on desktop
+      ═══════════════════════════════════════════════════ */}
+      <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 flex flex-wrap gap-2 sticky top-[96px] z-20 shadow-sm">
+        {/* Category */}
+        <div className="relative flex-1 min-w-[130px]">
+          <select
+            value={selectedCategory ?? ""}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val) handleCategoryChange(val);
+              else {
+                dispatch(setCategory(null));
+                router.replace("/shop", { scroll: false });
+              }
+            }}
+            className="w-full appearance-none rounded-full border border-slate-200 bg-white pl-3 pr-8 py-2 text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#005AA9]/20 cursor-pointer"
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+            ))}
+          </select>
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">▼</span>
+        </div>
+
+        {/* Subcategory — only if category selected */}
+        {selectedCategory && (() => {
+          const cat = categories.find((c) => c.slug === selectedCategory);
+          return cat?.subcategories?.length ? (
+            <div className="relative flex-1 min-w-[130px]">
+              <select
+                value={selectedSubcategory ?? ""}
+                onChange={(e) => handleSubcategoryToggle(e.target.value)}
+                className="w-full appearance-none rounded-full border border-slate-200 bg-white pl-3 pr-8 py-2 text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#005AA9]/20 cursor-pointer"
+              >
+                <option value="">All Sub-types</option>
+                {cat.subcategories.map((sub) => (
+                  <option key={sub.slug} value={sub.slug}>{sub.name}</option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">▼</span>
+            </div>
+          ) : null;
+        })()}
+
+        {/* Sort */}
+       
+      </div>
+
+      <div className="container mx-auto py-6 md:py-10 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {/* Sidebar — desktop only */}
+          <div className="hidden md:block md:col-span-3">
             <FilterSidebar
               selectedCategory={selectedCategory}
               selectedSubcategory={selectedSubcategory}
@@ -375,9 +427,9 @@ const handleSortChange = (
             />
           </div>
 
-          <div className="col-span-9">
+          <div className="col-span-full md:col-span-9">
             <div className="flex justify-between items-center mb-6">
-              <p className="text-sm text-slate-500">
+              <p className="text-[12px] text-slate-500">
                 Showing <span className="font-semibold text-slate-800">{startIndex}–{endIndex}</span> of{" "}
                 <span className="font-semibold text-slate-800">{sortedProducts.length}</span> products
               </p>
