@@ -12,7 +12,6 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 
-
 const CORPORATE = [
   { label: "About Us", href: "/about" },
   { label: "Careers", href: "/careers" },
@@ -59,7 +58,7 @@ const SOCIAL = [
     bg: "bg-[#FF0000]",
     ring: "ring-red-500/20",
   },
-   {
+  {
     icon: FaGoogle,
     label: "Google",
     href: "https://maps.app.goo.gl/2FGdE7AMyrQmkdrN9",
@@ -78,7 +77,6 @@ const SOCIAL = [
 export default function Footer() {
   return (
     <footer className="mt-auto bg-white border-t border-slate-100 relative z-20">
-
       {/* ── Newsletter strip ─────────────────────────────────── */}
       <div className="relative overflow-hidden bg-gradient-to-r from-[#003d73] via-[#005AA9] to-[#0077cc]">
         {/* Decorative bubbles */}
@@ -89,15 +87,13 @@ export default function Footer() {
         <div className="container relative mx-auto grid grid-cols-1 items-center gap-5 px-4 py-6 md:grid-cols-3">
           {/* Icon + headline */}
           <div className="flex items-center gap-3 text-center md:text-left">
-    
-
-    <p className="text-sm font-semibold leading-none text-white md:text-base">
-      STORE HOURS :
-      <span className="ml-2 text-[13px]">
-        Mon–Fri 11AM–7PM • Sat 11AM–7PM • Sun 11AM–5PM
-      </span>
-    </p>
-  </div>
+            <p className="text-sm font-semibold leading-none text-white md:text-base">
+              STORE HOURS :
+              <span className="ml-2 text-[13px]">
+                Mon–Fri 11AM–7PM • Sat 11AM–7PM • Sun 11AM–5PM
+              </span>
+            </p>
+          </div>
 
           {/* Payment Badges */}
           <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:col-span-2">
@@ -106,7 +102,10 @@ export default function Footer() {
             </span>
 
             {/* Visa */}
-            <div title="Visa" className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105">
+            <div
+              title="Visa"
+              className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105"
+            >
               <Image
                 src="/images/logo/visa.png"
                 alt="Visa"
@@ -117,7 +116,10 @@ export default function Footer() {
             </div>
 
             {/* Mastercard */}
-            <div title="Mastercard" className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105">
+            <div
+              title="Mastercard"
+              className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105"
+            >
               <Image
                 src="/images/logo/mastercard.png"
                 alt="Mastercard"
@@ -128,7 +130,10 @@ export default function Footer() {
             </div>
 
             {/* American Express */}
-            <div title="American Express" className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105">
+            <div
+              title="American Express"
+              className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105"
+            >
               <Image
                 src="/images/logo/american-express.png"
                 alt="American Express"
@@ -139,7 +144,10 @@ export default function Footer() {
             </div>
 
             {/* Discover */}
-            <div title="Discover" className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105">
+            <div
+              title="Discover"
+              className="flex h-8 w-14 items-center justify-center rounded-md bg-white p-1 shadow-sm transition-transform hover:scale-105"
+            >
               <Image
                 src="/images/logo/discover.png"
                 alt="Discover"
@@ -155,7 +163,6 @@ export default function Footer() {
       {/* ── Main body ──────────────────────────────────────────── */}
       <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12">
-
           {/* Brand column */}
           <div className="col-span-2 lg:col-span-4">
             <Link
@@ -190,7 +197,8 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-600 transition-colors hover:border-[#005AA9] hover:text-[#005AA9]"
               >
-                <MapPin className="h-3 w-3" /> 601 S Grady Way Suite M, Renton, WA 98057
+                <MapPin className="h-3 w-3" /> 601 S Grady Way Suite M, Renton,
+                WA 98057
               </a>
               <a
                 href="tel:5306711147"
@@ -242,24 +250,18 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-
         </div>
       </div>
 
       {/* ── Bottom bar ─────────────────────────────────────────── */}
       <div className="bg-slate-900">
         <div className="container mx-auto flex flex-col items-center  justify-center gap-4 px-4 py-4 sm:flex-row">
-
           <p className="text-[13px] text-slate-400">
-            © {new Date().getFullYear()} Sierra Fish &amp; Pets. All rights reserved.
-            
+            © {new Date().getFullYear()} Sierra Fish &amp; Pets. All rights
+            reserved.
           </p>
-
-       
-
         </div>
       </div>
-
     </footer>
   );
 }

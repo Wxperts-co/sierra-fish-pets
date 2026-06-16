@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
-import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import type { Product } from "@/types";
 
 interface ProductActionsProps {
@@ -28,7 +28,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
   };
 
   const handleToggleWishlist = () => {
-    dispatch(toggleWishlist(product.id));
+    dispatch(toggleWishlistDb(product.id));
   };
 
   return (

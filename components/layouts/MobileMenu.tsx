@@ -229,7 +229,7 @@ export default function MobileMenu() {
                   <div className="flex flex-col gap-0.5 pr-2">
                     {category.subcategories.map((sub) => {
                       const href = `/shop?category=${category.slug}&subcategory=${sub.slug}`;
-                      const isActive = pathname.startsWith("/shop") && pathname.includes(sub.slug);
+                      const isActive = pathname?.startsWith("/shop") && pathname?.includes(sub.slug);
                       return (
                         <Link
                           key={sub.id}

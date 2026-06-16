@@ -22,7 +22,7 @@ import {
 import { getBestSellers } from "@/data/products";
 import { Product } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
-import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import { motion } from "framer-motion";
 
 // ─── Custom Flat Product Card matching reference image ───
@@ -32,7 +32,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    dispatch(toggleWishlist(product.id));
+    dispatch(toggleWishlistDb(product.id));
   };
 
   const hasDiscount =

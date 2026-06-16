@@ -8,6 +8,8 @@ import { closeAuthModal } from "@/store/slices/authModalSlice";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import ForgotPasswordForm from "./ForgotPasswordForm";
+import VerifyEmailForm from "./VerifyEmailForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 
 
@@ -35,6 +37,8 @@ export default function AuthModal() {
             {view === "login" && "Login"}
             {view === "register" && "Create Account"}
             {view === "forgot-password" && "Forgot Password"}
+            {view === "verify-email" && "Verify Email"}
+            {view === "reset-password" && "Reset Password"}
           </h2>
 
           <button
@@ -54,6 +58,10 @@ export default function AuthModal() {
           {view === "forgot-password" && (
             <ForgotPasswordForm />
           )}
+
+          {view === "verify-email" && <VerifyEmailForm />}
+
+          {view === "reset-password" && <ResetPasswordForm />}
         </div>
       </div>
     </div>

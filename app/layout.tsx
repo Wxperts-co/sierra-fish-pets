@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Nunito } from "next/font/google";
 import "./globals.css";
-import ReduxProvider from "@/store/provider";
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
 import AuthModal from "@/components/auth/AuthModal";
+import Providers from "./provider";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -34,14 +34,13 @@ export default function RootLayout({
       className={`${geistMono.variable} ${nunito.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-[family-name:var(--font-nunito)]">
-        <ReduxProvider>
-          {/* <TopBar /> */}
-          <Header />
-          {children}
-          <AuthModal />
-          <Footer />
-        </ReduxProvider>
-      </body>
+  <Providers>
+    <Header />
+    {children}
+    <AuthModal />
+    <Footer />
+  </Providers>
+</body>
     </html>
   );
 }

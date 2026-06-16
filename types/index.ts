@@ -149,19 +149,39 @@ export interface Address extends ShippingAddress {
   label: string; // "Home", "Office", etc.
 }
 
+export interface UserAddress {
+  id: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  isDefault: boolean;
+  label: string;
+}
+
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
+  role: "user" | "admin";
+  name: string;
   email: string;
-  password: string; // hashed in real app
+  avatar?: {
+    url: string;
+    public_id: string;
+  };
+  wishlist?: string[];
+  isEmailVerified: boolean;
   phone?: string;
-  avatar?: string;
-  addresses: Address[];
-  wishlist: string[];  // product IDs
-  loyaltyPoints: number;
-  createdAt: string;
-  isActive: boolean;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  addresses?: UserAddress[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // ─── BRAND ──────────────────────────────────────────────────────────────────

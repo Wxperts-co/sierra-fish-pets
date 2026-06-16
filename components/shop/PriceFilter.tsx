@@ -2,7 +2,7 @@
 
 import * as Slider from "@radix-ui/react-slider";
 import { useAppDispatch } from "@/store/hooks";
-import { setPriceRange } from "@/store/slices/filtersSlice";
+import { setPriceRange, DEFAULT_MAX_PRICE } from "@/store/slices/filtersSlice";
 
 interface PriceFilterProps {
   minPrice: number;
@@ -11,7 +11,7 @@ interface PriceFilterProps {
 }
 
 const MIN = 0;
-const MAX = 400;
+const MAX = DEFAULT_MAX_PRICE;
 
 export default function PriceFilter({
   minPrice,

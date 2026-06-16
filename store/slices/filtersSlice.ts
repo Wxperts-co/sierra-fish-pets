@@ -3,6 +3,9 @@ import type {
   CategorySlug,
   StockStatus,
 } from "@/types";
+import { allProducts } from "@/data";
+
+export const DEFAULT_MAX_PRICE = Math.ceil(Math.max(...allProducts.map((p) => p.price), 0));
 
 export type SortOption =
   | "featured"
@@ -35,7 +38,7 @@ const initialState: FiltersState = {
   search: "",
 
   minPrice: 0,
-  maxPrice: 400,
+  maxPrice: DEFAULT_MAX_PRICE,
 
   stockStatus: null,
   minRating: null,
@@ -133,7 +136,7 @@ const filtersSlice = createSlice({
       state.search = "";
 
       state.minPrice = 0;
-      state.maxPrice = 400;
+      state.maxPrice = DEFAULT_MAX_PRICE;
 
       state.stockStatus = null;
       state.minRating = null;

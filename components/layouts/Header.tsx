@@ -64,7 +64,7 @@ export default function Header() {
   const wishlistCount = useAppSelector(
     (state) => state.wishlist.productIds.length,
   );
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
@@ -86,7 +86,6 @@ export default function Header() {
   const isSierraEdu =
     pathname === "/sierra-edu" ||
     (pathname ? pathname.startsWith("/edu/") : false);
-
 
   const isTransparentPage =
     isHome ||
@@ -149,7 +148,10 @@ export default function Header() {
           {/* Left: Hamburger menu + Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <MobileMenu />
-            <Link href="/" className="inline-flex items-center justify-center bg-white rounded-lg px-2 py-1">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center bg-white rounded-lg px-2 py-1"
+            >
               <Image
                 src="/images/logo/logo.png"
                 alt="Sierra Fish & Pets"
@@ -223,7 +225,7 @@ export default function Header() {
 
           {categories.map((category) => {
             const href = `/shop?category=${category.slug}`;
-            const isActive = pathname.startsWith("/shop");
+            const isActive = pathname?.startsWith("/shop");
             return (
               <Link
                 key={category.id}
@@ -276,14 +278,18 @@ export default function Header() {
               className="flex h-16 shrink-0 items-center overflow-visible"
             >
               <Image
-                src={showSolidBackground ? "/images/logo/logo.png" : "/images/logo/logo3.png"}
+                src={
+                  showSolidBackground
+                    ? "/images/logo/logo.png"
+                    : "/images/logo/logo3.png"
+                }
                 alt="Sierra Fish & Pets"
                 width={400}
                 height={100}
                 priority
                 className={cn(
                   "block h-auto w-[260px] object-contain object-center transition-all duration-300",
-                  showSolidBackground ? "rounded-xl" : ""
+                  showSolidBackground ? "rounded-xl" : "",
                 )}
               />
             </Link>
@@ -295,10 +301,14 @@ export default function Header() {
                   return (
                     <React.Fragment key={item.label}>
                       <MegaMenu
-                        textClass={useWhiteText ? "text-white" : "text-[#003DA5]"}
+                        textClass={
+                          useWhiteText ? "text-white" : "text-[#003DA5]"
+                        }
                         isOpen={activeDropdown === "shop"}
                         onToggle={() =>
-                          setActiveDropdown(activeDropdown === "shop" ? null : "shop")
+                          setActiveDropdown(
+                            activeDropdown === "shop" ? null : "shop",
+                          )
                         }
                         onClose={() => setActiveDropdown(null)}
                       />
@@ -332,10 +342,15 @@ export default function Header() {
                 if (item.type === "dropdown") {
                   const dropKey = item.label.toLowerCase();
                   return (
-                    <div key={item.label} className="relative py-3 px-3.5 nav-dropdown-container">
+                    <div
+                      key={item.label}
+                      className="relative py-3 px-3.5 nav-dropdown-container"
+                    >
                       <button
                         onClick={() =>
-                          setActiveDropdown(activeDropdown === dropKey ? null : dropKey)
+                          setActiveDropdown(
+                            activeDropdown === dropKey ? null : dropKey,
+                          )
                         }
                         className={cn(
                           "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
@@ -357,7 +372,9 @@ export default function Header() {
                       <div
                         className={cn(
                           "absolute top-full left-0 z-50 translate-y-2 rounded-xl bg-white p-2 shadow-xl border border-slate-100 transition-all duration-200 origin-top-left",
-                          dropKey === "more" ? "min-w-[140px]" : "min-w-[200px]",
+                          dropKey === "more"
+                            ? "min-w-[140px]"
+                            : "min-w-[200px]",
                           activeDropdown === dropKey
                             ? "opacity-100 visible scale-100 pointer-events-auto"
                             : "opacity-0 invisible scale-95 pointer-events-none",
@@ -371,80 +388,107 @@ export default function Header() {
                                   {menuItem.label}
                                   <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                                 </div>
-                                
+
                                 {/* Submenu Panel */}
                                 <div
                                   className={cn(
                                     "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left",
-                                    dropKey === "more" ? "min-w-[170px]" : "min-w-[240px]"
+                                    dropKey === "more"
+                                      ? "min-w-[170px]"
+                                      : "min-w-[240px]",
                                   )}
                                 >
-                                  {menuItem.submenuItems?.map((subItem: any, sIdx: number) => {
-                                    const isSierraEdu = menuItem.label === "Sierra Edu";
-                                    const isSubOpen = activeSubmenu === subItem.label;
+                                  {menuItem.submenuItems?.map(
+                                    (subItem: any, sIdx: number) => {
+                                      const isSierraEdu =
+                                        menuItem.label === "Sierra Edu";
+                                      const isSubOpen =
+                                        activeSubmenu === subItem.label;
 
-                                    return (
-                                      <div key={sIdx} className="relative group/edu-submenu">
-                                        {subItem.items ? (
-                                          <>
-                                            {isSierraEdu ? (
-                                              <button
-                                                onClick={(e) => {
-                                                  e.stopPropagation();
-                                                  setActiveSubmenu(isSubOpen ? null : subItem.label);
-                                                }}
-                                                className="w-full text-left flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-pointer select-none focus:outline-none"
-                                              >
-                                                {subItem.label}
-                                                <ChevronRight className={cn("h-3.5 w-3.5 text-slate-400 transition-transform duration-200", isSubOpen && "rotate-90")} />
-                                              </button>
-                                            ) : (
-                                              <div className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none">
-                                                {subItem.label}
-                                                <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                                              </div>
-                                            )}
-                                            
-                                            {/* Third Level Submenu */}
-                                            <div
-                                              className={cn(
-                                                "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
-                                                dropKey === "more" ? "min-w-[180px]" : "min-w-[220px]",
-                                                isSierraEdu
-                                                  ? (isSubOpen ? "opacity-100 visible scale-100 pointer-events-auto" : "opacity-0 invisible scale-95 pointer-events-none")
-                                                  : "opacity-0 invisible scale-95 pointer-events-none group-hover/edu-submenu:opacity-100 group-hover/edu-submenu:visible group-hover/edu-submenu:scale-100"
-                                              )}
-                                            >
-                                              {subItem.items.map((nestedItem: any, nIdx: number) => (
-                                                <Link
-                                                  key={nIdx}
-                                                  href={nestedItem.href}
-                                                  onClick={() => {
-                                                    setActiveDropdown(null);
-                                                    setActiveSubmenu(null);
+                                      return (
+                                        <div
+                                          key={sIdx}
+                                          className="relative group/edu-submenu"
+                                        >
+                                          {subItem.items ? (
+                                            <>
+                                              {isSierraEdu ? (
+                                                <button
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveSubmenu(
+                                                      isSubOpen
+                                                        ? null
+                                                        : subItem.label,
+                                                    );
                                                   }}
-                                                  className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                                  className="w-full text-left flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-pointer select-none focus:outline-none"
                                                 >
-                                                  {nestedItem.label}
-                                                </Link>
-                                              ))}
-                                            </div>
-                                          </>
-                                        ) : (
-                                          <Link
-                                            href={subItem.href}
-                                            onClick={() => {
-                                              setActiveDropdown(null);
-                                              setActiveSubmenu(null);
-                                            }}
-                                            className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
-                                          >
-                                            {subItem.label}
-                                          </Link>
-                                        )}
-                                      </div>
-                                    );
-                                  })}
+                                                  {subItem.label}
+                                                  <ChevronRight
+                                                    className={cn(
+                                                      "h-3.5 w-3.5 text-slate-400 transition-transform duration-200",
+                                                      isSubOpen && "rotate-90",
+                                                    )}
+                                                  />
+                                                </button>
+                                              ) : (
+                                                <div className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none">
+                                                  {subItem.label}
+                                                  <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                                                </div>
+                                              )}
+
+                                              {/* Third Level Submenu */}
+                                              <div
+                                                className={cn(
+                                                  "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
+                                                  dropKey === "more"
+                                                    ? "min-w-[180px]"
+                                                    : "min-w-[220px]",
+                                                  isSierraEdu
+                                                    ? isSubOpen
+                                                      ? "opacity-100 visible scale-100 pointer-events-auto"
+                                                      : "opacity-0 invisible scale-95 pointer-events-none"
+                                                    : "opacity-0 invisible scale-95 pointer-events-none group-hover/edu-submenu:opacity-100 group-hover/edu-submenu:visible group-hover/edu-submenu:scale-100",
+                                                )}
+                                              >
+                                                {subItem.items.map(
+                                                  (
+                                                    nestedItem: any,
+                                                    nIdx: number,
+                                                  ) => (
+                                                    <Link
+                                                      key={nIdx}
+                                                      href={nestedItem.href}
+                                                      onClick={() => {
+                                                        setActiveDropdown(null);
+                                                        setActiveSubmenu(null);
+                                                      }}
+                                                      className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                                    >
+                                                      {nestedItem.label}
+                                                    </Link>
+                                                  ),
+                                                )}
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <Link
+                                              href={subItem.href}
+                                              onClick={() => {
+                                                setActiveDropdown(null);
+                                                setActiveSubmenu(null);
+                                              }}
+                                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                            >
+                                              {subItem.label}
+                                            </Link>
+                                          )}
+                                        </div>
+                                      );
+                                    },
+                                  )}
                                 </div>
                               </div>
                             );
@@ -491,24 +535,7 @@ export default function Header() {
                 )}
               </button>
 
-              {/* Account */}
-              {isAuthenticated ? (
-                <Link
-                  href="/account"
-                  className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
-                  aria-label="Account"
-                >
-                  <User className="h-5 w-5" />
-                </Link>
-              ) : (
-                <button
-                  onClick={() => dispatch(openLoginModal())}
-                  className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15 cursor-pointer focus:outline-none"
-                  aria-label="Account"
-                >
-                  <User className="h-5 w-5" />
-                </button>
-              )}
+              
 
               {/* Wishlist */}
               {/* <Link
@@ -547,6 +574,36 @@ export default function Header() {
                   </span>
                 )}
               </Link>
+
+              {/* Account */}
+              {isAuthenticated ? (
+                <Link
+                  href="/account"
+                  className="flex items-center gap-2 px-2.5 py-1 rounded-full transition-colors hover:bg-white/15"
+                  aria-label="Account"
+                >
+                  <div className="relative h-8 w-8 rounded-full overflow-hidden border border-white/20 shrink-0 bg-slate-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={user?.avatar?.url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"}
+                      alt={user?.name || "User"}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <span className="text-sm font-bold truncate max-w-[120px] hidden sm:inline">
+                    {user?.name || "Account"}
+                  </span>
+                  <ChevronDown className="h-4 w-4 shrink-0 hidden sm:block" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => dispatch(openLoginModal())}
+                  className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15 cursor-pointer focus:outline-none"
+                  aria-label="Account"
+                >
+                  <User className="h-5 w-5" />
+                </button>
+              )}
 
               {/* Theme Toggle */}
             </div>

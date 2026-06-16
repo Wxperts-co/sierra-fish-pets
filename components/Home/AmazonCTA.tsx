@@ -74,6 +74,7 @@ export default function AmazonCTA() {
             src="/images/cta.png"
             alt="Sierra Fish & Pets – Amazon Pet Products"
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain"
             priority
           />

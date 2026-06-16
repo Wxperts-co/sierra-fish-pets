@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { setAuthModalView } from "@/store/slices/authModalSlice";
+import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { openVerifyEmailModal, setAuthModalView } from "@/store/slices/authModalSlice";
+import { signIn } from "next-auth/react";
 
 export default function RegisterForm() {
   const dispatch = useAppDispatch();
+  const { message } = useAppSelector((state) => state.authModal);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -41,18 +44,21 @@ export default function RegisterForm() {
 
     try {
       setLoading(true);
+      setError("");
 
-      // TODO: Call Register API
-      console.log("Register Data:", formData);
+      await axios.post("/api/auth/register", {
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+      });
 
-      // Example:
-      // await registerUser(formData);
-
-      // After successful registration:
-      dispatch(setAuthModalView("login"));
-    } catch (error) {
-      console.error(error);
-      setError("Registration failed. Please try again.");
+      // After successful registration, transition to verification view
+      dispatch(openVerifyEmailModal(formData.email));
+    } catch (err: any) {
+      console.error(err);
+      const errMsg = err.response?.data?.message || err.message || "Registration failed. Please try again.";
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
@@ -60,6 +66,18 @@ export default function RegisterForm() {
 
   return (
     <div>
+      {/* External Success/Error Message */}
+      {message && message.type === "success" && (
+        <div className="flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl p-4 text-sm font-semibold mb-4">
+          <span>{message.text}</span>
+        </div>
+      )}
+      {message && message.type === "error" && (
+        <div className="flex items-center gap-3 bg-rose-50 text-rose-700 border border-rose-100 rounded-xl p-4 text-sm font-semibold mb-4">
+          <span>{message.text}</span>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="space-y-4"
@@ -178,6 +196,7 @@ export default function RegisterForm() {
       {/* Google Register */}
       <button
         type="button"
+        onClick={() => signIn("google", { callbackUrl: "/?authAction=signup" })}
         className="w-full rounded-lg border border-gray-300 py-3 font-medium transition hover:bg-gray-50"
       >
         Continue with Google

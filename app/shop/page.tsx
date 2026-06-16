@@ -57,11 +57,11 @@ function ShopPageContent() {
 
   // Sync URL query param → Redux on mount / param change
   useEffect(() => {
-    const categoryFromUrl = searchParams.get("category") as CategorySlug | null;
-    const subcategoryFromUrl = searchParams.get("subcategory");
-    const brandsFromUrl =searchParams.get("brand")?.split(",") || [];
-    const ratingFromUrl = searchParams.get("rating");
-    const sortFromUrl = searchParams.get("sort");
+    const categoryFromUrl = searchParams?.get("category") as CategorySlug | null;
+    const subcategoryFromUrl = searchParams?.get("subcategory") || null;
+    const brandsFromUrl = searchParams?.get("brand")?.split(",") || [];
+    const ratingFromUrl = searchParams?.get("rating");
+    const sortFromUrl = searchParams?.get("sort");
 
     if (categoryFromUrl) {
       dispatch(setCategory(categoryFromUrl));
@@ -113,7 +113,7 @@ function ShopPageContent() {
 
   setCurrentPage(1);
 
-  const params = new URLSearchParams(searchParams.toString());
+  const params = new URLSearchParams(searchParams?.toString() || "");
 
   params.set("category", slug);
   params.delete("subcategory");
@@ -133,7 +133,7 @@ function ShopPageContent() {
       dispatch(setSubcategory(newValue));
 
       const params = new URLSearchParams(
-        searchParams.toString()
+        searchParams?.toString() || ""
       );
 
       if (newValue) {
@@ -152,7 +152,7 @@ function ShopPageContent() {
   dispatch(toggleBrand(slug));
 
   const params = new URLSearchParams(
-    searchParams.toString()
+    searchParams?.toString() || ""
   );
 
   const currentBrands =
@@ -189,7 +189,7 @@ function ShopPageContent() {
       dispatch(setMinRating(rating));
 
       const params = new URLSearchParams(
-        searchParams.toString()
+        searchParams?.toString() || ""
       );
 
       if (rating) {
@@ -216,7 +216,7 @@ function ShopPageContent() {
       );
 
       const params = new URLSearchParams(
-        searchParams.toString()
+        searchParams?.toString() || ""
       );
 
       if (min === 0 && max === 400) {
@@ -248,7 +248,7 @@ const handleSortChange = (
     dispatch(setSortBy(value));
 
     const params = new URLSearchParams(
-      searchParams.toString()
+      searchParams?.toString() || ""
     );
 
     params.set("sort", value);

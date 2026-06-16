@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import axios from "axios";
 import { useAppDispatch } from "@/store/hooks";
-import { setAuthModalView } from "@/store/slices/authModalSlice";
+import { setAuthModalView, openResetPasswordModal } from "@/store/slices/authModalSlice";
 
 export default function ForgotPasswordForm() {
   const dispatch = useAppDispatch();
@@ -10,24 +11,29 @@ export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
+    setError("");
 
     try {
       setLoading(true);
-
-      // TODO: Call Forgot Password API
-      console.log("Reset Password Email:", email);
-
-      // Example:
-      // await forgotPassword(email);
-
-      setSuccess(true);
-    } catch (error) {
-      console.error(error);
+      const res = await axios.post("/api/auth/forgot-password", { email });
+      if (res.data.success) {
+        setSuccess(true);
+      } else {
+        setError(res.data.message || "Failed to send reset link.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "An error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -43,18 +49,18 @@ export default function ForgotPasswordForm() {
         </h3>
 
         <p className="mb-6 text-sm text-gray-600">
-          We've sent a password reset link to your email
+          We've sent a 6-digit password reset code to your email
           address.
         </p>
 
         <button
           type="button"
           onClick={() =>
-            dispatch(setAuthModalView("login"))
+            dispatch(openResetPasswordModal(email))
           }
-          className="w-full rounded-lg bg-black py-3 font-medium text-white transition hover:opacity-90"
+          className="w-full rounded-lg bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] py-3 font-semibold text-white transition hover:opacity-95"
         >
-          Back to Login
+          Enter Reset Code
         </button>
       </div>
     );
@@ -65,7 +71,7 @@ export default function ForgotPasswordForm() {
       <div className="mb-6">
         <p className="text-sm text-gray-600">
           Enter your registered email address and
-          we'll send you a link to reset your password.
+          we'll send you a code to reset your password.
         </p>
       </div>
 
@@ -98,9 +104,16 @@ export default function ForgotPasswordForm() {
           className="w-full rounded-lg bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] py-3 font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading
-            ? "Sending..."
-            : "Send Reset Link"}
+            ? "Sending Code..."
+            : "Send Reset Code"}
         </button>
+
+        {/* Error */}
+        {error && (
+          <p className="text-sm text-red-500 text-center font-medium">
+            {error}
+          </p>
+        )}
       </form>
 
       {/* Back To Login */}

@@ -13,6 +13,7 @@ import {
   setPriceRange,
   setMinRating,
   setStockStatus,
+  DEFAULT_MAX_PRICE,
 } from "@/store/slices/filtersSlice";
 import PriceFilter from "./PriceFilter";
 import RatingFilter from "./RatingFilter";
@@ -121,7 +122,7 @@ export default function FilterSidebar({
     }));
   };
 
-  const isPriceModified = minPrice !== 0 || maxPrice !== 400;
+  const isPriceModified = minPrice !== 0 || maxPrice !== DEFAULT_MAX_PRICE;
   const appliedFiltersCount =
     (selectedSubcategory ? 1 : 0) +
     selectedBrands.length +

@@ -5,12 +5,14 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
+  isLoggingOut: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   loading: false,
+  isLoggingOut: false,
 };
 
 const authSlice = createSlice({
@@ -25,6 +27,7 @@ const authSlice = createSlice({
     ) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+      state.isLoggingOut = false;
     },
 
     updateUser: (
@@ -39,6 +42,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.isLoggingOut = true;
     },
 
     setAuthLoading: (

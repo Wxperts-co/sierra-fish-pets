@@ -35,7 +35,7 @@ export default function BrandGrid({ brands }: BrandGridProps) {
   const router = useRouter();
 
   // Always read the active category from the live URL
-  const activeCategory = searchParams.get("category") ?? "all";
+  const activeCategory = searchParams?.get("category") ?? "all";
 
   // Build the list of categories that actually exist in the data
 //   const availableCategories = useMemo(() => {
@@ -118,7 +118,7 @@ export default function BrandGrid({ brands }: BrandGridProps) {
 
   // Update the URL when a category pill is clicked
   function handleCategoryChange(cat: string) {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || "");
     if (cat === "all") {
       params.delete("category");
     } else {

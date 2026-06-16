@@ -9,7 +9,7 @@ import { Product } from "@/types";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
-import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 
 interface ProductCardProps {
   product: Product;
@@ -28,7 +28,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    dispatch(toggleWishlist(product.id));
+    dispatch(toggleWishlistDb(product.id));
   };
 
   const hasDiscount =
@@ -113,6 +113,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                 src={imgError ? getFallbackImage() : product.images[0]}
                 alt={product.name}
                 fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className={`object-contain p-1 transition-transform duration-500 ease-out ${
                   hovered ? "scale-108" : "scale-100"
                 }`}

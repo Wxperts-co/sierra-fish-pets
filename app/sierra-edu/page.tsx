@@ -722,8 +722,8 @@ function SierraEduContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const slugParam = searchParams.get("slug");
-  const categoryParam = searchParams.get("category");
+  const slugParam = searchParams?.get("slug");
+  const categoryParam = searchParams?.get("category");
 
   const navigate = (params: Record<string, string> | null) => {
     if (!params) {

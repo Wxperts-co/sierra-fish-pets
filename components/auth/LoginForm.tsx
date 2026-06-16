@@ -1,14 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useAppDispatch } from "@/store/hooks";
+import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   setAuthModalView,
   closeAuthModal,
+  openVerifyEmailModal,
 } from "@/store/slices/authModalSlice";
+import { setUser } from "@/store/slices/authSlice";
+import { setWishlist } from "@/store/slices/wishlistSlice";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const dispatch = useAppDispatch();
+  const { message } = useAppSelector((state) => state.authModal);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -16,6 +22,7 @@ export default function LoginForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -33,16 +40,28 @@ export default function LoginForm() {
 
     try {
       setLoading(true);
+      setError("");
 
-      // TODO: Call Login API
-      console.log("Login Data:", formData);
+      const res = await axios.post("/api/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Example:
-      // const response = await loginUser(formData);
-
+      // Save user object to Redux store
+      dispatch(setUser(res.data.user));
+      dispatch(setWishlist(res.data.user.wishlist || []));
       dispatch(closeAuthModal());
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
+      
+      // If the email isn't verified, transition to verify OTP screen directly
+      if (err.response?.status === 403 && err.response?.data?.notVerified) {
+        dispatch(openVerifyEmailModal(formData.email));
+        return;
+      }
+      
+      const errMsg = err.response?.data?.message || err.message || "Invalid email or password.";
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
@@ -50,6 +69,18 @@ export default function LoginForm() {
 
   return (
     <div>
+      {/* External Success/Error Message */}
+      {message && message.type === "success" && (
+        <div className="flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl p-4 text-sm font-semibold mb-4">
+          <span>{message.text}</span>
+        </div>
+      )}
+      {message && message.type === "error" && (
+        <div className="flex items-center gap-3 bg-rose-50 text-rose-700 border border-rose-100 rounded-xl p-4 text-sm font-semibold mb-4">
+          <span>{message.text}</span>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="space-y-4"
@@ -103,6 +134,13 @@ export default function LoginForm() {
           </button>
         </div>
 
+        {/* Error */}
+        {error && (
+          <p className="text-sm text-red-500">
+            {error}
+          </p>
+        )}
+
         {/* Login Button */}
         <button
           type="submit"
@@ -125,6 +163,7 @@ export default function LoginForm() {
       {/* Google Login */}
       <button
         type="button"
+        onClick={() => signIn("google", { callbackUrl: "/?authAction=login" })}
         className="w-full rounded-lg border border-gray-300 py-3 font-medium transition hover:bg-gray-50"
       >
         Continue with Google

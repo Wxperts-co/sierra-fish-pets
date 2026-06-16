@@ -289,14 +289,14 @@ export default function AboutPage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-2 md:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
             {/* Value Card 1 */}
             <motion.div
               variants={fadeInUpVariants}
               whileHover="hover"
               custom={0}
-              className="bg-white rounded-3xl p-2 md:p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
             >
               <div className="p-4 bg-[#EBF7FF] rounded-2xl mb-6 text-[#005AA9]">
                 <Heart className="w-8 h-8" />

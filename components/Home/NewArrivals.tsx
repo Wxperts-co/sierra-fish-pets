@@ -26,7 +26,7 @@ import { getNewArrivals } from "@/data/products";
 import { Product } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
-import { toggleWishlist } from "@/store/slices/wishlistSlice";
+import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 
 // ─── Custom Flat Product Card for New Arrivals ───
 function NewArrivalCard({ product }: { product: Product }) {
@@ -41,7 +41,7 @@ function NewArrivalCard({ product }: { product: Product }) {
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    dispatch(toggleWishlist(product.id));
+    dispatch(toggleWishlistDb(product.id));
   };
 
   const hasDiscount =
