@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
 
-    const { email, password } = await req.json();
+    const { email, password, role } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -49,7 +49,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Generate JWT Token
+    // 4. Admin route guard — verify role from DB, never mutate it
+    if (role === "admin" && user.role !== "admin") {
+      return NextResponse.json(
+        { success: false, message: "Invalid role" },
+        { status: 403 }
+      );
+    }
+
+    // Public user route guard — reject admin accounts from signing in through the normal user login flow
+    if (role !== "admin" && user.role !== "user") {
+      return NextResponse.json(
+        { success: false, message: "Invalid role" },
+        { status: 403 }
+      );
+    }
+
+    // 5. Generate JWT Token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       JWT_SECRET,

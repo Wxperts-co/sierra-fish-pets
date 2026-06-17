@@ -65,6 +65,8 @@ export default function Header() {
     (state) => state.wishlist.productIds.length,
   );
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const isAdminRoute = pathname?.startsWith("/admin");
+  const shouldShowAccount = isAuthenticated && (user?.role !== "admin" || isAdminRoute);
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
@@ -576,7 +578,7 @@ export default function Header() {
               </Link>
 
               {/* Account */}
-              {isAuthenticated ? (
+              {shouldShowAccount ? (
                 <Link
                   href="/account"
                   className="flex items-center gap-2 px-2.5 py-1 rounded-full transition-colors hover:bg-white/15"

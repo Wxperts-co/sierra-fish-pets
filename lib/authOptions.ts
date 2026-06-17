@@ -27,6 +27,7 @@ export const authOptions: AuthOptions = {
             "";
           const decodedCallbackUrl = decodeURIComponent(callbackUrlCookie);
           const isSignUp = decodedCallbackUrl.includes("authAction=signup");
+          const isAdminRoute = decodedCallbackUrl.includes("/admin");
 
           let existingUser = await UserModel.findOne({ email, deletedAt: null });
 
@@ -34,10 +35,10 @@ export const authOptions: AuthOptions = {
             // SIGN UP FLOW
             if (existingUser) {
               // User already exists, redirect back to register modal showing error
-              return "/?error=UserAlreadyExists";
+              return isAdminRoute ? "/admin?error=UserAlreadyExists" : "/?error=UserAlreadyExists";
             }
 
-            // Create user in DB if they don't exist (providing a dummy password since password is required by schema)
+            // Create user in DB (always role: "user" — admin accounts are created manually)
             existingUser = await UserModel.create({
               name: user.name || "Google User",
               email: email,
@@ -48,12 +49,22 @@ export const authOptions: AuthOptions = {
             });
 
             // Redirect back showing success to continue to login
-            return "/?success=GoogleAccountCreated";
+            return isAdminRoute ? "/admin?success=GoogleAccountCreated" : "/?success=GoogleAccountCreated";
           } else {
             // LOGIN FLOW
             if (!existingUser) {
               // User not found during login: redirect to register modal showing error
-              return "/?error=UserNotExist";
+              return isAdminRoute ? "/admin?error=UserNotExist" : "/?error=UserNotExist";
+            }
+
+            // Admin route: reject if user does not already have admin role in DB
+            if (isAdminRoute && existingUser.role !== "admin") {
+              return "/admin?error=InvalidRole";
+            }
+
+            // Public user route: reject admin accounts from signing in through the normal user login flow
+            if (!isAdminRoute && existingUser.role !== "user") {
+              return "/?error=InvalidRole";
             }
 
             // Populate user object details for JWT mapping

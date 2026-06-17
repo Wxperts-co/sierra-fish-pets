@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
 
-    const { name, email, password, phone } =
+    const { name, email, password, phone, role } =
       await req.json();
 
     if (!name || !email || !password) {
@@ -37,11 +37,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Only allow "user" (default) or "admin" — reject any other value
+    const allowedRoles = ["user", "admin"];
+    const assignedRole = role && allowedRoles.includes(role) ? role : "user";
+
     const user = await UserModel.create({
       name,
       email,
       password,
       phone: phone || "",
+      role: assignedRole,
     });
 
     const otp = generateOTP();
