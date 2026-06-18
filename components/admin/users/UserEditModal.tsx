@@ -12,6 +12,12 @@ import { Button } from "@/components/ui/button";
 const editUserSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Enter a valid email address"),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zipCode: z.string().optional(),
+  country: z.string().optional(),
   role: z.enum(["user", "admin"]),
   status: z.enum(["active", "inactive", "banned"]),
 });
@@ -63,6 +69,12 @@ export default function UserEditModal({ isOpen, user, onClose, onSave }: UserEdi
     reset({
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      zipCode: user.zipCode,
+      country: user.country,
       role: user.role,
       status: user.status,
     });
@@ -106,6 +118,42 @@ export default function UserEditModal({ isOpen, user, onClose, onSave }: UserEdi
               <label className="block text-sm font-medium text-slate-700">Email</label>
               <Input type="email" {...register("email")} disabled />
               {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Phone</label>
+              <Input type="text" {...register("phone")} />
+              {errors.phone && <p className="text-xs text-red-600">{errors.phone.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Address</label>
+              <Input type="text" {...register("address")} />
+              {errors.address && <p className="text-xs text-red-600">{errors.address.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">City</label>
+              <Input type="text" {...register("city")} />
+              {errors.city && <p className="text-xs text-red-600">{errors.city.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">State</label>
+              <Input type="text" {...register("state")} />
+              {errors.state && <p className="text-xs text-red-600">{errors.state.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Zip Code</label>
+              <Input type="text" {...register("zipCode")} />
+              {errors.zipCode && <p className="text-xs text-red-600">{errors.zipCode.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Country</label>
+              <Input type="text" {...register("country")} />
+              {errors.country && <p className="text-xs text-red-600">{errors.country.message}</p>}
             </div>
 
             <div className="space-y-2">

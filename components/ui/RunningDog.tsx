@@ -1,15 +1,9 @@
 "use client";
 
-import Lottie from "lottie-react";
-import dogAnimation from "@/data/running-dog.json";
-
 export default function RunningDog() {
   return (
-    <div className="w-40">
-      <Lottie
-        animationData={dogAnimation}
-        loop={true}
-      />
+    <div className="flex h-40 w-40 items-center justify-center rounded-2xl bg-slate-100 text-center text-xs text-slate-500">
+      Running dog animation unavailable
     </div>
   );
 }

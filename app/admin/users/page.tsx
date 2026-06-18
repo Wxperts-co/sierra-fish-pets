@@ -12,8 +12,8 @@ import UserEditModal from "../../../components/admin/users/UserEditModal";
 import UserDeleteModal from "@/components/admin/users/UserDeleteModal";
 import { setLoading } from "@/store/slices/productsSlice";
 import axios from "axios";
-import { exportUsersToExcel, ExportUser } from "@/src/lib/export/usersExport";
-import { showErrorToast } from "@/src/lib/toast";
+import { exportUsersToExcel, ExportUser } from "@/lib/export/usersExport";
+import { showErrorToast } from "@/lib/toast";
 import { setUser } from "@/store/slices/authSlice";
 
 type User = {
@@ -120,14 +120,24 @@ export default function UsersPage() {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveUser = (updatedUser: User) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user._id === updatedUser._id ? { ...user, ...updatedUser } : user
-      )
-    );
-    setSelectedUser(updatedUser);
-    setIsEditModalOpen(false);
+  const handleSaveUser = async (updatedUser: User) => {
+    try {
+      const { data } = await axios.patch(`/api/admin/users/${updatedUser._id}`, updatedUser);
+
+      if (data && data.success) {
+        const saved = data.user ?? updatedUser;
+        setUsers((prevUsers) =>
+          prevUsers.map((user) => (user._id === saved._id ? { ...user, ...saved } : user))
+        );
+        setSelectedUser(saved as User);
+        setIsEditModalOpen(false);
+      } else {
+        showErrorToast(data?.message || "Failed to save user");
+      }
+    } catch (error) {
+      console.error("Failed to save user:", error);
+      showErrorToast("Failed to save user");
+    }
   };
 
   const handleDelete = (user: User) => {

@@ -31,7 +31,7 @@ import { logout } from "@/store/slices/authSlice";
 const menuItems = [
   { name: "Dashboard",    href: "/admin",              icon: LayoutDashboard },
   { name: "Users",        href: "/admin/users",        icon: Users },
-  { name: "Products",     href: "",     icon: ShoppingBag },
+  { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Orders",       href: "",       icon: ClipboardList },
   { name: "Categories",   href: "",   icon: Tag },
   { name: "Events", href: "", icon: CalendarDays },

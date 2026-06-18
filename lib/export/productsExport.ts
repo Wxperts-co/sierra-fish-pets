@@ -1,0 +1,85 @@
+import * as XLSX from "xlsx";
+import axios from "axios";
+import { showErrorToast } from "@/lib/toast";
+import {
+  RETAILER_CSV_COLUMNS,
+  buildRetailerCsvExportRow,
+  type RetailerCsvExportProduct,
+} from "@/lib/products/retailerCsvColumns";
+
+export type ExportProduct = RetailerCsvExportProduct;
+
+export function exportProductsToExcel(products: ExportProduct[]) {
+  if (!products || products.length === 0) {
+    throw new Error("No products available to export");
+  }
+
+  const rows = products.map(buildRetailerCsvExportRow);
+
+  const worksheet = XLSX.utils.json_to_sheet(rows, {
+    header: [...RETAILER_CSV_COLUMNS],
+  });
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+
+  const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([wbout], { type: "application/octet-stream" });
+
+  const yyyy = new Date().toISOString().slice(0, 10);
+  const filename = `products-${yyyy}.xlsx`;
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+export async function importProductsFromExcel(file: File) {
+  if (!file) {
+    throw new Error("No file selected");
+  }
+
+  const reader = new FileReader();
+
+  return new Promise<void>((resolve, reject) => {
+    reader.onload = async (e) => {
+      try {
+        const data = e.target?.result;
+        const workbook = XLSX.read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet);
+
+        if (!jsonData || jsonData.length === 0) {
+          throw new Error("No data found in file");
+        }
+
+        // Send to backend API for importing
+        const response = await axios.post("/api/admin/products/import", {
+          products: jsonData,
+        });
+
+        if (response.data?.success) {
+          resolve();
+        } else {
+          throw new Error(response.data?.message || "Failed to import products");
+        }
+      } catch (error: any) {
+        console.error("Failed to import products:", error);
+        reject(error);
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+export default exportProductsToExcel;

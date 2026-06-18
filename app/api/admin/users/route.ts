@@ -51,10 +51,11 @@ export async function POST(request: NextRequest) {
     const parsed = addUserSchema.safeParse(body);
 
     if (!parsed.success) {
+      const perr: any = parsed.error;
       return NextResponse.json(
         {
           success: false,
-          message: parsed.error.errors[0]?.message || "Validation failed",
+          message: perr.errors?.[0]?.message || "Validation failed",
         },
         { status: 400 }
       );
@@ -82,16 +83,17 @@ export async function POST(request: NextRequest) {
 
     await user.save();
 
+    const u: any = user;
     return NextResponse.json(
       {
         success: true,
         user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isEmailVerified: user.isEmailVerified,
-          createdAt: user.createdAt,
+          _id: u._id,
+          name: u.name,
+          email: u.email,
+          role: u.role,
+          isEmailVerified: u.isEmailVerified,
+          createdAt: u.createdAt,
         },
       },
       { status: 201 }

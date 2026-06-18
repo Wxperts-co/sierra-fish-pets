@@ -19,6 +19,7 @@ export interface IUser extends Document {
   role: "user" | "admin";
   name: string;
   email: string;
+  status: "active" | "inactive" | "banned";
   password: string;
   avatar: {
     url: string;
@@ -97,6 +98,12 @@ const userSchema = new mongoose.Schema<IUser>(
     isEmailVerified: {
       type: Boolean,
       default: false,
+    },
+
+    status: {
+      type: String,
+      enum: ["active", "inactive", "banned"],
+      default: "active",
     },
 
     phone: {
