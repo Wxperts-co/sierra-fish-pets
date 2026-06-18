@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-import categories from "@/data/categories.json";
+import categoriesJson from "@/data/categories.json";
+import type { Category } from "@/types";
 import SubCategoryFilter from "./SubcategoryFilter";
 import BrandFilter from "./BrandFilter";
 import brands from "@/data/brands.json";
+
+const categories = categoriesJson as Array<Partial<Category>>;
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   toggleBrand,
@@ -155,7 +158,7 @@ export default function FilterSidebar({
           </span>
 
           <span className="ml-auto text-xs font-medium text-[#005ca5]">
-            {category.productCount} products
+            {category.productCount ?? 0} products
           </span>
         </div>
       )}

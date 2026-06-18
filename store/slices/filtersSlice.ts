@@ -3,9 +3,9 @@ import type {
   CategorySlug,
   StockStatus,
 } from "@/types";
-import { allProducts } from "@/data";
 
-export const DEFAULT_MAX_PRICE = Math.ceil(Math.max(...allProducts.map((p) => p.price), 0));
+// Static upper-bound — high enough to never accidentally filter out DB products
+export const DEFAULT_MAX_PRICE = 9999;
 
 export type SortOption =
   | "featured"

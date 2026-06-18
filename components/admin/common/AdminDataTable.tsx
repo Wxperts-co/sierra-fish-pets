@@ -53,6 +53,31 @@ export default function AdminDataTable<T>({
   const startEntry = (currentPage - 1) * itemsPerPage + 1;
   const endEntry = Math.min(currentPage * itemsPerPage, totalItems || data.length);
 
+  const paginationRange = (() => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const pages = [1];
+    const left = Math.max(2, currentPage - 1);
+    const right = Math.min(totalPages - 1, currentPage + 1);
+
+    if (left > 2) {
+      pages.push(-1);
+    }
+
+    for (let page = left; page <= right; page += 1) {
+      pages.push(page);
+    }
+
+    if (right < totalPages - 1) {
+      pages.push(-1);
+    }
+
+    pages.push(totalPages);
+    return pages;
+  })();
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col w-full">
       {/* Table responsive container */}
@@ -149,43 +174,45 @@ export default function AdminDataTable<T>({
             <span className="font-semibold text-slate-700">{totalItems || data.length}</span> entries
           </p>
 
-          <div className="flex items-center gap-1.5">
+          <nav className="flex items-center gap-2" aria-label="Pagination">
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition"
               aria-label="Previous page"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
 
-            {[...Array(totalPages)].map((_, i) => {
-              const pageNumber = i + 1;
-              const isSelected = pageNumber === currentPage;
-              return (
+            {paginationRange.map((pageNumber, idx) =>
+              pageNumber === -1 ? (
+                <span key={`ellipsis-${idx}`} className="px-2 text-sm text-slate-400">
+                  …
+                </span>
+              ) : (
                 <button
                   key={pageNumber}
                   onClick={() => onPageChange(pageNumber)}
-                  className={`inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold transition ${
-                    isSelected
+                  className={`inline-flex min-w-[36px] h-9 items-center justify-center rounded-full px-3 text-sm font-semibold transition ${
+                    pageNumber === currentPage
                       ? "bg-[#003B73] text-white shadow-sm shadow-slate-900/10"
                       : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                   }`}
                 >
                   {pageNumber}
                 </button>
-              );
-            })}
+              )
+            )}
 
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition"
               aria-label="Next page"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
-          </div>
+          </nav>
         </div>
       )}
     </div>

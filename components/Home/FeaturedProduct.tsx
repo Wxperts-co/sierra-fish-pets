@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 import ProductCard from "@/components/shop/ProductCard";
-import { allProducts } from "@/data/products";
+import type { Product } from "@/types";
 
 const CATEGORY_SLUGS = [
   "dog",
@@ -47,6 +47,7 @@ const cardVariants = {
 export default function FeaturedProducts() {
   const containerRef = useRef<HTMLElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,10 +70,22 @@ export default function FeaturedProducts() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Fetch all products from DB via API
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setAllProducts(data.products as Product[]);
+      })
+      .catch((err) => console.error("FeaturedProducts fetch error:", err));
+  }, []);
+
   // Fetch the latest 2 products for each category, ordered so that all #1 latest are in row 1, and all #2 latest are in row 2
   const latestProductsByCategory = (() => {
     const row1 = CATEGORY_SLUGS.map((slug) => {
-      const catProducts = allProducts.filter((p) => p.categorySlug === slug);
+      const catProducts = allProducts.filter(
+        (p) => p.categorySlug === slug || p.categorySlug?.startsWith(slug + "-/-")
+      );
       const sorted = [...catProducts].sort((a, b) => {
         const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -82,7 +95,9 @@ export default function FeaturedProducts() {
     }).filter(Boolean);
 
     const row2 = CATEGORY_SLUGS.map((slug) => {
-      const catProducts = allProducts.filter((p) => p.categorySlug === slug);
+      const catProducts = allProducts.filter(
+        (p) => p.categorySlug === slug || p.categorySlug?.startsWith(slug + "-/-")
+      );
       const sorted = [...catProducts].sort((a, b) => {
         const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;

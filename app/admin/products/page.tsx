@@ -1,13 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import axios from "axios";
 
-import AdminDataTable from "@/components/admin/common/AdminDataTable";
+import ProductDataGrid from "@/components/admin/products/ProductDataGrid";
 import { showErrorToast } from "@/lib/toast";
-import { Download, Plus, Upload } from "lucide-react";
+import { AlertTriangle, Box, CheckCircle2, Download, Edit3, Eye, Filter, Package, Plus, RotateCcw, Search, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { exportProductsToExcel, importProductsFromExcel, ExportProduct } from "@/lib/export/productsExport";
 import type { IRetailerCsvData } from "@/lib/products/retailerCsvColumns";
@@ -46,7 +45,6 @@ export default function AdminProductsPage() {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [filters, setFilters] = useState({ search: "", stockStatus: "all" });
-  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -96,6 +94,37 @@ export default function AdminProductsPage() {
     outOfStock: products.filter((product) => product.stockStatus === "out_of_stock").length,
   };
 
+  const statCards = [
+    {
+      label: "Total Products",
+      value: stats.total,
+      icon: Package,
+      color: "from-[#003B73] to-[#005EA8]",
+      bgGlow: "bg-blue-500/10",
+    },
+    {
+      label: "In Stock",
+      value: stats.inStock,
+      icon: CheckCircle2,
+      color: "from-emerald-600 to-teal-500",
+      bgGlow: "bg-emerald-500/10",
+    },
+    {
+      label: "Low Stock",
+      value: stats.lowStock,
+      icon: AlertTriangle,
+      color: "from-purple-600 to-indigo-500",
+      bgGlow: "bg-purple-500/10",
+    },
+    {
+      label: "Out of Stock",
+      value: stats.outOfStock,
+      icon: Box,
+      color: "from-rose-600 to-red-500",
+      bgGlow: "bg-rose-500/10",
+    },
+  ];
+
   const handleExportExcel = async () => {
     if (!filteredProducts || filteredProducts.length === 0) {
       showErrorToast("No products available to export");
@@ -137,13 +166,30 @@ export default function AdminProductsPage() {
 
     try {
       setIsImporting(true);
-      await importProductsFromExcel(file);
+      const resData = await importProductsFromExcel(file);
       
       // Refresh products after import
       const response = await axios.get("/api/admin/products");
       if (response.data?.success) {
         setProducts(response.data.products || []);
-        setCurrentPage(1);
+      }
+
+      // Show detailed alert to user
+      if (resData?.results) {
+        const { successful, failed, errors } = resData.results;
+        if (failed > 0) {
+          const errorList = errors.slice(0, 5).join("\n• ");
+          alert(
+            `Import completed!\n\n` +
+            `• Successfully imported: ${successful}\n` +
+            `• Failed to import: ${failed}\n\n` +
+            `First few errors:\n• ${errorList || "None"}`
+          );
+        } else {
+          alert(`Successfully imported ${successful} products!`);
+        }
+      } else {
+        alert(resData?.message || "Import completed successfully!");
       }
     } catch (err: any) {
       console.error("Failed to import products:", err);
@@ -156,13 +202,20 @@ export default function AdminProductsPage() {
     }
   };
 
-  const itemsPerPage = 10;
-  const totalItems = filteredProducts.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-  const displayedProducts = filteredProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const handleDeleteProduct = async (productId: string) => {
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`/api/admin/products/${productId}`);
+      setProducts((prev) => prev.filter((product) => product._id !== productId));
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      showErrorToast("Failed to delete product");
+    }
+  };
+
+  const displayedProducts = filteredProducts;
 
   const columns = [
     { header: "Name", accessorKey: "name" },
@@ -184,19 +237,31 @@ export default function AdminProductsPage() {
     {
       header: "Actions",
       cell: (product: Product) => (
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href={`/admin/products/${product._id}`}
-            className="inline-flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => router.push(`/admin/products/${product._id}`)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
+            aria-label="View product"
           >
-            View
-          </Link>
-          <Link
-            href={`/admin/products/${product._id}`}
-            className="inline-flex items-center rounded-lg bg-[#003B73] px-3 py-1 text-xs font-semibold text-white hover:bg-[#002f5c]"
+            <Eye className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push(`/admin/products/${product._id}`)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
+            aria-label="Edit product"
           >
-            Edit
-          </Link>
+            <Edit3 className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleDeleteProduct(product._id)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-500 text-white hover:bg-rose-600 transition"
+            aria-label="Delete product"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
         </div>
       ),
     },
@@ -253,48 +318,67 @@ export default function AdminProductsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">Total Products</p>
-          <p className="mt-3 text-3xl font-semibold text-slate-900">{stats.total}</p>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">In Stock</p>
-          <p className="mt-3 text-3xl font-semibold text-slate-900">{stats.inStock}</p>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">Low Stock</p>
-          <p className="mt-3 text-3xl font-semibold text-slate-900">{stats.lowStock}</p>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">Out of Stock</p>
-          <p className="mt-3 text-3xl font-semibold text-slate-900">{stats.outOfStock}</p>
-        </div>
+        {statCards.map((card, index) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={index}
+              className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5"
+            >
+              <div className={`absolute -right-6 -bottom-6 w-24 h-24 rounded-full ${card.bgGlow} blur-xl group-hover:scale-150 transition-transform duration-500`} />
+
+              <div className="flex items-center justify-between relative z-10">
+                <div className="space-y-1.5">
+                  <span className="text-sm font-medium text-slate-500">{card.label}</span>
+                  <p className="text-3xl font-extrabold text-slate-900 leading-none">
+                    {card.value.toLocaleString()}
+                  </p>
+                </div>
+
+                <div className={`p-3.5 rounded-xl bg-gradient-to-br ${card.color} text-white shadow-sm shadow-slate-900/10`}>
+                  <Icon className="h-5.5 w-5.5" />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 lg:grid-cols-4">
-          <div className="relative">
-            <input
-              type="text"
-              value={filters.search}
-              onChange={(event) => {
-                setFilters((prev) => ({ ...prev, search: event.target.value }));
-                setCurrentPage(1);
-              }}
-              placeholder="Search product name, SKU, brand..."
-              className="w-full h-11 rounded-lg border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8]/50"
-            />
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+        <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+          <Filter className="h-4 w-4 text-[#003B73]" />
+          <h3 className="text-sm font-semibold text-slate-800">Filter Products</h3>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Search Product
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Name, SKU, brand..."
+                value={filters.search}
+                onChange={(event) => {
+                  setFilters((prev) => ({ ...prev, search: event.target.value }));
+                }}
+                className="w-full h-9 pl-9 pr-3 text-sm rounded-lg border border-slate-200 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8] transition bg-slate-50/50"
+              />
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Stock status</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Stock status
+            </label>
             <select
               value={filters.stockStatus}
               onChange={(event) => {
                 setFilters((prev) => ({ ...prev, stockStatus: event.target.value }));
-                setCurrentPage(1);
               }}
-              className="w-full h-11 rounded-lg border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8]/50"
+              className="w-full h-9 px-3 text-sm rounded-lg border border-slate-200 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8] transition bg-slate-50/50 text-slate-700 font-medium"
             >
               <option value="all">All stock statuses</option>
               <option value="in_stock">In stock</option>
@@ -302,18 +386,30 @@ export default function AdminProductsPage() {
               <option value="out_of_stock">Out of stock</option>
             </select>
           </div>
+
+          <div className="lg:col-span-2" />
+
+          <div className="flex justify-end lg:justify-start">
+            <button
+              type="button"
+              onClick={() => {
+                setFilters({ search: "", stockStatus: "all" });
+              }}
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition active:translate-y-px"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              Reset Filters
+            </button>
+          </div>
         </div>
       </div>
 
-      <AdminDataTable
-        data={displayedProducts}
-        columns={columns}
+      <ProductDataGrid
+        products={displayedProducts}
         loading={loading}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-        itemsPerPage={itemsPerPage}
-        totalItems={totalItems}
+        onView={(p) => router.push(`/admin/products/${p._id}`)}
+        onEdit={(p) => router.push(`/admin/products/${p._id}`)}
+        onDelete={(p) => handleDeleteProduct(p._id)}
       />
     </div>
   );

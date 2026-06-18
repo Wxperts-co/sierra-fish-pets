@@ -4,7 +4,18 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import categories from "@/data/categories.json";
+import categoriesJson from "@/data/categories.json";
+import type { Category } from "@/types";
+
+type ShopCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  subcategories: { id: string; name: string; slug: string }[];
+  image?: string;
+};
+
+const categories = categoriesJson as ShopCategory[];
 
 const categoryImages: Record<string, string> = {
   dog: "/images/categories/dog.jpeg",
@@ -211,7 +222,7 @@ export default function ShopHero({
                         {/* Inner circle image */}
                         <span className="relative block h-[100px] w-[100px] overflow-hidden rounded-full bg-[#f0f9fa] md:h-[80px] md:w-[80px] sm:h-[64px] sm:w-[64px]">
                           <Image
-                            src={categoryImages[cat.slug] ?? cat.image}
+                            src={categoryImages[cat.slug] ?? cat.image ?? "/images/categories/default.png"}
                             alt={cat.name}
                             fill
                             className="object-cover transition-transform duration-[350ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110"

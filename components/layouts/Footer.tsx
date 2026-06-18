@@ -90,7 +90,7 @@ export default function Footer() {
             <p className="text-sm font-semibold leading-none text-white md:text-base">
               STORE HOURS :
               <span className="ml-2 text-[13px]">
-                Mon–Fri 11AM–7PM • Sat 11AM–7PM • Sun 11AM–5PM
+                Mon – Fri 11AM – 7PM • Sat 11AM – 7PM • Sun 11AM – 5PM
               </span>
             </p>
           </div>

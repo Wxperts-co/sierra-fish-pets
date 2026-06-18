@@ -19,8 +19,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { getBestSellers } from "@/data/products";
-import { Product } from "@/types";
+import type { Product } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import { motion } from "framer-motion";
@@ -166,10 +165,31 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
 
 // ─── BestSellers (Redesigned Section with Embla Carousel) ───
 export default function BestSellers() {
-  const bestSellers = getBestSellers().slice(0, 10); // Grab up to 10 best sellers
+  const [bestSellers, setBestSellers] = useState<Product[]>([]);
   const [api, setApi] = useState<CarouselApi>();
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
+
+  // Fetch best sellers from DB via API
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          let sellers = (data.products as Product[]).filter(
+            (p) => p.isBestSeller
+          );
+          // Fallback: If no products are flagged as isBestSeller, use products with the highest review count as a proxy
+          if (sellers.length === 0) {
+            sellers = [...(data.products as Product[])]
+              .sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0))
+              .slice(0, 10);
+          }
+          setBestSellers(sellers);
+        }
+      })
+      .catch((err) => console.error("BestSellers fetch error:", err));
+  }, []);
 
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();

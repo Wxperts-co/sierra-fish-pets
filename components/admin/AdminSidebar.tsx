@@ -33,7 +33,7 @@ const menuItems = [
   { name: "Users",        href: "/admin/users",        icon: Users },
   { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Orders",       href: "",       icon: ClipboardList },
-  { name: "Categories",   href: "",   icon: Tag },
+  { name: "Categories",   href: "/admin/categories",   icon: Tag },
   { name: "Events", href: "", icon: CalendarDays },
   { name: "Dog Adoption", href: "", icon: PawPrint },
   { name: "Brands", href: "", icon: BadgePercent },

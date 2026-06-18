@@ -55,7 +55,7 @@ export default function AdminModal({
       onClick={handleOverlayClick}
       className="fixed inset-0 z-[250] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto animate-fade-in"
     >
-      <div className={`w-full ${sizeClasses[size]} rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col my-8 animate-scale-up border border-slate-100`}>
+      <div className={`w-full ${sizeClasses[size]} max-h-[calc(100vh-4rem)] rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col my-8 animate-scale-up border border-slate-100`}>
         {/* Modal Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-slate-50/80 backdrop-blur px-6 py-4">
           <h3 className="text-lg font-bold text-slate-800 tracking-tight">{title}</h3>
@@ -69,7 +69,7 @@ export default function AdminModal({
         </div>
 
         {/* Modal Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 min-h-0 overflow-y-auto p-6">
           {children}
         </div>
       </div>

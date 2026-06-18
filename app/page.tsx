@@ -17,8 +17,8 @@ const page = () => {
       <HeroBanner/>
       <CategoryCards/>
       <PromoBlocksCarousel/>
-      {/* <NewArrivals/> */}
-      <FeaturedProducts/>
+      <NewArrivals/>
+      {/* <FeaturedProducts/> */}
       <AmazonCTA/>
       <FeaturesSection/>
       <TasteGuarantee/>

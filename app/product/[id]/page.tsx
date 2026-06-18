@@ -1,7 +1,8 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getProductById, getProductsByCategory } from "@/data";
+import { connectDB } from "@/lib/mongodb";
+import ProductModel from "@/models/Product";
+import type { Product } from "@/types";
 import ProductActions from "@/components/shop/ProductActions";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductDetailsTabs from "@/components/shop/ProductDetailsTabs";
@@ -19,15 +20,25 @@ export default async function ProductPage({
 }: ProductPageProps) {
   const { id } = await params;
 
-  const product = getProductById(id);
+  await connectDB();
 
-  if (!product) {
+  const rawProduct = await ProductModel.findOne({ id }).lean();
+
+  if (!rawProduct) {
     notFound();
   }
 
-  const relatedProducts = getProductsByCategory(product.categorySlug)
-    .filter((p) => p.id !== product.id)
-    .slice(0, 4);
+  // Cast lean Mongoose document to our frontend Product type
+  const product = rawProduct as unknown as Product;
+
+  const rawRelated = await ProductModel.find({
+    categorySlug: product.categorySlug,
+    id: { $ne: product.id },
+  })
+    .limit(4)
+    .lean();
+
+  const relatedProducts = rawRelated as unknown as Product[];
 
   const hasDiscount =
     product.compareAtPrice &&

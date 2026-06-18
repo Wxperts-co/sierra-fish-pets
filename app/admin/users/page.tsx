@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import UserStats from "@/components/admin/users/UserStats";
 import UserFilters from "@/components/admin/users/UserFilters";
-import UserTable from "@/components/admin/users/UserTable";
+import UserDataGrid from "@/components/admin/users/UserDataGrid";
 import UserPageHeader from "@/components/admin/users/UserPageHeader";
 import UserDetailModal from "@/components/admin/users/UserDetailModal";
 import UserEditModal from "../../../components/admin/users/UserEditModal";
@@ -205,15 +205,13 @@ export default function UsersPage() {
         }
       />
 
-      <UserTable
+      <UserDataGrid
         users={filteredUsers}
-        currentPage={1}
-        totalPages={1}
-        onPageChange={() => {}}
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onToggleStatus={handleToggleStatus}
+        loading={loading}
       />
 
       <UserDetailModal

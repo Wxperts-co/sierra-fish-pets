@@ -5,13 +5,28 @@ import { Heart } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import { addToCart } from "@/store/slices/cartSlice";
-import { allProducts } from "@/data";
+import { useEffect, useState } from "react";
 import WishlistCard from "@/components/account/WishlistCard";
 import AccountHeader from "@/components/account/AccountHeader";
+import type { Product } from "@/types";
 
 export default function WishlistPage() {
   const dispatch = useAppDispatch();
   const wishlistProductIds = useAppSelector((state) => state.wishlist.productIds);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.products)) {
+          setAllProducts(data.products);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch wishlist products:", err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   // Filter products that exist in wishlist
   const wishlistProducts = allProducts.filter((product) =>
@@ -25,6 +40,14 @@ export default function WishlistPage() {
   const handleRemove = (productId: string) => {
     dispatch(toggleWishlistDb(productId));
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#005AA9]" />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-6 md:p-8 font-lato space-y-6">

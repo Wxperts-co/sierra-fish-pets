@@ -13,10 +13,23 @@ import {
 } from "@/components/ui/carousel";
 
 import { Button } from "@/components/ui/button";
-import { getFeaturedProducts } from "@/data/products";
+import { useEffect, useState } from "react";
+import type { Product } from "@/types";
 
 export default function HeroProductCarousel() {
-  const products = getFeaturedProducts().slice(0, 5);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.products)) {
+          const featured = data.products.filter((p: any) => p.isFeatured).slice(0, 5);
+          setProducts(featured);
+        }
+      })
+      .catch((err) => console.error("HeroProductCarousel fetch error:", err));
+  }, []);
 
   return (
     <div className="relative mt-8 w-[340px]">

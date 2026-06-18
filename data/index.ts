@@ -1,6 +1,3 @@
-// Products
-export * from "./products";
-
 // Reference data
 export { default as categories } from "./categories.json";
 export { default as brands } from "./brands.json";
