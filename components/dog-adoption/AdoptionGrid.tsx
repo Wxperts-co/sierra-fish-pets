@@ -1,17 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PawPrint } from "lucide-react";
-import dogsData from "@/data/dog-adoption.json";
 import AdoptionCard, { Dog } from "./AdoptionCard";
 import AdoptionModal from "./AdoptionModal";
 
 export default function AdoptionGrid() {
+  const [allDogs, setAllDogs] = useState<Dog[]>([]);
   const [selectedDog, setSelectedDog] = useState<Dog | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    fetch("/api/dogs")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.dogs)) {
+          setAllDogs(data.dogs);
+        }
+      })
+      .catch((err) => console.error("Failed to load dogs:", err));
+  }, []);
+
   // Filter available dogs and take the first 4 for the featured row
-  const featuredDogs = dogsData
+  const featuredDogs = allDogs
     .filter((dog) => dog.adoptionStatus === "available")
     .slice(0, 4);
 

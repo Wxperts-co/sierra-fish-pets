@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-import banners from "@/data/banners.json";
-import mobBanners from "@/data/mobcarousal.json";
 import { cn } from "@/lib/utils";
 
 import {
@@ -27,10 +24,36 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+interface Banner {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  ctaLink: string;
+  order: number;
+  status: string;
+}
+
 export default function HeroBanner() {
+  const [activeBanners, setActiveBanners] = useState<Banner[]>([]);
   const [api, setApi] = useState<CarouselApi>();
   const [mobApi, setMobApi] = useState<CarouselApi>();
   const [currentMobIndex, setCurrentMobIndex] = useState(0);
+
+  // Fetch active banners from database
+  useEffect(() => {
+    fetch("/api/banners")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && Array.isArray(data.banners)) {
+          setActiveBanners(
+            data.banners.filter((b: Banner) => b.status === "active")
+          );
+        }
+      })
+      .catch((err) => console.error("HeroBanner fetch error:", err));
+  }, []);
 
   // Implement smooth autoplay for desktop hero
   useEffect(() => {
@@ -72,7 +95,7 @@ export default function HeroBanner() {
           className="w-full"
         >
           <CarouselContent>
-            {banners.map((banner) => (
+            {activeBanners.map((banner) => (
               <CarouselItem key={banner.id}>
                 {/* Full screen viewport height */}
                 <div className="relative w-full h-[100vh]">
@@ -199,7 +222,7 @@ export default function HeroBanner() {
               className="w-full"
             >
               <CarouselContent>
-                {banners.map((banner, index) => (
+                {activeBanners.map((banner, index) => (
                   <CarouselItem key={banner.id}>
                     <div className="relative w-full h-[260px] overflow-hidden rounded-2xl shadow-sm border border-slate-100">
 
@@ -243,7 +266,7 @@ export default function HeroBanner() {
 
             {/* Indicators */}
             <div className="flex justify-center gap-1.5 mt-3">
-              {banners.map((_, index) => (
+              {activeBanners.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => mobApi?.scrollTo(index)}

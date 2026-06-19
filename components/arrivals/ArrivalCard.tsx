@@ -52,7 +52,7 @@ export default function ArrivalCard({
       {/* Image */}
       <div className="relative h-[200px] overflow-hidden">
         <Image
-          src={pet.images[0]}
+          src={pet.images?.[0] || "/images/products/dog1.avif"}
           alt={pet.name}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
 import categoriesJson from "@/data/categories.json";
 import type { Category } from "@/types";
 import SubCategoryFilter from "./SubcategoryFilter";
 import BrandFilter from "./BrandFilter";
-import brands from "@/data/brands.json";
+
 
 const categories = categoriesJson as Array<Partial<Category>>;
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -91,6 +91,19 @@ export default function FilterSidebar({
   onPriceChange,
 }: FilterSidebarProps) {
   const category = categories.find((item) => item.slug === selectedCategory);
+
+  const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/brands")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.brands)) {
+          setBrands(data.brands);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Adapt single-selection Redux state → array for SubCategoryFilter
   const selectedSubcategories = selectedSubcategory

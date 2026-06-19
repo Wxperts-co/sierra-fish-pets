@@ -24,50 +24,53 @@ export default function CategoryStats({ categories = [], loading = false }: Cate
       label: "Total Categories",
       value: totalCategories,
       icon: Tag,
-      color: "from-[#003B73] to-[#005EA8]",
-      bgGlow: "bg-blue-500/10",
+      iconBg: "bg-[#eef6ff]",
+      iconColor: "text-[#005AA9]",
+      valueColor: "text-slate-800",
     },
     {
       label: "Total Products",
       value: totalProducts,
       icon: Package,
-      color: "from-emerald-600 to-teal-500",
-      bgGlow: "bg-emerald-500/10",
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+      valueColor: "text-emerald-600",
     },
     {
       label: "Subcategories",
       value: totalSubcategories,
       icon: Layers,
-      color: "from-purple-600 to-indigo-500",
-      bgGlow: "bg-purple-500/10",
+      iconBg: "bg-purple-50",
+      iconColor: "text-purple-600",
+      valueColor: "text-purple-600",
     },
     {
       label: "Avg. per Category",
       value: averageSubcategories,
       icon: Grid,
-      color: "from-rose-600 to-red-500",
-      bgGlow: "bg-rose-500/10",
+      iconBg: "bg-slate-50",
+      iconColor: "text-slate-500",
+      valueColor: "text-slate-500",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {cards.map((card, index) => {
         const Icon = card.icon;
         return (
           <div
             key={index}
-            className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition hover:shadow-md"
+            className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between"
           >
-            <div className={`absolute -right-6 -bottom-6 h-24 w-24 rounded-full ${card.bgGlow} blur-xl`} />
-            <div className="relative z-10 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-500">{card.label}</p>
-                <p className="mt-3 text-3xl font-semibold text-slate-900">{card.value.toLocaleString()}</p>
-              </div>
-              <div className={`flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br ${card.color} text-white shadow-sm shadow-slate-900/10`}>
-                <Icon className="h-5 w-5" />
-              </div>
+            <div>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{card.label}</p>
+              <h3 className={`text-2xl font-black mt-2 ${card.valueColor}`}>
+                {loading ? "..." : card.value.toLocaleString()}
+              </h3>
+            </div>
+            <div className={`p-3 ${card.iconBg} rounded-xl ${card.iconColor}`}>
+              <Icon className="w-6 h-6" />
             </div>
           </div>
         );

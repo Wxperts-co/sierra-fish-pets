@@ -34,15 +34,12 @@ const menuItems = [
   { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Orders",       href: "",       icon: ClipboardList },
   { name: "Categories",   href: "/admin/categories",   icon: Tag },
-  { name: "Events", href: "", icon: CalendarDays },
-  { name: "Dog Adoption", href: "", icon: PawPrint },
-  { name: "Brands", href: "", icon: BadgePercent },
-  { name: "Gift Cards", href: "", icon: Gift },
-  { name: "Blog Posts",   href: "",        icon: FileText },
-  { name: "FAQs",         href: "",         icon: HelpCircle },
-  { name: "Hero Slider",  href: "",  icon: Layers },
-  { name: "Gallery",      href: "",      icon: Images },
-  { name: "About",        href: "",        icon: Info },
+  { name: "Events", href: "/admin/events", icon: CalendarDays },
+  { name: "Dog Adoption", href: "/admin/dog-adoption", icon: PawPrint },
+  { name: "Brands", href: "/admin/brands", icon: BadgePercent },
+  { name: "Gift Cards", href: "/admin/gift-cards", icon: Gift },
+  { name: "Blog Posts", href: "/admin/blogs", icon: FileText },
+  { name: "Hero Slider",  href: "/admin/hero-slider",  icon: Layers },
 ];
 
 export default function AdminSidebar() {

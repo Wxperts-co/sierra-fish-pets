@@ -1,14 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Heart, PawPrint, Award } from "lucide-react";
-import dogsData from "@/data/dog-adoption.json";
 
 export default function AdoptionHero() {
-  const availableDogsCount = dogsData.filter(
-    (dog) => dog.adoptionStatus === "available"
-  ).length;
+  const [availableDogsCount, setAvailableDogsCount] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/dogs")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.dogs)) {
+          setAvailableDogsCount(
+            data.dogs.filter((d: any) => d.adoptionStatus === "available").length
+          );
+        }
+      })
+      .catch((err) => console.error("Failed to load dog count:", err));
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

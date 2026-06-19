@@ -6,9 +6,27 @@ import axios from "axios";
 
 import ProductDataGrid from "@/components/admin/products/ProductDataGrid";
 import { showErrorToast } from "@/lib/toast";
-import { AlertTriangle, Box, CheckCircle2, Download, Edit3, Eye, Filter, Package, Plus, RotateCcw, Search, Trash2, Upload } from "lucide-react";
+import {
+  AlertTriangle,
+  Box,
+  CheckCircle2,
+  Download,
+  Edit3,
+  Eye,
+  Filter,
+  Package,
+  Plus,
+  RotateCcw,
+  Search,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { exportProductsToExcel, importProductsFromExcel, ExportProduct } from "@/lib/export/productsExport";
+import {
+  exportProductsToExcel,
+  importProductsFromExcel,
+  ExportProduct,
+} from "@/lib/export/productsExport";
 import type { IRetailerCsvData } from "@/lib/products/retailerCsvColumns";
 
 type Product = {
@@ -41,21 +59,62 @@ const stockLabels: Record<Product["stockStatus"], string> = {
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [filters, setFilters] = useState({ search: "", stockStatus: "all" });
+  const [searchInput, setSearchInput] = useState("");
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [stats, setStats] = useState({
+    total: 0,
+    inStock: 0,
+    lowStock: 0,
+    outOfStock: 0,
+  });
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setFilters((prev) => ({ ...prev, search: searchInput }));
+      setPaginationModel((prev) => ({ ...prev, page: 0 }));
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchInput]);
+
+  // Reset page when stock filter changes
+  const handleStockStatusChange = (status: string) => {
+    setFilters((prev) => ({ ...prev, stockStatus: status }));
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/api/admin/products");
+        const params = new URLSearchParams();
+        params.set("page", String(paginationModel.page + 1));
+        params.set("limit", String(paginationModel.pageSize));
+        if (filters.search) params.set("search", filters.search);
+        if (filters.stockStatus !== "all")
+          params.set("stockStatus", filters.stockStatus);
+
+        const response = await axios.get(
+          `/api/admin/products?${params.toString()}`,
+        );
 
         if (response.data?.success) {
           setProducts(response.data.products || []);
+          setTotalCount(response.data.count || 0);
+          if (response.data.stats) {
+            setStats(response.data.stats);
+          }
         } else {
           showErrorToast(response.data?.message || "Failed to load products");
         }
@@ -68,88 +127,86 @@ export default function AdminProductsPage() {
     };
 
     fetchProducts();
-  }, []);
-
-  const filteredProducts = useMemo(() => {
-    const term = filters.search.trim().toLowerCase();
-
-    return products.filter((product) => {
-      const matchesSearch =
-        !term ||
-        product.name.toLowerCase().includes(term) ||
-        product.sku.toLowerCase().includes(term) ||
-        product.brand.toLowerCase().includes(term);
-
-      const matchesStock =
-        filters.stockStatus === "all" || product.stockStatus === filters.stockStatus;
-
-      return matchesSearch && matchesStock;
-    });
-  }, [products, filters]);
-
-  const stats = {
-    total: products.length,
-    inStock: products.filter((product) => product.stockStatus === "in_stock").length,
-    lowStock: products.filter((product) => product.stockStatus === "low_stock").length,
-    outOfStock: products.filter((product) => product.stockStatus === "out_of_stock").length,
-  };
+  }, [
+    paginationModel.page,
+    paginationModel.pageSize,
+    filters.search,
+    filters.stockStatus,
+  ]);
 
   const statCards = [
     {
       label: "Total Products",
       value: stats.total,
       icon: Package,
-      color: "from-[#003B73] to-[#005EA8]",
-      bgGlow: "bg-blue-500/10",
+      iconBg: "bg-[#eef6ff]",
+      iconColor: "text-[#005AA9]",
+      valueColor: "text-slate-800",
     },
     {
       label: "In Stock",
       value: stats.inStock,
       icon: CheckCircle2,
-      color: "from-emerald-600 to-teal-500",
-      bgGlow: "bg-emerald-500/10",
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+      valueColor: "text-emerald-600",
     },
     {
       label: "Low Stock",
       value: stats.lowStock,
       icon: AlertTriangle,
-      color: "from-purple-600 to-indigo-500",
-      bgGlow: "bg-purple-500/10",
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
+      valueColor: "text-amber-500",
     },
     {
       label: "Out of Stock",
       value: stats.outOfStock,
       icon: Box,
-      color: "from-rose-600 to-red-500",
-      bgGlow: "bg-rose-500/10",
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-600",
+      valueColor: "text-rose-600",
     },
   ];
 
   const handleExportExcel = async () => {
-    if (!filteredProducts || filteredProducts.length === 0) {
-      showErrorToast("No products available to export");
-      return;
-    }
-
     try {
       setIsExporting(true);
-      const exportProducts: ExportProduct[] = filteredProducts.map((p) => ({
-        id: p.id,
-        name: p.name,
-        sku: p.sku,
-        brand: p.brand,
-        price: p.price,
-        compareAtPrice: p.compareAtPrice,
-        stockCount: p.stockCount,
-        categorySlug: p.categorySlug,
-        subcategorySlug: p.subcategorySlug,
-        images: p.images,
-        description: p.description,
-        shortDescription: p.shortDescription,
-        tags: p.tags,
-        isFeatured: p.isFeatured,
-        retailerCsvData: p.retailerCsvData,
-      }));
+      const params = new URLSearchParams();
+      if (filters.search) params.set("search", filters.search);
+      if (filters.stockStatus !== "all")
+        params.set("stockStatus", filters.stockStatus);
+      params.set("limit", "100000"); // Retrieve all matching products
+
+      const response = await axios.get(
+        `/api/admin/products?${params.toString()}`,
+      );
+      const exportProductsData = response.data?.products || [];
+
+      if (exportProductsData.length === 0) {
+        showErrorToast("No products available to export");
+        return;
+      }
+
+      const exportProducts: ExportProduct[] = exportProductsData.map(
+        (p: any) => ({
+          id: p.id,
+          name: p.name,
+          sku: p.sku,
+          brand: p.brand,
+          price: p.price,
+          compareAtPrice: p.compareAtPrice,
+          stockCount: p.stockCount,
+          categorySlug: p.categorySlug,
+          subcategorySlug: p.subcategorySlug,
+          images: p.images,
+          description: p.description,
+          shortDescription: p.shortDescription,
+          tags: p.tags,
+          isFeatured: p.isFeatured,
+          retailerCsvData: p.retailerCsvData,
+        }),
+      );
 
       exportProductsToExcel(exportProducts);
     } catch (err) {
@@ -160,18 +217,33 @@ export default function AdminProductsPage() {
     }
   };
 
-  const handleImportExcel = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImportExcel = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     try {
       setIsImporting(true);
       const resData = await importProductsFromExcel(file);
-      
+
       // Refresh products after import
-      const response = await axios.get("/api/admin/products");
+      const params = new URLSearchParams();
+      params.set("page", String(paginationModel.page + 1));
+      params.set("limit", String(paginationModel.pageSize));
+      if (filters.search) params.set("search", filters.search);
+      if (filters.stockStatus !== "all")
+        params.set("stockStatus", filters.stockStatus);
+
+      const response = await axios.get(
+        `/api/admin/products?${params.toString()}`,
+      );
       if (response.data?.success) {
         setProducts(response.data.products || []);
+        setTotalCount(response.data.count || 0);
+        if (response.data.stats) {
+          setStats(response.data.stats);
+        }
       }
 
       // Show detailed alert to user
@@ -181,9 +253,9 @@ export default function AdminProductsPage() {
           const errorList = errors.slice(0, 5).join("\n• ");
           alert(
             `Import completed!\n\n` +
-            `• Successfully imported: ${successful}\n` +
-            `• Failed to import: ${failed}\n\n` +
-            `First few errors:\n• ${errorList || "None"}`
+              `• Successfully imported: ${successful}\n` +
+              `• Failed to import: ${failed}\n\n` +
+              `First few errors:\n• ${errorList || "None"}`,
           );
         } else {
           alert(`Successfully imported ${successful} products!`);
@@ -203,21 +275,58 @@ export default function AdminProductsPage() {
   };
 
   const handleDeleteProduct = async (productId: string) => {
-    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?",
+    );
     if (!confirmed) return;
 
     try {
       await axios.delete(`/api/admin/products/${productId}`);
-      setProducts((prev) => prev.filter((product) => product._id !== productId));
+      // Re-fetch current page products and stats
+      const params = new URLSearchParams();
+      params.set("page", String(paginationModel.page + 1));
+      params.set("limit", String(paginationModel.pageSize));
+      if (filters.search) params.set("search", filters.search);
+      if (filters.stockStatus !== "all")
+        params.set("stockStatus", filters.stockStatus);
+
+      const response = await axios.get(
+        `/api/admin/products?${params.toString()}`,
+      );
+      if (response.data?.success) {
+        setProducts(response.data.products || []);
+        setTotalCount(response.data.count || 0);
+        if (response.data.stats) {
+          setStats(response.data.stats);
+        }
+      }
     } catch (error) {
       console.error("Failed to delete product:", error);
       showErrorToast("Failed to delete product");
     }
   };
 
-  const displayedProducts = filteredProducts;
+  const displayedProducts = products;
 
   const columns = [
+    {
+      header: "Image",
+      cell: (product: Product) => (
+        <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 border">
+          {product.images?.[0] ? (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-400">
+              No img
+            </div>
+          )}
+        </div>
+      ),
+    },
     { header: "Name", accessorKey: "name" },
     { header: "SKU", accessorKey: "sku" },
     { header: "Brand", accessorKey: "brand" },
@@ -232,7 +341,8 @@ export default function AdminProductsPage() {
     },
     {
       header: "Created",
-      cell: (product: Product) => new Date(product.createdAt).toLocaleDateString(),
+      cell: (product: Product) =>
+        new Date(product.createdAt).toLocaleDateString(),
     },
     {
       header: "Actions",
@@ -269,10 +379,11 @@ export default function AdminProductsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      {/* ── Title block ── */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Products</h1>
-          <p className="mt-2 text-sm text-slate-500">
+          <h1 className="text-3xl font-black text-slate-800">Products</h1>
+          <p className="mt-2 text-sm text-slate-500 font-medium">
             Manage catalog products, pricing, and inventory.
           </p>
         </div>
@@ -282,7 +393,7 @@ export default function AdminProductsPage() {
             onClick={handleExportExcel}
             disabled={isExporting}
             variant="outline"
-            className="h-10 px-4 rounded-xl border-slate-200"
+            className="h-11 rounded-2xl border-slate-200 font-semibold px-5 active:scale-95 transition-all text-slate-600 hover:bg-slate-50"
           >
             <Download className="w-4 h-4 mr-2" />
             {isExporting ? "Exporting..." : "Export Excel"}
@@ -292,7 +403,7 @@ export default function AdminProductsPage() {
             onClick={() => fileInputRef.current?.click()}
             disabled={isImporting}
             variant="outline"
-            className="h-10 px-4 rounded-xl border-slate-200"
+            className="h-11 rounded-2xl border-slate-200 font-semibold px-5 active:scale-95 transition-all text-slate-600 hover:bg-slate-50"
           >
             <Upload className="w-4 h-4 mr-2" />
             {isImporting ? "Importing..." : "Import Excel"}
@@ -309,7 +420,7 @@ export default function AdminProductsPage() {
 
           <Button
             onClick={() => router.push("/admin/products/add")}
-            className="h-10 px-5 rounded-xl bg-[#5B3DF5] hover:bg-[#4c31df]"
+            className="h-11 rounded-2xl bg-[#005AA9] hover:bg-[#003B73] text-white font-bold text-sm px-6 shadow-md transition-all active:scale-95"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Product
@@ -317,38 +428,37 @@ export default function AdminProductsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* ── Stats Row ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {statCards.map((card, index) => {
           const Icon = card.icon;
           return (
             <div
               key={index}
-              className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5"
+              className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between"
             >
-              <div className={`absolute -right-6 -bottom-6 w-24 h-24 rounded-full ${card.bgGlow} blur-xl group-hover:scale-150 transition-transform duration-500`} />
-
-              <div className="flex items-center justify-between relative z-10">
-                <div className="space-y-1.5">
-                  <span className="text-sm font-medium text-slate-500">{card.label}</span>
-                  <p className="text-3xl font-extrabold text-slate-900 leading-none">
-                    {card.value.toLocaleString()}
-                  </p>
-                </div>
-
-                <div className={`p-3.5 rounded-xl bg-gradient-to-br ${card.color} text-white shadow-sm shadow-slate-900/10`}>
-                  <Icon className="h-5.5 w-5.5" />
-                </div>
+              <div>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{card.label}</p>
+                <h3 className={`text-2xl font-black mt-2 ${card.valueColor}`}>
+                  {loading ? "..." : card.value.toLocaleString()}
+                </h3>
+              </div>
+              <div className={`p-3 ${card.iconBg} rounded-xl ${card.iconColor}`}>
+                <Icon className="w-6 h-6" />
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
           <Filter className="h-4 w-4 text-[#003B73]" />
-          <h3 className="text-sm font-semibold text-slate-800">Filter Products</h3>
+          <h3 className="text-sm font-semibold text-slate-800">
+            Filter Products
+          </h3>
         </div>
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
           <div className="space-y-1.5">
@@ -360,9 +470,9 @@ export default function AdminProductsPage() {
               <input
                 type="text"
                 placeholder="Name, SKU, brand..."
-                value={filters.search}
+                value={searchInput}
                 onChange={(event) => {
-                  setFilters((prev) => ({ ...prev, search: event.target.value }));
+                  setSearchInput(event.target.value);
                 }}
                 className="w-full h-9 pl-9 pr-3 text-sm rounded-lg border border-slate-200 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8] transition bg-slate-50/50"
               />
@@ -376,7 +486,7 @@ export default function AdminProductsPage() {
             <select
               value={filters.stockStatus}
               onChange={(event) => {
-                setFilters((prev) => ({ ...prev, stockStatus: event.target.value }));
+                handleStockStatusChange(event.target.value);
               }}
               className="w-full h-9 px-3 text-sm rounded-lg border border-slate-200 outline-none focus:border-[#0077C8] focus:ring-1 focus:ring-[#0077C8] transition bg-slate-50/50 text-slate-700 font-medium"
             >
@@ -393,7 +503,9 @@ export default function AdminProductsPage() {
             <button
               type="button"
               onClick={() => {
+                setSearchInput("");
                 setFilters({ search: "", stockStatus: "all" });
+                setPaginationModel((prev) => ({ ...prev, page: 0 }));
               }}
               className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition active:translate-y-px"
             >
@@ -410,6 +522,9 @@ export default function AdminProductsPage() {
         onView={(p) => router.push(`/admin/products/${p._id}`)}
         onEdit={(p) => router.push(`/admin/products/${p._id}`)}
         onDelete={(p) => handleDeleteProduct(p._id)}
+        rowCount={totalCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
       />
     </div>
   );

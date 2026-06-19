@@ -18,7 +18,7 @@ import {
   Download,
   ExternalLink,
 } from "lucide-react";
-import eventsData from "@/data/events.json";
+
 import categoriesData from "@/data/eventCategories.json";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
@@ -112,25 +112,22 @@ export default function EventCalendarPage() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  // Dynamic Events list state with localStorage persistence
-  const [events, setEvents] = useState<EventItem[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("sierra_events");
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-    return eventsData as EventItem[];
-  });
+  // Dynamic Events list state – always loaded from DB
+  const [events, setEvents] = useState<EventItem[]>([]);
 
-  // Save changes to localStorage
+  // Fetch events from DB on mount
   React.useEffect(() => {
-    localStorage.setItem("sierra_events", JSON.stringify(events));
-  }, [events]);
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.events)) {
+          setEvents(data.events);
+        }
+      })
+      .catch((err) => console.error("Failed to load events from DB:", err));
+  }, []);
+
+
 
   // Form states for adding custom events
   const [clickedDate, setClickedDate] = useState<Date | null>(null);
@@ -178,7 +175,24 @@ export default function EventCalendarPage() {
       },
     };
 
-    setEvents((prev) => [...prev, newEvent]);
+    // Save to DB
+    fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newEvent),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setEvents((prev) => [...prev, data.event]);
+        } else {
+          setEvents((prev) => [...prev, newEvent]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to save event to DB:", err);
+        setEvents((prev) => [...prev, newEvent]);
+      });
 
     // Reset
     setNewTitle("");

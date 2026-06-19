@@ -24,15 +24,31 @@ type Props = {
   onView: (p: Product) => void;
   onEdit: (p: Product) => void;
   onDelete: (p: Product) => void;
+  rowCount: number;
+  paginationModel: { page: number; pageSize: number };
+  onPaginationModelChange: (model: { page: number; pageSize: number }) => void;
 };
 
-export default function ProductDataGrid({ products, loading = false, onView, onEdit, onDelete }: Props) {
-  const rows = products.map((p, index) => ({ ...p, id: p._id, serial: index + 1 }));
+export default function ProductDataGrid({
+  products,
+  loading = false,
+  onView,
+  onEdit,
+  onDelete,
+  rowCount,
+  paginationModel,
+  onPaginationModelChange,
+}: Props) {
+  const rows = products.map((p, index) => ({
+    ...p,
+    id: p._id,
+    serial: paginationModel.page * paginationModel.pageSize + index + 1,
+  }));
 
   const columns: GridColDef[] = [
     {
       field: "serial",
-      headerName: "#",
+      headerName: "S.NO.",
       width: 70,
       sortable: false,
       filterable: false,
@@ -63,9 +79,8 @@ export default function ProductDataGrid({ products, loading = false, onView, onE
       field: "price",
       headerName: "Price",
       flex: 0.6,
-      valueGetter: (params: GridRenderCellParams<Product>) => {
-        const row = (params.row ?? {}) as Partial<Product>;
-        const price = typeof row.price === "number" ? row.price : Number(params.value ?? 0);
+      valueGetter: (value: any, row: Product) => {
+        const price = typeof row?.price === "number" ? row.price : Number(value ?? 0);
         return `$${Number(price || 0).toFixed(2)}`;
       },
     },
@@ -85,9 +100,8 @@ export default function ProductDataGrid({ products, loading = false, onView, onE
       field: "createdAt",
       headerName: "Created",
       flex: 0.6,
-      valueGetter: (params: GridRenderCellParams<Product>) => {
-        const row = (params.row ?? {}) as Partial<Product>;
-        const created = row.createdAt ?? params.value ?? "";
+      valueGetter: (value: any, row: Product) => {
+        const created = value ?? row?.createdAt ?? "";
         try {
           return created ? new Date(created).toLocaleDateString() : "";
         } catch {
@@ -119,8 +133,11 @@ export default function ProductDataGrid({ products, loading = false, onView, onE
         rows={rows}
         columns={columns}
         pagination
+        paginationMode="server"
+        rowCount={rowCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={[10, 25, 50]}
-        initialState={{ pagination: { paginationModel: { pageSize: 10, page: 0 } } }}
         disableRowSelectionOnClick
         loading={loading}
         autoHeight

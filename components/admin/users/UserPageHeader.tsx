@@ -1,4 +1,4 @@
-import { Download, Upload, Plus } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type UserPageHeaderProps = {
@@ -8,18 +8,13 @@ type UserPageHeaderProps = {
 
 export default function UserPageHeader({ onAddUser, onExportExcel }: UserPageHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       {/* Left Section */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          Users
-        </h1>
-
-        <div className="mt-1 flex items-center gap-2 text-sm text-slate-500">
-          <span>Dashboard</span>
-          <span>/</span>
-          <span className="text-slate-700 font-medium">Users</span>
-        </div>
+        <h1 className="text-3xl font-black text-slate-800">Users</h1>
+        <p className="mt-2 text-sm text-slate-500 font-medium">
+          Manage registered customers, roles, account status, and access permissions.
+        </p>
       </div>
 
       {/* Right Section */}
@@ -27,23 +22,15 @@ export default function UserPageHeader({ onAddUser, onExportExcel }: UserPageHea
         <Button
           onClick={onExportExcel}
           variant="outline"
-          className="h-10 px-4 rounded-xl border-slate-200"
+          className="h-11 rounded-2xl border-slate-200 font-semibold px-5 active:scale-95 transition-all text-slate-600 hover:bg-slate-50"
         >
           <Download className="w-4 h-4 mr-2" />
           Export Excel
         </Button>
 
-        {/* <Button
-          variant="outline"
-          className="h-10 px-4 rounded-xl border-slate-200"
-        >
-          <Upload className="w-4 h-4 mr-2" />
-          Import
-        </Button> */}
-
         <Button
           onClick={onAddUser}
-          className="h-10 px-5 rounded-xl bg-[#5B3DF5] hover:bg-[#4c31df]"
+          className="h-11 rounded-2xl bg-[#005AA9] hover:bg-[#003B73] text-white font-bold text-sm px-6 shadow-md transition-all active:scale-95"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add User

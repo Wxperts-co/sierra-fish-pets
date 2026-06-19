@@ -110,7 +110,11 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           >
             <Link href={`/product/${product.id}`} className="relative block w-full h-full">
               <Image
-                src={imgError ? getFallbackImage() : product.images[0]}
+                src={
+                  imgError || !product.images?.[0]
+                    ? getFallbackImage()
+                    : product.images[0]
+                }
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

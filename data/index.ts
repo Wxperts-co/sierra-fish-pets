@@ -4,7 +4,7 @@ export { default as brands } from "./brands.json";
 export { default as users } from "./users.json";
 export { default as orders } from "./orders.json";
 export { default as blogPosts } from "./blogs.json";
-export { default as events } from "./events.json";
+
 export { default as services } from "./services.json";
 export { default as banners } from "./banners.json";
 export { default as coupons } from "./coupons.json";

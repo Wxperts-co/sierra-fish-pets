@@ -23,10 +23,27 @@ type Props = {
   onEdit: (user: User) => void;
   onDelete: (user: User) => void;
   onToggleStatus?: (user: User) => void;
+  rowCount: number;
+  paginationModel: { page: number; pageSize: number };
+  onPaginationModelChange: (model: { page: number; pageSize: number }) => void;
 };
 
-export default function UserDataGrid({ users, loading = false, onView, onEdit, onDelete, onToggleStatus }: Props) {
-  const rows = users.map((u, index) => ({ ...u, id: u._id, serial: index + 1 }));
+export default function UserDataGrid({
+  users,
+  loading = false,
+  onView,
+  onEdit,
+  onDelete,
+  onToggleStatus,
+  rowCount,
+  paginationModel,
+  onPaginationModelChange,
+}: Props) {
+  const rows = users.map((u, index) => ({
+    ...u,
+    id: u._id,
+    serial: paginationModel.page * paginationModel.pageSize + index + 1,
+  }));
 
   const columns: GridColDef[] = [
     {
@@ -72,9 +89,8 @@ export default function UserDataGrid({ users, loading = false, onView, onEdit, o
       field: "createdAt",
       headerName: "Joined",
       flex: 0.6,
-      valueGetter: (params: GridRenderCellParams<User>) => {
-        const row = (params.row ?? {}) as Partial<User>;
-        const created = row.createdAt ?? params.value ?? "";
+      valueGetter: (value: any, row: User) => {
+        const created = value ?? row?.createdAt ?? "";
         try {
           return created ? new Date(created).toLocaleDateString() : "";
         } catch {
@@ -110,8 +126,12 @@ export default function UserDataGrid({ users, loading = false, onView, onEdit, o
         <DataGrid
           rows={rows}
           columns={columns}
+          pagination
+          paginationMode="server"
+          rowCount={rowCount}
+          paginationModel={paginationModel}
+          onPaginationModelChange={onPaginationModelChange}
           pageSizeOptions={[10, 25, 50]}
-          paginationModel={{ pageSize: 10, page: 0 }}
           disableRowSelectionOnClick
           loading={loading}
           autoHeight

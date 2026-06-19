@@ -104,7 +104,7 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
             [
               { id: "description", label: "Description" },
               { id: "specifications", label: "Specifications" },
-              { id: "faq", label: "FAQ" },
+            
               { id: "shipping", label: "Shipping & Returns" },
             ] as const
           ).map((tab) => {
@@ -233,19 +233,7 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
             </div>
           )}
 
-          {activeTab === "faq" && (
-            <div className="space-y-6">
-              {faqData.map((item: any, i: number) => (
-                <div key={i} className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
-                  <h5 className="font-bold text-slate-800 text-sm mb-2">Q: {item.question}</h5>
-                  <p className="text-slate-600 text-xs leading-relaxed font-medium">
-                    A: {item.answer}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
+       
           {activeTab === "shipping" && (
             <div className="space-y-6 text-sm text-slate-600 leading-relaxed">
               <h5 className="font-bold text-slate-800 text-sm">Delivery Policy</h5>
@@ -380,7 +368,7 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
                 />
                 <div className="w-24 h-24 relative bg-slate-50 rounded-xl overflow-hidden border border-slate-100/60 p-2">
                   <Image
-                    src={product.images[0]}
+                    src={product.images?.[0] || "/images/placeholder.png"}
                     alt={product.name}
                     fill
                     className="object-contain"
@@ -429,7 +417,7 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
                     />
                     <div className="w-24 h-24 relative bg-slate-50 rounded-xl overflow-hidden border border-slate-100/60 p-2">
                       <Image
-                        src={bundleItems[1].images[0]}
+                        src={bundleItems[1].images?.[0] || "/images/placeholder.png"}
                         alt={bundleItems[1].name}
                         fill
                         className="object-contain"

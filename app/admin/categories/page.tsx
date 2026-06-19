@@ -90,11 +90,11 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Categories</h1>
-          <p className="mt-2 text-sm text-slate-500">
+          <h1 className="text-3xl font-black text-slate-800">Categories</h1>
+          <p className="mt-2 text-sm text-slate-500 font-medium">
             Manage catalog categories, metadata, and subcategory structure.
           </p>
         </div>
@@ -104,17 +104,15 @@ export default function AdminCategoriesPage() {
             type="button"
             variant="outline"
             onClick={() => exportCategoriesToExcel(categories)}
-            className="h-10 px-4 rounded-xl border-slate-200"
+            className="h-11 rounded-2xl border-slate-200 font-semibold px-5 active:scale-95 transition-all text-slate-600 hover:bg-slate-50"
           >
-            <Plus className="mr-2 h-4 w-4" />
             Export Excel
           </Button>
 
           <Button
             type="button"
-            variant="outline"
             onClick={() => router.push("/admin/categories/add")}
-            className="h-10 rounded-xl"
+            className="h-11 rounded-2xl bg-[#005AA9] hover:bg-[#003B73] text-white font-bold text-sm px-6 shadow-md transition-all active:scale-95"
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Category

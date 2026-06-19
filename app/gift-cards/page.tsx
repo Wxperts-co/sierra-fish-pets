@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X, CheckCircle2, ChevronRight, Gift, ShoppingBag, Minus, Plus } from "lucide-react";
-import giftCardsData from "@/data/gift-cards.json";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface GiftCardItem {
@@ -46,9 +45,9 @@ const staggerContainer: Variants = {
   },
 };
 
-const giftCards = giftCardsData as GiftCardItem[];
-
 export default function GiftCardsPage() {
+  const [giftCards, setGiftCards] = useState<GiftCardItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCard, setActiveCard] = useState<GiftCardItem | null>(null);
   const [buyCard, setBuyCard] = useState<GiftCardItem | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<string>("");
@@ -69,6 +68,25 @@ export default function GiftCardsPage() {
     setAddedToCart(false);
     setCustomAmount("");
   };
+
+  useEffect(() => {
+    const fetchGiftCards = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/gift-cards");
+        const data = await response.json();
+        if (data.success && Array.isArray(data.giftCards)) {
+          setGiftCards(data.giftCards);
+        }
+      } catch (error) {
+        console.error("Failed to load gift cards:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGiftCards();
+  }, []);
 
   const closeBuyModal = () => {
     setBuyCard(null);
@@ -156,8 +174,16 @@ export default function GiftCardsPage() {
           </p>
         </div>
 
-        <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {giftCards.map((card) => (
+        {loading ? (
+          <div className="grid place-items-center py-20">
+            <div className="inline-flex items-center gap-3 rounded-3xl bg-slate-100 px-6 py-4 text-slate-600 shadow-sm">
+              <div className="h-3 w-3 rounded-full animate-pulse bg-[#005AA9]" />
+              Loading gift cards...
+            </div>
+          </div>
+        ) : (
+          <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {giftCards.map((card) => (
             <motion.div
               key={card.id}
               variants={fadeInUp}
@@ -202,6 +228,7 @@ export default function GiftCardsPage() {
             </motion.div>
           ))}
         </motion.div>
+      )}
       </section>
 
       {/* ─── DETAILS OVERLAY MODAL ─── */}

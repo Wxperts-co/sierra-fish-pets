@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import BrandGrid from "@/components/brands/BrandGrid";
 import BrandHero from "@/components/brands/BrandsHero";
 import BrandCTA from "@/components/brands/BrandCTA";
-import brands from "@/data/brands.json";
+import { connectDB } from "@/lib/mongodb";
+import BrandModel from "@/models/Brand";
+import defaultBrands from "@/data/brands.json";
 
 export const metadata = {
   title: "Brands | Sierra Fish & Pets",
@@ -23,9 +25,25 @@ interface BrandsPageProps {
   searchParams: Promise<{ category?: string }>;
 }
 
+async function getBrands() {
+  try {
+    await connectDB();
+    let brands = await BrandModel.find().sort({ name: 1 }).lean();
+    if (brands.length === 0) {
+      await BrandModel.insertMany(defaultBrands);
+      brands = await BrandModel.find().sort({ name: 1 }).lean();
+    }
+    return JSON.parse(JSON.stringify(brands));
+  } catch {
+    return defaultBrands;
+  }
+}
+
 export default async function BrandsPage({ searchParams }: BrandsPageProps) {
   const { category } = await searchParams;
   const activeCategory = category ?? "all";
+
+  const brands = await getBrands();
 
   const breadcrumbs: { label: string; href?: string }[] = [
     { label: "Home", href: "/" },

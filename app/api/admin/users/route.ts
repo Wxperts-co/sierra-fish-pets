@@ -11,22 +11,70 @@ const addUserSchema = z.object({
   role: z.enum(["user", "admin"]),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const users = await User.find({
-      deletedAt: null,
-    })
-      .select("-password")
-      .sort({ createdAt: -1 })
-      .lean();
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page");
+    const limit = searchParams.get("limit");
+    const search = searchParams.get("search");
+    const role = searchParams.get("role");
+    const status = searchParams.get("status");
+    const isEmailVerified = searchParams.get("isEmailVerified");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filter: Record<string, any> = { deletedAt: null };
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (role && role !== "all") {
+      filter.role = role;
+    }
+
+    if (status && status !== "all") {
+      filter.status = status;
+    }
+
+    if (isEmailVerified && isEmailVerified !== "all") {
+      filter.isEmailVerified = isEmailVerified === "verified";
+    }
+
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const [users, totalCount, total, active, admins, banned] = await Promise.all([
+      User.find(filter)
+        .select("-password")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+      User.countDocuments(filter),
+      User.countDocuments({ deletedAt: null }),
+      User.countDocuments({ deletedAt: null, status: "active" }),
+      User.countDocuments({ deletedAt: null, role: "admin" }),
+      User.countDocuments({ deletedAt: null, status: { $in: ["inactive", "banned"] } }),
+    ]);
 
     return NextResponse.json(
       {
         success: true,
-        count: users.length,
+        count: totalCount,
         users,
+        stats: {
+          total,
+          active,
+          admins,
+          banned,
+        },
       },
       { status: 200 }
     );

@@ -68,11 +68,11 @@ export default function FeaturedProducts() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [allProducts.length]);
 
   // Fetch all products from DB via API
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/products?latestByCategory=true")
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setAllProducts(data.products as Product[]);

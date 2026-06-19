@@ -31,17 +31,64 @@ const productSchema = z.object({
   createdAt: z.string().min(1, "Created date is required"),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const products = await Product.find({}).sort({ createdAt: -1 }).lean();
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page");
+    const limit = searchParams.get("limit");
+    const search = searchParams.get("search");
+    const stockStatus = searchParams.get("stockStatus");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filter: Record<string, any> = {};
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { sku: { $regex: search, $options: "i" } },
+        { brand: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (stockStatus && stockStatus !== "all") {
+      filter.stockStatus = stockStatus;
+    }
+
+    const pageNum = page ? parseInt(page, 10) : null;
+    const limitNum = limit ? parseInt(limit, 10) : null;
+    const isPaginated = pageNum && limitNum && !isNaN(pageNum) && !isNaN(limitNum);
+
+    let query = Product.find(filter).sort({ createdAt: -1 });
+
+    if (isPaginated) {
+      const skip = (pageNum! - 1) * limitNum!;
+      query = query.skip(skip).limit(limitNum!);
+    } else if (limitNum && !isNaN(limitNum)) {
+      query = query.limit(limitNum);
+    }
+
+    const [products, totalCount, total, inStock, lowStock, outOfStock] = await Promise.all([
+      query.lean(),
+      Product.countDocuments(filter),
+      Product.countDocuments({}),
+      Product.countDocuments({ stockStatus: "in_stock" }),
+      Product.countDocuments({ stockStatus: "low_stock" }),
+      Product.countDocuments({ stockStatus: "out_of_stock" }),
+    ]);
 
     return NextResponse.json(
       {
         success: true,
-        count: products.length,
+        count: totalCount,
         products,
+        stats: {
+          total,
+          inStock,
+          lowStock,
+          outOfStock,
+        },
       },
       { status: 200 }
     );

@@ -1,20 +1,17 @@
 "use client";
 
-import { Users, UserCheck, ShieldAlert,CalendarDays  } from "lucide-react";
-
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  role: "user" | "admin";
-  status: "active" | "inactive" | "banned";
-  isEmailVerified: boolean;
-  createdAt: string;
-};
+import { Users, UserCheck, ShieldAlert, ShieldCheck } from "lucide-react";
 
 type UserStatsProps = {
-  users?: User[];
+  users?: {
+    _id: string;
+    name: string;
+    email: string;
+    role: "user" | "admin";
+    status: "active" | "inactive" | "banned";
+    isEmailVerified: boolean;
+    createdAt: string;
+  }[];
   stats?: {
     total: number;
     active: number;
@@ -25,7 +22,6 @@ type UserStatsProps = {
 };
 
 export default function UserStats({ users, stats, loading = false }: UserStatsProps) {
-  // Compute stats if users array is provided
   const computedStats = {
     total: stats?.total ?? 0,
     active: stats?.active ?? 0,
@@ -45,79 +41,53 @@ export default function UserStats({ users, stats, loading = false }: UserStatsPr
       label: "Total Users",
       value: computedStats.total,
       icon: Users,
-      color: "from-[#003B73] to-[#005EA8]",
-      bgGlow: "bg-blue-500/10",
-      textColor: "text-[#003B73]",
+      iconBg: "bg-[#eef6ff]",
+      iconColor: "text-[#005AA9]",
+      valueColor: "text-slate-800",
     },
     {
       label: "Active Accounts",
       value: computedStats.active,
       icon: UserCheck,
-      color: "from-emerald-600 to-teal-500",
-      bgGlow: "bg-emerald-500/10",
-      textColor: "text-emerald-600",
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+      valueColor: "text-emerald-600",
     },
     {
-      label: "Upcoming Events",
+      label: "Admin Users",
       value: computedStats.admins,
-      icon: CalendarDays ,
-      color: "from-purple-600 to-indigo-500",
-      bgGlow: "bg-purple-500/10",
-      textColor: "text-purple-600",
+      icon: ShieldCheck,
+      iconBg: "bg-purple-50",
+      iconColor: "text-purple-600",
+      valueColor: "text-purple-600",
     },
     {
       label: "Banned / Inactive",
       value: computedStats.banned,
       icon: ShieldAlert,
-      color: "from-rose-600 to-red-500",
-      bgGlow: "bg-rose-500/10",
-      textColor: "text-rose-600",
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-600",
+      valueColor: "text-rose-600",
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className="animate-pulse bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between"
-          >
-            <div className="space-y-3 flex-1">
-              <div className="h-4 bg-slate-200 rounded w-2/3"></div>
-              <div className="h-8 bg-slate-200 rounded w-1/3"></div>
-            </div>
-            <div className="h-12 w-12 rounded-xl bg-slate-200"></div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {cards.map((card, i) => {
         const Icon = card.icon;
-        const valueToRender = card.label === "Total Users" ? (users?.length ?? card.value) : card.value;
         return (
           <div
             key={i}
-            className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5"
+            className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between"
           >
-            {/* Background Glow */}
-            <div className={`absolute -right-6 -bottom-6 w-24 h-24 rounded-full ${card.bgGlow} blur-xl group-hover:scale-150 transition-transform duration-500`} />
-
-            <div className="flex items-center justify-between relative z-10">
-              <div className="space-y-1.5">
-                <span className="text-sm font-medium text-slate-500">{card.label}</span>
-                <p className="text-3xl font-extrabold text-slate-800 leading-none">
-                  {valueToRender.toLocaleString()}
-                </p>
-              </div>
-
-              <div className={`p-3.5 rounded-xl bg-gradient-to-br ${card.color} text-white shadow-sm shadow-slate-900/10`}>
-                <Icon className="h-5.5 w-5.5" />
-              </div>
+            <div>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{card.label}</p>
+              <h3 className={`text-2xl font-black mt-2 ${card.valueColor}`}>
+                {loading ? "..." : card.value.toLocaleString()}
+              </h3>
+            </div>
+            <div className={`p-3 ${card.iconBg} rounded-xl ${card.iconColor}`}>
+              <Icon className="w-6 h-6" />
             </div>
           </div>
         );

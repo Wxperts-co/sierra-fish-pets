@@ -101,8 +101,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
         <Link href={`/product/${product.id}`} className="block w-full h-full relative overflow-hidden">
           <motion.div
             initial={{ x: 120, opacity: 0, scale: 0.95 }}
-            whileInView={{ x: 0, opacity: 1, scale: 1 }}
-            viewport={{ once: false, amount: 0.1 }}
+            animate={{ x: 0, opacity: 1, scale: 1 }}
             transition={{
               type: "spring",
               stiffness: 60,
@@ -112,7 +111,11 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
             className="w-full h-full relative"
           >
             <Image
-              src={imgError ? getFallbackImage() : product.images[0]}
+              src={
+                imgError || !product.images?.[0]
+                  ? getFallbackImage()
+                  : product.images[0]
+              }
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, 25vw"
@@ -172,23 +175,27 @@ export default function BestSellers() {
 
   // Fetch best sellers from DB via API
   useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          let sellers = (data.products as Product[]).filter(
-            (p) => p.isBestSeller
-          );
-          // Fallback: If no products are flagged as isBestSeller, use products with the highest review count as a proxy
-          if (sellers.length === 0) {
-            sellers = [...(data.products as Product[])]
-              .sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0))
-              .slice(0, 10);
-          }
-          setBestSellers(sellers);
+    const loadBestSellers = async () => {
+      try {
+        // 1. Try fetching products with isBestSeller flag
+        const res = await fetch("/api/products?isBestSeller=true&limit=10");
+        const data = await res.json();
+        if (data.success && data.products && data.products.length > 0) {
+          setBestSellers(data.products);
+          return;
         }
-      })
-      .catch((err) => console.error("BestSellers fetch error:", err));
+
+        // 2. Fallback: If no products are flagged as isBestSeller, fetch products sorted by review count
+        const fallbackRes = await fetch("/api/products?sort=best-selling&limit=10");
+        const fallbackData = await fallbackRes.json();
+        if (fallbackData.success) {
+          setBestSellers(fallbackData.products);
+        }
+      } catch (err) {
+        console.error("BestSellers fetch error:", err);
+      }
+    };
+    loadBestSellers();
   }, []);
 
   const scrollPrev = useCallback(() => {

@@ -20,12 +20,11 @@ export default function HeroProductCarousel() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/products?isFeatured=true&limit=5")
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.products)) {
-          const featured = data.products.filter((p: any) => p.isFeatured).slice(0, 5);
-          setProducts(featured);
+          setProducts(data.products);
         }
       })
       .catch((err) => console.error("HeroProductCarousel fetch error:", err));
@@ -50,7 +49,7 @@ export default function HeroProductCarousel() {
               <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-white/70 backdrop-blur-xl shadow-xl">
                 <div className="relative h-[220px] w-full">
                   <Image
-                    src={product.images[0]}
+                    src={product.images?.[0] || "/images/placeholder.png"}
                     alt={product.name}
                     fill
                     className="object-contain p-4"

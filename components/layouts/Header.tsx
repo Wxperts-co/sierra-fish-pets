@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import categories from "@/data/categories.json";
 import navbarData from "@/data/navbar.json";
 import { openLoginModal } from "@/store/slices/authModalSlice";
+import { CartDrawer } from "../cart/cart-drawer";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -557,7 +558,7 @@ export default function Header() {
               </Link> */}
 
               {/* Cart */}
-              <Link
+              {/* <Link
                 href="/cart"
                 className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
                 aria-label="Cart"
@@ -575,7 +576,9 @@ export default function Header() {
                     {cartCount > 9 ? "9+" : cartCount}
                   </span>
                 )}
-              </Link>
+              </Link> */}
+
+              <CartDrawer />
 
               {/* Account */}
               {shouldShowAccount ? (

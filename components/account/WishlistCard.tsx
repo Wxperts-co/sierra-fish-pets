@@ -32,7 +32,7 @@ export default function WishlistCard({
         className="relative h-28 w-28 bg-slate-50 rounded-xl overflow-hidden shrink-0 border border-slate-100 block"
       >
         <Image
-          src={product.images[0]}
+          src={product.images?.[0] || "/images/placeholder.png"}
           alt={product.name}
           fill
           sizes="112px"

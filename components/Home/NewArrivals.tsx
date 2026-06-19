@@ -56,31 +56,31 @@ export default function NewArrivals() {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [newArrivals.length]);
 
   // Fetch new arrival products from DB via API
   useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          let arrivals = (data.products as Product[]).filter(
-            (p) => p.isNewArrival
-          );
-          // Fallback: If no products are flagged as isNewArrival, use the most recently created products
-          if (arrivals.length === 0) {
-            arrivals = [...(data.products as Product[])]
-              .sort(
-                (a, b) =>
-                  new Date(b.createdAt || 0).getTime() -
-                  new Date(a.createdAt || 0).getTime()
-              )
-              .slice(0, 12);
-          }
-          setNewArrivals(arrivals);
+    const loadNewArrivals = async () => {
+      try {
+        // 1. Try fetching products with isNewArrival flag
+        const res = await fetch("/api/products?isNewArrival=true&limit=12");
+        const data = await res.json();
+        if (data.success && data.products && data.products.length > 0) {
+          setNewArrivals(data.products);
+          return;
         }
-      })
-      .catch((err) => console.error("NewArrivals fetch error:", err));
+
+        // 2. Fallback: If no products are flagged as isNewArrival, fetch products sorted by newest creation date
+        const fallbackRes = await fetch("/api/products?sort=newest&limit=12");
+        const fallbackData = await fallbackRes.json();
+        if (fallbackData.success) {
+          setNewArrivals(fallbackData.products);
+        }
+      } catch (err) {
+        console.error("NewArrivals fetch error:", err);
+      }
+    };
+    loadNewArrivals();
   }, []);
 
   if (!newArrivals.length) {

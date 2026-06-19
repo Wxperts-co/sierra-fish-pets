@@ -100,11 +100,13 @@ const productSchema = new mongoose.Schema<IProduct>(
       type: String,
       required: [true, "Category slug is required"],
       trim: true,
+      index: true,
     },
     subcategorySlug: {
       type: String,
       required: [true, "Subcategory slug is required"],
       trim: true,
+      index: true,
     },
     brand: {
       type: String,
@@ -163,14 +165,17 @@ const productSchema = new mongoose.Schema<IProduct>(
     isNewArrival: {
       type: Boolean,
       default: false,
+      index: true,
     },
     isFeatured: {
       type: Boolean,
       default: false,
+      index: true,
     },
     isBestSeller: {
       type: Boolean,
       default: false,
+      index: true,
     },
     dimensions: {
       type: String,
@@ -179,6 +184,7 @@ const productSchema = new mongoose.Schema<IProduct>(
     createdAt: {
       type: String,
       required: [true, "Created date is required"],
+      index: true,
     },
     retailerCsvData: {
       type: new mongoose.Schema(retailerCsvDataSchemaDefinition, { _id: false }),

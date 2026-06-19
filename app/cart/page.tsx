@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { removeFromCart, updateQuantity } from "@/store/slices/cartSlice";
+
 import {
   Trash2,
   Plus,
@@ -14,258 +16,294 @@ import {
   Lock,
   Tag,
 } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartPage() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
+
   const { items, subtotal, discount, shipping, total } = useAppSelector(
     (state) => state.cart
   );
 
   const [couponCode, setCouponCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  const handleQuantityChange = (productId: string, currentQty: number, delta: number) => {
+  const cartCount = useMemo(
+    () => items.reduce((sum, i) => sum + i.quantity, 0),
+    [items]
+  );
+
+  const handleQuantityChange = (
+    productId: string,
+    currentQty: number,
+    delta: number
+  ) => {
     const newQty = currentQty + delta;
-    if (newQty >= 1) {
-      dispatch(updateQuantity({ productId, quantity: newQty }));
-    }
+
+    if (newQty < 1) return;
+
+    dispatch(
+      updateQuantity({
+        productId,
+        quantity: newQty,
+      })
+    );
   };
 
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();
-    if (couponCode.trim()) {
-      setPromoApplied(true);
-    }
+    if (!couponCode.trim()) return;
+
+    setPromoApplied(true);
   };
 
-  const formatPrice = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
+  const handleCheckout = () => {
+    if (items.length === 0) return;
+
+    setIsCheckingOut(true);
+
+    setTimeout(() => {
+      router.push("/checkout");
+    }, 300);
+  };
+
+  const formatPrice = (amount: number) =>
+    new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
     }).format(amount);
-  };
 
   return (
     <div className="min-h-screen bg-slate-50/50 md:py-20 py-8">
       <div className="container mx-auto px-4 max-w-6xl">
+
         {/* Breadcrumb */}
-        <nav
-          aria-label="breadcrumb"
-          className="flex flex-wrap items-center gap-0.5 text-sm font-medium text-slate-500 mb-8"
-        >
-          <span className="flex items-center gap-0.5">
-            <Link
-              href="/"
-              className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
-            >
-              Home
-            </Link>
-            <span className="px-0.5 text-slate-400"> › </span>
-          </span>
-          <span className="flex items-center gap-0.5">
-            <span className="font-bold text-[#0d1b2a]">Shopping Cart</span>
-          </span>
+        <nav className="flex items-center gap-1 text-sm text-slate-500 mb-8">
+          <Link href="/" className="hover:text-teal-600">
+            Home
+          </Link>
+          <span>›</span>
+          <span className="font-semibold text-slate-800">Cart</span>
         </nav>
 
         <h1 className="text-3xl font-black text-[#002244] mb-10">
-          Shopping Cart
+          Shopping Cart ({cartCount})
         </h1>
 
         <AnimatePresence mode="wait">
+
+          {/* EMPTY STATE */}
           {items.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white rounded-3xl p-12 border border-slate-100 shadow-xl shadow-slate-100/30 flex flex-col items-center text-center max-w-xl mx-auto"
+              className="bg-white rounded-3xl p-12 border shadow-xl flex flex-col items-center text-center max-w-xl mx-auto"
             >
-              <div className="p-5 bg-sky-50 rounded-2xl mb-6">
-                <ShoppingBag className="w-12 h-12 text-[#005AA9]" />
-              </div>
-              <h2 className="text-2xl font-bold text-[#002244] mb-3">
+              <ShoppingBag className="w-12 h-12 text-slate-400 mb-4" />
+
+              <h2 className="text-xl font-bold text-[#002244]">
                 Your cart is empty
               </h2>
-              <p className="text-slate-500 text-base leading-relaxed mb-8">
-                Looks like you haven&apos;t added anything to your cart yet. Explore our high-quality pet supplies to get started!
+
+              <p className="text-slate-500 mt-2">
+                Add products to continue shopping
               </p>
+
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 bg-[#005AA9] hover:bg-[#003d73] text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all hover:scale-[1.03] shadow-md shadow-[#005AA9]/10"
+                className="mt-6 inline-flex items-center gap-2 bg-[#005AA9] text-white px-6 py-3 rounded-full font-semibold"
               >
-                Start Shopping
-                <ArrowRight className="w-4 h-4" />
+                Start Shopping <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
+
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8"
             >
-              {/* Left: Cart Items */}
+
+              {/* LEFT: ITEMS */}
               <div className="lg:col-span-8 space-y-4">
+
                 {items.map((item) => (
                   <motion.div
                     layout
                     key={item.product.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 bg-white rounded-2xl border border-slate-100 shadow-lg shadow-slate-100/20 gap-4"
+                    className="flex flex-col sm:flex-row justify-between gap-4 bg-white p-5 rounded-2xl border shadow-sm"
                   >
-                    {/* Product Image & Title */}
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="relative w-20 h-20 bg-slate-50 rounded-xl overflow-hidden border border-slate-100 shrink-0">
+                    {/* PRODUCT */}
+                    <div className="flex gap-4 flex-1">
+                      <div className="relative w-20 h-20 bg-slate-50 rounded-xl overflow-hidden">
                         <Image
-                          src={item.product.images[0] || "/images/placeholder.png"}
+                          src={
+                            item.product.images[0] ||
+                            "/images/placeholder.png"
+                          }
                           alt={item.product.name}
                           fill
                           className="object-contain p-2"
                         />
                       </div>
+
                       <div>
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <p className="text-xs text-slate-400 uppercase">
                           {item.product.brand}
-                        </span>
-                        <h3 className="font-bold text-[#002244] text-base hover:text-[#005AA9] transition-colors line-clamp-2">
-                          <Link href={`/product/${item.product.id}`}>
-                            {item.product.name}
-                          </Link>
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1">
+                        </p>
+
+                        <Link
+                          href={`/product/${item.product.id}`}
+                          className="font-bold text-[#002244] hover:text-[#005AA9]"
+                        >
+                          {item.product.name}
+                        </Link>
+
+                        <p className="text-xs text-slate-400">
                           SKU: {item.product.sku}
                         </p>
                       </div>
                     </div>
 
-                    {/* Quantity Controls & Price */}
-                    <div className="flex items-center justify-between w-full sm:w-auto gap-8 shrink-0">
-                      {/* Qty Selector */}
-                      <div className="flex items-center border border-slate-200 rounded-full p-1 bg-slate-50/50">
+                    {/* CONTROLS */}
+                    <div className="flex items-center gap-6">
+
+                      {/* Qty */}
+                      <div className="flex items-center border rounded-full p-1 bg-slate-50">
                         <button
-                          onClick={() => handleQuantityChange(item.product.id, item.quantity, -1)}
-                          className="p-1.5 hover:bg-slate-200 rounded-full transition-colors text-slate-600 cursor-pointer"
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.product.id,
+                              item.quantity,
+                              -1
+                            )
+                          }
                         >
-                          <Minus className="w-3.5 h-3.5" />
+                          <Minus className="w-4 h-4" />
                         </button>
-                        <span className="px-3.5 text-sm font-bold text-[#002244] select-none">
+
+                        <span className="px-3 font-bold">
                           {item.quantity}
                         </span>
+
                         <button
-                          onClick={() => handleQuantityChange(item.product.id, item.quantity, 1)}
-                          className="p-1.5 hover:bg-slate-200 rounded-full transition-colors text-slate-600 cursor-pointer"
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.product.id,
+                              item.quantity,
+                              1
+                            )
+                          }
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Plus className="w-4 h-4" />
                         </button>
                       </div>
 
-                      {/* Item Total Price */}
+                      {/* PRICE */}
                       <div className="text-right">
-                        <p className="font-extrabold text-[#002244] text-base">
-                          {formatPrice(item.product.price * item.quantity)}
+                        <p className="font-bold text-[#002244]">
+                          {formatPrice(
+                            item.product.price * item.quantity
+                          )}
                         </p>
-                        {item.quantity > 1 && (
-                          <p className="text-slate-400 text-xs mt-0.5">
-                            {formatPrice(item.product.price)} each
-                          </p>
-                        )}
                       </div>
 
-                      {/* Remove Button */}
+                      {/* REMOVE */}
                       <button
-                        onClick={() => dispatch(removeFromCart(item.product.id))}
-                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all cursor-pointer shrink-0"
-                        title="Remove Item"
+                        onClick={() =>
+                          dispatch(removeFromCart(item.product.id))
+                        }
+                        className="text-slate-400 hover:text-red-500"
                       >
-                        <Trash2 className="w-4.5 h-4.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
+
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Right: Summary */}
-              <div className="lg:col-span-4 space-y-6">
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/30 p-6">
-                  <h2 className="text-lg font-bold text-[#002244] border-b border-slate-100 pb-4 mb-5">
+              {/* RIGHT: SUMMARY */}
+              <div className="lg:col-span-4">
+
+                <div className="bg-white p-6 rounded-3xl border shadow-lg">
+
+                  <h2 className="font-bold text-lg mb-5">
                     Order Summary
                   </h2>
 
-                  <div className="space-y-4 text-sm font-medium mb-6">
-                    <div className="flex justify-between text-slate-500">
+                  <div className="space-y-3 text-sm">
+
+                    <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span className="text-[#002244] font-bold">{formatPrice(subtotal)}</span>
+                      <span>{formatPrice(subtotal)}</span>
                     </div>
+
                     {discount > 0 && (
-                      <div className="flex justify-between text-emerald-600">
+                      <div className="flex justify-between text-green-600">
                         <span>Discount</span>
-                        <span className="font-bold">-{formatPrice(discount)}</span>
+                        <span>-{formatPrice(discount)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between text-slate-500">
+
+                    <div className="flex justify-between">
                       <span>Shipping</span>
-                      <span className="text-emerald-600 font-bold">
-                        {shipping === 0 ? "Free" : formatPrice(shipping)}
+                      <span>
+                        {shipping === 0
+                          ? "Free"
+                          : formatPrice(shipping)}
                       </span>
                     </div>
+
                   </div>
 
-                  {/* Coupon Form */}
-                  <form onSubmit={handleApplyCoupon} className="mb-6 flex gap-2">
-                    <div className="relative flex-1">
-                      <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="Promo code"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
-                        disabled={promoApplied}
-                        className="w-full pl-10 pr-3 py-2.5 bg-slate-50 text-slate-800 placeholder:text-slate-400 text-sm rounded-xl border border-slate-100 focus:border-sky-300 outline-none transition-all font-medium disabled:opacity-60"
-                      />
-                    </div>
-                    <button
-                      type="submit"
+                  {/* COUPON */}
+                  <form
+                    onSubmit={handleApplyCoupon}
+                    className="flex gap-2 mt-5"
+                  >
+                    <input
+                      value={couponCode}
+                      onChange={(e) =>
+                        setCouponCode(e.target.value)
+                      }
+                      placeholder="Promo code"
                       disabled={promoApplied}
-                      className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all hover:bg-slate-800 disabled:opacity-50 cursor-pointer"
+                      className="flex-1 border rounded-xl px-3 py-2 text-sm"
+                    />
+
+                    <button
+                      disabled={promoApplied}
+                      className="px-4 bg-black text-white rounded-xl text-sm"
                     >
                       {promoApplied ? "Applied" : "Apply"}
                     </button>
                   </form>
 
-                  {/* Total */}
-                  <div className="border-t border-slate-100 pt-5 mb-8 flex justify-between items-end">
-                    <div>
-                      <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">
-                        Total Amount
-                      </p>
-                      <p className="text-2xl font-black text-[#002244] leading-none">
-                        {formatPrice(total)}
-                      </p>
-                    </div>
+                  {/* TOTAL */}
+                  <div className="flex justify-between mt-6 pt-4 border-t font-bold text-lg">
+                    <span>Total</span>
+                    <span>{formatPrice(total)}</span>
                   </div>
 
-                  {/* Checkout Button */}
+                  {/* CHECKOUT */}
                   <button
-                    onClick={() => alert("Checkout functionality coming soon!")}
-                    className="w-full flex items-center justify-center gap-2 bg-[#005AA9] hover:bg-[#003d73] text-white py-4 rounded-full font-bold text-sm transition-all hover:scale-[1.02] shadow-md shadow-[#005AA9]/10 cursor-pointer"
+                    onClick={handleCheckout}
+                    disabled={isCheckingOut}
+                    className="mt-6 w-full bg-[#005AA9] text-white py-3 rounded-full font-bold flex items-center justify-center gap-2"
                   >
                     <Lock className="w-4 h-4" />
-                    Secure Checkout
+                    {isCheckingOut
+                      ? "Redirecting..."
+                      : "Proceed to Checkout"}
                   </button>
+
                 </div>
 
-                {/* Additional Info */}
-                <div className="bg-slate-50 rounded-2xl border border-slate-100 p-5 text-center">
-                  <p className="text-xs font-bold text-slate-500 flex items-center justify-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-emerald-600" />
-                    100% Safe & Secure Payments
-                  </p>
-                  <p className="text-slate-400 text-[10px] leading-relaxed mt-2">
-                    We accept Credit Cards, PayPal, and Debit Cards. All transaction information is protected by industry-standard encryption.
-                  </p>
-                </div>
               </div>
             </motion.div>
           )}

@@ -1,9 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import brands from "@/data/brands.json";
+import { useState, useEffect } from "react";
+
+interface Brand {
+  id: string;
+  name: string;
+  logo: string;
+}
 
 export default function PopularBrands() {
+  const [brands, setBrands] = useState<Brand[]>([]);
+
+  useEffect(() => {
+    fetch("/api/brands")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.brands)) {
+          setBrands(data.brands);
+        }
+      })
+      .catch((err) => console.error("Failed to load brands:", err));
+  }, []);
+
+  if (brands.length === 0) return null;
+
   return (
     <section className=" bg-background py-12" >
       <div className="container mx-auto px-4">

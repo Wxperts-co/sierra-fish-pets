@@ -35,10 +35,11 @@ export default function UsersPage() {
     status: "all",
     isEmailVerified: "all",
   });
+  const [searchInput, setSearchInput] = useState("");
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+  const [totalCount, setTotalCount] = useState(0);
+  const [stats, setStats] = useState({ total: 0, active: 0, admins: 0, banned: 0 });
 
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -47,15 +48,53 @@ export default function UsersPage() {
     router.push("/admin/users/add");
   };
 
+  // Debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setFilters((prev) => ({ ...prev, search: searchInput }));
+      setPaginationModel((prev) => ({ ...prev, page: 0 }));
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchInput]);
+
+  // Reset page when other filters change
+  const handleFilterChange = (newFilters: Partial<typeof filters>) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  };
+
+  const handleResetFilters = () => {
+    setSearchInput("");
+    setFilters({
+      search: "",
+      role: "all",
+      status: "all",
+      isEmailVerified: "all",
+    });
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
 
-        const { data } = await axios.get("/api/admin/users");
-        console.log(data);
+        const params = new URLSearchParams();
+        params.set("page", String(paginationModel.page + 1));
+        params.set("limit", String(paginationModel.pageSize));
+        if (filters.search) params.set("search", filters.search);
+        if (filters.role !== "all") params.set("role", filters.role);
+        if (filters.status !== "all") params.set("status", filters.status);
+        if (filters.isEmailVerified !== "all") params.set("isEmailVerified", filters.isEmailVerified);
+
+        const { data } = await axios.get(`/api/admin/users?${params.toString()}`);
         if (data.success) {
-          setUsers(data.users);
+          setUsers(data.users || []);
+          setTotalCount(data.count || 0);
+          if (data.stats) {
+            setStats(data.stats);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -65,39 +104,7 @@ export default function UsersPage() {
     };
 
     fetchUsers();
-  }, []);
-
-  const filteredUsers = users.filter((user) => {
-    const searchTerm = filters.search.trim().toLowerCase();
-    const matchesSearch =
-      !searchTerm ||
-      user.name.toLowerCase().includes(searchTerm) ||
-      user.email.toLowerCase().includes(searchTerm) ||
-      user.phone?.toLowerCase().includes(searchTerm);
-
-    const matchesRole = filters.role === "all" || user.role === filters.role;
-    const matchesStatus = filters.status === "all" || user.status === filters.status;
-    const matchesVerification =
-      filters.isEmailVerified === "all" ||
-      (filters.isEmailVerified === "verified" && user.isEmailVerified) ||
-      (filters.isEmailVerified === "unverified" && !user.isEmailVerified);
-
-    return matchesSearch && matchesRole && matchesStatus && matchesVerification;
-  });
-
-  const totalPages = 1;
-  const totalItems = filteredUsers.length;
-  const itemsPerPage = 10;
-
-  const handleSort = (field: string) => {
-    if (sortBy === field) {
-      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortBy(field);
-      setSortOrder("asc");
-    }
-    setCurrentPage(1);
-  };
+  }, [paginationModel.page, paginationModel.pageSize, filters.search, filters.role, filters.status, filters.isEmailVerified]);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -125,11 +132,23 @@ export default function UsersPage() {
       const { data } = await axios.patch(`/api/admin/users/${updatedUser._id}`, updatedUser);
 
       if (data && data.success) {
-        const saved = data.user ?? updatedUser;
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => (user._id === saved._id ? { ...user, ...saved } : user))
-        );
-        setSelectedUser(saved as User);
+        // Re-fetch current page users and stats
+        const params = new URLSearchParams();
+        params.set("page", String(paginationModel.page + 1));
+        params.set("limit", String(paginationModel.pageSize));
+        if (filters.search) params.set("search", filters.search);
+        if (filters.role !== "all") params.set("role", filters.role);
+        if (filters.status !== "all") params.set("status", filters.status);
+        if (filters.isEmailVerified !== "all") params.set("isEmailVerified", filters.isEmailVerified);
+
+        const refreshRes = await axios.get(`/api/admin/users?${params.toString()}`);
+        if (refreshRes.data && refreshRes.data.success) {
+          setUsers(refreshRes.data.users || []);
+          setTotalCount(refreshRes.data.count || 0);
+          if (refreshRes.data.stats) {
+            setStats(refreshRes.data.stats);
+          }
+        }
         setIsEditModalOpen(false);
       } else {
         showErrorToast(data?.message || "Failed to save user");
@@ -146,12 +165,30 @@ export default function UsersPage() {
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (!selectedUser) return;
+  const handleConfirmDelete = async () => {
+    try {
+      // Re-fetch current page users and stats
+      const params = new URLSearchParams();
+      params.set("page", String(paginationModel.page + 1));
+      params.set("limit", String(paginationModel.pageSize));
+      if (filters.search) params.set("search", filters.search);
+      if (filters.role !== "all") params.set("role", filters.role);
+      if (filters.status !== "all") params.set("status", filters.status);
+      if (filters.isEmailVerified !== "all") params.set("isEmailVerified", filters.isEmailVerified);
 
-    setUsers((prevUsers) => prevUsers.filter((user) => user._id !== selectedUser._id));
-    setIsDeleteModalOpen(false);
-    setSelectedUser(null);
+      const refreshRes = await axios.get(`/api/admin/users?${params.toString()}`);
+      if (refreshRes.data && refreshRes.data.success) {
+        setUsers(refreshRes.data.users || []);
+        setTotalCount(refreshRes.data.count || 0);
+        if (refreshRes.data.stats) {
+          setStats(refreshRes.data.stats);
+        }
+      }
+      setIsDeleteModalOpen(false);
+      setSelectedUser(null);
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+    }
   };
 
   const handleToggleStatus = (user: User) => {
@@ -159,22 +196,32 @@ export default function UsersPage() {
     console.log("Toggle status", user);
   };
 
-  const handleExport = () => {
-    const exportUsers: ExportUser[] = filteredUsers.map((u) => ({
-      name: u.name,
-      email: u.email,
-      phone: u.phone ?? "",
-      role: u.role,
-      isEmailVerified: u.isEmailVerified,
-      createdAt: u.createdAt,
-    }));
-
-    if (!exportUsers || exportUsers.length === 0) {
-      showErrorToast("No users available to export");
-      return;
-    }
-
+  const handleExport = async () => {
     try {
+      const params = new URLSearchParams();
+      if (filters.search) params.set("search", filters.search);
+      if (filters.role !== "all") params.set("role", filters.role);
+      if (filters.status !== "all") params.set("status", filters.status);
+      if (filters.isEmailVerified !== "all") params.set("isEmailVerified", filters.isEmailVerified);
+      params.set("limit", "100000"); // Retrieve all matching users for export
+
+      const { data } = await axios.get(`/api/admin/users?${params.toString()}`);
+      const exportUsersData = data.users || [];
+
+      if (!exportUsersData || exportUsersData.length === 0) {
+        showErrorToast("No users available to export");
+        return;
+      }
+
+      const exportUsers: ExportUser[] = exportUsersData.map((u: any) => ({
+        name: u.name,
+        email: u.email,
+        phone: u.phone ?? "",
+        role: u.role,
+        isEmailVerified: u.isEmailVerified,
+        createdAt: u.createdAt,
+      }));
+
       exportUsersToExcel(exportUsers);
     } catch (err) {
       console.error("Failed to export users:", err);
@@ -185,33 +232,30 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <UserPageHeader onAddUser={handleAddUser} onExportExcel={handleExport} />
-      <UserStats users={users} />
+      <UserStats stats={stats} loading={loading} />
 
       <UserFilters
-        filters={filters}
-        onFilterChange={(newFilters) =>
-          setFilters((prev) => ({
-            ...prev,
-            ...newFilters,
-          }))
-        }
-        onReset={() =>
-          setFilters({
-            search: "",
-            role: "all",
-            status: "all",
-            isEmailVerified: "all",
-          })
-        }
+        filters={{ ...filters, search: searchInput }}
+        onFilterChange={(newFilters) => {
+          if (newFilters.search !== undefined) {
+            setSearchInput(newFilters.search);
+          } else {
+            handleFilterChange(newFilters);
+          }
+        }}
+        onReset={handleResetFilters}
       />
 
       <UserDataGrid
-        users={filteredUsers}
+        users={users}
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onToggleStatus={handleToggleStatus}
         loading={loading}
+        rowCount={totalCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
       />
 
       <UserDetailModal
