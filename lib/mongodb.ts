@@ -35,6 +35,12 @@ export async function connectDB() {
     };
 
     cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongooseInstance) => {
+      // Lazy-load and boot the background scheduler
+      import("@/services/imageScheduler").then(({ initImageScheduler }) => {
+        initImageScheduler();
+      }).catch((err) => {
+        console.error("[MongoDB] Failed to initialize background image scheduler:", err);
+      });
       return mongooseInstance;
     });
   }

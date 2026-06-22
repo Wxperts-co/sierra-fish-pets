@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { Plus, Edit2, Trash2, Calendar, MapPin, Search, X, Check, Star, Clock } from "lucide-react";
+import { Plus, Edit2, Trash2, Calendar, MapPin, Search, X, Check, Star, Clock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
@@ -48,6 +48,8 @@ export default function AdminEventsPage() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [viewingEvent, setViewingEvent] = useState<EventItem | null>(null);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -352,11 +354,21 @@ export default function AdminEventsPage() {
       filterable: false,
       align: "right",
       headerAlign: "right",
-      flex: 0.8,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 py-1.5 h-full">
+            <button
+              onClick={() => {
+                setViewingEvent(row);
+                setIsDetailModalOpen(true);
+              }}
+              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
             <button
               onClick={() => handleOpenEditModal(row)}
               className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
@@ -749,6 +761,108 @@ export default function AdminEventsPage() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Detail View Modal ── */}
+      {isDetailModalOpen && viewingEvent && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          <div onClick={() => setIsDetailModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-[#003B73] px-6 py-4 text-white flex items-center justify-between shrink-0">
+              <h2 className="text-base font-black uppercase tracking-wider flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-sky-300" />
+                <span>Event Details</span>
+              </h2>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Details Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Title</span>
+                <h4 className="text-base font-bold text-slate-800 mt-1">{viewingEvent.title}</h4>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Description</span>
+                <p className="text-sm text-slate-600 mt-1 whitespace-pre-wrap font-medium">{viewingEvent.description || "No description provided."}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Category</span>
+                  <span className="text-sm text-slate-700 font-bold capitalize mt-1 block">{viewingEvent.category}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Featured Status</span>
+                  <span className="text-sm font-bold mt-1 block">
+                    {viewingEvent.featured ? (
+                      <span className="text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full text-xs border border-amber-100 font-extrabold uppercase">Featured</span>
+                    ) : (
+                      <span className="text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-full text-xs border border-slate-100 font-semibold uppercase">Standard</span>
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-2 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Location</span>
+                  <div className="flex items-center gap-1.5 text-sm text-slate-700 font-bold mt-1">
+                    <MapPin className="w-4 h-4 text-slate-400" />
+                    <span>{viewingEvent.location}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Start Date & Time</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">
+                    {new Date(viewingEvent.startDate).toLocaleString([], { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">End Date & Time</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">
+                    {new Date(viewingEvent.endDate).toLocaleString([], { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">CTA Text</span>
+                  <span className="text-sm text-slate-700 font-semibold mt-1 block">{viewingEvent.ctaText || "N/A"}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">CTA Link</span>
+                  <span className="text-sm text-[#005AA9] font-bold mt-1 block truncate">{viewingEvent.ctaLink || "N/A"}</span>
+                </div>
+              </div>
+              <div className="border-t border-slate-100 pt-3">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Target Pet Types</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(viewingEvent.petType || []).map(type => (
+                    <span key={type} className="bg-slate-50 border border-slate-150 text-slate-600 text-xs font-bold px-2.5 py-0.5 rounded-full capitalize">
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Footer */}
+            <div className="flex justify-end gap-3 border-t border-slate-100 p-6 shrink-0 bg-slate-50/50">
+              <Button
+                type="button"
+                onClick={() => setIsDetailModalOpen(false)}
+                className="h-11 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 active:scale-95 transition-all shadow-md"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

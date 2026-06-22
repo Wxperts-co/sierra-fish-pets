@@ -57,15 +57,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
   // Category specific fallback images
   const getFallbackImage = () => {
-    switch (product.categorySlug) {
-      case "cat":
-        return "/images/products/cat1.avif";
-      case "aquatic":
-        return "/images/products/aqua1.avif";
-      case "dog":
-      default:
-        return "/images/products/dog1.avif";
-    }
+    return "/placeholder-product.png";
   };
 
   return (

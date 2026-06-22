@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
 import { setWishlist } from "@/store/slices/wishlistSlice";
 import { openLoginModalWithMessage, openRegisterModalWithMessage } from "@/store/slices/authModalSlice";
+import { showErrorToast } from "@/lib/toast";
 
 function SessionSync() {
   const { status } = useSession();
@@ -51,6 +52,12 @@ function QueryParamAuthListener() {
       router.replace(window.location.pathname);
     } else if (errorParam === "UserAlreadyExists") {
       dispatch(openLoginModalWithMessage("Account already exists. Please login."));
+      router.replace(window.location.pathname);
+    } else if (errorParam === "NotAuthenticated") {
+      showErrorToast("Please log in to access your account.");
+      router.replace(window.location.pathname);
+    } else if (errorParam === "InvalidRole") {
+      showErrorToast("Access denied: you do not have permission to view that page.");
       router.replace(window.location.pathname);
     } else if (successParam === "GoogleAccountCreated") {
       dispatch(openLoginModalWithMessage("Account created successfully. Continue to login."));

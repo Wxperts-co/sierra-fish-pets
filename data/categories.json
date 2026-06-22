@@ -248,7 +248,7 @@
   {
     "id": "cat-003",
     "name": "Fish",
-    "slug": "fish",
+    "slug": "aquatic",
     "image": "/images/categories/aquatic_category.png",
     "subcategories": [
       {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -12,6 +13,7 @@ import { CartDrawerItem } from "./cart-drawer-item";
 import { setLoading } from "@/store/slices/productsSlice";
 
 export function CartDrawer() {
+  const [open, setOpen] = useState(false);
   const router = useRouter();
   const cart = useSelector((state: RootState) => state.cart);
 
@@ -21,18 +23,20 @@ export function CartDrawer() {
   const progress = Math.min((cart.subtotal / freeShippingGoal) * 100, 100);
 
   return (
-    <Sheet>
-      <SheetTrigger>
-        <button className="relative flex h-10 w-10 items-center justify-center rounded-full hover:bg-black/5 transition">
-          <ShoppingBag className="h-5 w-5" />
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        render={
+          <button className="relative flex h-10 w-10 items-center justify-center rounded-full hover:bg-black/5 transition">
+            <ShoppingBag className="h-5 w-5" />
 
-          {cartCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-black text-[10px] text-white px-1">
-              {cartCount > 9 ? "9+" : cartCount}
-            </span>
-          )}
-        </button>
-      </SheetTrigger>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-black text-[10px] text-white px-1">
+                {cartCount > 9 ? "9+" : cartCount}
+              </span>
+            )}
+          </button>
+        }
+      />
 
       <SheetContent className="flex w-full flex-col p-0 sm:max-w-[440px]">
         {/* HEADER */}
@@ -44,7 +48,7 @@ export function CartDrawer() {
         </div>
 
         {/* FREE SHIPPING PROGRESS */}
-        {cart.items.length > 0 && (
+        {/* {cart.items.length > 0 && (
           <div className="px-5 pt-4">
             <div className="rounded-xl bg-gray-50 p-3">
               <p className="text-xs text-gray-600">
@@ -63,7 +67,7 @@ export function CartDrawer() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* ITEMS */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
@@ -75,7 +79,13 @@ export function CartDrawer() {
                 Add items to start your order
               </p>
 
-              <Button className="mt-5" onClick={() => router.push("/shop")}>
+              <Button
+                className="mt-5"
+                onClick={() => {
+                  setOpen(false);
+                  router.push("/shop");
+                }}
+              >
                 Continue Shopping
               </Button>
             </div>
@@ -98,6 +108,7 @@ export function CartDrawer() {
               className="w-full h-11 text-sm font-medium"
               disabled={cart.items.length === 0}
               onClick={() => {
+                setOpen(false);
                 setLoading(true);
                 router.push("/checkout");
               }}
@@ -108,7 +119,10 @@ export function CartDrawer() {
             <Button
               variant="outline"
               className="w-full h-10 text-sm"
-              onClick={() => router.push("/cart")}
+              onClick={() => {
+                setOpen(false);
+                router.push("/cart");
+              }}
             >
               View Cart
             </Button>

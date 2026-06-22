@@ -4,6 +4,7 @@ import UserModel from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { linkGuestOrders } from "@/lib/auth/linking";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -47,6 +48,13 @@ export const authOptions: AuthOptions = {
               isEmailVerified: true,
               role: "user",
             });
+
+            // Link guest orders to Google account
+            try {
+              await linkGuestOrders(email, existingUser._id.toString());
+            } catch (err) {
+              console.error("Failed to link guest orders during google registration:", err);
+            }
 
             // Redirect back showing success to continue to login
             return isAdminRoute ? "/admin?success=GoogleAccountCreated" : "/?success=GoogleAccountCreated";

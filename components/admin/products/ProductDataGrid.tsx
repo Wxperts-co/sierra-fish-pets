@@ -119,9 +119,9 @@ export default function ProductDataGrid({
       flex: 0.8,
       renderCell: (params: GridRenderCellParams<Product>) => (
         <div className="flex items-center justify-end gap-2 w-full pr-2">
-          <button type="button" onClick={() => onView(params.row)} className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition"><Eye className="h-4 w-4" /></button>
-          <button type="button" onClick={() => onEdit(params.row)} className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"><Edit3 className="h-4 w-4" /></button>
-          <button type="button" onClick={() => onDelete(params.row)} className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-500 text-white hover:bg-rose-600 transition"><Trash2 className="h-4 w-4" /></button>
+          <button type="button" onClick={() => onView(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition active:scale-95 cursor-pointer"><Eye className="h-4 w-4" /></button>
+          <button type="button" onClick={() => onEdit(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"><Edit3 className="h-4 w-4" /></button>
+          <button type="button" onClick={() => onDelete(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"><Trash2 className="h-4 w-4" /></button>
         </div>
       ),
     },

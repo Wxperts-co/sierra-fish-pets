@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/models/User";
 import OTPVerificationModel from "@/models/OTPVerification";
 import { connectDB } from "@/lib/mongodb";
+import { linkGuestOrders } from "@/lib/auth/linking";
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,6 +65,13 @@ export async function POST(req: NextRequest) {
     // 4. Update user verification status
     user.isEmailVerified = true;
     await user.save();
+
+    // Link guest orders to verified user account
+    try {
+      await linkGuestOrders(user.email, user._id.toString());
+    } catch (err) {
+      console.error("Failed to link guest orders during verification:", err);
+    }
 
     // 5. Clean up the used OTP record
     await OTPVerificationModel.deleteOne({ _id: verification._id });

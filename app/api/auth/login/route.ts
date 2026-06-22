@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import UserModel from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
+import { linkGuestOrders } from "@/lib/auth/linking";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
 
@@ -65,7 +66,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Generate JWT Token
+    // 5. Link guest orders to user account
+    try {
+      await linkGuestOrders(user.email, user._id.toString());
+    } catch (err) {
+      console.error("Failed to link guest orders during credentials login:", err);
+    }
+
+    // 6. Generate JWT Token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       JWT_SECRET,

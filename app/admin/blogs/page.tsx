@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { Plus, Edit2, Trash2, BookOpen, Search, X, Check, FileText, Sparkles, Clock, Star } from "lucide-react";
+import { Plus, Edit2, Trash2, BookOpen, Search, X, Check, FileText, Sparkles, Clock, Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
@@ -70,6 +70,8 @@ export default function AdminBlogPostsPage() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<AdminBlogPost | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [viewingPost, setViewingPost] = useState<AdminBlogPost | null>(null);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -88,7 +90,7 @@ export default function AdminBlogPostsPage() {
   const [status, setStatus] = useState("draft");
   const [readingTime, setReadingTime] = useState(3);
   const [galleryImagesInput, setGalleryImagesInput] = useState("");
-  
+
   // Specialist Quote
   const [quoteText, setQuoteText] = useState("");
   const [quoteAuthor, setQuoteAuthor] = useState("SIERRA TEAM");
@@ -218,7 +220,7 @@ export default function AdminBlogPostsPage() {
       .split(",")
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
-    
+
     const galleryImages = galleryImagesInput
       .split(",")
       .map((i) => i.trim())
@@ -397,16 +399,16 @@ export default function AdminBlogPostsPage() {
         const row = params.row;
         const isPublished = row.status === "published";
         return (
-          <div className="flex items-center h-full">
+          <div className="flex items-center justify-start w-full h-full">
             <span
-              className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold ${
-                isPublished
-                  ? "bg-emerald-100 text-emerald-700"
-                  : "bg-slate-100 text-slate-600"
-              }`}
-            >
-              {row.status}
-            </span>
+  className={`inline-flex items-center rounded-full p-2 text-[11px] leading-none font-bold ${
+    isPublished
+      ? "bg-emerald-100 text-emerald-700"
+      : "bg-slate-100 text-slate-600"
+  }`}
+>
+  {row.status}
+</span>
           </div>
         );
       },
@@ -418,21 +420,31 @@ export default function AdminBlogPostsPage() {
       filterable: false,
       align: "right",
       headerAlign: "right",
-      flex: 0.8,
+      width: 150,
       renderCell: (params: GridRenderCellParams<AdminBlogPost>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 py-1.5 h-full">
             <button
+              onClick={() => {
+                setViewingPost(row);
+                setIsDetailModalOpen(true);
+              }}
+              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90 cursor-pointer"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
+            <button
               onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
+              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90 cursor-pointer"
               title="Edit Blog"
             >
               <Edit2 className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleDelete(row.id)}
-              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90"
+              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90 cursor-pointer"
               title="Delete Blog"
             >
               <Trash2 className="w-4 h-4" />
@@ -911,6 +923,184 @@ export default function AdminBlogPostsPage() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Detail View Modal ── */}
+      {isDetailModalOpen && viewingPost && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          <div onClick={() => setIsDetailModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-2xl bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-[#003B73] px-6 py-4 text-white flex items-center justify-between shrink-0">
+              <h2 className="text-base font-black uppercase tracking-wider flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-sky-300" />
+                <span>Blog Post Details</span>
+              </h2>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Details Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Cover Image Block */}
+              <div className="relative h-48 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shrink-0">
+                {viewingPost.coverImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={viewingPost.coverImage} alt={viewingPost.thumbnailAlt || viewingPost.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-350 bg-slate-50">
+                    <BookOpen className="w-10 h-10" />
+                  </div>
+                )}
+                <div className="absolute top-3 right-3 flex flex-wrap gap-2">
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-black uppercase shadow-sm ${viewingPost.status === "published" ? "bg-emerald-500 text-white" : "bg-slate-500 text-white"}`}>
+                    {viewingPost.status}
+                  </span>
+                  {viewingPost.featured && (
+                    <span className="bg-amber-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase shadow-sm">
+                      Featured
+                    </span>
+                  )}
+                  {viewingPost.isArrival && (
+                    <span className="bg-cyan-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase shadow-sm">
+                      New Arrival
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Title & Metadata */}
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
+                  <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-black">{viewingPost.category}</span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {viewingPost.readingTime} min read</span>
+                </div>
+                <h3 className="text-xl font-black text-slate-800 leading-snug">{viewingPost.title}</h3>
+                <p className="text-xs font-semibold text-slate-400 bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 w-fit">
+                  Slug: <span className="text-slate-600 select-all font-mono">{viewingPost.slug}</span>
+                </p>
+              </div>
+
+              {/* Author Info */}
+              <div className="flex items-center gap-3 border-t border-b border-slate-100 py-3.5">
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center shrink-0">
+                  {viewingPost.authorImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={viewingPost.authorImage} alt={viewingPost.author} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-slate-400 font-bold text-sm">{viewingPost.author?.[0]}</span>
+                  )}
+                </div>
+                <div>
+                  <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Written By</span>
+                  <span className="font-bold text-sm text-slate-800 block mt-0.5">{viewingPost.author}</span>
+                  <span className="text-xs text-slate-500 font-semibold">{viewingPost.authorRole || "Pet Specialist"}</span>
+                </div>
+                <div className="ml-auto text-right text-xs font-semibold text-slate-400">
+                  {viewingPost.publishedAt ? (
+                    <>
+                      <span className="block text-[10px] font-black uppercase tracking-widest leading-none">Published</span>
+                      <span className="block text-slate-600 mt-0.5">
+                        {new Date(viewingPost.publishedAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-amber-500 font-bold">Draft</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Excerpt */}
+              {viewingPost.excerpt && (
+                <div className="bg-slate-50/85 p-4 rounded-2xl border border-slate-100">
+                  <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Excerpt</span>
+                  <p className="text-sm text-slate-600 font-semibold leading-relaxed italic">"{viewingPost.excerpt}"</p>
+                </div>
+              )}
+
+              {/* Content */}
+              <div className="space-y-2">
+                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Post Content</span>
+                <div className="text-sm text-slate-700 leading-relaxed font-medium whitespace-pre-wrap max-h-60 overflow-y-auto border border-slate-150 rounded-2xl p-4 bg-white shadow-inner">
+                  {viewingPost.content}
+                </div>
+              </div>
+
+              {/* Gallery Images */}
+              {viewingPost.galleryImages && viewingPost.galleryImages.length > 0 && (
+                <div className="space-y-2">
+                  <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Gallery Images</span>
+                  <div className="flex gap-2 overflow-x-auto pb-1.5 pt-0.5">
+                    {viewingPost.galleryImages.map((img, idx) => (
+                      <div key={idx} className="w-20 h-20 rounded-xl overflow-hidden border border-slate-150 shrink-0 bg-slate-50 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Specialist Quote */}
+              {viewingPost.specialistQuote && viewingPost.specialistQuote.quote && (
+                <div className="border-l-4 border-[#005AA9] bg-[#eef6ff]/40 p-4 rounded-r-2xl border-t border-b border-r border-slate-100">
+                  <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Specialist Quote</span>
+                  <p className="text-sm font-semibold text-slate-700 leading-relaxed italic">"{viewingPost.specialistQuote.quote}"</p>
+                  <span className="block text-xs font-bold text-slate-500 mt-2">— {viewingPost.specialistQuote.author || "SIERRA TEAM"}</span>
+                </div>
+              )}
+
+              {/* Tags */}
+              {viewingPost.tags && viewingPost.tags.length > 0 && (
+                <div className="space-y-1.5">
+                  <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Tags</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {viewingPost.tags.map(tag => (
+                      <span key={tag} className="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-slate-150">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SEO */}
+              {viewingPost.seo && (
+                <div className="p-4 rounded-2xl border border-sky-100 bg-[#eef6ff]/10 space-y-3">
+                  <h4 className="text-xs font-black text-sky-700 uppercase tracking-widest">SEO Configurations</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium">
+                    <div>
+                      <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Title</span>
+                      <span className="text-slate-700 font-semibold">{viewingPost.seo.title || "—"}</span>
+                    </div>
+                    <div>
+                      <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Keywords</span>
+                      <span className="text-slate-700 font-semibold">{(viewingPost.seo.keywords || []).join(", ") || "—"}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Description</span>
+                    <p className="text-slate-600 font-semibold">{viewingPost.seo.description || "—"}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Footer */}
+            <div className="flex justify-end gap-3 border-t border-slate-100 p-6 shrink-0 bg-slate-50/50">
+              <Button
+                type="button"
+                onClick={() => setIsDetailModalOpen(false)}
+                className="h-11 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 active:scale-95 transition-all shadow-md"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

@@ -40,6 +40,10 @@ export interface IProduct extends Document {
   price: number;
   compareAtPrice?: number;
   images: string[];
+  upc: string;
+  imageStatus: "pending" | "processing" | "completed" | "failed";
+  imageSource: string;
+  imageLastChecked: Date | null;
   shortDescription: string;
   description: string;
   features: string[];
@@ -124,6 +128,26 @@ const productSchema = new mongoose.Schema<IProduct>(
     images: {
       type: [String],
       default: [],
+    },
+    upc: {
+      type: String,
+      default: "",
+      trim: true,
+      index: true,
+    },
+    imageStatus: {
+      type: String,
+      enum: ["pending", "processing", "completed", "failed"],
+      default: "pending",
+      index: true,
+    },
+    imageSource: {
+      type: String,
+      default: "",
+    },
+    imageLastChecked: {
+      type: Date,
+      default: null,
     },
     shortDescription: {
       type: String,

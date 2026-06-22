@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 
 import axios from "axios";
 import {
-  Plus, Edit2, Trash2, Search, X, Star, Globe, Tag, LayoutGrid,
+  Plus, Edit2, Trash2, Search, X, Star, Globe, Tag, LayoutGrid, Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
@@ -43,6 +43,8 @@ export default function AdminBrandsPage() {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBrand, setEditingBrand] = useState<BrandItem | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [viewingBrand, setViewingBrand] = useState<BrandItem | null>(null);
 
   // Form state
   const [name, setName] = useState("");
@@ -211,18 +213,23 @@ export default function AdminBrandsPage() {
       renderCell: (params: GridRenderCellParams<BrandItem>) => {
         const row = params.row;
         return (
-          <div className="flex flex-wrap gap-1 items-center h-full">
-            {(row.categories || []).map((cat: string) => {
-              const cls = CATEGORY_STYLES[cat] || "text-slate-600 bg-slate-100 border-slate-200";
-              return (
-                <span
-                  key={cat}
-                  className={`inline-flex items-center px-2 rounded-full border  font-black capitalize ${cls}`}
-                >
-                  {cat}
-                </span>
-              );
-            })}
+          <div className="flex items-center h-full w-full">
+            <div className="flex flex-wrap gap-1">
+              {(row.categories || []).map((cat) => {
+                const cls =
+                  CATEGORY_STYLES[cat] ||
+                  "text-slate-600 bg-slate-100 border-slate-200";
+
+                return (
+                  <span
+                    key={cat}
+                    className={`inline-flex items-center justify-center px-2 py-0.5 text-xs leading-none rounded-full border font-semibold capitalize ${cls}`}
+                  >
+                    {cat}
+                  </span>
+                );
+              })}
+            </div>
           </div>
         );
       },
@@ -265,20 +272,32 @@ export default function AdminBrandsPage() {
       headerName: "Actions",
       sortable: false, filterable: false,
       align: "right", headerAlign: "right",
-      width: 110,
+      width: 150,
       renderCell: (params: GridRenderCellParams<BrandItem>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-1 h-full">
             <button
+              onClick={() => {
+                setViewingBrand(row);
+                setIsDetailModalOpen(true);
+              }}
+              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90 cursor-pointer"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
+            <button
               onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
+              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90 cursor-pointer"
+              title="Edit Brand"
             >
               <Edit2 className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleDelete(row.id || row._id || "")}
-              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90"
+              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90 cursor-pointer"
+              title="Delete Brand"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -466,11 +485,10 @@ export default function AdminBrandsPage() {
                         key={cat}
                         type="button"
                         onClick={() => toggleCategory(cat)}
-                        className={`px-3 py-1.5 rounded-full border text-xs font-bold capitalize transition-all ${
-                          isSelected
-                            ? "bg-[#005AA9] border-[#005AA9] text-white"
-                            : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
-                        }`}
+                        className={`px-3 py-1.5 rounded-full border text-xs font-bold capitalize transition-all ${isSelected
+                          ? "bg-[#005AA9] border-[#005AA9] text-white"
+                          : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                          }`}
                       >
                         {cat}
                       </button>
@@ -508,6 +526,97 @@ export default function AdminBrandsPage() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Detail View Modal ── */}
+      {isDetailModalOpen && viewingBrand && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          <div onClick={() => setIsDetailModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-[#003B73] px-6 py-4 text-white flex items-center justify-between shrink-0">
+              <h2 className="text-base font-black uppercase tracking-wider flex items-center gap-2">
+                <Tag className="w-5 h-5 text-sky-300" />
+                <span>Brand Details</span>
+              </h2>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Details Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-14 h-14 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 shrink-0 flex items-center justify-center">
+                  {viewingBrand.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={viewingBrand.logo} alt={viewingBrand.name} className="w-full h-full object-contain p-1.5" />
+                  ) : (
+                    <Tag className="w-6 h-6 text-slate-300" />
+                  )}
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-slate-800">{viewingBrand.name}</h4>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{viewingBrand.slug}</p>
+                </div>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Description</span>
+                <p className="text-sm text-slate-600 mt-1 whitespace-pre-wrap font-medium">{viewingBrand.description || "No description provided."}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Featured Status</span>
+                  <span className="text-sm font-bold mt-1 block">
+                    {viewingBrand.featured ? (
+                      <span className="text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full text-xs border border-amber-100 font-extrabold uppercase">Featured</span>
+                    ) : (
+                      <span className="text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-full text-xs border border-slate-100 font-semibold uppercase">Standard</span>
+                    )}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Website Link</span>
+                  {viewingBrand.website ? (
+                    <a
+                      href={viewingBrand.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-bold text-[#005AA9] hover:underline mt-1 block truncate max-w-[180px]"
+                    >
+                      <Globe className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{viewingBrand.website.replace(/^https?:\/\/(www\.)?/, "")}</span>
+                    </a>
+                  ) : (
+                    <span className="text-slate-400 text-sm font-medium mt-1 block">No website link</span>
+                  )}
+                </div>
+              </div>
+              <div className="border-t border-slate-100 pt-3">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Categories Linked</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(viewingBrand.categories || []).map(cat => (
+                    <span key={cat} className="bg-slate-50 border border-slate-150 text-slate-600 text-xs font-bold px-2.5 py-0.5 rounded-full capitalize">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Footer */}
+            <div className="flex justify-end gap-3 border-t border-slate-100 p-6 shrink-0 bg-slate-50/50">
+              <Button
+                type="button"
+                onClick={() => setIsDetailModalOpen(false)}
+                className="h-11 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 active:scale-95 transition-all shadow-md"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

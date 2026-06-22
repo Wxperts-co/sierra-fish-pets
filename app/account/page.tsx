@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +20,6 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { clearWishlist } from "@/store/slices/wishlistSlice";
-import { orders } from "@/data";
 import { userReviews } from "./reviews/page";
 import DashboardStats from "@/components/account/DashboardStats";
 import RecentOrders from "@/components/account/RecentOrders";
@@ -52,61 +52,48 @@ export default function AccountDashboard() {
 
   const firstName = user?.name ? user.name.split(" ")[0] : "Pet Lover";
 
-  // Filter orders by user ID
-  const userOrders = orders.filter(
-    (o) => o.userId === user?.id || o.userId === "usr-001",
-  );
+  const [dbOrders, setDbOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
-  // Mock data matching the reference image if no real user orders are loaded
-  const mockOrders = [
-    {
-      id: "mock-1",
-      productName: "Premium Fish Food",
-      orderNumber: "AM123456",
-      status: "delivered",
-      date: "May 21, 2024",
-      price: "$24.99",
-      image: "/images/products/aqua1.jpeg",
-    },
-    {
-      id: "mock-2",
-      productName: "Aquarium Filter",
-      orderNumber: "AM123455",
-      status: "shipped",
-      date: "May 20, 2024",
-      price: "$45.99",
-      image: "/images/products/aqua1.avif",
-    },
-    {
-      id: "mock-3",
-      productName: "Live Aquatic Plants",
-      orderNumber: "AM123454",
-      status: "processing",
-      date: "May 19, 2024",
-      price: "$18.50",
-      image: "/images/products/aqua1.jpeg",
-    },
-  ];
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get("/api/orders");
+        if (response.data?.success) {
+          setDbOrders(response.data.orders || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch database orders:", error);
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const userOrders = useMemo(() => {
+    return [...dbOrders].sort(
+      (a, b) => new Date(b.placedAt).getTime() - new Date(a.placedAt).getTime()
+    );
+  }, [dbOrders]);
 
   // Choose display orders
-  const displayOrders =
-    userOrders.length > 0
-      ? userOrders.slice(0, 3).map((o) => ({
-          id: o.id,
-          productName: o.items[0]?.productName || "Pet Supplies",
-          orderNumber: o.orderNumber,
-          status: o.status,
-          date: new Date(o.placedAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          }),
-          price: `$${o.total.toFixed(2)}`,
-          image: o.items[0]?.productImage || "/images/products/aqua1.jpeg",
-        }))
-      : mockOrders;
+  const displayOrders = userOrders.slice(0, 3).map((o) => ({
+    id: o._id || o.id,
+    productName: o.items[0]?.productName || "Pet Supplies",
+    orderNumber: o.orderNumber,
+    status: o.status,
+    date: new Date(o.placedAt).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }),
+    price: `$${o.total.toFixed(2)}`,
+    image: o.items[0]?.productImage || "/images/products/aqua1.jpeg",
+  }));
 
-  const totalOrdersCount = userOrders.length > 0 ? userOrders.length : 24;
+  const totalOrdersCount = userOrders.length;
   const wishlistCount =
     wishlistProductIds.length > 0 ? wishlistProductIds.length : 8;
   const addressCount = user?.addresses && user.addresses.length > 0 ? user.addresses.length : 0;

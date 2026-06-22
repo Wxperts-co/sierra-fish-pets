@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import {
   Plus, Edit2, Trash2, PawPrint, Search, X, Check, Star, Heart,
-  ShieldCheck, Users,
+  ShieldCheck, Users, Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
@@ -51,6 +51,8 @@ export default function AdminDogAdoptionPage() {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDog, setEditingDog] = useState<DogItem | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [viewingDog, setViewingDog] = useState<DogItem | null>(null);
 
   // Form state
   const [name, setName] = useState("");
@@ -264,13 +266,20 @@ export default function AdminDogAdoptionPage() {
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
-          <div className="flex flex-wrap gap-1 items-center h-full py-1">
-            {row.vaccinated && (
-              <span className="text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-full">Vaccinated</span>
-            )}
-            {row.neutered && (
-              <span className="text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full">Neutered</span>
-            )}
+          <div className="flex items-center h-full w-full">
+            <div className="flex flex-wrap gap-1">
+              {row.vaccinated && (
+                <span className="inline-flex items-center text-[10px] leading-none font-semibold bg-sky-50 text-sky-700 border border-sky-200 p-2 rounded-full">
+                  Vaccinated
+                </span>
+              )}
+
+              {row.neutered && (
+                <span className="inline-flex items-center text-[10px] leading-none font-semibold bg-purple-50 text-purple-700 border border-purple-200 p-2 rounded-full">
+                  Neutered
+                </span>
+              )}
+            </div>
           </div>
         );
       },
@@ -280,11 +289,21 @@ export default function AdminDogAdoptionPage() {
       headerName: "Actions",
       sortable: false, filterable: false,
       align: "right", headerAlign: "right",
-      flex: 0.8,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 py-1.5 h-full">
+            <button
+              onClick={() => {
+                setViewingDog(row);
+                setIsDetailModalOpen(true);
+              }}
+              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
             <button
               onClick={() => handleOpenEditModal(row)}
               className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
@@ -627,6 +646,114 @@ export default function AdminDogAdoptionPage() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Detail View Modal ── */}
+      {isDetailModalOpen && viewingDog && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          <div onClick={() => setIsDetailModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-[#003B73] px-6 py-4 text-white flex items-center justify-between shrink-0">
+              <h2 className="text-base font-black uppercase tracking-wider flex items-center gap-2">
+                <PawPrint className="w-5 h-5 text-sky-300" />
+                <span>Dog Details</span>
+              </h2>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="p-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Details Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                  <PawPrint className="w-6 h-6 text-slate-300" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-slate-800">{viewingDog.name}</h4>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{viewingDog.breed}</p>
+                </div>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Description</span>
+                <p className="text-sm text-slate-600 mt-1 whitespace-pre-wrap font-medium">{viewingDog.description || "No description provided."}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Age</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.age}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Gender</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.gender}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Size</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.size}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Color</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.color || "N/A"}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Adoption Fee</span>
+                  <span className="text-sm text-emerald-600 font-bold mt-1 block">{viewingDog.adoptionFee}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Status</span>
+                  <span className="text-sm text-slate-700 font-bold capitalize mt-1 block">{viewingDog.adoptionStatus}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Vaccinated</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.vaccinated ? "Yes" : "No"}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Neutered / Spayed</span>
+                  <span className="text-sm text-slate-700 font-bold mt-1 block">{viewingDog.neutered ? "Yes" : "No"}</span>
+                </div>
+              </div>
+              <div className="border-t border-slate-100 pt-3">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Good With</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {viewingDog.goodWithKids && <span className="bg-emerald-50 border border-emerald-150 text-emerald-700 text-xs font-bold px-2.5 py-0.5 rounded-full">Kids</span>}
+                  {viewingDog.goodWithDogs && <span className="bg-emerald-50 border border-emerald-150 text-emerald-700 text-xs font-bold px-2.5 py-0.5 rounded-full">Other Dogs</span>}
+                  {viewingDog.goodWithCats && <span className="bg-emerald-50 border border-emerald-150 text-emerald-700 text-xs font-bold px-2.5 py-0.5 rounded-full">Cats</span>}
+                </div>
+              </div>
+              {viewingDog.personality && viewingDog.personality.length > 0 && (
+                <div className="border-t border-slate-100 pt-3">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Personality Traits</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {viewingDog.personality.map(tag => (
+                      <span key={tag} className="bg-slate-50 border border-slate-150 text-slate-600 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Footer */}
+            <div className="flex justify-end gap-3 border-t border-slate-100 p-6 shrink-0 bg-slate-50/50">
+              <Button
+                type="button"
+                onClick={() => setIsDetailModalOpen(false)}
+                className="h-11 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 active:scale-95 transition-all shadow-md"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import UserModel from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
 import { authOptions } from "@/lib/authOptions";
+import { linkGuestOrders } from "@/lib/auth/linking";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
 
@@ -29,6 +30,13 @@ export async function POST(req: NextRequest) {
         { success: false, message: "User not found in database" },
         { status: 404 }
       );
+    }
+
+    // Link guest orders to Google account
+    try {
+      await linkGuestOrders(user.email, user._id.toString());
+    } catch (err) {
+      console.error("Failed to link guest orders during google-sync:", err);
     }
 
     // Generate custom JWT Token (same format as normal SMTP login)
