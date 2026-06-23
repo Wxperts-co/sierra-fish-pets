@@ -36,24 +36,24 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
   const discountPercentage = hasDiscount
     ? Math.round(
-        ((product.compareAtPrice! - product.price) / product.compareAtPrice!) *
-          100
-      )
+      ((product.compareAtPrice! - product.price) / product.compareAtPrice!) *
+      100
+    )
     : 0;
 
   const stockColor =
     product.stockStatus === "in_stock"
       ? "text-emerald-500"
       : product.stockStatus === "low_stock"
-      ? "text-amber-500"
-      : "text-red-500";
+        ? "text-amber-500"
+        : "text-red-500";
 
   const stockLabel =
     product.stockStatus === "in_stock"
       ? "In Stock"
       : product.stockStatus === "low_stock"
-      ? "Low Stock"
-      : "Out of Stock";
+        ? "Low Stock"
+        : "Out of Stock";
 
   // Category specific fallback images
   const getFallbackImage = () => {
@@ -101,18 +101,17 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             style={{ backfaceVisibility: "hidden" }}
           >
             <Link href={`/product/${product.id}`} className="relative block w-full h-full">
-              <Image
+              <img
                 src={
                   imgError || !product.images?.[0]
                     ? getFallbackImage()
-                    : product.images[0]
+                    : (product.images[0].startsWith("http") || product.images[0].startsWith("/")
+                      ? product.images[0]
+                      : `/${product.images[0]}`)
                 }
                 alt={product.name}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                className={`object-contain p-1 transition-transform duration-500 ease-out ${
-                  hovered ? "scale-108" : "scale-100"
-                }`}
+                className={`object-contain p-1 w-full h-full transition-transform duration-500 ease-out ${hovered ? "scale-108" : "scale-100"
+                  }`}
                 onError={() => setImgError(true)}
               />
             </Link>
@@ -188,11 +187,10 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              className={`h-3.5 w-3.5 ${
-                i < Math.round(product.rating)
+              className={`h-3.5 w-3.5 ${i < Math.round(product.rating)
                   ? "fill-amber-400 text-amber-400"
                   : "fill-gray-200 text-gray-200"
-              }`}
+                }`}
             />
           ))}
           <span className="ml-1.5 text-xs text-gray-400">

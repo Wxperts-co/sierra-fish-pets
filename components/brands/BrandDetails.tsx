@@ -160,6 +160,7 @@ export default function BrandDetail({
                       alt={item.name}
                       fill
                       className="object-contain transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 640px) 50vw, 250px"
                     />
                   </div>
                   <h3 className="font-bold text-center text-[#002244] text-sm group-hover:text-[#005AA9] transition-colors">

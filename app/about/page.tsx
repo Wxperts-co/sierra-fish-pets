@@ -379,6 +379,7 @@ export default function AboutPage() {
             alt="Sierra Fish & Pets customer service"
             fill
             className="object-cover"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/10" />
         </div>

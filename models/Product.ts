@@ -44,6 +44,8 @@ export interface IProduct extends Document {
   imageStatus: "pending" | "processing" | "completed" | "failed";
   imageSource: string;
   imageLastChecked: Date | null;
+  imageRetryCount: number;
+  imageFailureType: string;
   shortDescription: string;
   description: string;
   features: string[];
@@ -148,6 +150,14 @@ const productSchema = new mongoose.Schema<IProduct>(
     imageLastChecked: {
       type: Date,
       default: null,
+    },
+    imageRetryCount: {
+      type: Number,
+      default: 0,
+    },
+    imageFailureType: {
+      type: String,
+      default: "",
     },
     shortDescription: {
       type: String,

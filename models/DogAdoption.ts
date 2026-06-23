@@ -67,7 +67,6 @@ const dogAdoptionSchema = new mongoose.Schema<IDogAdoption>(
   }
 );
 
-dogAdoptionSchema.index({ id: 1 }, { unique: true });
 dogAdoptionSchema.index({ adoptionStatus: 1 });
 
 const DogAdoptionModel: Model<IDogAdoption> =

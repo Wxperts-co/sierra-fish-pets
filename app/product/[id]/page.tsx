@@ -73,13 +73,15 @@ export default async function ProductPage({
 
           {/* Rating */}
           <div className="mb-5 flex items-center gap-2">
-            <span className="text-yellow-500">
-              ⭐ {product.rating}
-            </span>
+            <a href="#reviews-section" className="flex items-center gap-2 hover:underline select-none">
+              <span className="text-yellow-500">
+                ⭐ {product.rating.toFixed(1)}
+              </span>
 
-            <span className="text-gray-500 ">
-              ({product.reviewCount} Reviews)
-            </span>
+              <span className="text-gray-500">
+                ({product.reviewCount} Reviews)
+              </span>
+            </a>
           </div>
 
           {/* Price */}

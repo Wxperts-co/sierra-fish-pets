@@ -52,6 +52,7 @@ export function CartDrawerItem({ item }: Props) {
           alt={item.product.name}
           fill
           className="object-cover"
+          sizes="80px"
         />
       </div>
 

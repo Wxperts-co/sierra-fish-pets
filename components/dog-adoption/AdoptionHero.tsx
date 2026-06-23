@@ -43,6 +43,7 @@ export default function AdoptionHero() {
           fill
           priority
           className="object-cover object-center"
+          sizes="100vw"
         />
       </motion.div>
 

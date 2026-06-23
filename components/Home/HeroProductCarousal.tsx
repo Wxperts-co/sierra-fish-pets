@@ -53,6 +53,7 @@ export default function HeroProductCarousel() {
                     alt={product.name}
                     fill
                     className="object-contain p-4"
+                    sizes="340px"
                   />
                 </div>
 

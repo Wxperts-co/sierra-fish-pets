@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
 import categoriesJson from "@/data/categories.json";
@@ -105,6 +105,50 @@ export default function FilterSidebar({
       .catch(() => {});
   }, []);
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const [dynamicMax, setDynamicMax] = useState(400);
+
+  const { minPrice, maxPrice } = useAppSelector((state) => state.filters);
+  const dispatch = useAppDispatch();
+
+  const filterStateRef = useRef({ minPrice, maxPrice, dynamicMax });
+  useEffect(() => {
+    filterStateRef.current = { minPrice, maxPrice, dynamicMax };
+  }, [minPrice, maxPrice, dynamicMax]);
+
+  useEffect(() => {
+    const fetchMaxPrice = async () => {
+      try {
+        const url = selectedCategory
+          ? `/api/products?category=${selectedCategory}&limit=1&sort=price-high-low`
+          : "/api/products?limit=1&sort=price-high-low";
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.success && data.products && data.products.length > 0) {
+          const maxProductPrice = Math.ceil(data.products[0].price);
+          
+          const currentFilters = filterStateRef.current;
+          setDynamicMax(maxProductPrice);
+          
+          if (
+            currentFilters.maxPrice === DEFAULT_MAX_PRICE || 
+            currentFilters.maxPrice === currentFilters.dynamicMax || 
+            currentFilters.maxPrice > maxProductPrice
+          ) {
+            dispatch(setPriceRange({ min: currentFilters.minPrice, max: maxProductPrice }));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch dynamic max price:", err);
+      }
+    };
+    fetchMaxPrice();
+  }, [selectedCategory, dispatch]);
+
   // Adapt single-selection Redux state → array for SubCategoryFilter
   const selectedSubcategories = selectedSubcategory
     ? [selectedSubcategory]
@@ -112,15 +156,11 @@ export default function FilterSidebar({
 
   const selectedBrands = useAppSelector((state) => state.filters.brands);
 
-  const { minPrice, maxPrice } = useAppSelector((state) => state.filters);
-
   const selectedRating = useAppSelector((state) => state.filters.minRating);
 
   const selectedStockStatus = useAppSelector(
     (state) => state.filters.stockStatus,
   );
-
-  const dispatch = useAppDispatch();
 
   // Accordion sections state (open by default: subcategory, price)
   const [openSections, setOpenSections] = useState({
@@ -199,11 +239,16 @@ export default function FilterSidebar({
           isOpen={openSections.price}
           onToggle={() => toggleSection("price")}
         >
-          <PriceFilter
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            onChange={onPriceChange}
-          />
+          {isMounted ? (
+            <PriceFilter
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              maxLimit={dynamicMax}
+              onChange={onPriceChange}
+            />
+          ) : (
+            <div className="h-20 animate-pulse bg-slate-100 rounded-xl" />
+          )}
         </CollapsibleSection>
 
         {/* Rating */}

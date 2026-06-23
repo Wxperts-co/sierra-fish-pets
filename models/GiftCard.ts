@@ -46,8 +46,6 @@ const giftCardSchema = new mongoose.Schema<IGiftCard>(
   }
 );
 
-giftCardSchema.index({ id: 1 }, { unique: true });
-
 const GiftCardModel: Model<IGiftCard> =
   mongoose.models.GiftCard || mongoose.model<IGiftCard>("GiftCard", giftCardSchema);
 

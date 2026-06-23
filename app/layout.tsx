@@ -32,6 +32,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistMono.variable} ${nunito.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-[family-name:var(--font-nunito)]">
   <Providers>

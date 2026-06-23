@@ -7,15 +7,14 @@ import { setPriceRange, DEFAULT_MAX_PRICE } from "@/store/slices/filtersSlice";
 interface PriceFilterProps {
   minPrice: number;
   maxPrice: number;
+  maxLimit: number;
   onChange: (min: number, max: number) => void;
 }
-
-const MIN = 0;
-const MAX = DEFAULT_MAX_PRICE;
 
 export default function PriceFilter({
   minPrice,
   maxPrice,
+  maxLimit,
   onChange,
 }: PriceFilterProps) {
   const dispatch = useAppDispatch();
@@ -25,8 +24,8 @@ export default function PriceFilter({
       <Slider.Root
         className="relative flex h-5 w-full touch-none select-none items-center"
         value={[minPrice, maxPrice]}
-        min={MIN}
-        max={MAX}
+        min={0}
+        max={maxLimit}
         step={5}
         minStepsBetweenThumbs={1}
 

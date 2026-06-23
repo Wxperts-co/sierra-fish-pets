@@ -103,8 +103,6 @@ const eventSchema = new mongoose.Schema<IEvent>(
   }
 );
 
-// Ensure index on id and startDate for efficient lookups
-eventSchema.index({ id: 1 }, { unique: true });
 eventSchema.index({ startDate: 1 });
 
 const EventModel: Model<IEvent> =

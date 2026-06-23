@@ -41,7 +41,6 @@ const brandSchema = new mongoose.Schema<IBrand>(
   }
 );
 
-brandSchema.index({ id: 1 }, { unique: true });
 brandSchema.index({ name: 1 });
 
 const BrandModel: Model<IBrand> =

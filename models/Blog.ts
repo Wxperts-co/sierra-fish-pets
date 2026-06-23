@@ -105,7 +105,6 @@ const blogSchema = new mongoose.Schema<IBlog>(
   }
 );
 
-blogSchema.index({ id: 1 }, { unique: true });
 blogSchema.index({ slug: 1 });
 
 const BlogModel: Model<IBlog> =

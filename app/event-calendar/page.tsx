@@ -105,9 +105,22 @@ const getEventImage = (eventId: string): string => {
 };
 
 export default function EventCalendarPage() {
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Initialize to current date (today)
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  if (!isMounted) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#fafbfd]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#005AA9]"></div>
+      </div>
+    );
+  }
   const [activeEvent, setActiveEvent] = useState<EventItem | null>(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -684,6 +697,7 @@ export default function EventCalendarPage() {
                           alt={evt.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="64px"
                         />
                       </div>
 
@@ -784,6 +798,7 @@ export default function EventCalendarPage() {
                   alt={activeEvent.title}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 500px"
                 />
               </div>
 

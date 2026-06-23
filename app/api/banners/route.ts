@@ -6,6 +6,16 @@ import { connectDB } from "@/lib/mongodb";
 import BannerModel from "@/models/Banner";
 import defaultBanners from "@/data/banners.json";
 
+// Simple in-memory cache for banners API
+let cachedBanners: any = null;
+let bannersCacheExpiry = 0;
+const BANNERS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export function invalidateBannersCache() {
+  cachedBanners = null;
+  bannersCacheExpiry = 0;
+}
+
 const bannerSchema = z.object({
   id: z.string().min(1, "Banner ID is required"),
   image: z.string().min(1, "Image URL is required"),
@@ -37,6 +47,13 @@ async function syncBannersJson() {
 
 export async function GET(_request: NextRequest) {
   try {
+    if (cachedBanners && bannersCacheExpiry > Date.now()) {
+      return NextResponse.json(
+        { success: true, count: cachedBanners.length, banners: cachedBanners },
+        { status: 200 }
+      );
+    }
+
     await connectDB();
     let banners = await BannerModel.find().sort({ order: 1 }).lean();
 
@@ -45,6 +62,9 @@ export async function GET(_request: NextRequest) {
       await BannerModel.insertMany(defaultBanners);
       banners = await BannerModel.find().sort({ order: 1 }).lean();
     }
+
+    cachedBanners = banners;
+    bannersCacheExpiry = Date.now() + BANNERS_CACHE_TTL;
 
     return NextResponse.json(
       { success: true, count: banners.length, banners },
@@ -88,6 +108,8 @@ export async function POST(request: NextRequest) {
 
     // Sync file system JSON
     await syncBannersJson();
+
+    invalidateBannersCache();
 
     return NextResponse.json({ success: true, banner }, { status: 201 });
   } catch (error) {

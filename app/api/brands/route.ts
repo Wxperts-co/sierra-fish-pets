@@ -4,6 +4,16 @@ import { connectDB } from "@/lib/mongodb";
 import BrandModel from "@/models/Brand";
 import defaultBrands from "@/data/brands.json";
 
+// Simple in-memory cache for brands API
+let cachedBrands: any = null;
+let brandsCacheExpiry = 0;
+const BRANDS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export function invalidateBrandsCache() {
+  cachedBrands = null;
+  brandsCacheExpiry = 0;
+}
+
 const brandSchema = z.object({
   id: z.string().min(1, "Brand ID is required"),
   name: z.string().min(1, "Brand name is required"),
@@ -17,6 +27,13 @@ const brandSchema = z.object({
 
 export async function GET(_request: NextRequest) {
   try {
+    if (cachedBrands && brandsCacheExpiry > Date.now()) {
+      return NextResponse.json(
+        { success: true, count: cachedBrands.length, brands: cachedBrands },
+        { status: 200 }
+      );
+    }
+
     await connectDB();
 
     let brands = await BrandModel.find().sort({ name: 1 }).lean();
@@ -26,6 +43,9 @@ export async function GET(_request: NextRequest) {
       await BrandModel.insertMany(defaultBrands);
       brands = await BrandModel.find().sort({ name: 1 }).lean();
     }
+
+    cachedBrands = brands;
+    brandsCacheExpiry = Date.now() + BRANDS_CACHE_TTL;
 
     return NextResponse.json(
       { success: true, count: brands.length, brands },
@@ -65,6 +85,8 @@ export async function POST(request: NextRequest) {
 
     const brand = new BrandModel(parsed.data);
     await brand.save();
+
+    invalidateBrandsCache();
 
     return NextResponse.json({ success: true, brand }, { status: 201 });
   } catch (error) {

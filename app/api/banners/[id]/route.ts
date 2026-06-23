@@ -5,6 +5,7 @@ import { writeFile } from "fs/promises";
 import { join } from "path";
 import { connectDB } from "@/lib/mongodb";
 import BannerModel from "@/models/Banner";
+import { invalidateBannersCache } from "../route";
 
 const bannerUpdateSchema = z.object({
   image: z.string().min(1).optional(),
@@ -116,6 +117,8 @@ export async function PATCH(
     // Sync filesystem JSON
     await syncBannersJson();
 
+    invalidateBannersCache();
+
     return NextResponse.json({ success: true, banner }, { status: 200 });
   } catch (error) {
     console.error("PATCH /api/banners/[id] error:", error);
@@ -148,6 +151,8 @@ export async function DELETE(
 
     // Sync filesystem JSON
     await syncBannersJson();
+
+    invalidateBannersCache();
 
     return NextResponse.json(
       { success: true, message: "Banner deleted successfully." },

@@ -11,6 +11,7 @@ import {
   Truck,
   MapPin,
   FileText,
+  Download,
 } from "lucide-react";
 import { Order } from "@/types";
 
@@ -27,6 +28,247 @@ export default function OrderCard({ order }: OrderCardProps) {
     month: "long",
     day: "numeric",
   });
+
+  const getPaymentMethodLabel = (method: string) => {
+    switch (method) {
+      case "credit_card":
+        return "Credit Card";
+      case "debit_card":
+        return "Debit Card";
+      case "paypal":
+        return "PayPal / UPI";
+      case "cash_on_delivery":
+        return "Cash on Delivery";
+      default:
+        return method.replace(/_/g, " ").toUpperCase();
+    }
+  };
+
+  const formatPrice = (amount: number) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount);
+
+  const handleDownloadInvoice = () => {
+    const invoiceHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invoice #${order.orderNumber}</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #333;
+      margin: 40px;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .logo-container h1 {
+      color: #003B73;
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+    }
+    .logo-container p {
+      margin: 2px 0 0 0;
+      color: #718096;
+      font-size: 14px;
+    }
+    .invoice-title {
+      text-align: right;
+    }
+    .invoice-title h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #2d3748;
+      font-weight: 700;
+    }
+    .invoice-title p {
+      margin: 5px 0 0 0;
+      font-size: 14px;
+      color: #4a5568;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .details-block h3 {
+      margin: 0 0 10px 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #a0aec0;
+      border-bottom: 1px solid #edf2f7;
+      padding-bottom: 5px;
+    }
+    .details-block p {
+      margin: 0 0 5px 0;
+      font-size: 14px;
+      color: #2d3748;
+    }
+    .details-block strong {
+      color: #000;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th {
+      background-color: #f7fafc;
+      border-bottom: 2px solid #edf2f7;
+      color: #4a5568;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 12px;
+      text-align: left;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 14px;
+      color: #2d3748;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .totals-table {
+      width: 300px;
+      margin-left: auto;
+      margin-top: 20px;
+    }
+    .totals-table td {
+      border: none;
+      padding: 6px 12px;
+    }
+    .totals-table tr.grand-total td {
+      border-top: 1px solid #e2e8f0;
+      font-size: 16px;
+      font-weight: 800;
+      color: #000;
+      padding-top: 12px;
+    }
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 12px;
+      color: #a0aec0;
+      border-top: 1px solid #edf2f7;
+      padding-top: 20px;
+    }
+    @media print {
+      body { margin: 20px; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-container">
+      <h1>Sierra Fish & Pets</h1>
+      <p>Your local pet & aquarium specialists</p>
+    </div>
+    <div class="invoice-title">
+      <h2>INVOICE</h2>
+      <p><strong>Order:</strong> #${order.orderNumber}</p>
+      <p><strong>Date:</strong> ${placedDate}</p>
+    </div>
+  </div>
+
+  <div class="details-grid">
+    <div class="details-block">
+      <h3>Seller Details</h3>
+      <p><strong>Sierra Fish & Pets</strong></p>
+      <p>601 S Grady Way</p>
+      <p>Renton, WA 98057</p>
+      <p>Phone: 425-226-3215</p>
+      <p>Email: contact@sierrafishpets.com</p>
+    </div>
+    <div class="details-block">
+      <h3>Ship To</h3>
+      <p><strong>${order.shippingAddress.fullName}</strong></p>
+      <p>${order.shippingAddress.addressLine1}</p>
+      ${order.shippingAddress.addressLine2 ? `<p>${order.shippingAddress.addressLine2}</p>` : ""}
+      <p>${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}</p>
+      <p>Payment: ${getPaymentMethodLabel(order.paymentMethod)} (${order.paymentStatus})</p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>SKU</th>
+        <th class="text-right">Price</th>
+        <th class="text-right">Qty</th>
+        <th class="text-right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${order.items.map((item: any) => `
+        <tr>
+          <td>${item.productName}</td>
+          <td>${item.sku || "N/A"}</td>
+          <td class="text-right">${formatPrice(item.unitPrice)}</td>
+          <td class="text-right">${item.quantity}</td>
+          <td class="text-right">${formatPrice(item.unitPrice * item.quantity)}</td>
+        </tr>
+      `).join("")}
+    </tbody>
+  </table>
+
+  <table class="totals-table">
+    <tr>
+      <td>Subtotal:</td>
+      <td class="text-right">${formatPrice(order.subtotal)}</td>
+    </tr>
+    ${order.discount > 0 ? `
+    <tr>
+      <td style="color: #2f855a;">Discount (${order.couponCode || "Promo"}):</td>
+      <td class="text-right" style="color: #2f855a;">-${formatPrice(order.discount)}</td>
+    </tr>
+    ` : ""}
+    <tr>
+      <td>Shipping:</td>
+      <td class="text-right">${order.shippingCost === 0 ? "FREE" : formatPrice(order.shippingCost)}</td>
+    </tr>
+    <tr class="grand-total">
+      <td>Total Paid:</td>
+      <td class="text-right">${formatPrice(order.total)}</td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    <p>Thank you for your business! If you have any questions regarding this invoice, please reach out to us.</p>
+    <p>&copy; ${new Date().getFullYear()} Sierra Fish & Pets. All rights reserved.</p>
+  </div>
+
+  <script>
+    window.onload = function() {
+      window.print();
+    }
+  </script>
+</body>
+</html>
+    `;
+
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(invoiceHtml);
+      printWindow.document.close();
+    }
+  };
 
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
@@ -89,7 +331,17 @@ export default function OrderCard({ order }: OrderCardProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0">
+        <div className="flex items-center justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 gap-4">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadInvoice();
+            }}
+            className="text-sm font-bold text-[#005AA9] hover:text-[#004b8d] flex items-center gap-1.5 cursor-pointer bg-blue-50/50 hover:bg-blue-50 px-3.5 py-2 rounded-xl transition"
+          >
+            <Download className="h-4 w-4" />
+            <span>Invoice</span>
+          </button>
           <button className="text-sm font-bold text-primary flex items-center gap-1 cursor-pointer">
             <span>{isExpanded ? "Hide Details" : "View Details"}</span>
             {isExpanded ? (

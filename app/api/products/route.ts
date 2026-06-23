@@ -4,11 +4,24 @@ import ProductModel from "@/models/Product";
 import { connectDB } from "@/lib/mongodb";
 import { brands } from "@/data";
 
+// Simple in-memory cache for products
+const productCache = new Map<string, { data: any; expiresAt: number }>();
+const CACHE_TTL = 60 * 1000; // 1 minute cache duration
+
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
+    searchParams.sort();
+    const cacheKey = searchParams.toString();
+
+    // Check cache
+    const cached = productCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      return NextResponse.json(cached.data, { status: 200 });
+    }
+
     const category = searchParams.get("category");
     const subcategory = searchParams.get("subcategory");
     const id = searchParams.get("id");
@@ -51,15 +64,14 @@ export async function GET(request: NextRequest) {
       const results = await Promise.all(productsPromises);
       const allLatestProducts = results.flat();
 
-      return NextResponse.json(
-        {
-          success: true,
-          count: allLatestProducts.length,
-          products: allLatestProducts,
-          totalPages: 1,
-        },
-        { status: 200 }
-      );
+      const responseData = {
+        success: true,
+        count: allLatestProducts.length,
+        products: allLatestProducts,
+        totalPages: 1,
+      };
+      productCache.set(cacheKey, { data: responseData, expiresAt: Date.now() + CACHE_TTL });
+      return NextResponse.json(responseData, { status: 200 });
     }
 
     // Build filter
@@ -196,15 +208,14 @@ export async function GET(request: NextRequest) {
 
     const totalPages = isPaginated ? Math.ceil(totalCount / limitNum!) : 1;
 
-    return NextResponse.json(
-      {
-        success: true,
-        count: totalCount,
-        products,
-        totalPages,
-      },
-      { status: 200 }
-    );
+    const responseData = {
+      success: true,
+      count: totalCount,
+      products,
+      totalPages,
+    };
+    productCache.set(cacheKey, { data: responseData, expiresAt: Date.now() + CACHE_TTL });
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("GET /api/products error:", error);
     return NextResponse.json(

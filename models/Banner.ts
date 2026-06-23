@@ -41,7 +41,6 @@ const bannerSchema = new mongoose.Schema<IBanner>(
   }
 );
 
-bannerSchema.index({ id: 1 }, { unique: true });
 bannerSchema.index({ order: 1 });
 
 const BannerModel: Model<IBanner> =

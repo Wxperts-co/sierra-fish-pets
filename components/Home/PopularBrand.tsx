@@ -52,6 +52,7 @@ export default function PopularBrands() {
                     alt={brand.name}
                     fill
                     className="object-contain"
+                    sizes="128px"
                   />
                 </div>
               </div>

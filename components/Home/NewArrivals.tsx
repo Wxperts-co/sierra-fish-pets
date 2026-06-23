@@ -118,21 +118,21 @@ export default function NewArrivals() {
         {/* ── Products Grid (2 columns on mobile, 3 on tablet/lg, 6 on desktop/xl) ── */}
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
           {newArrivals.slice(0, 12).map((product, index) => (
-            <motion.div
-              key={product.id}
-              custom={index}
-              variants={cardVariants}
-              className={cn(
-                "w-full h-full",
-                index >= 4 ? "hidden sm:block" : "block"
-              )}
-            >
-              <ProductCard
-                product={product}
-                className="border border-[#b8dfff]/40 shadow-[0_8px_30px_rgba(0,90,169,0.05)] hover:border-[#7fc4ff] hover:shadow-[0_16px_36px_rgba(0,90,169,0.12)] transition-all duration-300 w-full h-full"
-              />
-            </motion.div>
-          ))}
+                <motion.div
+                  key={product.id}
+                  custom={index}
+                  variants={cardVariants}
+                  className={cn(
+                    "w-full h-full",
+                    index >= 4 ? "hidden sm:block" : "block"
+                  )}
+                >
+                  <ProductCard
+                    product={product}
+                    className="border border-[#b8dfff]/40 shadow-[0_8px_30px_rgba(0,90,169,0.05)] hover:border-[#7fc4ff] hover:shadow-[0_16px_36px_rgba(0,90,169,0.12)] transition-all duration-300 w-full h-full"
+                  />
+                </motion.div>
+              ))}
         </div>
 
         {/* View All Button */}

@@ -427,6 +427,7 @@ export default async function ServiceDetailPage({
                   alt="CTA Card background"
                   fill
                   className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                 />
                 {/* Overlay to keep text perfectly readable while showing the image */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#eaf5ff]/45 to-[#f4faff]/45" />

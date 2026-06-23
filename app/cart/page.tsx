@@ -148,6 +148,7 @@ export default function CartPage() {
                           alt={item.product.name}
                           fill
                           className="object-contain p-2"
+                          sizes="80px"
                         />
                       </div>
 

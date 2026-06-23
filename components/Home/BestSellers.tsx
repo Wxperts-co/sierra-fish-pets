@@ -29,6 +29,8 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
   const dispatch = useAppDispatch();
   const [imgError, setImgError] = useState(false);
 
+  console.log(product.images[0])
+
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(toggleWishlistDb(product.id));
@@ -47,12 +49,12 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
   const getFallbackImage = () => {
     switch (product.categorySlug) {
       case "cat":
-        return "/images/products/cat1.avif";
+        return "/images/placeholder-product.png";
       case "aquatic":
-        return "/images/products/aqua1.avif";
+        return "/images/placeholder-product.png";
       case "dog":
       default:
-        return "/images/products/dog1.avif";
+        return "/images/placeholder-product.png";
     }
   };
 
@@ -98,6 +100,8 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
           </span>
         )}
 
+        
+
         <Link href={`/product/${product.id}`} className="block w-full h-full relative overflow-hidden">
           <motion.div
             initial={{ x: 120, opacity: 0, scale: 0.95 }}
@@ -110,18 +114,18 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
             }}
             className="w-full h-full relative"
           >
-            <Image
+            
+            <img
               src={
                 imgError || !product.images?.[0]
                   ? getFallbackImage()
-                  : product.images[0]
+                  : (product.images[0].startsWith("http") || product.images[0].startsWith("/")
+                      ? product.images[0]
+                      : `/${product.images[0]}`)
               }
               alt={product.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110"
               onError={() => setImgError(true)}
-              priority
             />
           </motion.div>
         </Link>
@@ -180,6 +184,7 @@ export default function BestSellers() {
         // 1. Try fetching products with isBestSeller flag
         const res = await fetch("/api/products?isBestSeller=true&limit=10");
         const data = await res.json();
+        console.log("bestseler",data);
         if (data.success && data.products && data.products.length > 0) {
           setBestSellers(data.products);
           return;

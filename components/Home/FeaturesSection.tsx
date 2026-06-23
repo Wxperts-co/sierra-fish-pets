@@ -273,6 +273,7 @@ export default function FeaturesSection() {
                     alt={item.title}
                     fill
                     className="object-contain  group-hover:scale-105 transition-transform duration-300"
+                    sizes="50vw"
                   />
                 </div>
 

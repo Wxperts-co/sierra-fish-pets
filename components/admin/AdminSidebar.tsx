@@ -34,6 +34,7 @@ const menuItems = [
   { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Image Enrichment", href: "/admin/products/enrich", icon: Images },
   { name: "Orders",       href: "/admin/orders",       icon: ClipboardList },
+  { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Categories",   href: "/admin/categories",   icon: Tag },
   { name: "Events", href: "/admin/events", icon: CalendarDays },
   { name: "Dog Adoption", href: "/admin/dog-adoption", icon: PawPrint },
@@ -68,7 +69,7 @@ export default function AdminSidebar() {
       {/* ── Brand / Profile ── */}
       <div className="flex items-center justify-center px-5 py-6 shrink-0">
         <div className="relative h-14 w-40 overflow-hidden rounded-3xl border border-white/15 bg-white/10 shadow-[0_15px_35px_-25px_rgba(0,0,0,0.5)]">
-          <Image src="/images/logo/logo.png" alt="Sierra Admin Logo" fill className="object-contain" />
+          <Image src="/images/logo/logo.png" alt="Sierra Admin Logo" fill className="object-contain" sizes="160px" />
         </div>
       </div>
 

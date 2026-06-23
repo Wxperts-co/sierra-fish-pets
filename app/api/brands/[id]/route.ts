@@ -3,6 +3,7 @@ import { z } from "zod";
 import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import BrandModel from "@/models/Brand";
+import { invalidateBrandsCache } from "../route";
 
 const brandUpdateSchema = z.object({
   name: z.string().min(1).optional(),
@@ -68,6 +69,7 @@ export async function PATCH(
     }
     Object.assign(brand, parsed.data);
     await brand.save();
+    invalidateBrandsCache();
     return NextResponse.json({ success: true, brand }, { status: 200 });
   } catch (error) {
     console.error("PATCH /api/brands/[id] error:", error);
@@ -87,6 +89,7 @@ export async function DELETE(
       return NextResponse.json({ success: false, message: "Brand not found" }, { status: 404 });
     }
     await brand.deleteOne();
+    invalidateBrandsCache();
     return NextResponse.json({ success: true, message: "Brand deleted." }, { status: 200 });
   } catch (error) {
     console.error("DELETE /api/brands/[id] error:", error);

@@ -147,9 +147,24 @@ export async function POST(request: NextRequest) {
         const isFeaturedRaw = getValue(productData, "product_is_featured", "isFeatured", "featured");
         const isFeatured = isFeaturedRaw === "TRUE" || isFeaturedRaw === "true" || isFeaturedRaw === true;
 
-        const imageUrl = extractImageUrl(productData);
+        let imageUrl = extractImageUrl(productData);
+        if (imageUrl === "0" || imageUrl === "undefined" || imageUrl === "null") {
+          imageUrl = "";
+        }
+
+        // Check if the image is a generic placeholder/fallback to treat it as pending
+        const isPlaceholder = imageUrl && (
+          imageUrl === "/images/products/dog1.avif" ||
+          imageUrl === "/images/products/cat1.avif" ||
+          imageUrl === "/images/products/aqua1.avif" ||
+          imageUrl === "/images/products/bird/bird1.avif" ||
+          imageUrl === "/placeholder-product.png" ||
+          imageUrl.toLowerCase().includes("placeholder") ||
+          imageUrl.toLowerCase().includes("fallback")
+        );
+
         const images = imageUrl ? [imageUrl] : [];
-        const imageStatus = images.length > 0 ? "completed" : "pending";
+        const imageStatus = (images.length > 0 && !isPlaceholder) ? "completed" : "pending";
         const imageSource = images.length > 0 ? "Import CSV" : "";
         const imageLastChecked = images.length > 0 ? new Date() : null;
 
@@ -218,6 +233,12 @@ export async function POST(request: NextRequest) {
       console.log(`[Import] Writing ${productsToInsert.length} products to database...`);
       await Product.insertMany(productsToInsert, { ordered: false });
 
+      // Trigger background enrichment batch immediately
+      import("@/services/imageScheduler").then(({ triggerEnrichment }) => {
+        triggerEnrichment();
+      }).catch((err) => {
+        console.error("[Import] Failed to import scheduler for immediate enrichment:", err);
+      });
     }
 
     return NextResponse.json(
