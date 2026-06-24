@@ -73,7 +73,7 @@ export default function CategoryCards() {
 
   return (
     <section ref={sectionRef} className="pt-8 pb-16 bg-white overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container  px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -7,7 +7,7 @@ import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 
 import { Product } from "@/types";
 import { cn } from "@/lib/utils";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 
@@ -30,6 +30,9 @@ export default function ProductCard({ product, className }: ProductCardProps) {
     e.preventDefault();
     dispatch(toggleWishlistDb(product.id));
   };
+
+  const wishlist = useAppSelector((state) => state.wishlist.productIds);
+  const isWished = wishlist.includes(product.id);
 
   const hasDiscount =
     product.compareAtPrice && product.compareAtPrice > product.price;
@@ -140,16 +143,19 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             {/* Secondary actions */}
             <div className="flex items-center gap-4">
               {/* Wishlist */}
-              {/* <button
+              <button
                 onClick={handleWishlist}
                 className="flex flex-col items-center gap-1 group/btn"
                 title="Add to Wishlist"
               >
                 <span className="flex items-center justify-center w-11 h-11 rounded-full bg-white text-[#e8473f] shadow-md group-hover/btn:scale-110 active:scale-95 transition-all duration-200">
-                  <Heart className="h-5 w-5 fill-[#e8473f]" />
+                  <Heart
+                    className={`h-5 w-5 transition-colors duration-200 ${isWished ? "text-[#e8473f] fill-[#e8473f]" : "text-[#e8473f]"
+                      }`}
+                  />
                 </span>
-                <span className="text-[11px] font-semibold text-white/90">Wishlist</span>
-              </button> */}
+                <span className="text-[11px] font-semibold text-white/90 ">Wishlist</span>
+              </button>
 
               {/* Quick View */}
               <Link
@@ -188,8 +194,8 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             <Star
               key={i}
               className={`h-3.5 w-3.5 ${i < Math.round(product.rating)
-                  ? "fill-amber-400 text-amber-400"
-                  : "fill-gray-200 text-gray-200"
+                ? "fill-amber-400 text-amber-400"
+                : "fill-gray-200 text-gray-200"
                 }`}
             />
           ))}

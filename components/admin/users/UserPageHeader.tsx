@@ -28,13 +28,13 @@ export default function UserPageHeader({ onAddUser, onExportExcel }: UserPageHea
           Export Excel
         </Button>
 
-        <Button
+        {/* <Button
           onClick={onAddUser}
           className="h-11 rounded-2xl bg-[#005AA9] hover:bg-[#003B73] text-white font-bold text-sm px-6 shadow-md transition-all active:scale-95"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add User
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

@@ -47,6 +47,20 @@ export default function ArrivalCard({
 }: ArrivalCardProps) {
   const displayPrice = pet.discountPrice ?? pet.price;
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const [year, month, day] = parts;
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const mIndex = parseInt(month, 10) - 1;
+    const mName = months[mIndex] || month;
+    return `${mName} ${parseInt(day, 10)}, ${year}`;
+  };
+
   return (
     <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
@@ -99,7 +113,7 @@ export default function ArrivalCard({
         <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
           <CalendarDays size={14} className="text-slate-400" />
           <span>
-            Arrived {new Date(pet.arrivalDate).toLocaleDateString()}
+            Arrived {formatDate(pet.arrivalDate)}
           </span>
         </div>
 

@@ -212,7 +212,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
           
 
             {/* Interactive/Mockup Comments Thread */}
-            <BlogComments postCategory={post.categorySlug} />
+            {/* <BlogComments postCategory={post.categorySlug} /> */}
 
           </article>
         </div>

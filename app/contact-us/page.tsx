@@ -57,7 +57,18 @@ export default function ContactUsPage() {
     setIsSubmitting(true);
 
     // Simulate API request delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // await new Promise((resolve) => setTimeout(resolve, 1500));
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to send message");
+    }
 
     setIsSubmitting(false);
     setSubmitSuccess(true);
@@ -71,7 +82,7 @@ export default function ContactUsPage() {
   return (
     <main className="relative text-slate-800 min-h-screen overflow-x-hidden pb-24">
       {/* ─── HERO HEADER SECTION ─── */}
-      
+
       <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
         {/* Image — clipped to banner bounds */}
         <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">

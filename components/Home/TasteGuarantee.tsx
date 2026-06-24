@@ -115,7 +115,7 @@ export default function TasteGuarantee() {
       />
 
       {/* ── CONTENT CONTAINER ── */}
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
+      <div className=" relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column (Desktop Spacer - reserved for the cat in the background image) */}
           <div className="lg:col-span-6 xl:col-span-5 md:block hidden" />

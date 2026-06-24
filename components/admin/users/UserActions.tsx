@@ -30,7 +30,7 @@ export default function UserActions({
         className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition active:scale-95 cursor-pointer"
         aria-label="View user"
       >
-        <Eye className="h-4 w-4" />
+        <Eye className="h-4 w-4 text-slate-500" />
       </button>
 
       <button
@@ -39,7 +39,7 @@ export default function UserActions({
         className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"
         aria-label="Edit user"
       >
-        <Edit3 className="h-4 w-4" />
+        <Edit3 className="h-4 w-4 text-blue-500" />
       </button>
 {/* 
       {onToggleStatus && (
@@ -58,7 +58,7 @@ export default function UserActions({
         className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"
         aria-label="Delete user"
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-4 w-4 text-red-500 stroke-[2]" />
       </button>
     </div>
   );

@@ -4,7 +4,7 @@
     "title": "Dog Adoptions",
     "subtitle": "Every 3rd Weekend",
     "image": "/images/promos/promobanner1.jpg",
-    "link": "/events/adoption"
+    "link": "/services/dog-adoption"
   },
   {
     "id": "4",
@@ -18,13 +18,13 @@
     "title": "Aquarium Services",
     "subtitle": "Design & Installation",
     "image": "/images/promos/promobanner4.png",
-    "link": "/services/aquarium"
+    "link": "/services/aquarium/aquarium-installation"
   },
   {
     "id": "6",
     "title": "Aquarium Philosophy",
     "subtitle": "Professional Aquarium Husbandry",
     "image": "/images/promos/promobanner3.png",
-    "link": "/about"
+    "link": "/services/aquarium/aquarium-consulting-design"
   }
 ]

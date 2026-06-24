@@ -297,6 +297,30 @@ export default function AdminBlogPostsPage() {
     serial: index + 1,
   }));
 
+ const handleAuthorImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", "authors");
+
+  try {
+    const res = await axios.post("/api/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (res.data?.success && res.data?.url) {
+      setAuthorImage(res.data.url);
+    }
+  } catch (err: any) {
+    console.error("Failed to upload author image:", err);
+    showErrorToast(err.response?.data?.message || "Failed to upload author image");
+  }
+};
+
   const columns: GridColDef[] = [
     {
       field: "serial",
@@ -401,14 +425,13 @@ export default function AdminBlogPostsPage() {
         return (
           <div className="flex items-center justify-start w-full h-full">
             <span
-  className={`inline-flex items-center rounded-full p-2 text-[11px] leading-none font-bold ${
-    isPublished
-      ? "bg-emerald-100 text-emerald-700"
-      : "bg-slate-100 text-slate-600"
-  }`}
->
-  {row.status}
-</span>
+              className={`inline-flex items-center rounded-full p-2 text-[11px] leading-none font-bold ${isPublished
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-slate-100 text-slate-600"
+                }`}
+            >
+              {row.status}
+            </span>
           </div>
         );
       },
@@ -433,21 +456,21 @@ export default function AdminBlogPostsPage() {
               className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90 cursor-pointer"
               title="View Details"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-4 h-4 text-slate-500" />
             </button>
             <button
               onClick={() => handleOpenEditModal(row)}
               className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90 cursor-pointer"
               title="Edit Blog"
             >
-              <Edit2 className="w-4 h-4" />
+              <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
             <button
               onClick={() => handleDelete(row.id)}
               className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90 cursor-pointer"
               title="Delete Blog"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </button>
           </div>
         );
@@ -550,7 +573,7 @@ export default function AdminBlogPostsPage() {
       </div>
 
       {/* ── Grid/Table ── */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" style={{ width: "100%" }}>
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -654,9 +677,9 @@ export default function AdminBlogPostsPage() {
                     Author Image URL
                   </label>
                   <input
-                    type="text"
-                    value={authorImage}
-                    onChange={(e) => setAuthorImage(e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAuthorImageChange}
                     className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800"
                   />
                 </div>
@@ -683,15 +706,52 @@ export default function AdminBlogPostsPage() {
 
                 <div>
                   <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">
-                    Cover Image URL
+                    Cover Image (Upload File)
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={coverImage}
-                    onChange={(e) => setCoverImage(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800"
-                  />
+                  <div className="flex flex-col gap-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const formData = new FormData();
+                        formData.append("file", file);
+                        formData.append("folder", "blogs");
+                        try {
+                          const res = await axios.post("/api/upload", formData, {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                          });
+                          if (res.data?.success && res.data?.url) {
+                            setCoverImage(res.data.url);
+                          }
+                        } catch (err: any) {
+                          console.error("Failed to upload image:", err);
+                          showErrorToast(
+                            err.response?.data?.message || "Failed to upload image"
+                          );
+                        }
+                      }}
+                      className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-2xl file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-[#005AA9] hover:file:bg-sky-100 cursor-pointer border border-slate-200 rounded-2xl bg-white"
+                    />
+                    {coverImage && (
+                      <div className="flex items-center gap-2 border border-slate-100 rounded-2xl p-2 bg-slate-50/50 w-full">
+                        <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-white shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={coverImage}
+                            alt="Cover preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="text-xs text-slate-500 font-semibold truncate flex-1">
+                          {coverImage}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -811,48 +871,7 @@ export default function AdminBlogPostsPage() {
                 </div>
               </div>
 
-              {/* SEO Block */}
-              <div className="p-4.5 rounded-2xl border border-sky-100 bg-[#eef6ff]/10 space-y-4">
-                <h4 className="text-xs font-black text-sky-700 uppercase tracking-widest">SEO Metadata</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-black text-sky-600 uppercase tracking-widest mb-1.5">
-                      Meta Title
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="SEO optimized title"
-                      value={seoTitle}
-                      onChange={(e) => setSeoTitle(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-2xl border border-sky-100 bg-white text-sm outline-none focus:border-sky-350 font-semibold text-slate-800"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-black text-sky-600 uppercase tracking-widest mb-1.5">
-                      Keywords (comma separated)
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. freshwater fish, clownfish"
-                      value={seoKeywords}
-                      onChange={(e) => setSeoKeywords(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-2xl border border-sky-100 bg-white text-sm outline-none focus:border-sky-350 font-semibold text-slate-800"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-black text-sky-600 uppercase tracking-widest mb-1.5">
-                    Meta Description
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="SEO snippet description..."
-                    value={seoDescription}
-                    onChange={(e) => setSeoDescription(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-2xl border border-sky-100 bg-white text-sm outline-none focus:border-sky-350 font-semibold text-slate-800 resize-none"
-                  />
-                </div>
-              </div>
+
 
               {/* Switches: Featured, Arrival, Status */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-5">
@@ -1070,26 +1089,7 @@ export default function AdminBlogPostsPage() {
                 </div>
               )}
 
-              {/* SEO */}
-              {viewingPost.seo && (
-                <div className="p-4 rounded-2xl border border-sky-100 bg-[#eef6ff]/10 space-y-3">
-                  <h4 className="text-xs font-black text-sky-700 uppercase tracking-widest">SEO Configurations</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium">
-                    <div>
-                      <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Title</span>
-                      <span className="text-slate-700 font-semibold">{viewingPost.seo.title || "—"}</span>
-                    </div>
-                    <div>
-                      <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Keywords</span>
-                      <span className="text-slate-700 font-semibold">{(viewingPost.seo.keywords || []).join(", ") || "—"}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="block text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">Meta Description</span>
-                    <p className="text-slate-600 font-semibold">{viewingPost.seo.description || "—"}</p>
-                  </div>
-                </div>
-              )}
+
             </div>
             {/* Footer */}
             <div className="flex justify-end gap-3 border-t border-slate-100 p-6 shrink-0 bg-slate-50/50">

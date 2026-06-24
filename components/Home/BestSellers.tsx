@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Heart,
   Search,
+  ShoppingCart,
   Shuffle,
   Star,
 } from "lucide-react";
@@ -23,18 +24,24 @@ import type { Product } from "@/types";
 import { useAppDispatch } from "@/store/hooks";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import { motion } from "framer-motion";
+import { addToCart } from "@/store/slices/cartSlice";
 
 // ─── Custom Flat Product Card matching reference image ───
 function BestSellerCard({ product, index }: { product: Product; index: number }) {
   const dispatch = useAppDispatch();
   const [imgError, setImgError] = useState(false);
 
-  console.log(product.images[0])
+ 
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(toggleWishlistDb(product.id));
   };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+  e.preventDefault();
+  dispatch(addToCart(product));
+};
 
   const hasDiscount =
     product.compareAtPrice && product.compareAtPrice > product.price;
@@ -78,18 +85,13 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
         </button>
         <button
           type="button"
+          onClick={handleAddToCart}
           className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm transition-colors hover:border-[#005AA9] hover:text-[#005AA9]"
-          aria-label={`Compare ${product.name}`}
+          aria-label={`Add ${product.name} to cart`}
         >
-          <Shuffle className="h-4 w-4" />
+          <ShoppingCart  className="h-4 w-4" />
         </button>
-        <Link
-          href={`/product/${product.id}`}
-          className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm transition-colors hover:border-[#005AA9] hover:text-[#005AA9]"
-          aria-label={`Quick view ${product.name}`}
-        >
-          <Search className="h-4 w-4" />
-        </Link>
+       
       </div>
 
       {/* Product Image Area - takes up majority of card */}
@@ -184,7 +186,7 @@ export default function BestSellers() {
         // 1. Try fetching products with isBestSeller flag
         const res = await fetch("/api/products?isBestSeller=true&limit=10");
         const data = await res.json();
-        console.log("bestseler",data);
+
         if (data.success && data.products && data.products.length > 0) {
           setBestSellers(data.products);
           return;

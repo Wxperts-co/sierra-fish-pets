@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import arrivalsData from "@/data/newarrivals.json";
+import { useRouter } from "next/navigation";
 import ArrivalHero from "./ArrivalHero";
 import ArrivalCategoryNav from "./ArrivalCategoryNav";
 import ArrivalGrid from "./ArrivalGrid";
@@ -10,6 +10,7 @@ import { ArrivalPet } from "./ArrivalCard";
 
 interface ArrivalsContainerProps {
   initialCategory?: string;
+  initialArrivals?: ArrivalPet[];
 }
 
 const mapCategoryParam = (param: string): string => {
@@ -38,9 +39,21 @@ const mapCategoryParam = (param: string): string => {
   return "all";
 };
 
-export default function ArrivalsContainer({ initialCategory }: ArrivalsContainerProps) {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+export default function ArrivalsContainer({ initialCategory, initialArrivals }: ArrivalsContainerProps) {
+  const router = useRouter();
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
+    return initialCategory ? mapCategoryParam(initialCategory) : "all";
+  });
   const [selectedPet, setSelectedPet] = useState<ArrivalPet | null>(null);
+  const [arrivals, setArrivals] = useState<ArrivalPet[]>(initialArrivals || []);
+  const [loading, setLoading] = useState(!initialArrivals);
+
+  // Sync category changes to browser URL path
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    const path = category === "all" ? "/arrivals" : `/arrivals/${category}`;
+    window.history.pushState(null, "", path);
+  };
 
   // Initialize category filter based on prop
   useEffect(() => {
@@ -51,7 +64,42 @@ export default function ArrivalsContainer({ initialCategory }: ArrivalsContainer
     }
   }, [initialCategory]);
 
-  const arrivals = arrivalsData as ArrivalPet[];
+  // Listen to browser back/forward navigation (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const pathname = window.location.pathname;
+      const parts = pathname.split("/");
+      const catParam = parts[2] || "all";
+      setActiveCategory(mapCategoryParam(catParam));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Fetch arrivals from public DB API if not provided as prop
+  useEffect(() => {
+    if (!initialArrivals || initialArrivals.length === 0) {
+      const loadArrivals = async () => {
+        try {
+          setLoading(true);
+          const res = await fetch("/api/new-arrivals");
+          const data = await res.json();
+          if (data.success && data.arrivals) {
+            setArrivals(data.arrivals);
+          }
+        } catch (err) {
+          console.error("Failed to load arrivals dynamically from DB:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadArrivals();
+    } else {
+      setArrivals(initialArrivals);
+      setLoading(false);
+    }
+  }, [initialArrivals]);
 
   // Get active breadcrumb label based on active category
   const getCategoryLabel = (catId: string) => {
@@ -98,7 +146,7 @@ export default function ArrivalsContainer({ initialCategory }: ArrivalsContainer
       {/* Category Selection Filter */}
       <ArrivalCategoryNav
         activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
+        onCategoryChange={handleCategoryChange}
       />
 
       {/* Product/Pet Grid */}

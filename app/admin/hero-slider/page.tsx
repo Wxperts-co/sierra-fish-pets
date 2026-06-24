@@ -239,6 +239,7 @@ export default function AdminHeroSliderPage() {
       field: "title",
       headerName: "Title",
       flex: 1,
+      minWidth: 150,
       renderCell: (params: GridRenderCellParams<AdminBanner>) => {
         return (
           <div className="flex items-center h-full">
@@ -251,6 +252,7 @@ export default function AdminHeroSliderPage() {
       field: "subtitle",
       headerName: "Subtitle",
       flex: 1.5,
+      minWidth: 200,
       renderCell: (params: GridRenderCellParams<AdminBanner>) => {
         return (
           <div className="flex items-center h-full">
@@ -280,6 +282,7 @@ export default function AdminHeroSliderPage() {
       field: "ctaLink",
       headerName: "Link",
       flex: 1,
+      minWidth: 130,
       renderCell: (params: GridRenderCellParams<AdminBanner>) => {
         return (
           <div className="flex items-center h-full">
@@ -342,14 +345,14 @@ export default function AdminHeroSliderPage() {
               className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-[#005AA9] hover:text-[#003B73] transition-all active:scale-90 shadow-sm"
               title="Edit Banner"
             >
-              <Edit2 className="w-4 h-4" />
+              <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
             <button
               onClick={() => handleDelete(row.id)}
               className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-red-500 hover:text-red-600 transition-all active:scale-90 shadow-sm"
               title="Delete Banner"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </button>
           </div>
         );
@@ -426,7 +429,7 @@ export default function AdminHeroSliderPage() {
       </div>
 
       {/* ── Grid/Table ── */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" style={{ width: "100%" }}>
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}

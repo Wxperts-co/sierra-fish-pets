@@ -25,13 +25,6 @@ if (!global.mongoose) {
 const cached = global.mongoose;
 
 export async function connectDB() {
-  // Always verify / trigger background image enrichment scheduler on database connection request
-  import("@/services/imageScheduler").then(({ initImageScheduler }) => {
-    initImageScheduler();
-  }).catch((err) => {
-    console.error("[MongoDB] Failed to initialize background image scheduler:", err);
-  });
-
   if (cached.conn) {
     return cached.conn;
   }

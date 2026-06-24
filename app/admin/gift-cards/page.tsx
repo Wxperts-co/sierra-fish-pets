@@ -260,21 +260,21 @@ export default function AdminGiftCardsPage() {
               className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90 cursor-pointer"
               title="View Details"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-4 h-4 text-slate-500" />
             </button>
             <button
               onClick={() => handleOpenEditModal(row)}
               className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90 cursor-pointer"
               title="Edit Gift Card"
             >
-              <Edit2 className="w-4 h-4" />
+              <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
             <button
               onClick={() => handleDelete(row.id || row._id || "")}
               className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90 cursor-pointer"
               title="Delete Gift Card"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </button>
           </div>
         );
@@ -356,7 +356,7 @@ export default function AdminGiftCardsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" style={{ width: "100%" }}>
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <div style={{ width: "100%" }}>
           <DataGrid
             rows={rows}

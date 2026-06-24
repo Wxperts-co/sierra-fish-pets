@@ -54,6 +54,70 @@ function parseDescription(descHtml: any): string {
   return descStr.replace(/<[^>]*>/g, "").slice(0, 150).trim();
 }
 
+// Helper to normalize category slugs from various CSV formats
+function normalizeCategorySlug(val: any): string {
+  const text = cleanExcelText(val).toLowerCase().replace(/\s+/g, "-");
+  if (text === "fish") return "aquatic";
+  if (text === "small-pet") return "small-animal";
+  return text || "uncategorized";
+}
+
+// Helper to parse description HTML into plain text description, features array, and image URL
+function parseHtmlDescription(descHtml: any) {
+  if (!descHtml) return { description: "", features: [] as string[], extractedImage: null as string | null };
+
+  const html = String(descHtml);
+
+  // 1. Extract image url
+  const imgRegex = /<img[^>]+src=["']([^"']+)["']/i;
+  const imgMatch = imgRegex.exec(html);
+  let extractedImage = imgMatch ? imgMatch[1] : null;
+  if (extractedImage && (extractedImage.includes("product-spec-helptext") || extractedImage.includes("plus.png") || extractedImage.includes("minus.png"))) {
+    extractedImage = null;
+  }
+
+  // 2. Extract table spec key-values
+  const features: string[] = [];
+  const thTdRegex = /<th[^>]*>([^<]+)<\/th>\s*<td[^>]*>([^<]+)<\/td>/gi;
+  let match;
+  while ((match = thTdRegex.exec(html)) !== null) {
+    const key = match[1].replace(/:/g, "").trim();
+    const val = match[2].trim();
+    if (key && val) {
+      features.push(`${key}: ${val}`);
+    }
+  }
+
+  // 3. Extract clean description text
+  let cleanText = html;
+  // Remove table
+  cleanText = cleanText.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, "");
+  // Remove h3 headers (like "Plant info")
+  cleanText = cleanText.replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, "");
+  // Remove images and their anchor wrappers
+  cleanText = cleanText.replace(/<a[^>]*>\s*<img[^>]*>\s*<\/a>/gi, "");
+  cleanText = cleanText.replace(/<img[^>]*>/gi, "");
+  // Strip all other HTML tags
+  cleanText = cleanText.replace(/<[^>]*>/g, " ");
+  // Clean up HTML entities
+  cleanText = cleanText
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+  // Clean up whitespace
+  cleanText = cleanText.replace(/\s+/g, " ").trim();
+
+  return {
+    description: cleanText,
+    features,
+    extractedImage,
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -109,7 +173,14 @@ export async function POST(request: NextRequest) {
         const upc = cleanExcelText(rawUpc);
 
         const quantityRaw = getValue(productData, "product_quantity", "quantity", "stock_count", "stockCount");
-        const quantity = quantityRaw != null ? parseInt(quantityRaw) || 0 : 0;
+        const statusRaw = getValue(productData, "status");
+        
+        let quantity = 50; // Default in_stock count if quantity column is missing (e.g. feedback template)
+        if (quantityRaw != null) {
+          quantity = parseInt(quantityRaw) || 0;
+        } else if (statusRaw && String(statusRaw).toLowerCase() === "inactive") {
+          quantity = 0; // Out of stock if explicitly marked as Inactive
+        }
 
         if (!id || !name || !sku) {
           results.failed++;
@@ -124,8 +195,9 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-        const brandRaw = getValue(productData, "product_brand", "brand") || "Unknown";
-        const brand = cleanExcelText(brandRaw);
+        const brandRaw = getValue(productData, "product_brand", "brand");
+        const cleanBrandVal = cleanExcelText(brandRaw);
+        const brand = (cleanBrandVal && cleanBrandVal !== "Unknown") ? cleanBrandVal : (name.split(" ")[0] || "Unknown");
 
         const priceRaw = getValue(productData, "default_price", "product_price", "price");
         const price = priceRaw != null ? parseFloat(priceRaw) || 0 : 0;
@@ -136,7 +208,7 @@ export async function POST(request: NextRequest) {
         const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category");
         const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory");
         
-        const categorySlugVal = cleanExcelText(cat1Raw).toLowerCase().replace(/\s+/g, "-") || "uncategorized";
+        const categorySlugVal = normalizeCategorySlug(cat1Raw);
         const subcategorySlugVal = cleanExcelText(cat2Raw).toLowerCase().replace(/\s+/g, "-") || "uncategorized";
         
         let categorySlug = categorySlugVal;
@@ -144,12 +216,17 @@ export async function POST(request: NextRequest) {
           categorySlug = `${categorySlugVal}-/-${subcategorySlugVal}`;
         }
 
+        const parsedDesc = parseHtmlDescription(getValue(productData, "product_description", "description"));
+
         const isFeaturedRaw = getValue(productData, "product_is_featured", "isFeatured", "featured");
         const isFeatured = isFeaturedRaw === "TRUE" || isFeaturedRaw === "true" || isFeaturedRaw === true;
 
         let imageUrl = extractImageUrl(productData);
         if (imageUrl === "0" || imageUrl === "undefined" || imageUrl === "null") {
           imageUrl = "";
+        }
+        if (!imageUrl && parsedDesc.extractedImage) {
+          imageUrl = parsedDesc.extractedImage;
         }
 
         // Check if the image is a generic placeholder/fallback to treat it as pending
@@ -205,9 +282,9 @@ export async function POST(request: NextRequest) {
           imageStatus,
           imageSource,
           imageLastChecked,
-          shortDescription: parseDescription(getValue(productData, "product_description", "description")) || String(name),
-          description: getValue(productData, "product_description", "description") || String(name),
-          features: [],
+          shortDescription: parseDescription(parsedDesc.description) || String(name),
+          description: parsedDesc.description || String(name),
+          features: parsedDesc.features || [],
           tags: cat1Raw ? [cleanExcelText(cat1Raw)] : [],
           isNewArrival: isFeatured,
           isFeatured,
@@ -232,19 +309,12 @@ export async function POST(request: NextRequest) {
     if (productsToInsert.length > 0) {
       console.log(`[Import] Writing ${productsToInsert.length} products to database...`);
       await Product.insertMany(productsToInsert, { ordered: false });
-
-      // Trigger background enrichment batch immediately
-      import("@/services/imageScheduler").then(({ triggerEnrichment }) => {
-        triggerEnrichment();
-      }).catch((err) => {
-        console.error("[Import] Failed to import scheduler for immediate enrichment:", err);
-      });
     }
 
     return NextResponse.json(
       {
         success: true,
-        message: `Import completed: ${results.successful} successful, ${results.failed} failed. Products queued for background image enrichment.`,
+        message: `Import completed: ${results.successful} successful, ${results.failed} failed.`,
         results,
       },
       { status: 200 }

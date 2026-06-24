@@ -24,9 +24,7 @@ const productSchema = z.object({
   price: z.coerce.number().nonnegative(),
   compareAtPrice: z.preprocess(
     (value) => {
-      if (typeof value === "string" && value.trim() === "") {
-        return null;
-      }
+      if (typeof value === "string" && value.trim() === "") return null;
       return value === null ? null : Number(value);
     },
     z.number().nonnegative().nullable().optional()
@@ -131,202 +129,191 @@ export default function AddProductPage() {
       }
     } catch (error: any) {
       console.error("Failed to create product:", error);
-      setSubmitError(error?.response?.data?.message || "Failed to create product.");
+      setSubmitError(
+        error?.response?.data?.message || "Failed to create product."
+      );
       showErrorToast("Failed to create product.");
     }
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-4 p-4">
+      {/* Top bar */}
       <div className="flex items-center gap-3">
         <Link
           href="/admin/products"
-          className="inline-flex items-center rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          className="inline-flex items-center rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Products
+          Back
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="mb-6">
-          <h1 className="text-3xl font-semibold text-slate-900">Add New Product</h1>
-          <p className="mt-2 text-sm text-slate-500">
-            Create a new product record for the storefront.
+      {/* Card */}
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="mb-4">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Add New Product
+          </h1>
+          <p className="mt-1 text-xs text-slate-500">
+            Create a product record for the store.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Product ID</label>
-              <Input type="text" {...register("id")} />
-              {errors.id && <p className="text-xs text-red-600">{errors.id.message}</p>}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* GRID */}
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              ["Product ID", "id"],
+              ["Name", "name"],
+              ["Slug", "slug"],
+              ["SKU", "sku"],
+              ["Category Slug", "categorySlug"],
+              ["Subcategory Slug", "subcategorySlug"],
+              ["Brand", "brand"],
+              ["Price", "price"],
+              ["Compare At Price", "compareAtPrice"],
+              ["Stock Count", "stockCount"],
+              ["Dimensions", "dimensions"],
+            ].map(([label, field]) => (
+              <div key={field} className="space-y-1">
+                <label className="block text-xs font-medium text-slate-700">
+                  {label}
+                </label>
+                <Input
+                  type="text"
+                  className="h-8 text-sm"
+                  {...register(field as any)}
+                />
+                {(errors as any)[field] && (
+                  <p className="text-[11px] text-red-600">
+                    {(errors as any)[field]?.message}
+                  </p>
+                )}
+              </div>
+            ))}
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Name</label>
-              <Input type="text" {...register("name")} />
-              {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Slug</label>
-              <Input type="text" {...register("slug")} />
-              {errors.slug && <p className="text-xs text-red-600">{errors.slug.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">SKU</label>
-              <Input type="text" {...register("sku")} />
-              {errors.sku && <p className="text-xs text-red-600">{errors.sku.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Category Slug</label>
-              <Input type="text" {...register("categorySlug")} />
-              {errors.categorySlug && (
-                <p className="text-xs text-red-600">{errors.categorySlug.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Subcategory Slug</label>
-              <Input type="text" {...register("subcategorySlug")} />
-              {errors.subcategorySlug && (
-                <p className="text-xs text-red-600">{errors.subcategorySlug.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Brand</label>
-              <Input type="text" {...register("brand")} />
-              {errors.brand && <p className="text-xs text-red-600">{errors.brand.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Price</label>
-              <Input type="number" step="0.01" {...register("price", { valueAsNumber: true })} />
-              {errors.price && <p className="text-xs text-red-600">{errors.price.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Compare At Price</label>
-              <Input type="number" step="0.01" {...register("compareAtPrice")} />
-              {errors.compareAtPrice && (
-                <p className="text-xs text-red-600">{errors.compareAtPrice.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2 sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700">Image URLs</label>
-              <Input type="text" {...register("images")} placeholder="Enter URLs separated by commas" />
-              {errors.images && <p className="text-xs text-red-600">{errors.images.message}</p>}
-            </div>
-
-            <div className="space-y-2 sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700">Features</label>
-              <Input type="text" {...register("features")} placeholder="comma-separated feature list" />
-              {errors.features && <p className="text-xs text-red-600">{errors.features.message}</p>}
-            </div>
-
-            <div className="space-y-2 sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700">Tags</label>
-              <Input type="text" {...register("tags")} placeholder="comma-separated tags" />
-              {errors.tags && <p className="text-xs text-red-600">{errors.tags.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Stock Status</label>
+            {/* Stock Status */}
+            <div className="space-y-1">
+              <label className="block text-xs font-medium text-slate-700">
+                Stock Status
+              </label>
               <select
-                className="h-9 w-full rounded-lg border border-slate-200 bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                className="h-8 w-full rounded-lg border border-slate-200 px-2 text-sm"
                 {...register("stockStatus")}
               >
                 <option value="in_stock">In stock</option>
                 <option value="low_stock">Low stock</option>
                 <option value="out_of_stock">Out of stock</option>
               </select>
-              {errors.stockStatus && (
-                <p className="text-xs text-red-600">{errors.stockStatus.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Stock Count</label>
-              <Input type="number" {...register("stockCount", { valueAsNumber: true })} />
-              {errors.stockCount && (
-                <p className="text-xs text-red-600">{errors.stockCount.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Dimensions</label>
-              <Input type="text" {...register("dimensions")} />
-              {errors.dimensions && (
-                <p className="text-xs text-red-600">{errors.dimensions.message}</p>
-              )}
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Short Description</label>
+          {/* TEXT AREAS */}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-700">
+                Short Description
+              </label>
               <textarea
-                rows={3}
-                className="w-full rounded-lg border border-slate-200 bg-transparent px-3 py-2 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                rows={2}
+                className="w-full rounded-lg border border-slate-200 px-2 py-1 text-sm"
                 {...register("shortDescription")}
               />
-              {errors.shortDescription && (
-                <p className="text-xs text-red-600">{errors.shortDescription.message}</p>
-              )}
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Description</label>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-700">
+                Description
+              </label>
               <textarea
-                rows={3}
-                className="w-full rounded-lg border border-slate-200 bg-transparent px-3 py-2 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                rows={2}
+                className="w-full rounded-lg border border-slate-200 px-2 py-1 text-sm"
                 {...register("description")}
               />
-              {errors.description && (
-                <p className="text-xs text-red-600">{errors.description.message}</p>
-              )}
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" className="h-4 w-4 rounded border-slate-300" {...register("isNewArrival")} />
-              New arrival
+          {/* LIST FIELDS */}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-700">
+                Features
+              </label>
+              <Input
+                className="h-8 text-sm"
+                placeholder="comma separated"
+                {...register("features")}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-slate-700">
+                Tags
+              </label>
+              <Input
+                className="h-8 text-sm"
+                placeholder="comma separated"
+                {...register("tags")}
+              />
+            </div>
+          </div>
+
+          {/* IMAGES */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-700">
+              Image URLs
             </label>
-            <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" className="h-4 w-4 rounded border-slate-300" {...register("isFeatured")} />
+            <Input
+              className="h-8 text-sm"
+              placeholder="comma separated URLs"
+              {...register("images")}
+            />
+          </div>
+
+          {/* CHECKBOXES */}
+          <div className="flex flex-wrap gap-4 text-xs text-slate-700">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isNewArrival")} />
+              New Arrival
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isFeatured")} />
               Featured
             </label>
-            <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-              <input type="checkbox" className="h-4 w-4 rounded border-slate-300" {...register("isBestSeller")} />
-              Best seller
+
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isBestSeller")} />
+              Best Seller
             </label>
           </div>
 
+          {/* STATUS */}
           {submitError && (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            <div className="rounded-lg bg-red-50 p-2 text-xs text-red-600">
               {submitError}
             </div>
           )}
 
           {successMessage && (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+            <div className="rounded-lg bg-emerald-50 p-2 text-xs text-emerald-600">
               {successMessage}
             </div>
           )}
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs text-slate-500">All required fields must be completed before saving.</p>
-            </div>
-            <Button type="submit" className="min-w-[160px]" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Create Product"}
+          {/* FOOTER */}
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] text-slate-500">
+              All required fields must be filled.
+            </p>
+
+            <Button
+              type="submit"
+              className="min-w-[140px]"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Create"}
             </Button>
           </div>
         </form>

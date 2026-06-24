@@ -259,6 +259,7 @@ export default function AdminOrdersPage() {
       field: "orderNumber",
       headerName: "Order Details",
       flex: 1.2,
+      minWidth: 160,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -281,6 +282,7 @@ export default function AdminOrdersPage() {
       field: "placedAt",
       headerName: "Date Placed",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         const dateStr = new Date(row.placedAt).toLocaleDateString("en-US", {
@@ -302,6 +304,7 @@ export default function AdminOrdersPage() {
       field: "customer",
       headerName: "Customer",
       flex: 1.2,
+      minWidth: 160,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -316,6 +319,7 @@ export default function AdminOrdersPage() {
       field: "items",
       headerName: "Items Count",
       flex: 0.8,
+      minWidth: 100,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         const itemsCount = row.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -330,6 +334,7 @@ export default function AdminOrdersPage() {
       field: "total",
       headerName: "Total Amount",
       flex: 0.9,
+      minWidth: 130,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -343,6 +348,7 @@ export default function AdminOrdersPage() {
       field: "status",
       headerName: "Order Status",
       flex: 1,
+      minWidth: 130,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -358,6 +364,7 @@ export default function AdminOrdersPage() {
       field: "paymentStatus",
       headerName: "Payment Status",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -377,6 +384,7 @@ export default function AdminOrdersPage() {
       align: "right",
       headerAlign: "right",
       flex: 1,
+      minWidth: 130,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -386,21 +394,21 @@ export default function AdminOrdersPage() {
               className="p-2 border border-slate-100 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition active:scale-95 cursor-pointer"
               title="View Receipts"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-4 h-4 text-slate-500" />
             </button>
             <button
               onClick={() => handleOpenEditModal(row)}
               className="p-2 border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"
               title="Edit Status / Tracking"
             >
-              <Edit2 className="w-4 h-4" />
+              <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
             <button
               onClick={() => handleDeleteOrder(row._id)}
               className="p-2 border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"
               title="Delete Order"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </button>
           </div>
         );
@@ -514,7 +522,7 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* ── Orders Table Grid ── */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" style={{ width: "100%" }}>
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <div style={{ height: 500, width: "100%" }}>
           <DataGrid
             rows={rows}

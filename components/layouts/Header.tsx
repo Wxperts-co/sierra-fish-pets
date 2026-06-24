@@ -40,6 +40,82 @@ export default function Header() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
 
+  const [location, setLocation] = useState<string>("Location not set");
+
+  const handleAutoDetectLocation = () => {
+    setLocation("Detecting...");
+    
+    const fetchIpLocation = () => {
+      fetch("https://ipapi.co/json/")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.city && data.postal) {
+            const locText = `Deliver to ${data.city} ${data.postal}`;
+            setLocation(locText);
+            localStorage.setItem("delivery_location", locText);
+          } else if (data.city) {
+            const locText = `Deliver to ${data.city}`;
+            setLocation(locText);
+            localStorage.setItem("delivery_location", locText);
+          } else {
+            setLocation("Seattle 98101");
+            localStorage.setItem("delivery_location", "Seattle 98101");
+          }
+        })
+        .catch((err) => {
+          console.error("IP Geolocation failed:", err);
+          setLocation("Seattle 98101");
+          localStorage.setItem("delivery_location", "Seattle 98101");
+        });
+    };
+
+    if (typeof window !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+            .then((res) => res.json())
+            .then((data) => {
+              const address = data.address || {};
+              const city = address.city || address.town || address.village || address.suburb || "";
+              const postcode = address.postcode || "";
+              if (city && postcode) {
+                const locText = `Deliver to ${city} ${postcode}`;
+                setLocation(locText);
+                localStorage.setItem("delivery_location", locText);
+              } else if (city) {
+                const locText = `Deliver to ${city}`;
+                setLocation(locText);
+                localStorage.setItem("delivery_location", locText);
+              } else {
+                fetchIpLocation();
+              }
+            })
+            .catch(() => {
+              fetchIpLocation();
+            });
+        },
+        (error) => {
+          fetchIpLocation();
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      fetchIpLocation();
+    }
+  };
+
+  // Load location from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedLocation = localStorage.getItem("delivery_location");
+      if (savedLocation) {
+        setLocation(savedLocation);
+      }
+    }
+  }, []);
+
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
@@ -194,9 +270,14 @@ export default function Header() {
         {/* Row 2: Location Selector */}
         <div className="flex items-center gap-1.5 px-3 py-2 bg-[#004b8d]/50 text-white text-xs border-t border-[#004b8d]/30">
           <MapPin className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-          <span className="text-white/80">Location not set</span>
-          <button className="flex items-center gap-0.5 text-cyan-300 font-bold hover:underline transition-all">
-            Select delivery location
+          <span className="text-white/80 truncate max-w-[200px]">
+            {location}
+          </span>
+          <button
+            onClick={handleAutoDetectLocation}
+            className="flex items-center gap-0.5 text-cyan-300 font-bold hover:underline transition-all cursor-pointer"
+          >
+            {location === "Location not set" ? "Select delivery location" : "Change"}
             <ChevronDown className="h-3 w-3" />
           </button>
         </div>
@@ -273,7 +354,7 @@ export default function Header() {
               ),
         )}
       >
-        <div className="container mx-auto px-4">
+        <div className="w-[90%] max-w-[1600px] mx-auto px-4">
           <div className="flex h-25 items-center justify-between gap-4">
             {/* Left — logo */}
             <Link
@@ -541,7 +622,7 @@ export default function Header() {
               
 
               {/* Wishlist */}
-              {/* <Link
+              <Link
                 href="/account/wishlist"
                 className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
                 aria-label="Wishlist"
@@ -555,7 +636,7 @@ export default function Header() {
                     {wishlistCount > 9 ? "9+" : wishlistCount}
                   </span>
                 )}
-              </Link> */}
+              </Link>
 
               {/* Cart */}
               {/* <Link
@@ -647,6 +728,8 @@ export default function Header() {
           </div>
         </div>
       )}
+
+
     </>
   );
 }

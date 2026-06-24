@@ -96,7 +96,7 @@ export default function ShopHero({
   const defaultBreadcrumb = [
     { label: "Home", href: "/" },
     activeCategory
-      ? { label: "Shop", href: `/shop?category=${activeCategory.slug}` }
+      ? { label: "Shop", href: `/shop` }
       : { label: "Shop", href: "/shop" },
     activeCategory ? { label: activeCategory.name } : { label: "All Products" },
   ];

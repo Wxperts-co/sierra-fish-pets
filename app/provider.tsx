@@ -1,7 +1,7 @@
 "use client";
 
 import { SessionProvider, useSession } from "next-auth/react";
-import { useEffect, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import ReduxProvider from "@/store/provider";
@@ -10,6 +10,7 @@ import { setUser } from "@/store/slices/authSlice";
 import { setWishlist } from "@/store/slices/wishlistSlice";
 import { openLoginModalWithMessage, openRegisterModalWithMessage } from "@/store/slices/authModalSlice";
 import { showErrorToast } from "@/lib/toast";
+import { initializeCart } from "@/store/slices/cartSlice";
 
 function SessionSync() {
   const { status } = useSession();
@@ -71,6 +72,35 @@ function QueryParamAuthListener() {
   return null;
 }
 
+function CartSync() {
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("sierra_cart");
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        dispatch(initializeCart(parsedCart));
+      } catch (e) {
+        console.error("Failed to parse saved cart:", e);
+      }
+    }
+    setIsInitialized(true);
+  }, [dispatch]);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem("sierra_cart", JSON.stringify(cart));
+    }
+  }, [cart, isInitialized]);
+
+  return null;
+}
+
 export default function Providers({
   children,
 }: {
@@ -80,6 +110,7 @@ export default function Providers({
     <SessionProvider>
       <ReduxProvider>
         <SessionSync />
+        <CartSync />
         <Suspense fallback={null}>
           <QueryParamAuthListener />
         </Suspense>

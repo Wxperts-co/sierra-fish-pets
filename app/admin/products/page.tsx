@@ -354,7 +354,7 @@ export default function AdminProductsPage() {
             className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
             aria-label="View product"
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="h-4 w-4 text-slate-500" />
           </button>
           <button
             type="button"
@@ -362,7 +362,7 @@ export default function AdminProductsPage() {
             className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
             aria-label="Edit product"
           >
-            <Edit3 className="h-4 w-4" />
+            <Edit3 className="h-4 w-4 text-blue-500" />
           </button>
           <button
             type="button"
@@ -370,7 +370,7 @@ export default function AdminProductsPage() {
             className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-500 text-white hover:bg-rose-600 transition"
             aria-label="Delete product"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4 text-red-500" />
           </button>
         </div>
       ),

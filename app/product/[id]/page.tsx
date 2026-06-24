@@ -2,11 +2,13 @@ import { notFound } from "next/navigation";
 
 import { connectDB } from "@/lib/mongodb";
 import ProductModel from "@/models/Product";
+import ReviewModel from "@/models/Review";
 import type { Product } from "@/types";
 import ProductActions from "@/components/shop/ProductActions";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductDetailsTabs from "@/components/shop/ProductDetailsTabs";
 import ProductImageViewer from "@/components/shop/ProductImageViewer";
+import { Star, Check } from "lucide-react";
 
 
 interface ProductPageProps {
@@ -28,8 +30,18 @@ export default async function ProductPage({
     notFound();
   }
 
-  // Cast lean Mongoose document to our frontend Product type
-  const product = rawProduct as unknown as Product;
+  // Cast lean Mongoose document to our frontend Product type and serialize to a plain object
+  const product = JSON.parse(JSON.stringify(rawProduct)) as Product;
+
+  // Fetch the single most recent published review for this product
+  const rawRecentReview = await ReviewModel.findOne({
+    productId: id,
+    status: "published",
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const recentReview = rawRecentReview ? JSON.parse(JSON.stringify(rawRecentReview)) : null;
 
   const rawRelated = await ProductModel.find({
     categorySlug: product.categorySlug,
@@ -38,7 +50,7 @@ export default async function ProductPage({
     .limit(4)
     .lean();
 
-  const relatedProducts = rawRelated as unknown as Product[];
+  const relatedProducts = JSON.parse(JSON.stringify(rawRelated)) as Product[];
 
   const hasDiscount =
     product.compareAtPrice &&
@@ -86,7 +98,7 @@ export default async function ProductPage({
 
           {/* Price */}
           <div className="mb-6 flex items-center gap-4">
-            <span className="text-2xl md:text-4xl font-bold text-[#005AA9]">
+            <span className="text-2xl md:text-3xl font-bold text-[#005AA9]">
               ${product.price.toFixed(2)}
             </span>
 
@@ -110,10 +122,12 @@ export default async function ProductPage({
 
           {/* Description */}
           <div className="mb-8">
-            <p className="leading-7 text-gray-600 text-[13px] md:text-xl">
+            <p className="leading-7 text-gray-600 text-[13px] md:text-[16px]">
               {product.description}
             </p>
           </div>
+
+          
 
           {/* Buttons — client component wired to Redux */}
           <ProductActions product={product} />

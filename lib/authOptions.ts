@@ -6,6 +6,21 @@ import { cookies } from "next/headers";
 import crypto from "crypto";
 import { linkGuestOrders } from "@/lib/auth/linking";
 
+const getRedirectUrl = (baseUrl: string, paramName: string, paramValue: string) => {
+  try {
+    const isRelative = !baseUrl.startsWith("http://") && !baseUrl.startsWith("https://");
+    const base = isRelative ? "http://dummy-base.com" : undefined;
+    const urlObj = new URL(baseUrl, base);
+    
+    urlObj.searchParams.set(paramName, paramValue);
+    urlObj.searchParams.delete("authAction");
+    
+    return isRelative ? urlObj.pathname + urlObj.search : urlObj.toString();
+  } catch {
+    return `/?${paramName}=${paramValue}`;
+  }
+};
+
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
@@ -36,7 +51,7 @@ export const authOptions: AuthOptions = {
             // SIGN UP FLOW
             if (existingUser) {
               // User already exists, redirect back to register modal showing error
-              return isAdminRoute ? "/admin?error=UserAlreadyExists" : "/?error=UserAlreadyExists";
+              return getRedirectUrl(decodedCallbackUrl, "error", "UserAlreadyExists");
             }
 
             // Create user in DB (always role: "user" — admin accounts are created manually)
@@ -57,22 +72,22 @@ export const authOptions: AuthOptions = {
             }
 
             // Redirect back showing success to continue to login
-            return isAdminRoute ? "/admin?success=GoogleAccountCreated" : "/?success=GoogleAccountCreated";
+            return getRedirectUrl(decodedCallbackUrl, "success", "GoogleAccountCreated");
           } else {
             // LOGIN FLOW
             if (!existingUser) {
               // User not found during login: redirect to register modal showing error
-              return isAdminRoute ? "/admin?error=UserNotExist" : "/?error=UserNotExist";
+              return getRedirectUrl(decodedCallbackUrl, "error", "UserNotExist");
             }
 
             // Admin route: reject if user does not already have admin role in DB
             if (isAdminRoute && existingUser.role !== "admin") {
-              return "/admin?error=InvalidRole";
+              return getRedirectUrl(decodedCallbackUrl, "error", "InvalidRole");
             }
 
             // Public user route: reject admin accounts from signing in through the normal user login flow
             if (!isAdminRoute && existingUser.role !== "user") {
-              return "/?error=InvalidRole";
+              return getRedirectUrl(decodedCallbackUrl, "error", "InvalidRole");
             }
 
             // Populate user object details for JWT mapping

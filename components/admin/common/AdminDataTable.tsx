@@ -79,10 +79,10 @@ export default function AdminDataTable<T>({
   })();
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col w-full">
+    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm flex flex-col w-full overflow-hidden">
       {/* Table responsive container */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+      <div className="overflow-x-auto w-full">
+        <table className="min-w-max w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider select-none">
               {columns.map((column, idx) => {

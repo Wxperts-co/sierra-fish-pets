@@ -5,11 +5,11 @@
     "slug": "test-blog-posttest-btest-blog-postlog-post",
     "excerpt": "A short test blog post description.",
     "content": "This is a test blog post content. Let us test the database saving and filesystem sync functionality.",
-    "coverImage": "/images/blo/images/blogs/blog-test.jpggs/dog1.jpeg",
+    "coverImage": "/uploads/blogs/1782325566219-61880-image_3.png",
     "thumbnailAlt": "Test Blog Image",
     "author": "Sierra TeamSierra Team",
     "authorRole": "Pet SpecialisPet Specialistt",
-    "authorImage": "/images/team/sierra-team.jpg",
+    "authorImage": "/uploads/authors/1782326366876-19461-rest-inn-logo.svg",
     "category": "Dogs",
     "categorySlug": "dog",
     "tags": [
@@ -21,7 +21,7 @@
     "isArrival": false,
     "status": "published",
     "publishedAt": "2026-06-19T18:56:45.236Z",
-    "updatedAt": "Sat Jun 20 2026 00:27:42 GMT+0530 (India Standard Time)",
+    "updatedAt": "Thu Jun 25 2026 00:09:31 GMT+0530 (India Standard Time)",
     "readingTime": 35,
     "relatedIds": [],
     "seo": {
@@ -186,8 +186,8 @@
     "thumbnailAlt": "New bird arrivals including cockatiels and conures",
     "author": "Sierra Team",
     "authorRole": "Bird Care Specialist",
-    "authorImage": "/images/team/sierra-team.jpg",
-    "category": "Bird",
+    "authorImage": "/uploads/authors/1782326430936-55674-rest-inn-logo.svg",
+    "category": "Birds",
     "categorySlug": "bird",
     "tags": [
       "bird",
@@ -199,7 +199,7 @@
     "isArrival": true,
     "status": "published",
     "publishedAt": "2025-01-19T10:00:00Z",
-    "updatedAt": "2025-01-19T10:00:00Z",
+    "updatedAt": "Thu Jun 25 2026 00:10:37 GMT+0530 (India Standard Time)",
     "readingTime": 2,
     "relatedIds": [],
     "seo": {

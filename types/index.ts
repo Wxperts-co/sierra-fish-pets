@@ -164,6 +164,7 @@ export interface UserAddress {
 
 export interface User {
   id: string;
+  _id?: string;
   role: "user" | "admin";
   name: string;
   email: string;

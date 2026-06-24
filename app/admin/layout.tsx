@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser, setAuthLoading } from "@/store/slices/authSlice";
 import { setWishlist } from "@/store/slices/wishlistSlice";
 import axios from "axios";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 
@@ -18,6 +18,7 @@ export default function AdminLayout({
   const dispatch = useAppDispatch();
   const { user, isAuthenticated, loading } = useAppSelector((state) => state.auth);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -72,13 +73,21 @@ export default function AdminLayout({
   return (
     <div className="fixed inset-0 z-[200] flex bg-[#f5f6fa] overflow-hidden">
       {/* ── Sidebar ── */}
-      <AdminSidebar />
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* ── Right panel ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Top navbar — admin-specific, blue-accented */}
-        <header className="h-16 bg-[#003B73] border-b border-white/10 flex  items-center justify-end px-6 shrink-0">
+        <header className="h-16 bg-[#003B73] border-b border-white/10 flex items-center justify-between px-6 shrink-0">
+          {/* Hamburger Menu Toggle on Mobile */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden p-2 -ml-2 rounded-xl text-white hover:bg-white/10 transition active:scale-95 cursor-pointer"
+            aria-label="Open sidebar"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
           {/* Search */}
           {/* <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70 pointer-events-none" />
@@ -90,7 +99,7 @@ export default function AdminLayout({
           </div> */}
 
           {/* Right: bell + user */}
-          <div className="flex  items-center gap-2">
+          <div className="flex items-center gap-2 ml-auto">
             {/* <button className="p-2 rounded-full hover:bg-white/15 transition-colors relative text-white/80 hover:text-white">
               <Bell className="h-5 w-5" />
             </button> */}

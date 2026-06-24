@@ -163,9 +163,10 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
     for (let i = 0; i < e.target.files.length; i++) {
       formData.append("files", e.target.files[i]);
     }
+    formData.append("folder", "reviews");
 
     try {
-      const res = await fetch("/api/reviews/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });

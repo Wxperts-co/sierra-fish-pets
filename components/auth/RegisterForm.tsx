@@ -199,11 +199,19 @@ export default function RegisterForm() {
       <button
         id="register-google"
         type="button"
-        onClick={() =>
+        onClick={() => {
+          let cbUrl = typeof window !== "undefined" ? window.location.href : (isAdminRoute ? "/admin" : "/");
+          try {
+            const urlObj = new URL(cbUrl);
+            urlObj.searchParams.set("authAction", "signup");
+            cbUrl = urlObj.pathname + urlObj.search;
+          } catch (e) {
+            cbUrl = isAdminRoute ? "/admin?authAction=signup" : "/?authAction=signup";
+          }
           signIn("google", {
-            callbackUrl: isAdminRoute ? "/admin?authAction=signup" : "/?authAction=signup",
-          })
-        }
+            callbackUrl: cbUrl,
+          });
+        }}
         className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white/60 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24">

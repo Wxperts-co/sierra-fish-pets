@@ -74,9 +74,22 @@ const cartSlice= createSlice({
             state.shipping = 0;
             state.total = 0;
             delete state.couponCode;
+        },
+
+        initializeCart: (state, action: PayloadAction<Cart>) => {
+            state.items = action.payload.items || [];
+            state.subtotal = action.payload.subtotal || 0;
+            state.discount = action.payload.discount || 0;
+            state.shipping = action.payload.shipping || 0;
+            state.total = action.payload.total || 0;
+            if (action.payload.couponCode) {
+                state.couponCode = action.payload.couponCode;
+            } else {
+                delete state.couponCode;
+            }
         }
     }
 })
 
-export const {addToCart, removeFromCart, updateQuantity, clearCart} = cartSlice.actions;
+export const {addToCart, removeFromCart, updateQuantity, clearCart, initializeCart} = cartSlice.actions;
 export default cartSlice.reducer;

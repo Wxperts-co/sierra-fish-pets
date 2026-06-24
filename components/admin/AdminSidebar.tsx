@@ -15,7 +15,6 @@ import {
   MessageSquare,
   HelpCircle,
   Layers,
-  Images,
   Info,
   LogOut,
   Fish,
@@ -23,6 +22,7 @@ import {
   PawPrint,
   BadgePercent,
   Gift,
+  X,
 } from "lucide-react";
 import axios from "axios";
 import { useAppDispatch } from "@/store/hooks";
@@ -32,19 +32,24 @@ const menuItems = [
   { name: "Dashboard",    href: "/admin",              icon: LayoutDashboard },
   { name: "Users",        href: "/admin/users",        icon: Users },
   { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
-  { name: "Image Enrichment", href: "/admin/products/enrich", icon: Images },
   { name: "Orders",       href: "/admin/orders",       icon: ClipboardList },
-  { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Categories",   href: "/admin/categories",   icon: Tag },
   { name: "Events", href: "/admin/events", icon: CalendarDays },
+  { name: "New Arrivals", href: "/admin/new-arrivals", icon: PawPrint },
   { name: "Dog Adoption", href: "/admin/dog-adoption", icon: PawPrint },
   { name: "Brands", href: "/admin/brands", icon: BadgePercent },
   { name: "Gift Cards", href: "/admin/gift-cards", icon: Gift },
+  { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blogs", icon: FileText },
   { name: "Hero Slider",  href: "/admin/hero-slider",  icon: Layers },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
 
@@ -64,14 +69,36 @@ export default function AdminSidebar() {
     href === "/admin" ? pathname === "/admin" : (pathname ?? "").startsWith(href);
 
   return (
-    <aside className="w-64 h-full flex flex-col shrink-0 bg-[#003B73] border-r border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+    <>
+      {/* Backdrop overlay for mobile */}
+      {isOpen && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden"
+        />
+      )}
 
-      {/* ── Brand / Profile ── */}
-      <div className="flex items-center justify-center px-5 py-6 shrink-0">
-        <div className="relative h-14 w-40 overflow-hidden rounded-3xl border border-white/15 bg-white/10 shadow-[0_15px_35px_-25px_rgba(0,0,0,0.5)]">
-          <Image src="/images/logo/logo.png" alt="Sierra Admin Logo" fill className="object-contain" sizes="160px" />
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 h-full flex flex-col shrink-0 bg-[#003B73] border-r border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] transition-transform duration-300 lg:static lg:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+
+        {/* ── Brand / Profile ── */}
+        <div className="flex items-center justify-between px-5 py-6 shrink-0 lg:justify-center">
+          <div className="relative h-14 w-40 overflow-hidden rounded-3xl border border-white/15 bg-white/10 shadow-[0_15px_35px_-25px_rgba(0,0,0,0.5)]">
+            <Image src="/images/logo/logo.png" alt="Sierra Admin Logo" fill className="object-contain" sizes="160px" />
+          </div>
+          
+          {/* Close button inside sidebar on mobile */}
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 rounded-xl text-white hover:bg-white/10 transition active:scale-95 cursor-pointer"
+            aria-label="Close sidebar"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      </div>
 
       {/* ── Navigation ── */}
       <nav className="flex-1 overflow-y-auto py-5 px-3 space-y-2">
@@ -81,6 +108,7 @@ export default function AdminSidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={onClose}
               className={`group flex items-center gap-3 rounded-3xl px-4 py-3 text-sm font-medium transition-all duration-150 ${
                 active
                   ? "bg-white/15 text-white shadow-[0_12px_30px_-18px_rgba(255,255,255,0.35)]"
@@ -110,5 +138,6 @@ export default function AdminSidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

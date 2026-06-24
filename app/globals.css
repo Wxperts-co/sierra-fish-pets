@@ -143,7 +143,15 @@
 
 
 .container {
-  width: 100%;
+  width: 75%;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
 }

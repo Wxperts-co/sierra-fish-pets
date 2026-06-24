@@ -114,13 +114,6 @@ export default function EventCalendarPage() {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  if (!isMounted) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#fafbfd]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#005AA9]"></div>
-      </div>
-    );
-  }
   const [activeEvent, setActiveEvent] = useState<EventItem | null>(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -410,6 +403,14 @@ export default function EventCalendarPage() {
     const day = String(d.getDate()).padStart(2, "0");
     return { month: m, day };
   };
+
+  if (!isMounted) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#fafbfd]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#005AA9]"></div>
+      </div>
+    );
+  }
 
   return (
     <main className="relative min-h-screen bg-[#fafbfd] pb-8 text-slate-800">

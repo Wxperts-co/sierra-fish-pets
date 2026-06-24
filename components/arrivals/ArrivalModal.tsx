@@ -31,6 +31,20 @@ export default function ArrivalModal({ pet, onClose }: ArrivalModalProps) {
   const [inquiryPhone, setInquiryPhone] = useState("");
   const [inquiryMessage, setInquiryMessage] = useState("");
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const [year, month, day] = parts;
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const mIndex = parseInt(month, 10) - 1;
+    const mName = months[mIndex] || month;
+    return `${mName} ${parseInt(day, 10)}, ${year}`;
+  };
+
   if (!pet) return null;
 
   const displayPrice = pet.discountPrice ?? pet.price;
@@ -241,11 +255,7 @@ export default function ArrivalModal({ pet, onClose }: ArrivalModalProps) {
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Arrival Date</p>
                     <p className="text-sm font-bold text-[#002244]">
-                      {new Date(pet.arrivalDate).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                      {formatDate(pet.arrivalDate)}
                     </p>
                   </div>
                 </div>

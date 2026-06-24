@@ -162,6 +162,7 @@ export default function AdminDashboard() {
       field: "orderNumber",
       headerName: "Order Number",
       flex: 1.2,
+      minWidth: 160,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -186,6 +187,7 @@ export default function AdminDashboard() {
       field: "placedAt",
       headerName: "Date Placed",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         const dateStr = new Date(row.placedAt).toLocaleDateString("en-US", {
@@ -207,6 +209,7 @@ export default function AdminDashboard() {
       field: "customer",
       headerName: "Customer Details",
       flex: 1.2,
+      minWidth: 160,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -221,6 +224,7 @@ export default function AdminDashboard() {
       field: "items",
       headerName: "Items",
       flex: 0.7,
+      minWidth: 90,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         const itemsCount = row.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
@@ -235,6 +239,7 @@ export default function AdminDashboard() {
       field: "total",
       headerName: "Total Amount",
       flex: 0.9,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -248,6 +253,7 @@ export default function AdminDashboard() {
       field: "status",
       headerName: "Status",
       flex: 0.9,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -267,6 +273,7 @@ export default function AdminDashboard() {
       field: "paymentStatus",
       headerName: "Payment",
       flex: 0.9,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<Order>) => {
         const row = params.row;
         return (
@@ -572,7 +579,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl overflow-hidden border border-slate-200/60 shadow-sm">
+        <div className="bg-white rounded-2xl overflow-x-auto border border-slate-200/60 shadow-sm">
           <DataGrid
             rows={rows}
             columns={columns}

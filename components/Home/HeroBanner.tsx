@@ -111,7 +111,7 @@ export default function HeroBanner() {
 
                   {/* Content */}
                   <div className="absolute inset-0 flex items-center">
-                    <div className="container mx-auto px-4 md:px-6">
+                    <div className="w-[100%] max-w-[1600px] mx-auto px-4 md:px-6">
                       <div className="max-w-2xl">
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#007CFF]/30 bg-[#E8F3FF] text-[#007CFF] text-sm font-bold mb-6 select-none">

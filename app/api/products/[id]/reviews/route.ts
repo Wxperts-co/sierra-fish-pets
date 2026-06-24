@@ -32,7 +32,7 @@ export async function GET(
       sortQuery = { helpfulCount: -1, createdAt: -1 };
     }
 
-    const filter = { productId, status: "published" };
+    const filter = { productId, status: "published" as const };
 
     // 1. Fetch paginated reviews
     const [reviews, totalCount] = await Promise.all([
