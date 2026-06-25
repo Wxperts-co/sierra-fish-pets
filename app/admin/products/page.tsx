@@ -77,6 +77,7 @@ export default function AdminProductsPage() {
   });
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedProductForView, setSelectedProductForView] = useState<Product | null>(null);
 
   // Debounce search input
   useEffect(() => {
@@ -519,13 +520,143 @@ export default function AdminProductsPage() {
       <ProductDataGrid
         products={displayedProducts}
         loading={loading}
-        onView={(p) => router.push(`/admin/products/${p._id}`)}
+        onView={(p) => setSelectedProductForView(p)}
         onEdit={(p) => router.push(`/admin/products/${p._id}`)}
         onDelete={(p) => handleDeleteProduct(p._id)}
         rowCount={totalCount}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
       />
+
+      {selectedProductForView && (
+        <ProductViewModal
+          product={selectedProductForView}
+          onClose={() => setSelectedProductForView(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+type ProductViewModalProps = {
+  product: Product;
+  onClose: () => void;
+};
+
+function ProductViewModal({ product, onClose }: ProductViewModalProps) {
+  return (
+    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Header */}
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <h2 className="text-xl font-black text-slate-800">Product Details</h2>
+            <p className="text-xs text-slate-500 font-semibold mt-1">ID: {product.id || product._id}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition active:scale-95 cursor-pointer"
+            aria-label="Close modal"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 overflow-y-auto space-y-6">
+          {/* Main Info */}
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Image */}
+            <div className="w-full md:w-48 h-48 rounded-2xl overflow-hidden bg-slate-100 border border-slate-150 flex-shrink-0 flex items-center justify-center">
+              {product.images?.[0] ? (
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-xs font-bold text-slate-400">No Image</span>
+              )}
+            </div>
+
+            {/* Details Grid */}
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Product Name</span>
+                <p className="text-sm font-extrabold text-slate-800 mt-0.5">{product.name}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">SKU</span>
+                <p className="text-sm font-semibold text-slate-700 mt-0.5">{product.sku || "N/A"}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Brand</span>
+                <p className="text-sm font-semibold text-slate-700 mt-0.5">{product.brand || "N/A"}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Price</span>
+                <p className="text-sm font-extrabold text-[#005AA9] mt-0.5">${product.price.toFixed(2)}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Stock Status</span>
+                <div className="mt-1">
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    product.stockStatus === "in_stock"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-250"
+                      : product.stockStatus === "low_stock"
+                      ? "bg-amber-50 text-amber-700 border border-amber-250"
+                      : "bg-rose-50 text-rose-700 border border-rose-250"
+                  }`}>
+                    {stockLabels[product.stockStatus]} ({product.stockCount} units)
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Featured Status</span>
+                <p className="text-sm font-semibold text-slate-700 mt-0.5">
+                  {product.isFeatured ? "★ Featured Product" : "Regular Product"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="border-t border-slate-100 pt-6">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Description</span>
+            <p className="text-sm text-slate-600 leading-relaxed mt-2 whitespace-pre-line bg-slate-50 p-4 rounded-2xl border border-slate-100">
+              {product.description || product.shortDescription || "No description provided."}
+            </p>
+          </div>
+
+          {/* Category */}
+          <div className="border-t border-slate-100 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Category</span>
+              <p className="text-sm font-semibold text-slate-700 mt-0.5">
+                {product.categorySlug ? product.categorySlug.split("-/-").join(" > ").split("-").join(" ") : "Uncategorized"}
+              </p>
+            </div>
+            <div>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subcategory</span>
+              <p className="text-sm font-semibold text-slate-700 mt-0.5">
+                {product.subcategorySlug ? product.subcategorySlug.split("-").join(" ") : "None"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-5 border-t border-slate-100 flex justify-end bg-slate-50/50">
+          <button
+            onClick={onClose}
+            className="h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-5 cursor-pointer transition active:scale-95"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

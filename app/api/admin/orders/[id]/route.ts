@@ -43,8 +43,58 @@ export async function PATCH(
       );
     }
 
+    const oldStatus = order.status;
+    const newStatus = updateData.status;
+
     Object.assign(order, updateData);
     await order.save();
+
+    // Trigger emails and invoice generation on status change
+    if (newStatus && newStatus !== oldStatus) {
+      if (newStatus === "processing" || newStatus === "confirmed") {
+        // Ensure invoice is generated
+        if (!order.invoiceUrl) {
+          try {
+            const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
+            const relativeInvoiceUrl = await generateInvoicePDF(order);
+            order.invoiceUrl = relativeInvoiceUrl;
+            order.invoiceGeneratedAt = new Date();
+            await order.save();
+          } catch (pdfErr) {
+            console.error("Failed to generate invoice on status change to processing/confirmed:", pdfErr);
+          }
+        }
+
+        // Send confirmation email
+        try {
+          const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
+          await sendOrderConfirmationEmail(order);
+        } catch (mailErr) {
+          console.error("Failed to send order confirmation email:", mailErr);
+        }
+      } else if (newStatus === "delivered") {
+        // Ensure invoice is generated
+        if (!order.invoiceUrl) {
+          try {
+            const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
+            const relativeInvoiceUrl = await generateInvoicePDF(order);
+            order.invoiceUrl = relativeInvoiceUrl;
+            order.invoiceGeneratedAt = new Date();
+            await order.save();
+          } catch (pdfErr) {
+            console.error("Failed to generate invoice on status change to delivered:", pdfErr);
+          }
+        }
+
+        // Send delivery email (with invoice attached)
+        try {
+          const { sendOrderDeliveredEmail } = await import("@/lib/services/emailService");
+          await sendOrderDeliveredEmail(order);
+        } catch (mailErr) {
+          console.error("Failed to send order delivered email:", mailErr);
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,

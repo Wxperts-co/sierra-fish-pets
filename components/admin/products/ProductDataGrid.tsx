@@ -3,6 +3,7 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import Image from "next/image";
 import { Eye, Edit3, Trash2 } from "lucide-react";
+import ActionsDropdown from "../common/ActionsDropdown";
 
 type Product = {
   _id: string;
@@ -49,7 +50,7 @@ export default function ProductDataGrid({
     {
       field: "serial",
       headerName: "S.NO.",
-      width: 70,
+      width: 80,
       sortable: false,
       filterable: false,
       align: "center",
@@ -59,8 +60,9 @@ export default function ProductDataGrid({
       field: "name",
       headerName: "Name",
       flex: 1.5,
+      minWidth: 300,
       renderCell: (params: GridRenderCellParams<Product>) => (
-        <div className="flex items-center gap-3 py-2">
+        <div className="flex items-center gap-3">
           {params.row.images && params.row.images[0] ? (
             <Image src={params.row.images[0]} alt={params.row.name} width={48} height={48} className="h-12 w-12 rounded-md object-cover" />
           ) : (
@@ -68,17 +70,18 @@ export default function ProductDataGrid({
           )}
           <div>
             <div className="font-semibold text-slate-900">{params.row.name}</div>
-            <div className="text-sm text-slate-500 truncate">{params.row.sku}</div>
+            {/* <div className="text-sm text-slate-500 truncate">{params.row.sku}</div> */}
           </div>
         </div>
       ),
     },
-    { field: "sku", headerName: "SKU", flex: 0.6 },
-    { field: "brand", headerName: "Brand", flex: 0.8 },
+    { field: "sku", headerName: "SKU", flex: 0.6, minWidth: 90 },
+    { field: "brand", headerName: "Brand", flex: 0.8, minWidth: 100 },
     {
       field: "price",
       headerName: "Price",
       flex: 0.6,
+      minWidth: 80,
       valueGetter: (value: any, row: Product) => {
         const price = typeof row?.price === "number" ? row.price : Number(value ?? 0);
         return `$${Number(price || 0).toFixed(2)}`;
@@ -88,6 +91,7 @@ export default function ProductDataGrid({
       field: "stock",
       headerName: "Stock",
       flex: 0.8,
+      minWidth: 110,
       renderCell: (params: GridRenderCellParams<Product>) => {
         const row = (params.row ?? {}) as Partial<Product>;
         const count = typeof row.stockCount === "number" ? row.stockCount : params.value ?? 0;
@@ -100,6 +104,7 @@ export default function ProductDataGrid({
       field: "createdAt",
       headerName: "Created",
       flex: 0.6,
+      minWidth: 100,
       valueGetter: (value: any, row: Product) => {
         const created = value ?? row?.createdAt ?? "";
         try {
@@ -117,11 +122,16 @@ export default function ProductDataGrid({
       align: "right",
       headerAlign: "right",
       flex: 0.8,
+      minWidth: 110,
       renderCell: (params: GridRenderCellParams<Product>) => (
         <div className="flex items-center justify-end gap-2 w-full pr-2">
-          <button type="button" onClick={() => onView(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition active:scale-95 cursor-pointer"><Eye className="h-4 w-4" /></button>
-          <button type="button" onClick={() => onEdit(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"><Edit3 className="h-4 w-4" /></button>
-          <button type="button" onClick={() => onDelete(params.row)} className="inline-flex h-9 w-9 items-center justify-center border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"><Trash2 className="h-4 w-4" /></button>
+          <ActionsDropdown
+            actions={[
+              { label: "View", icon: <Eye className="h-4 w-4" />, onClick: () => onView(params.row) },
+              { label: "Edit", icon: <Edit3 className="h-4 w-4" />, onClick: () => onEdit(params.row) },
+              { label: "Delete", icon: <Trash2 className="h-4 w-4" />, onClick: () => onDelete(params.row) },
+            ]}
+          />
         </div>
       ),
     },
@@ -142,7 +152,11 @@ export default function ProductDataGrid({
         loading={loading}
         autoHeight
         rowHeight={72}
-        sx={{ minHeight: 560 }}
+        sx={{
+          minHeight: 560,
+          '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+          '& .MuiDataGrid-row': { overflow: 'visible !important' },
+        }}
       />
     </div>
   );

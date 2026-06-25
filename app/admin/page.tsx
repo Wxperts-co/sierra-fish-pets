@@ -462,7 +462,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="h-[320px] w-full pt-2">
+          <div className="h-[320px] w-full pt-2 overflow-x-auto">
             {loading ? (
               <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
                 <RefreshCw className="h-6 w-6 text-[#005AA9] animate-spin" />
@@ -474,41 +474,43 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-400 font-bold mt-2">No {timeframe} analytics data available</span>
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                {chartTab === "revenue" ? (
-                  <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#005AA9" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#005AA9" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val}`} />
-                    <Tooltip
-                      formatter={(value: any) => [formatPrice(value), "Revenue"]}
-                      contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }}
-                    />
-                    <Area type="monotone" dataKey="revenue" stroke="#005AA9" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
-                  </AreaChart>
-                ) : (
-                  <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} allowDecimals={false} />
-                    <Tooltip
-                      formatter={(value: any) => [value, "Orders"]}
-                      contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }}
-                    />
-                    <Bar dataKey="orders" fill="#005AA9" radius={[4, 4, 0, 0]} maxBarSize={45}>
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={index === chartData.length - 1 ? "#005AA9" : "#3b82f6"} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                )}
-              </ResponsiveContainer>
+              <div className="h-full min-w-[650px] lg:min-w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  {chartTab === "revenue" ? (
+                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#005AA9" stopOpacity={0.2} />
+                          <stop offset="95%" stopColor="#005AA9" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val}`} />
+                      <Tooltip
+                        formatter={(value: any) => [formatPrice(value), "Revenue"]}
+                        contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }}
+                      />
+                      <Area type="monotone" dataKey="revenue" stroke="#005AA9" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                    </AreaChart>
+                  ) : (
+                    <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} allowDecimals={false} />
+                      <Tooltip
+                        formatter={(value: any) => [value, "Orders"]}
+                        contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }}
+                      />
+                      <Bar dataKey="orders" fill="#005AA9" radius={[4, 4, 0, 0]} maxBarSize={45}>
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={index === chartData.length - 1 ? "#005AA9" : "#3b82f6"} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  )}
+                </ResponsiveContainer>
+              </div>
             )}
           </div>
         </div>

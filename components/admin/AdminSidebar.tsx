@@ -23,6 +23,7 @@ import {
   BadgePercent,
   Gift,
   X,
+  User,
 } from "lucide-react";
 import axios from "axios";
 import { useAppDispatch } from "@/store/hooks";
@@ -42,6 +43,7 @@ const menuItems = [
   { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blogs", icon: FileText },
   { name: "Hero Slider",  href: "/admin/hero-slider",  icon: Layers },
+  { name: "Profile",      href: "/admin/profile",      icon: User },
 ];
 
 interface AdminSidebarProps {

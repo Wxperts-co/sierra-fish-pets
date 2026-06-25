@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import path from "path";
 import jwt from "jsonwebtoken";
 import UserModel from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
@@ -14,8 +15,25 @@ export const config = {
   },
 };
 
-// Setup Multer to store files in memory as buffer streams
-const storage = multer.memoryStorage();
+// Setup Multer to store files on disk in public/uploads/avatars
+const uploadDir = path.join(process.cwd(), "public", "uploads", "avatars");
+
+// Ensure upload directory exists
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, `avatar-${uniqueSuffix}${ext}`);
+  },
+});
+
 const upload = multer({
   storage,
   limits: {
@@ -84,48 +102,22 @@ export default async function handler(
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // 4. Validate Cloudinary Configuration
-    if (
-      !process.env.CLOUDINARY_CLOUD_NAME ||
-      !process.env.CLOUDINARY_API_KEY ||
-      !process.env.CLOUDINARY_API_SECRET
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Cloudinary credentials are not configured in your .env.local file. Please define CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET.",
-      });
+    // Delete old avatar from disk if it exists locally
+    if (user.avatar?.url && user.avatar.url.startsWith("/uploads/avatars/")) {
+      const oldPath = path.join(process.cwd(), "public", user.avatar.url);
+      if (fs.existsSync(oldPath)) {
+        try {
+          fs.unlinkSync(oldPath);
+        } catch (unlinkErr) {
+          console.error("Failed to delete old avatar file:", unlinkErr);
+        }
+      }
     }
 
-    // Configure Cloudinary
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
-
-    // 5. Upload buffer to Cloudinary
-    const uploadResult: any = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: "sierra_pets_avatars",
-          public_id: `avatar_${decoded.id}`,
-          overwrite: true,
-          invalidate: true,
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      stream.end(file.buffer);
-    });
-
-    // Delete old avatar from Cloudinary if existed (optional, handled by overwrite since public_id matches)
-
-    // 6. Update user's avatar in MongoDB
+    // 4. Update user's avatar in MongoDB with the local path
     user.avatar = {
-      url: uploadResult.secure_url,
-      public_id: uploadResult.public_id,
+      url: `/uploads/avatars/${file.filename}`,
+      public_id: file.filename,
     };
 
     await user.save();

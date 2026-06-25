@@ -3,13 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
-import categoriesJson from "@/data/categories.json";
 import type { Category } from "@/types";
 import SubCategoryFilter from "./SubcategoryFilter";
 import BrandFilter from "./BrandFilter";
-
-
-const categories = categoriesJson as Array<Partial<Category>>;
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   toggleBrand,
@@ -90,6 +86,15 @@ export default function FilterSidebar({
   onRatingChange,
   onPriceChange,
 }: FilterSidebarProps) {
+  const [categories, setCategories] = useState<Array<Partial<Category>>>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
+
   const category = categories.find((item) => item.slug === selectedCategory);
 
   const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);

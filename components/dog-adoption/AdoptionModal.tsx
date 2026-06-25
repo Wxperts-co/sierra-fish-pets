@@ -56,7 +56,7 @@ export default function AdoptionModal({ dog, isOpen, onClose }: AdoptionModalPro
             {/* Left Column: Image */}
             <div className="relative w-full md:w-1/2 aspect-[4/3] md:aspect-auto md:min-h-[500px]">
               <Image
-                src={dog.image}
+                src={dog.image || "/placeholder-product.png"}
                 alt={dog.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"

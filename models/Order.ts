@@ -42,6 +42,8 @@ export interface IOrder extends Document {
   updatedAt: Date;
   estimatedDelivery?: string;
   trackingNumber?: string;
+  invoiceUrl?: string;
+  invoiceGeneratedAt?: Date;
 }
 
 const orderItemSchema = new mongoose.Schema<IOrderItem>(
@@ -106,6 +108,8 @@ const orderSchema = new mongoose.Schema<IOrder>(
     updatedAt: { type: Date, default: Date.now, required: true },
     estimatedDelivery: { type: String },
     trackingNumber: { type: String },
+    invoiceUrl: { type: String },
+    invoiceGeneratedAt: { type: Date },
   },
   {
     timestamps: { createdAt: "placedAt", updatedAt: "updatedAt" },

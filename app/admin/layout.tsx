@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser, setAuthLoading } from "@/store/slices/authSlice";
 import { setWishlist } from "@/store/slices/wishlistSlice";
 import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 import { Search, Bell, Menu } from "lucide-react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
@@ -79,40 +81,57 @@ export default function AdminLayout({
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Top navbar — admin-specific, blue-accented */}
-        <header className="h-16 bg-[#003B73] border-b border-white/10 flex items-center justify-between px-6 shrink-0">
-          {/* Hamburger Menu Toggle on Mobile */}
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-2 rounded-xl text-white hover:bg-white/10 transition active:scale-95 cursor-pointer"
-            aria-label="Open sidebar"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-          {/* Search */}
-          {/* <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search orders, products..."
-              className="pl-10 pr-4 py-2 rounded-full bg-white/10 border border-white/15 text-sm text-white outline-none w-72 focus:bg-white/15 focus:border-white/30 focus:ring-2 focus:ring-white/20 transition"
-            />
-          </div> */}
+        <header className="relative h-16 bg-[#003B73] border-b border-white/10 flex items-center justify-between px-6 shrink-0">
+          <div className="flex items-center gap-4">
+            {/* Hamburger Menu Toggle on Mobile */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 -ml-2 rounded-xl text-white hover:bg-white/10 transition active:scale-95 cursor-pointer"
+              aria-label="Open sidebar"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
 
-          {/* Right: bell + user */}
-          <div className="flex items-center gap-2 ml-auto">
-            {/* <button className="p-2 rounded-full hover:bg-white/15 transition-colors relative text-white/80 hover:text-white">
-              <Bell className="h-5 w-5" />
-            </button> */}
+            {/* Logo on Mobile view — centered absolutely */}
+            <div className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-10 w-28 overflow-hidden rounded-xl bg-white/5 border border-white/10 shrink-0 select-none">
+              <Image
+                src="/images/logo/logo.png"
+                alt="Sierra Admin Logo"
+                fill
+                className="object-contain"
+                sizes="112px"
+                priority
+              />
+            </div>
+          </div>
 
-            <div className="flex items-center gap-3 ml-1 pl-3 border-l border-white/15">
-              {/* Blue gradient avatar */}
-              <div
-                className="h-9 w-9 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 select-none shadow-md shadow-slate-950/30"
-                style={{ background: "linear-gradient(135deg,#003B73 0%,#005EA8 50%,#0077C8 100%)" }}
+          {/* Right: user profile */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 pl-3 border-l border-white/15">
+              {/* Profile avatar image or initials link to profile */}
+              <Link
+                href="/admin/profile"
+                className="h-9 w-9 rounded-full overflow-hidden shrink-0 select-none shadow-md shadow-slate-950/30 relative flex items-center justify-center bg-slate-100 cursor-pointer active:scale-95 transition"
+                title="View Admin Profile"
               >
-                {user?.name?.[0]?.toUpperCase() ?? "A"}
-              </div>
-              <div className="leading-tight">
+                {user?.avatar?.url ? (
+                  <img
+                    src={user.avatar.url}
+                    alt={user.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="h-full w-full flex items-center justify-center text-white text-sm font-bold"
+                    style={{ background: "linear-gradient(135deg,#003B73 0%,#005EA8 50%,#0077C8 100%)" }}
+                  >
+                    {user?.name?.[0]?.toUpperCase() ?? "A"}
+                  </div>
+                )}
+              </Link>
+              
+              {/* Name and Email — hidden on mobile */}
+              <div className="hidden lg:block leading-tight">
                 <p className="text-sm font-semibold text-white leading-none">
                   {user?.name ?? "Admin User"}
                 </p>

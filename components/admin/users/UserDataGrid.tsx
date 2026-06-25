@@ -59,6 +59,7 @@ export default function UserDataGrid({
       field: "name",
       headerName: "User",
       flex: 1.5,
+      minWidth: 280,
       renderCell: (params: GridRenderCellParams<User>) => (
         <div className="flex items-center gap-3 py-2">
           {params.row.avatar?.url ? (
@@ -75,12 +76,13 @@ export default function UserDataGrid({
         </div>
       ),
     },
-    { field: "role", headerName: "Role", flex: 0.6 },
-    { field: "status", headerName: "Status", flex: 0.6 },
+    { field: "role", headerName: "Role", flex: 0.6, minWidth: 90 },
+    { field: "status", headerName: "Status", flex: 0.6, minWidth: 90 },
     {
       field: "isEmailVerified",
       headerName: "Verified",
       flex: 0.4,
+      minWidth: 90,
       renderCell: (params: GridRenderCellParams<User>) => (
         <div className="w-full text-center">{params.row.isEmailVerified ? "Yes" : "No"}</div>
       ),
@@ -89,6 +91,7 @@ export default function UserDataGrid({
       field: "createdAt",
       headerName: "Joined",
       flex: 0.6,
+      minWidth: 100,
       valueGetter: (value: any, row: User) => {
         const created = value ?? row?.createdAt ?? "";
         try {
@@ -106,6 +109,7 @@ export default function UserDataGrid({
       align: "right",
       headerAlign: "right",
       flex: 0.8,
+      minWidth: 110,
       renderCell: (params: GridRenderCellParams<User>) => (
         <div className="flex items-center justify-end gap-2 w-full pr-2">
           <UserActions
@@ -135,6 +139,10 @@ export default function UserDataGrid({
           disableRowSelectionOnClick
           loading={loading}
           autoHeight
+          sx={{
+            '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+            '& .MuiDataGrid-row': { overflow: 'visible !important' },
+          }}
         />
       </div>
     </div>

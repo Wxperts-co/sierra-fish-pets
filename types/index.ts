@@ -139,6 +139,8 @@ export interface Order {
   updatedAt: string;
   estimatedDelivery?: string;
   trackingNumber?: string;
+  invoiceUrl?: string;
+  invoiceGeneratedAt?: string;
 }
 
 // ─── USER ───────────────────────────────────────────────────────────────────

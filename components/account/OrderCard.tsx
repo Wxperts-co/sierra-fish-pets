@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import axios from "axios";
 import {
   Calendar,
   DollarSign,
@@ -12,8 +13,11 @@ import {
   MapPin,
   FileText,
   Download,
+  XCircle,
+  Loader2,
 } from "lucide-react";
 import { Order } from "@/types";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 interface OrderCardProps {
   order: Order;
@@ -21,6 +25,33 @@ interface OrderCardProps {
 
 export default function OrderCard({ order }: OrderCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [orderStatus, setOrderStatus] = useState(order.status);
+  const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  const handleCancelOrder = async () => {
+    setIsCancelling(true);
+    try {
+      const response = await axios.put("/api/orders", {
+        orderId: order.id || (order as any)._id,
+      });
+
+      if (response.data.success) {
+        setOrderStatus("cancelled");
+        setIsConfirmingCancel(false);
+        showSuccessToast("Order cancelled successfully.");
+      } else {
+        showErrorToast(response.data.message || "Failed to cancel order.");
+      }
+    } catch (error: any) {
+      console.error("Cancel order error:", error);
+      showErrorToast(
+        error.response?.data?.message || "Failed to cancel order. Please try again."
+      );
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   const itemQuantity = order.items.reduce((acc, item) => acc + item.quantity, 0);
   const placedDate = new Date(order.placedAt).toLocaleDateString("en-US", {
@@ -323,10 +354,10 @@ export default function OrderCard({ order }: OrderCardProps) {
             </p>
             <span
               className={`inline-block border text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${getStatusBadgeClass(
-                order.status
+                orderStatus
               )}`}
             >
-              {order.status}
+              {orderStatus}
             </span>
           </div>
         </div>
@@ -472,6 +503,57 @@ export default function OrderCard({ order }: OrderCardProps) {
               </div>
             </div>
           </div>
+
+          {/* Cancel Order Section */}
+          {["pending", "confirmed", "processing"].includes(orderStatus) && (
+            <div className="border-t border-slate-100 pt-6">
+              {!isConfirmingCancel ? (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50/50 -mx-6 -mb-6 p-6">
+                  <div className="text-sm text-slate-500 font-semibold text-center sm:text-left">
+                    <span className="font-extrabold text-slate-800 block mb-0.5">Need to cancel this order?</span>
+                    You can cancel this order before it is shipped.
+                  </div>
+                  <button
+                    onClick={() => setIsConfirmingCancel(true)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-rose-200 hover:border-rose-300 bg-rose-50 hover:bg-rose-100/80 text-rose-600 font-bold transition-all text-sm flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  >
+                    <XCircle className="h-4 w-4" />
+                    Cancel Order
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-rose-50/30 -mx-6 -mb-6 p-6">
+                  <div className="text-sm text-rose-800 font-semibold text-center sm:text-left">
+                    <span className="font-extrabold text-rose-900 block mb-0.5">Are you sure you want to cancel?</span>
+                    This action cannot be undone and your payment will be refunded if charged.
+                  </div>
+                  <div className="flex gap-3 w-full sm:w-auto shrink-0">
+                    <button
+                      onClick={() => setIsConfirmingCancel(false)}
+                      disabled={isCancelling}
+                      className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold transition text-sm cursor-pointer disabled:opacity-50"
+                    >
+                      No, Keep Order
+                    </button>
+                    <button
+                      onClick={handleCancelOrder}
+                      disabled={isCancelling}
+                      className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition text-sm flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      {isCancelling ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        "Yes, Cancel"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -18,10 +18,10 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import MobileMenu from "@/components/layouts/MobileMenu";
 import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
-import categories from "@/data/categories.json";
 import navbarData from "@/data/navbar.json";
 import { openLoginModal } from "@/store/slices/authModalSlice";
 import { CartDrawer } from "../cart/cart-drawer";
+import SearchBar from "./SearchBar";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -39,6 +39,14 @@ export default function Header() {
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
 
   const [location, setLocation] = useState<string>("Location not set");
 
@@ -243,15 +251,27 @@ export default function Header() {
           </div>
 
           {/* Right: Search Input + Cart icon */}
-          <div className="flex-1 flex items-center gap-2 justify-end">
-            <div className="relative flex-1 max-w-[200px]">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="w-full pl-8 pr-2.5 py-1.5 bg-white text-slate-800 placeholder:text-slate-400 text-xs rounded-lg border-0 focus:ring-2 focus:ring-cyan-400 outline-none transition-all shadow-inner font-medium"
-              />
-            </div>
+          <div className="flex-1 flex items-center gap-1 justify-end">
+            <SearchBar className="relative flex-1 max-w-[200px]" />
+
+            <Link
+              href="/account"
+              className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
+              aria-label="Account"
+            >
+              {shouldShowAccount && user?.avatar?.url ? (
+                <span className="relative h-7 w-7 overflow-hidden rounded-full border border-white/20 bg-slate-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={user.avatar.url}
+                    alt={user?.name || "User"}
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+              ) : (
+                <User className="h-4.5 w-4.5" />
+              )}
+            </Link>
 
             <Link
               href="/cart"
@@ -638,26 +658,7 @@ export default function Header() {
                 )}
               </Link>
 
-              {/* Cart */}
-              {/* <Link
-                href="/cart"
-                className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/15"
-                aria-label="Cart"
-              >
-                <ShoppingBag className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <span
-                    className={cn(
-                      "absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black",
-                      useWhiteText
-                        ? "bg-white text-[#005AA9]"
-                        : "bg-[#003DA5] text-white",
-                    )}
-                  >
-                    {cartCount > 9 ? "9+" : cartCount}
-                  </span>
-                )}
-              </Link> */}
+             
 
               <CartDrawer />
 
@@ -716,15 +717,12 @@ export default function Header() {
             </div>
 
             {/* Input Row with Bottom Border and Search Icon */}
-            <div className="relative flex items-center border-b border-white pb-3">
-              <input
-                autoFocus
-                type="text"
-                placeholder="Search..."
-                className="w-full bg-transparent text-3xl sm:text-5xl font-normal text-white placeholder:text-white/40 outline-none pr-12 tracking-wide"
-              />
-              <Search className="absolute right-1 h-7 w-7 text-white stroke-[1.5px]" />
-            </div>
+            <SearchBar
+              className="relative flex items-center border-b border-white pb-3 w-full"
+              inputClassName="w-full bg-transparent text-3xl sm:text-5xl font-normal text-white placeholder:text-white/40 outline-none pr-12 tracking-wide"
+              iconClassName="absolute right-1 h-7 w-7 text-white stroke-[1.5px]"
+              onClose={() => setSearchOpen(false)}
+            />
           </div>
         </div>
       )}

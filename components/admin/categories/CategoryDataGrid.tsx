@@ -37,20 +37,22 @@ export default function CategoryDataGrid({ categories, loading = false, onView, 
       field: "name",
       headerName: "Category",
       flex: 1.5,
+      minWidth: 180,
       renderCell: (params: GridRenderCellParams<any>) => (
-        <div className="py-2">
+        <div className="">
           <div className="font-semibold text-slate-900">{params.row.name}</div>
-          <div className="text-sm text-slate-500 truncate">{params.row.description || "No description"}</div>
+          {/* <div className="text-sm text-slate-500 truncate">{params.row.description || "No description"}</div> */}
         </div>
       ),
     },
-    { field: "slug", headerName: "Slug", flex: 0.8 },
-    { field: "productCount", headerName: "Products", type: "number", flex: 0.6 },
+    { field: "slug", headerName: "Slug", flex: 0.8, minWidth: 120 },
+    { field: "productCount", headerName: "Products", type: "number", flex: 0.6, minWidth: 90 },
     {
       field: "subcategoriesCount",
       headerName: "Subcategories",
       type: "number",
       flex: 0.6,
+      minWidth: 120,
     },
     {
       field: "actions",
@@ -59,6 +61,7 @@ export default function CategoryDataGrid({ categories, loading = false, onView, 
       filterable: false,
       align: "right",
       headerAlign: "right",
+      minWidth: 110,
       renderCell: (params: GridRenderCellParams<AdminCategory>) => (
         <div className="flex items-center justify-end gap-2 w-full pr-2">
           <CategoryActions
@@ -83,6 +86,10 @@ export default function CategoryDataGrid({ categories, loading = false, onView, 
           disableRowSelectionOnClick
           loading={loading}
           autoHeight
+          sx={{
+            '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+            '& .MuiDataGrid-row': { overflow: 'visible !important' },
+          }}
         />
       </div>
     </div>

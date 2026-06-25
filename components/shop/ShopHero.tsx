@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import categoriesJson from "@/data/categories.json";
 import type { Category } from "@/types";
 
 type ShopCategory = {
@@ -14,8 +13,6 @@ type ShopCategory = {
   subcategories: { id: string; name: string; slug: string }[];
   image?: string;
 };
-
-const categories = categoriesJson as ShopCategory[];
 
 const categoryImages: Record<string, string> = {
   dog: "/images/categories/dog.jpeg",
@@ -28,14 +25,6 @@ const categoryImages: Record<string, string> = {
 
 // Sort by preferred display order; any new slugs appended after
 const displayOrder = ["dog", "cat", "aquatic", "bird", "reptile", "small-animal"];
-const orderedCategories = [...categories].sort((a, b) => {
-  const ai = displayOrder.indexOf(a.slug);
-  const bi = displayOrder.indexOf(b.slug);
-  if (ai === -1 && bi === -1) return 0;
-  if (ai === -1) return 1;
-  if (bi === -1) return -1;
-  return ai - bi;
-});
 
 /** How many circles are visible at one time */
 const VISIBLE_COUNT = 6;
@@ -51,7 +40,35 @@ export default function ShopHero({
   setSelectedCategory,
   breadcrumb,
 }: ShopHeroProps) {
-  const activeCategory = categories.find((c) => c.slug === selectedCategory);
+  const [allCategories, setAllCategories] = useState<ShopCategory[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          const sorted = [...data.categories].sort((a: ShopCategory, b: ShopCategory) => {
+            // "Other" category always goes last
+            const aIsOther = a.slug.includes("other");
+            const bIsOther = b.slug.includes("other");
+            if (aIsOther && !bIsOther) return 1;
+            if (!aIsOther && bIsOther) return -1;
+
+            const ai = displayOrder.indexOf(a.slug);
+            const bi = displayOrder.indexOf(b.slug);
+            if (ai === -1 && bi === -1) return 0;
+            if (ai === -1) return 1;
+            if (bi === -1) return -1;
+            return ai - bi;
+          });
+          setAllCategories(sorted);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const orderedCategories = allCategories;
+  const activeCategory = allCategories.find((c) => c.slug === selectedCategory);
 
   // Index of the first visible item
   const [startIndex, setStartIndex] = useState(0);
@@ -79,7 +96,8 @@ export default function ShopHero({
     const ro = new ResizeObserver(measure);
     if (firstItemRef.current) ro.observe(firstItemRef.current);
     return () => ro.disconnect();
-  }, []);
+    // Re-run after categories load so firstItemRef is populated
+  }, [allCategories.length]);
 
   const total = orderedCategories.length;
   const hasMore = total > VISIBLE_COUNT;
@@ -166,7 +184,7 @@ export default function ShopHero({
         </div>
 
         {/* ── Category Carousel — desktop only; mobile uses filter row in shop/page ── */}
-        <div className="absolute top-full -translate-y-[53px] md:-translate-y-[43px] sm:-translate-y-[32px] left-0 right-0 z-10 hidden md:flex items-center justify-center gap-x-2">
+        <div className="absolute top-full -translate-y-1/2 left-0 right-0 z-10 hidden md:flex items-center justify-center gap-x-2">
 
           {/* Left Arrow */}
           {hasMore && (

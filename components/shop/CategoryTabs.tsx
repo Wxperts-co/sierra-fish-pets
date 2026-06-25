@@ -1,6 +1,6 @@
 "use client";
 
-import categories from "@/data/categories.json";
+import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCategory } from "@/store/slices/filtersSlice";
 import type { CategorySlug } from "@/types";
@@ -10,6 +10,14 @@ export default function CategoryTabs() {
   const activeCategory = useAppSelector(
     (state) => state.filters.category ?? "all"
   );
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="flex flex-wrap justify-center gap-4">

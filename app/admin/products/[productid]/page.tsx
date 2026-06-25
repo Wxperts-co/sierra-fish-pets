@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -65,6 +65,8 @@ export default function EditProductPage() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema) as any,
@@ -91,6 +93,37 @@ export default function EditProductPage() {
       dimensions: "",
     },
   });
+
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: "images", folder: string) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const data = new FormData();
+    data.append("folder", folder);
+    for (let i = 0; i < files.length; i++) {
+      data.append("file", files[i]);
+    }
+    try {
+      const res = await axios.post("/api/upload", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      if (res.data?.success) {
+        const urls = res.data.urls || [res.data.url];
+        const currentValue = watch("images") || "";
+        const updatedValue = currentValue
+          ? `${currentValue}, ${urls.join(", ")}`
+          : urls.join(", ");
+        setValue("images", updatedValue);
+      }
+    } catch (err) {
+      console.error(err);
+      showErrorToast("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     if (!productId) {
@@ -310,8 +343,32 @@ export default function EditProductPage() {
             </div>
 
             <div className="space-y-2 sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700">Image URLs</label>
-              <Input type="text" {...register("images")} placeholder="Enter URLs separated by commas" />
+              <label className="block text-sm font-medium text-slate-700">Images</label>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => handleFileUpload(e, "images", "products")}
+                    disabled={uploading}
+                    className="text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#005AA9] hover:file:bg-blue-100 cursor-pointer"
+                  />
+                  {uploading && <span className="text-xs text-slate-400 animate-pulse">Uploading...</span>}
+                </div>
+                <Input type="text" {...register("images")} placeholder="Enter URLs separated by commas" />
+                {watch("images") && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {watch("images")
+                      .split(",")
+                      .map((item) => item.trim())
+                      .filter(Boolean)
+                      .map((url, i) => (
+                        <img key={i} src={url} alt={`Preview ${i}`} className="h-12 w-12 object-cover rounded-lg border border-slate-200" />
+                      ))}
+                  </div>
+                )}
+              </div>
               {errors.images && <p className="text-xs text-red-600">{errors.images.message}</p>}
             </div>
 

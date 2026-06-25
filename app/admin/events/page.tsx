@@ -6,6 +6,7 @@ import { Plus, Edit2, Trash2, Calendar, MapPin, Search, X, Check, Star, Clock, E
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
+import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
 interface Recurrence {
   enabled: boolean;
@@ -271,19 +272,16 @@ export default function AdminEventsPage() {
       field: "title",
       headerName: "Event Details",
       flex: 1.5,
+      minWidth: 200,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         return (
           <div className="flex flex-col py-1.5 leading-tight justify-center h-full">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-slate-900">{row.title}</span>
-              {row.featured && (
-                <span className="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full select-none">
-                  FEATURED
-                </span>
-              )}
+              
             </div>
-            <div className="text-xs text-slate-500 truncate max-w-sm mt-0.5">{row.description}</div>
+           
           </div>
         );
       },
@@ -292,6 +290,7 @@ export default function AdminEventsPage() {
       field: "category",
       headerName: "Category",
       flex: 0.8,
+      minWidth: 110,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         const style = CATEGORIES.find((c) => c.id === row.category) || {
@@ -313,6 +312,7 @@ export default function AdminEventsPage() {
       field: "startDate",
       headerName: "Schedule",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         return (
@@ -337,6 +337,7 @@ export default function AdminEventsPage() {
       field: "location",
       headerName: "Location",
       flex: 1,
+      minWidth: 130,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         return (
@@ -355,34 +356,33 @@ export default function AdminEventsPage() {
       align: "right",
       headerAlign: "right",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<EventItem>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 py-1.5 h-full">
-            <button
-              onClick={() => {
-                setViewingEvent(row);
-                setIsDetailModalOpen(true);
-              }}
-              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90"
-              title="View Details"
-            >
-              <Eye className="w-4 h-4 text-slate-500" />
-            </button>
-            <button
-              onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
-              title="Edit Event"
-            >
-              <Edit2 className="w-4 h-4 text-blue-500" />
-            </button>
-            <button
-              onClick={() => handleDelete(row.id || row._id || "")}
-              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90"
-              title="Delete Event"
-            >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </button>
+            <ActionsDropdown
+              actions={[
+                {
+                  label: "View",
+                  icon: <Eye className="w-4 h-4 text-slate-500" />,
+                  onClick: () => {
+                    setViewingEvent(row);
+                    setIsDetailModalOpen(true);
+                  },
+                },
+                {
+                  label: "Edit",
+                  icon: <Edit2 className="w-4 h-4 text-blue-500" />,
+                  onClick: () => handleOpenEditModal(row),
+                },
+                {
+                  label: "Delete",
+                  icon: <Trash2 className="w-4 h-4 text-red-500" />,
+                  onClick: () => handleDelete(row.id || row._id || ""),
+                },
+              ]}
+            />
           </div>
         );
       },
@@ -499,6 +499,10 @@ export default function AdminEventsPage() {
             disableRowSelectionOnClick
             loading={loading}
             autoHeight
+            sx={{
+              '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+              '& .MuiDataGrid-row': { overflow: 'visible !important' },
+            }}
           />
         </div>
       </div>

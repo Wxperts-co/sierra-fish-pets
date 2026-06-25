@@ -85,7 +85,7 @@ export default function UserTable({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider select-none">
-              <th className="py-4 px-6 font-semibold">
+              <th className="py-4 px-6 font-semibold min-w-[300px]">
                 <button
                   type="button"
                   onClick={() => handleSort("name")}
@@ -95,7 +95,7 @@ export default function UserTable({
                   <ArrowUpDown className="h-3.5 w-3.5" />
                 </button>
               </th>
-              <th className="py-4 px-6 font-semibold">
+              <th className="py-4 px-6 font-semibold min-w-[120px]">
                 <button
                   type="button"
                   onClick={() => handleSort("role")}
@@ -105,7 +105,7 @@ export default function UserTable({
                   <ArrowUpDown className="h-3.5 w-3.5" />
                 </button>
               </th>
-              <th className="py-4 px-6 font-semibold">
+              <th className="py-4 px-6 font-semibold min-w-[120px]">
                 <button
                   type="button"
                   onClick={() => handleSort("status")}
@@ -115,10 +115,10 @@ export default function UserTable({
                   <ArrowUpDown className="h-3.5 w-3.5" />
                 </button>
               </th>
-              <th className="py-4 px-6 font-semibold text-center uppercase tracking-wider">
+              <th className="py-4 px-6 font-semibold text-center uppercase tracking-wider min-w-[100px]">
                 Verified
               </th>
-              <th className="py-4 px-6 font-semibold">
+              <th className="py-4 px-6 font-semibold min-w-[140px]">
                 <button
                   type="button"
                   onClick={() => handleSort("createdAt")}
@@ -128,7 +128,7 @@ export default function UserTable({
                   <ArrowUpDown className="h-3.5 w-3.5" />
                 </button>
               </th>
-              <th className="py-4 px-6 font-semibold text-right uppercase tracking-wider">
+              <th className="py-4 px-6 font-semibold text-right uppercase tracking-wider min-w-[120px]">
                 Actions
               </th>
             </tr>

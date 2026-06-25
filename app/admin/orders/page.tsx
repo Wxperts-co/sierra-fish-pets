@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
+import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
 interface OrderItem {
   productId: string;
@@ -389,27 +390,13 @@ export default function AdminOrdersPage() {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 h-full">
-            <button
-              onClick={() => handleOpenDetailModal(row)}
-              className="p-2 border border-slate-100 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition active:scale-95 cursor-pointer"
-              title="View Receipts"
-            >
-              <Eye className="w-4 h-4 text-slate-500" />
-            </button>
-            <button
-              onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"
-              title="Edit Status / Tracking"
-            >
-              <Edit2 className="w-4 h-4 text-blue-500" />
-            </button>
-            <button
-              onClick={() => handleDeleteOrder(row._id)}
-              className="p-2 border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"
-              title="Delete Order"
-            >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </button>
+            <ActionsDropdown
+              actions={[
+                { label: "View", icon: <Eye className="w-4 h-4 text-slate-500"/>, onClick: () => handleOpenDetailModal(row) },
+                { label: "Edit", icon: <Edit2 className="w-4 h-4 text-blue-500" />, onClick: () => handleOpenEditModal(row) },
+                { label: "Delete", icon: <Trash2 className="w-4 h-4 text-red-500" />, onClick: () => handleDeleteOrder(row._id) },
+              ]}
+            />
           </div>
         );
       },
@@ -537,6 +524,10 @@ export default function AdminOrdersPage() {
             disableRowSelectionOnClick
             loading={loading}
             autoHeight
+            sx={{
+              '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+              '& .MuiDataGrid-row': { overflow: 'visible !important' },
+            }}
           />
         </div>
       </div>

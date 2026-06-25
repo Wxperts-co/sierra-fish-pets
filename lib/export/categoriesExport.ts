@@ -43,20 +43,9 @@ export function exportCategoriesToExcel(categories: ExportCategory[]) {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Categories");
 
-  const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([wbout], { type: "application/octet-stream" });
-
   const yyyy = new Date().toISOString().slice(0, 10);
   const filename = `categories-${yyyy}.xlsx`;
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  XLSX.writeFile(workbook, filename);
 }
 
 export default exportCategoriesToExcel;

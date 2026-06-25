@@ -229,6 +229,26 @@ export async function POST(req: NextRequest) {
 
     const newOrder = await OrderModel.create(orderData);
 
+    // Generate Invoice PDF
+    try {
+      const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
+      const relativeInvoiceUrl = await generateInvoicePDF(newOrder);
+
+      newOrder.invoiceUrl = relativeInvoiceUrl;
+      newOrder.invoiceGeneratedAt = new Date();
+      await newOrder.save();
+    } catch (pdfError) {
+      console.error("Failed to generate invoice during order placement:", pdfError);
+    }
+
+    // Send Confirmation Email
+    try {
+      const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
+      await sendOrderConfirmationEmail(newOrder);
+    } catch (mailError) {
+      console.error("Failed to send order confirmation email during placement:", mailError);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Order placed successfully.",
@@ -244,6 +264,83 @@ export async function POST(req: NextRequest) {
     console.error("POST /api/orders error:", error);
     return NextResponse.json(
       { success: false, message: error.message || "Failed to place order." },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT: Cancel an order
+export async function PUT(req: NextRequest) {
+  try {
+    await connectDB();
+
+    const body = await req.json();
+    const { orderId } = body;
+
+    if (!orderId) {
+      return NextResponse.json(
+        { success: false, message: "Order ID is required." },
+        { status: 400 }
+      );
+    }
+
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { success: false, message: "Authentication required to cancel an order." },
+        { status: 401 }
+      );
+    }
+
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+      return NextResponse.json(
+        { success: false, message: "Session expired, please log in again." },
+        { status: 401 }
+      );
+    }
+
+    const order = await OrderModel.findById(orderId);
+    if (!order) {
+      return NextResponse.json(
+        { success: false, message: "Order not found." },
+        { status: 404 }
+      );
+    }
+
+    // Security: Check if order belongs to the authenticated user
+    if (order.userId !== decoded.id) {
+      return NextResponse.json(
+        { success: false, message: "Access denied. You cannot cancel this order." },
+        { status: 403 }
+      );
+    }
+
+    // Check if the order status allows cancellation
+    const nonCancellableStatuses = ["shipped", "delivered", "cancelled", "refunded"];
+    if (nonCancellableStatuses.includes(order.status)) {
+      return NextResponse.json(
+        { success: false, message: `This order is already ${order.status} and cannot be cancelled.` },
+        { status: 400 }
+      );
+    }
+
+    // Update status to cancelled
+    order.status = "cancelled";
+    order.updatedAt = new Date();
+    await order.save();
+
+    return NextResponse.json({
+      success: true,
+      message: "Order cancelled successfully.",
+      order,
+    });
+  } catch (error: any) {
+    console.error("PUT /api/orders error:", error);
+    return NextResponse.json(
+      { success: false, message: error.message || "Failed to cancel order." },
       { status: 500 }
     );
   }

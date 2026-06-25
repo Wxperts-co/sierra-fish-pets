@@ -1,5 +1,4 @@
 // Reference data
-export { default as categories } from "./categories.json";
 export { default as brands } from "./brands.json";
 export { default as users } from "./users.json";
 export { default as orders } from "./orders.json";
@@ -12,9 +11,10 @@ export { default as gallery } from "./gallery.json";
 export { default as faq } from "./faq.json";
 
 // Utility helpers
-export const getCategoryBySlug = (slug: string) => {
-  const cats = require("./categories.json");
-  return cats.find((c: { slug: string }) => c.slug === slug);
+export const getCategoryBySlug = async (slug: string) => {
+  // Categories are now fetched from DB via /api/categories
+  // This helper is deprecated; use /api/categories directly in client components
+  return null;
 };
 
 export const getBrandBySlug = (slug: string) => {

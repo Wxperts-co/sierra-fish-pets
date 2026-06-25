@@ -36,7 +36,7 @@ export default function AdoptionCard({ dog, badge, onOpenProfile }: AdoptionCard
       {/* Image Container */}
       <div className="relative aspect-[4/3] w-full overflow-hidden z-0">
         <Image
-          src={dog.image}
+          src={dog.image || "/placeholder-product.png"}
           alt={dog.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
+import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
 interface DogItem {
   _id?: string;
@@ -53,6 +54,8 @@ export default function AdminDogAdoptionPage() {
   const [editingDog, setEditingDog] = useState<DogItem | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [viewingDog, setViewingDog] = useState<DogItem | null>(null);
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   // Form state
   const [name, setName] = useState("");
@@ -113,6 +116,7 @@ export default function AdminDogAdoptionPage() {
     setFeatured(false); setDescription(""); setVaccinated(false);
     setNeutered(false); setGoodWithKids(false); setGoodWithDogs(false);
     setGoodWithCats(false); setPersonality([]); setPersonalityInput("");
+    setImage("");
   };
 
   const handleOpenAddModal = () => {
@@ -140,6 +144,7 @@ export default function AdminDogAdoptionPage() {
     setGoodWithCats(dog.goodWithCats);
     setPersonality(dog.personality || []);
     setPersonalityInput("");
+    setImage(dog.image || "");
     setIsModalOpen(true);
   };
 
@@ -161,6 +166,7 @@ export default function AdminDogAdoptionPage() {
       name, breed, age, gender, size, color, adoptionFee,
       adoptionStatus, featured, description, vaccinated,
       neutered, goodWithKids, goodWithDogs, goodWithCats, personality,
+      image,
     };
 
     try {
@@ -175,7 +181,6 @@ export default function AdminDogAdoptionPage() {
           ...payload,
           id: `dog-custom-${Date.now()}`,
           slug: name.toLowerCase().replace(/\s+/g, "-"),
-          image: "",
         };
         const { data } = await axios.post("/api/dogs", newPayload);
         if (data.success) setDogs((prev) => [...prev, data.dog]);
@@ -210,6 +215,7 @@ export default function AdminDogAdoptionPage() {
       field: "name",
       headerName: "Dog Details",
       flex: 1.5,
+      minWidth: 200,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
@@ -231,6 +237,7 @@ export default function AdminDogAdoptionPage() {
       field: "adoptionStatus",
       headerName: "Status",
       flex: 0.8,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         const cls = STATUS_STYLES[row.adoptionStatus] || "text-slate-600 bg-slate-100 border-slate-200";
@@ -249,6 +256,7 @@ export default function AdminDogAdoptionPage() {
       field: "size",
       headerName: "Details",
       flex: 0.9,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
@@ -263,6 +271,7 @@ export default function AdminDogAdoptionPage() {
       field: "vaccinated",
       headerName: "Health",
       flex: 0.9,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
@@ -273,7 +282,7 @@ export default function AdminDogAdoptionPage() {
                   Vaccinated
                 </span>
               )}
-
+ 
               {row.neutered && (
                 <span className="inline-flex items-center text-[10px] leading-none font-semibold bg-purple-50 text-purple-700 border border-purple-200 p-2 rounded-full">
                   Neutered
@@ -290,34 +299,33 @@ export default function AdminDogAdoptionPage() {
       sortable: false, filterable: false,
       align: "right", headerAlign: "right",
       flex: 1,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<DogItem>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 py-1.5 h-full">
-            <button
-              onClick={() => {
-                setViewingDog(row);
-                setIsDetailModalOpen(true);
-              }}
-              className="p-2 border border-slate-200 hover:border-slate-350 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all active:scale-90"
-              title="View Details"
-            >
-              <Eye className="w-4 h-4 text-slate-500" />
-            </button>
-            <button
-              onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-200 hover:border-sky-300 rounded-xl bg-white hover:bg-sky-50 text-slate-600 hover:text-[#005AA9] transition-all active:scale-90"
-              title="Edit Dog"
-            >
-              <Edit2 className="w-4 h-4 text-blue-500" />
-            </button>
-            <button
-              onClick={() => handleDelete(row.id || row._id || "")}
-              className="p-2 border border-slate-200 hover:border-red-300 rounded-xl bg-white hover:bg-red-50 text-slate-600 hover:text-red-500 transition-all active:scale-90"
-              title="Delete Dog"
-            >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </button>
+            <ActionsDropdown
+              actions={[
+                {
+                  label: "View",
+                  icon: <Eye className="w-4 h-4 text-slate-500" />,
+                  onClick: () => {
+                    setViewingDog(row);
+                    setIsDetailModalOpen(true);
+                  },
+                },
+                {
+                  label: "Edit",
+                  icon: <Edit2 className="w-4 h-4 text-blue-500" />,
+                  onClick: () => handleOpenEditModal(row),
+                },
+                {
+                  label: "Delete",
+                  icon: <Trash2 className="w-4 h-4 text-red-500" />,
+                  onClick: () => handleDelete(row.id || row._id || ""),
+                },
+              ]}
+            />
           </div>
         );
       },
@@ -424,6 +432,10 @@ export default function AdminDogAdoptionPage() {
             disableRowSelectionOnClick
             loading={loading}
             autoHeight
+            sx={{
+              '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+              '& .MuiDataGrid-row': { overflow: 'visible !important' },
+            }}
           />
         </div>
       </div>
@@ -539,6 +551,55 @@ export default function AdminDogAdoptionPage() {
                   value={description} onChange={(e) => setDescription(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800 resize-none"
                 />
+              </div>
+
+              {/* Image upload */}
+              <div>
+                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">Dog Image</label>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setUploading(true);
+                        const data = new FormData();
+                        data.append("file", file);
+                        data.append("folder", "dog-adoption");
+                        try {
+                          const res = await axios.post("/api/upload", data, {
+                            headers: { "Content-Type": "multipart/form-data" },
+                          });
+                          if (res.data?.success) {
+                            setImage(res.data.url);
+                          }
+                        } catch (err) {
+                          console.error(err);
+                          showErrorToast("Failed to upload image.");
+                        } finally {
+                          setUploading(false);
+                        }
+                      }}
+                      disabled={uploading}
+                      className="text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#005AA9] hover:file:bg-blue-100 cursor-pointer"
+                    />
+                    {uploading && <span className="text-xs text-slate-400 animate-pulse">Uploading...</span>}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Or enter Image URL"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 font-semibold text-slate-800"
+                  />
+                  {image && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <img src={image} alt="Preview" className="h-16 w-16 object-cover rounded-lg border border-slate-200" />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Personality Tags */}

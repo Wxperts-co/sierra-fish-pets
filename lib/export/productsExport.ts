@@ -1,11 +1,7 @@
 import * as XLSX from "xlsx";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
-import {
-  RETAILER_CSV_COLUMNS,
-  buildRetailerCsvExportRow,
-  type RetailerCsvExportProduct,
-} from "@/lib/products/retailerCsvColumns";
+import { type RetailerCsvExportProduct } from "@/lib/products/retailerCsvColumns";
 
 export type ExportProduct = RetailerCsvExportProduct;
 
@@ -14,29 +10,44 @@ export function exportProductsToExcel(products: ExportProduct[]) {
     throw new Error("No products available to export");
   }
 
-  const rows = products.map(buildRetailerCsvExportRow);
+  const rows = products.map((p) => ({
+    ID: p.id,
+    Name: p.name,
+    SKU: p.sku,
+    Brand: p.brand,
+    Price: p.price,
+    "Compare At Price": p.compareAtPrice ?? "",
+    "Stock Count": p.stockCount,
+    Category: p.categorySlug ?? "",
+    Subcategory: p.subcategorySlug ?? "",
+    Featured: p.isFeatured ? "Yes" : "No",
+    Description: p.description ?? p.shortDescription ?? "",
+    Image: p.images?.[0] ?? "",
+  }));
 
   const worksheet = XLSX.utils.json_to_sheet(rows, {
-    header: [...RETAILER_CSV_COLUMNS],
+    header: [
+      "ID",
+      "Name",
+      "SKU",
+      "Brand",
+      "Price",
+      "Compare At Price",
+      "Stock Count",
+      "Category",
+      "Subcategory",
+      "Featured",
+      "Description",
+      "Image",
+    ],
   });
 
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
 
-  const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  const blob = new Blob([wbout], { type: "application/octet-stream" });
-
   const yyyy = new Date().toISOString().slice(0, 10);
   const filename = `products-${yyyy}.xlsx`;
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  XLSX.writeFile(workbook, filename);
 }
 
 export async function importProductsFromExcel(file: File) {

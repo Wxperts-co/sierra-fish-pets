@@ -10,16 +10,6 @@
     "status": "active"
   },
   {
-    "id": "banner-002",
-    "image": "/images/heroslider/hero2.png",
-    "title": "Everything Your Pet Needs",
-    "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
-    "ctaLabel": "Shop Now",
-    "ctaLink": "/shop",
-    "order": 2,
-    "status": "active"
-  },
-  {
     "id": "banner-003",
     "image": "/images/heroslider/hero7.png",
     "title": "Everything Your Pet Needs",
@@ -30,13 +20,13 @@
     "status": "active"
   },
   {
-    "id": "banner-034",
-    "image": "/images/heroslider/1781898648991-shophero2.png",
-    "title": "Get your first pet",
-    "subtitle": "trusted",
+    "id": "banner-002",
+    "image": "/images/heroslider/hero2.png",
+    "title": "Everything Your Pet Needs",
+    "subtitle": "Premium food, accessories & supplies for dogs, cats and more",
     "ctaLabel": "Shop Now",
     "ctaLink": "/shop",
-    "order": 3,
-    "status": "inactive"
+    "order": 2,
+    "status": "active"
   }
 ]

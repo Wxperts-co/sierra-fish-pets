@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import eduData from "@/data/sierraedu.json";
 import navbarData from "@/data/navbar.json";
-import categoriesData from "@/data/categories.json";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface EduItem {
@@ -57,52 +56,66 @@ const navSierraCategories: Array<{ label: string; href: string }> =
   sierraEduMenu?.submenuItems ?? [];
 
 // Step 2 — for each nav category derive everything from the two JSON files
-const categoryConfig = navSierraCategories
-  .map((navCat) => {
-    // "/sierra-edu?category=dogs" → "dogs"
-    const categoryParam = navCat.href.split("category=")[1] ?? "";
-    if (!categoryParam) return null;
+// Now accepts fetched categories from DB instead of static JSON
+function buildCategoryConfig(fetchedCategories: any[]) {
+  return navSierraCategories
+    .map((navCat) => {
+      // "/sierra-edu?category=dogs" → "dogs"
+      const categoryParam = navCat.href.split("category=")[1] ?? "";
+      if (!categoryParam) return null;
 
-    // Collect unique tags from sierraedu.json items that belong to this category
-    const matchTags = Array.from(
-      new Set(
-        allItems
-          .filter(
-            (i) =>
-              i.categorySlug === categoryParam ||
-              (i.tags ?? []).includes(categoryParam),
-          )
-          .flatMap((i) => i.tags ?? []),
-      ),
-    );
+      // Collect unique tags from sierraedu.json items that belong to this category
+      const matchTags = Array.from(
+        new Set(
+          allItems
+            .filter(
+              (i) =>
+                i.categorySlug === categoryParam ||
+                (i.tags ?? []).includes(categoryParam),
+            )
+            .flatMap((i) => i.tags ?? []),
+        ),
+      );
 
-    const catSlug = categoryParamToSlug[categoryParam] ?? categoryParam;
-    const catJson = (categoriesData as any[]).find((c) => c.slug === catSlug);
+      const catSlug = categoryParamToSlug[categoryParam] ?? categoryParam;
+      const catJson = fetchedCategories.find((c: any) => c.slug === catSlug);
 
-    const assets = catJson
-      ? {
-          image: catJson.image || "",
-          description: catJson.description || navCat.label,
-          tag: catJson.name || navCat.label,
-        }
-      : {
-          image: "",
-          description: navCat.label,
-          tag: navCat.label,
-        };
+      const assets = catJson
+        ? {
+            image: catJson.image || "",
+            description: catJson.description || navCat.label,
+            tag: catJson.name || navCat.label,
+          }
+        : {
+            image: "",
+            description: navCat.label,
+            tag: navCat.label,
+          };
 
-    return {
-      id: `cat-${categoryParam}`,
-      title: navCat.label,             // ← navbar.json
-      image: assets.image,             // ← categories.json
-      description: assets.description, // ← categories.json
-      tag: assets.tag,                 // ← categories.json (name)
-      matchSlugs: [categoryParam],     // ← derived
-      matchTags,                       // ← derived from sierraedu.json
-      categoryParam,                   // ← derived from navbar.json href
-    };
-  })
-  .filter(Boolean) as Array<{
+      return {
+        id: `cat-${categoryParam}`,
+        title: navCat.label,             // ← navbar.json
+        image: assets.image,             // ← categories from DB
+        description: assets.description, // ← categories from DB
+        tag: assets.tag,                 // ← categories from DB (name)
+        matchSlugs: [categoryParam],     // ← derived
+        matchTags,                       // ← derived from sierraedu.json
+        categoryParam,                   // ← derived from navbar.json href
+      };
+    })
+    .filter(Boolean) as Array<{
+    id: string;
+    title: string;
+    image: string;
+    description: string;
+    tag: string;
+    matchSlugs: string[];
+    matchTags: string[];
+    categoryParam: string;
+  }>;
+}
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+type CategoryConfig = {
   id: string;
   title: string;
   image: string;
@@ -111,10 +124,9 @@ const categoryConfig = navSierraCategories
   matchSlugs: string[];
   matchTags: string[];
   categoryParam: string;
-}>;
+};
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function getItemsForCategory(catParam: string) {
+function getItemsForCategory(categoryConfig: CategoryConfig[], catParam: string) {
   const cat = categoryConfig.find((c) => c.categoryParam === catParam);
   if (!cat) return [];
   return allItems.filter(
@@ -258,7 +270,7 @@ function Hero({
 }
 
 // ─── VIEW 1: Landing — category grid ──────────────────────────────────────────
-function LandingView({ onCategory }: { onCategory: (cat: string) => void }) {
+function LandingView({ onCategory, categoryConfig }: { onCategory: (cat: string) => void; categoryConfig: CategoryConfig[] }) {
   return (
     <>
       <Hero
@@ -388,7 +400,7 @@ function LandingView({ onCategory }: { onCategory: (cat: string) => void }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {categoryConfig.map((cat) => {
-              const count = getItemsForCategory(cat.categoryParam).length;
+              const count = getItemsForCategory(categoryConfig, cat.categoryParam).length;
               return (
                 <motion.button
                   key={cat.id}
@@ -443,13 +455,15 @@ function CategoryView({
   categoryParam,
   onBack,
   onArticle,
+  categoryConfig,
 }: {
   categoryParam: string;
   onBack: () => void;
   onArticle: (slug: string) => void;
+  categoryConfig: CategoryConfig[];
 }) {
   const cat = categoryConfig.find((c) => c.categoryParam === categoryParam);
-  const items = getItemsForCategory(categoryParam);
+  const items = getItemsForCategory(categoryConfig, categoryParam);
 
   if (!cat) {
     return (
@@ -558,11 +572,13 @@ function ArticleView({
   onBack,
   onCategory,
   onArticle,
+  categoryConfig,
 }: {
   slug: string;
   onBack: () => void;
   onCategory: (cat: string) => void;
   onArticle: (slug: string) => void;
+  categoryConfig: CategoryConfig[];
 }) {
   const item = allItems.find((i) => i.slug === slug);
 
@@ -725,6 +741,20 @@ function SierraEduContent() {
   const slugParam = searchParams?.get("slug");
   const categoryParam = searchParams?.get("category");
 
+  const [fetchedCategories, setFetchedCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setFetchedCategories(data.categories); })
+      .catch(() => {});
+  }, []);
+
+  const categoryConfig = useMemo(
+    () => buildCategoryConfig(fetchedCategories),
+    [fetchedCategories]
+  );
+
   const navigate = (params: Record<string, string> | null) => {
     if (!params) {
       router.push("/sierra-edu");
@@ -741,6 +771,7 @@ function SierraEduContent() {
         onBack={() => navigate(null)}
         onCategory={(cat) => navigate({ category: cat })}
         onArticle={(s) => navigate({ slug: s })}
+        categoryConfig={categoryConfig}
       />
     );
   }
@@ -751,11 +782,12 @@ function SierraEduContent() {
         categoryParam={categoryParam}
         onBack={() => navigate(null)}
         onArticle={(s) => navigate({ slug: s })}
+        categoryConfig={categoryConfig}
       />
     );
   }
 
-  return <LandingView onCategory={(cat) => navigate({ category: cat })} />;
+  return <LandingView onCategory={(cat) => navigate({ category: cat })} categoryConfig={categoryConfig} />;
 }
 
 // ─── Page export — wraps in Suspense (required for useSearchParams) ────────────

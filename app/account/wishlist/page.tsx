@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
 import { addToCart } from "@/store/slices/cartSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import WishlistCard from "@/components/account/WishlistCard";
 import AccountHeader from "@/components/account/AccountHeader";
 import type { Product } from "@/types";
@@ -15,18 +15,38 @@ export default function WishlistPage() {
   const wishlistProductIds = useAppSelector((state) => state.wishlist.productIds);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const fetchedIds = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    fetch("/api/products")
+    if (wishlistProductIds.length === 0) {
+      setIsLoading(false);
+      return;
+    }
+
+    const idsToFetch = wishlistProductIds.filter(id => !fetchedIds.current.has(id));
+
+    if (idsToFetch.length === 0) {
+      setIsLoading(false);
+      return;
+    }
+
+    idsToFetch.forEach(id => fetchedIds.current.add(id));
+
+    fetch(`/api/products?ids=${idsToFetch.join(",")}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.products)) {
-          setAllProducts(data.products);
+          setAllProducts(prev => {
+            const newProducts = data.products.filter(
+              (newP: Product) => !prev.some(p => p.id === newP.id)
+            );
+            return [...prev, ...newProducts];
+          });
         }
       })
       .catch((err) => console.error("Failed to fetch wishlist products:", err))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [wishlistProductIds]);
 
   // Filter products that exist in wishlist
   const wishlistProducts = allProducts.filter((product) =>

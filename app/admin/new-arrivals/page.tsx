@@ -14,9 +14,11 @@ import {
   Plus,
   Info,
   Calendar,
+  Eye,
 } from "lucide-react";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { showErrorToast } from "@/lib/toast";
+import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
 interface ArrivalPet {
   id: string;
@@ -69,6 +71,7 @@ export default function AdminNewArrivalsPage() {
   // Modal States
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedArrival, setSelectedArrival] = useState<ArrivalPet | null>(null);
 
   // Form Inputs
@@ -93,6 +96,7 @@ export default function AdminNewArrivalsPage() {
   const [formLocation, setFormLocation] = useState("Renton Store");
   const [formStock, setFormStock] = useState("1");
   const [formSaving, setFormSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   // In-component custom toasts
   const [toasts, setToasts] = useState<{ id: string; message: string; type: "success" | "error" }[]>([]);
@@ -168,6 +172,12 @@ export default function AdminNewArrivalsPage() {
     setFormLocation("Renton Store");
     setFormStock("1");
     setIsFormModalOpen(true);
+  };
+
+  // Open Modal for Viewing Details
+  const handleOpenViewModal = (pet: ArrivalPet) => {
+    setSelectedArrival(pet);
+    setIsViewModalOpen(true);
   };
 
   // Open Form for Editing
@@ -363,7 +373,7 @@ export default function AdminNewArrivalsPage() {
         const row = params.row;
         return (
           <div className="flex items-center h-full">
-            <span className={`inline-block border text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${getCategoryBadgeClass(row.category)}`}>
+            <span className={`inline-block border text-[10px] font-black uppercase tracking-wider px-2.5  rounded-full ${getCategoryBadgeClass(row.category)}`}>
               {row.category}
             </span>
           </div>
@@ -400,7 +410,7 @@ export default function AdminNewArrivalsPage() {
         const row = params.row;
         return (
           <div className="flex items-center h-full">
-            <span className={`inline-block border text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${getStatusBadgeClass(row.status)}`}>
+            <span className={`inline-block border text-[10px] font-black uppercase tracking-wider px-2.5  rounded-full ${getStatusBadgeClass(row.status)}`}>
               {row.status}
             </span>
           </div>
@@ -431,25 +441,18 @@ export default function AdminNewArrivalsPage() {
       align: "right",
       headerAlign: "right",
       flex: 1,
-      minWidth: 110,
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams<ArrivalPet>) => {
         const row = params.row;
         return (
           <div className="flex items-center justify-end gap-2 w-full pr-2 h-full">
-            <button
-              onClick={() => handleOpenEditModal(row)}
-              className="p-2 border border-slate-100 hover:border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-slate-500 hover:text-[#005AA9] transition active:scale-95 cursor-pointer"
-              title="Edit Pet Record"
-            >
-              <Edit2 className="w-4 h-4 text-blue-500" />
-            </button>
-            <button
-              onClick={() => handleDeleteTrigger(row)}
-              className="p-2 border border-slate-100 hover:border-red-200 rounded-xl bg-white hover:bg-red-50 text-slate-500 hover:text-red-600 transition active:scale-95 cursor-pointer"
-              title="Delete Pet Record"
-            >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </button>
+            <ActionsDropdown
+              actions={[
+                { label: "View", icon: <Eye className="w-4 h-4 text-slate-500" />, onClick: () => handleOpenViewModal(row) },
+                { label: "Edit", icon: <Edit2 className="w-4 h-4 text-blue-500" />, onClick: () => handleOpenEditModal(row) },
+                { label: "Delete", icon: <Trash2 className="w-4 h-4 text-red-500" />, onClick: () => handleDeleteTrigger(row) },
+              ]}
+            />
           </div>
         );
       },
@@ -586,6 +589,10 @@ export default function AdminNewArrivalsPage() {
             disableRowSelectionOnClick
             loading={loading}
             autoHeight
+            sx={{
+              '& .MuiDataGrid-cell': { overflow: 'visible !important' },
+              '& .MuiDataGrid-row': { overflow: 'visible !important' },
+            }}
           />
         </div>
       </div>
@@ -864,15 +871,62 @@ export default function AdminNewArrivalsPage() {
               {/* Image urls */}
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                  Image URLs (Comma separated list)
+                  Images
                 </label>
-                <input
-                  type="text"
-                  value={formImages}
-                  onChange={(e) => setFormImages(e.target.value)}
-                  placeholder="e.g. /images/newarrivals/dog1.jpg, /images/newarrivals/dog2.jpg"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#005AA9]/30"
-                />
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={async (e) => {
+                        const files = e.target.files;
+                        if (!files || files.length === 0) return;
+                        setUploading(true);
+                        const data = new FormData();
+                        data.append("folder", "new-arrivals");
+                        for (let i = 0; i < files.length; i++) {
+                          data.append("file", files[i]);
+                        }
+                        try {
+                          const res = await axios.post("/api/upload", data, {
+                            headers: { "Content-Type": "multipart/form-data" },
+                          });
+                          if (res.data?.success) {
+                            const urls = res.data.urls || [res.data.url];
+                            setFormImages((prev) => (prev ? `${prev}, ${urls.join(", ")}` : urls.join(", ")));
+                          }
+                        } catch (err) {
+                          console.error(err);
+                          showErrorToast("Failed to upload image.");
+                        } finally {
+                          setUploading(false);
+                        }
+                      }}
+                      disabled={uploading}
+                      className="text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#005AA9] hover:file:bg-blue-100 cursor-pointer"
+                    />
+                    {uploading && <span className="text-xs text-slate-400 animate-pulse">Uploading...</span>}
+                  </div>
+                  <input
+                    type="text"
+                    value={formImages}
+                    onChange={(e) => setFormImages(e.target.value)}
+                    placeholder="e.g. /images/newarrivals/dog1.jpg, /images/newarrivals/dog2.jpg"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#005AA9]/30"
+                  />
+                  {formImages && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {formImages
+                        .split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean)
+                        .map((url, i) => (
+                          <img key={i} src={url} alt={`Preview ${i}`} className="h-12 w-12 object-cover rounded-lg border border-slate-200" />
+                        ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Description */}
@@ -906,6 +960,165 @@ export default function AdminNewArrivalsPage() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* ── VIEW ARRIVAL DETAILS MODAL ── */}
+      {isViewModalOpen && selectedArrival && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[250] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div>
+                <h3 className="text-xl font-black text-slate-800">New Arrival Details</h3>
+                <p className="text-xs text-slate-500 font-semibold mt-1">ID: {selectedArrival.id}</p>
+              </div>
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition active:scale-95 cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 overflow-y-auto space-y-6 text-slate-750">
+              {/* Pet Info */}
+              <div className="flex flex-col sm:flex-row gap-6">
+                {/* Image */}
+                <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden bg-slate-100 border border-slate-150 flex-shrink-0 flex items-center justify-center relative">
+                  {selectedArrival.images?.[0] ? (
+                    <img
+                      src={selectedArrival.images[0]}
+                      alt={selectedArrival.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs font-bold text-slate-400">No Image</span>
+                  )}
+                </div>
+
+                {/* Grid */}
+                <div className="flex-1 grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pet Name</span>
+                    <p className="text-sm font-extrabold text-slate-800 mt-0.5">{selectedArrival.name}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Category</span>
+                    <p className="text-sm font-bold text-slate-700 mt-0.5 capitalize">{selectedArrival.category}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Breed</span>
+                    <p className="text-sm font-semibold text-slate-700 mt-0.5">{selectedArrival.breed}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Gender</span>
+                    <p className="text-sm font-semibold text-slate-700 mt-0.5">{selectedArrival.gender}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Age</span>
+                    <p className="text-sm font-semibold text-slate-700 mt-0.5">{selectedArrival.age}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Size</span>
+                    <p className="text-sm font-semibold text-slate-700 mt-0.5">{selectedArrival.size}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Price & Location & Status */}
+              <div className="border-t border-slate-100 pt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pricing</span>
+                  <div className="mt-0.5">
+                    <span className="font-mono font-bold text-slate-900 text-sm">
+                      {formatPrice(selectedArrival.price)}
+                    </span>
+                    {selectedArrival.discountPrice && (
+                      <span className="text-[10px] text-slate-400 line-through ml-2">
+                        {formatPrice(selectedArrival.discountPrice)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Location / Stock</span>
+                  <p className="text-sm font-semibold text-slate-700 mt-0.5">
+                    {selectedArrival.location || "Renton Store"} ({selectedArrival.stock || 1} left)
+                  </p>
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Listing Status</span>
+                  <div className="mt-1">
+                    <span className={`inline-block border text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${getStatusBadgeClass(selectedArrival.status)}`}>
+                      {selectedArrival.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Badges/Characteristics */}
+              <div className="border-t border-slate-100 pt-6">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Characteristics</span>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <span className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                    selectedArrival.vaccinated ? "bg-emerald-50 text-emerald-700 border-emerald-150" : "bg-slate-50 text-slate-400 border-slate-200"
+                  }`}>
+                    {selectedArrival.vaccinated ? "✓ Vaccinated" : "✗ Not Vaccinated"}
+                  </span>
+                  <span className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                    selectedArrival.dewormed ? "bg-emerald-50 text-emerald-700 border-emerald-150" : "bg-slate-50 text-slate-400 border-slate-200"
+                  }`}>
+                    {selectedArrival.dewormed ? "✓ Dewormed" : "✗ Not Dewormed"}
+                  </span>
+                  <span className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                    selectedArrival.microchipped ? "bg-emerald-50 text-emerald-700 border-emerald-150" : "bg-slate-50 text-slate-400 border-slate-200"
+                  }`}>
+                    {selectedArrival.microchipped ? "✓ Microchipped" : "✗ Not Microchipped"}
+                  </span>
+                  <span className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
+                    selectedArrival.featured ? "bg-amber-50 text-amber-700 border-amber-150" : "bg-slate-50 text-slate-400 border-slate-200"
+                  }`}>
+                    ★ Featured Listing
+                  </span>
+                </div>
+              </div>
+
+              {/* Highlights */}
+              {selectedArrival.highlights && selectedArrival.highlights.length > 0 && (
+                <div className="border-t border-slate-100 pt-6">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Highlights</span>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {selectedArrival.highlights.map((h, i) => (
+                      <span key={i} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-xs font-semibold text-slate-600 border border-slate-200">
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Description */}
+              <div className="border-t border-slate-100 pt-6">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Description</span>
+                <p className="text-xs text-slate-600 leading-relaxed mt-2 bg-slate-50 p-4 rounded-2xl border border-slate-100/60 whitespace-pre-line">
+                  {selectedArrival.description || "No description provided."}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-slate-50 border-t border-slate-100 px-6 py-4 flex items-center justify-end">
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="px-5 py-2 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs cursor-pointer transition active:scale-95"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

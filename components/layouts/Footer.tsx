@@ -96,7 +96,7 @@ export default function Footer() {
           </div>
 
           {/* Payment Badges */}
-          <div className="flex flex-wrap items-center gap-3 justify-center md:justify-end md:col-span-2">
+          <div className="flex flex-wrap items-center gap-1 md:gap-3 justify-center md:justify-end md:col-span-2">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-100/90 mr-1">
               We Accept:
             </span>
@@ -161,8 +161,8 @@ export default function Footer() {
       </div>
 
       {/* ── Main body ──────────────────────────────────────────── */}
-      <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12">
+      <div className="container mx-auto px-4 md:py-10">
+        <div className="grid grid-cols-2 gap-y-4 gap-x-8 md:gap-x-8 md:gap-y-8 lg:grid-cols-12">
           {/* Brand column */}
           <div className="col-span-2 lg:col-span-4">
             <Link

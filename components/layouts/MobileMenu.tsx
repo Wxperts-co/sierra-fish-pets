@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, ChevronRight } from "lucide-react";
+import { Menu, ChevronRight, User } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -18,8 +18,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
-import categories from "@/data/categories.json";
 import navbarData from "@/data/navbar.json";
+import { useAppSelector } from "@/store/hooks";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -30,9 +30,25 @@ const CATEGORY_EMOJI: Record<string, string> = {
   "small-animal": "🐹",
 };
 
+type MobileCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  subcategories: { id: string; name: string; slug: string }[];
+};
+
 export default function MobileMenu() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState<MobileCategory[]>([]);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -65,6 +81,34 @@ export default function MobileMenu() {
         </SheetHeader>
 
         {/* ── Main nav links ── */}
+        <Link
+          href="/account"
+          onClick={() => setOpen(false)}
+          className="flex items-center gap-3 border-b border-slate-100 px-5 py-4 transition-colors hover:bg-blue-50/50"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-50 text-[#005AA9]">
+            {isAuthenticated && user?.avatar?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={user.avatar.url}
+                alt={user?.name || "User"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <User className="h-5 w-5" />
+            )}
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-bold text-slate-800">
+              {isAuthenticated ? user?.name || "My Account" : "My Account"}
+            </span>
+            <span className="block text-xs font-semibold text-slate-500">
+              View dashboard
+            </span>
+          </span>
+          <ChevronRight className="ml-auto h-4 w-4 text-slate-300" />
+        </Link>
+
         <nav className="border-b border-slate-100">
           <Accordion multiple className="w-full">
             {navbarData.map((item: any) => {

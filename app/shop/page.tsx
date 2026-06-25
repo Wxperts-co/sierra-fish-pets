@@ -7,7 +7,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import ShopHero from "@/components/shop/ShopHero";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 import ProductGrid from "@/components/shop/ProductGrid";
-import categories from "@/data/categories.json";
 import type { Product } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -19,6 +18,7 @@ import {
   setBrands,
   setMinRating,
   setPriceRange,
+  setSearch,
 } from "@/store/slices/filtersSlice";
 import type { CategorySlug } from "@/types";
 
@@ -44,6 +44,14 @@ function ShopPageContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string; subcategories?: { id: string; name: string; slug: string }[] }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
 
   // Read category, subcategory & brands from Redux
   const selectedCategory = useAppSelector((state) => state.filters.category);
@@ -51,7 +59,7 @@ function ShopPageContent() {
     (state) => state.filters.subcategory,
   );
   const selectedBrands = useAppSelector((state) => state.filters.brands);
-  const { minPrice, maxPrice, minRating, stockStatus, sortBy } = useAppSelector(
+  const { minPrice, maxPrice, minRating, stockStatus, sortBy, search } = useAppSelector(
     (state) => state.filters,
   );
 
@@ -64,6 +72,7 @@ function ShopPageContent() {
     const brandsFromUrl = searchParams?.get("brand")?.split(",") || [];
     const ratingFromUrl = searchParams?.get("rating");
     const sortFromUrl = searchParams?.get("sort");
+    const searchFromUrl = searchParams?.get("q") || "";
     const pageFromUrl = Number(searchParams?.get("page") || "1");
 
     setCurrentPage(pageFromUrl > 0 ? pageFromUrl : 1);
@@ -96,6 +105,7 @@ function ShopPageContent() {
     dispatch(setBrands(brandsFromUrl));
 
     dispatch(setMinRating(ratingFromUrl ? Number(ratingFromUrl) : null));
+    dispatch(setSearch(searchFromUrl));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -109,6 +119,7 @@ function ShopPageContent() {
     minRating,
     stockStatus,
     sortBy,
+    search,
   });
 
   // Fetch products from DB via API (paginated, sorted, and filtered)
@@ -122,6 +133,7 @@ function ShopPageContent() {
       minRating,
       stockStatus,
       sortBy,
+      search,
     };
 
     const filtersChanged =
@@ -132,7 +144,8 @@ function ShopPageContent() {
       prevFiltersRef.current.maxPrice !== currentFilters.maxPrice ||
       prevFiltersRef.current.minRating !== currentFilters.minRating ||
       prevFiltersRef.current.stockStatus !== currentFilters.stockStatus ||
-      prevFiltersRef.current.sortBy !== currentFilters.sortBy;
+      prevFiltersRef.current.sortBy !== currentFilters.sortBy ||
+      prevFiltersRef.current.search !== currentFilters.search;
 
     prevFiltersRef.current = currentFilters;
 
@@ -157,6 +170,7 @@ function ShopPageContent() {
     if (minRating) params.set("rating", String(minRating));
     if (stockStatus) params.set("stockStatus", stockStatus);
     if (sortBy) params.set("sort", sortBy);
+    if (search) params.set("q", search);
 
     fetch(`/api/products?${params.toString()}`)
       .then((res) => res.json())

@@ -7,7 +7,7 @@ import axios from "axios";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,28 +18,14 @@ const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   slug: z.string().min(1, "Slug is required"),
   description: z.string().min(1, "Description is required"),
-  image: z.string().min(1, "Image URL is required"),
-  icon: z.string().min(1, "Icon URL is required"),
+  image: z.string().min(1, "Image is required"),
+  icon: z.string().min(1, "Icon is required"),
   productCount: z.coerce.number().nonnegative("Product count must be non-negative"),
-  subcategories: z
-    .string()
-    .optional()
-    .transform((value) =>
-      value
-        ?.split(";")
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .map((entry) => {
-          const [id, name, slug] = entry.split(",").map((part) => part.trim());
-          return { id, name, slug };
-        })
-    )
-    .refine((list) => list?.every((item) => item.id && item.name && item.slug), {
-      message: "Subcategories must be entered as id,name,slug separated by semicolons",
-    }),
 });
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
+
+type Subcategory = { id: string; name: string; slug: string };
 
 const defaultValues: CategoryFormValues = {
   id: "",
@@ -49,22 +35,61 @@ const defaultValues: CategoryFormValues = {
   image: "",
   icon: "",
   productCount: 0,
-  subcategories: undefined,
 };
 
 export default function AddCategoryPage() {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema) as any,
     defaultValues,
   });
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: "image" | "icon", folder: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const data = new FormData();
+    data.append("file", file);
+    data.append("folder", folder);
+    try {
+      const res = await axios.post("/api/upload", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      if (res.data?.success) {
+        setValue(fieldName, res.data.url);
+      }
+    } catch (err) {
+      console.error(err);
+      showErrorToast("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const addSubcategory = () => {
+    setSubcategories((prev) => [...prev, { id: "", name: "", slug: "" }]);
+  };
+
+  const removeSubcategory = (index: number) => {
+    setSubcategories((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const updateSubcategory = (index: number, field: keyof Subcategory, value: string) => {
+    setSubcategories((prev) =>
+      prev.map((sub, i) => (i === index ? { ...sub, [field]: value } : sub))
+    );
+  };
 
   const onSubmit = async (values: CategoryFormValues) => {
     setSubmitError(null);
@@ -78,7 +103,7 @@ export default function AddCategoryPage() {
       image: values.image.trim(),
       icon: values.icon.trim(),
       productCount: values.productCount,
-      subcategories: values.subcategories || [],
+      subcategories: subcategories.filter((s) => s.id && s.name && s.slug),
     };
 
     try {
@@ -138,14 +163,42 @@ export default function AddCategoryPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Image URL</label>
-              <Input type="text" {...register("image")} />
+              <label className="block text-sm font-medium text-slate-700">Image</label>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-3">
+                  {watch("image") && (
+                    <img src={watch("image")} alt="Preview" className="h-10 w-10 object-cover rounded-lg border border-slate-200" />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, "image", "categories")}
+                    disabled={uploading}
+                    className="text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#005AA9] hover:file:bg-blue-100 cursor-pointer"
+                  />
+                </div>
+                <Input type="text" placeholder="Or enter Image URL" {...register("image")} />
+              </div>
               {errors.image && <p className="text-xs text-rose-600">{errors.image.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">Icon URL</label>
-              <Input type="text" {...register("icon")} />
+              <label className="block text-sm font-medium text-slate-700">Icon</label>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-3">
+                  {watch("icon") && (
+                    <img src={watch("icon")} alt="Preview" className="h-10 w-10 object-cover rounded-lg border border-slate-200" />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, "icon", "categories")}
+                    disabled={uploading}
+                    className="text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-[#005AA9] hover:file:bg-blue-100 cursor-pointer"
+                  />
+                </div>
+                <Input type="text" placeholder="Or enter Icon URL" {...register("icon")} />
+              </div>
               {errors.icon && <p className="text-xs text-rose-600">{errors.icon.message}</p>}
             </div>
 
@@ -170,18 +223,70 @@ export default function AddCategoryPage() {
             )}
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700">
-              Subcategories
-            </label>
-            <textarea
-              rows={4}
-              className="w-full rounded-2xl border border-slate-200 bg-transparent px-4 py-3 text-sm outline-none focus:border-[#003B73] focus:ring-1 focus:ring-[#003B73]/20"
-              placeholder="Enter subcategories as id,name,slug; separate multiple with semicolons"
-              {...register("subcategories")}
-            />
-            {errors.subcategories && (
-              <p className="text-xs text-rose-600">{errors.subcategories.message}</p>
+          {/* Subcategories */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="block text-sm font-medium text-slate-700">Subcategories</label>
+                <p className="text-xs text-slate-400 mt-0.5">Add each subcategory with its ID, display name, and URL slug.</p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addSubcategory}
+                className="h-8 rounded-lg px-3 text-xs gap-1.5"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add Subcategory
+              </Button>
+            </div>
+
+            {subcategories.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-400">
+                No subcategories yet. Click &quot;Add Subcategory&quot; to add one.
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {/* Header Row */}
+                <div className="grid grid-cols-[1fr_1fr_1fr_36px] gap-2 px-1">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">ID</span>
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</span>
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Slug</span>
+                  <span></span>
+                </div>
+                {subcategories.map((sub, index) => (
+                  <div key={index} className="grid grid-cols-[1fr_1fr_1fr_36px] gap-2 items-center">
+                    <Input
+                      type="text"
+                      placeholder="e.g. cat-dogs"
+                      value={sub.id}
+                      onChange={(e) => updateSubcategory(index, "id", e.target.value)}
+                      className="h-9 text-sm"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="e.g. Dogs"
+                      value={sub.name}
+                      onChange={(e) => updateSubcategory(index, "name", e.target.value)}
+                      className="h-9 text-sm"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="e.g. dogs"
+                      value={sub.slug}
+                      onChange={(e) => updateSubcategory(index, "slug", e.target.value)}
+                      className="h-9 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeSubcategory(index)}
+                      className="h-9 w-9 flex items-center justify-center rounded-lg border border-rose-200 text-rose-500 hover:bg-rose-50 transition"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 

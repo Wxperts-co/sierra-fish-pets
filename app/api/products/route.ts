@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     const isBestSeller = searchParams.get("isBestSeller");
     const isNewArrival = searchParams.get("isNewArrival");
     const isFeatured = searchParams.get("isFeatured");
+    const q = searchParams.get("q");
 
     const latestByCategory = searchParams.get("latestByCategory");
     if (latestByCategory === "true") {
@@ -77,12 +78,42 @@ export async function GET(request: NextRequest) {
     // Build filter
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filter: Record<string, any> = {};
-    if (id) filter.id = id;
+    const ids = searchParams.get("ids");
+    if (ids !== null) {
+      const idArray = ids.split(",").filter(Boolean);
+      if (idArray.length > 0) {
+        filter.id = { $in: idArray };
+      } else {
+        return NextResponse.json({
+          success: true,
+          count: 0,
+          products: [],
+          totalPages: 1,
+        }, { status: 200 });
+      }
+    } else if (id) {
+      filter.id = id;
+    }
+    if (q) {
+      filter.$and = filter.$and || [];
+      filter.$and.push({
+        $or: [
+          { name: { $regex: q, $options: "i" } },
+          { description: { $regex: q, $options: "i" } },
+          { brand: { $regex: q, $options: "i" } },
+          { categorySlug: { $regex: q, $options: "i" } },
+        ]
+      });
+    }
+
     if (category) {
-      filter.$or = [
-        { categorySlug: category },
-        { categorySlug: { $regex: new RegExp(`^${category}-\\/\\-`, "i") } },
-      ];
+      filter.$and = filter.$and || [];
+      filter.$and.push({
+        $or: [
+          { categorySlug: category },
+          { categorySlug: { $regex: new RegExp(`^${category}-\\/\\-`, "i") } },
+        ]
+      });
     }
     if (subcategory) filter.subcategorySlug = subcategory;
 

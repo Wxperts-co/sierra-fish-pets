@@ -7,15 +7,12 @@ import { motion, useInView } from "framer-motion";
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { Category } from "@/types";
 
-import categoriesJson from "@/data/categories.json";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-
-const categories = categoriesJson as Category[];
 
 const CATEGORY_BACKGROUNDS: Record<string, string> = {
   dog: "bg-[#FFF0ED]",
@@ -41,6 +38,14 @@ export default function CategoryCards() {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
   const [current, setCurrent] = useState(0);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => { if (data.success) setCategories(data.categories); })
+      .catch(() => {});
+  }, []);
 
   // Trigger card animations when the carousel scrolls into view
   const sectionRef = useRef<HTMLElement>(null);
