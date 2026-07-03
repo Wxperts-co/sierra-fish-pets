@@ -100,7 +100,6 @@ export default function AdminLayout({
                 fill
                 className="object-contain"
                 sizes="112px"
-                priority
               />
             </div>
           </div>

@@ -51,12 +51,15 @@ export default function MegaMenu({
       {/* Dropdown panel */}
       <div
         onClick={onClose}
-        className={`absolute left-0 top-full z-50 mt-0 w-[760px] transition-all duration-200 origin-top-left ${
-          isOpen
-            ? "opacity-100 visible scale-100 pointer-events-auto"
-            : "opacity-0 invisible scale-95 pointer-events-none"
-        }`}
-        style={{ paddingTop: "2px" }}
+        suppressHydrationWarning
+        className="absolute left-0 top-full z-50 mt-0 w-[760px] transition-all duration-200 origin-top-left"
+        style={{
+          paddingTop: "2px",
+          opacity: isOpen ? 1 : 0,
+          visibility: isOpen ? "visible" : "hidden",
+          transform: isOpen ? "scale(1)" : "scale(0.95)",
+          pointerEvents: isOpen ? "auto" : "none",
+        }}
       >
         <div className="font-lato overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl ring-1 ring-black/5">
 

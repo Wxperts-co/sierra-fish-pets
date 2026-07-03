@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -73,6 +73,11 @@ const COLORS = ["#005AA9", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"
 export default function AdminDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const [chartDimensions, setChartDimensions] = useState({ width: 0, height: 300 });
+
   const [stats, setStats] = useState({
     totalRevenue: 0,
     activeOrders: 0,
@@ -84,6 +89,17 @@ export default function AdminDashboard() {
   const [statusDistribution, setStatusDistribution] = useState<StatusItem[]>([]);
   const [chartTab, setChartTab] = useState<"revenue" | "orders">("revenue");
   const [timeframe, setTimeframe] = useState<"weekly" | "monthly" | "yearly">("weekly");
+
+  useEffect(() => {
+    if (!mounted || !chartContainerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      if (!entries || entries.length === 0) return;
+      const { width, height } = entries[0].contentRect;
+      setChartDimensions({ width, height: height || 300 });
+    });
+    observer.observe(chartContainerRef.current);
+    return () => observer.disconnect();
+  }, [mounted, loading, chartData]);
 
   const fetchDashboardData = async (rangeVal = timeframe) => {
     try {
@@ -104,6 +120,7 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    setMounted(true);
     fetchDashboardData(timeframe);
   }, [timeframe]);
 
@@ -463,7 +480,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className="h-[320px] w-full pt-2 overflow-x-auto">
-            {loading ? (
+            {!mounted || loading ? (
               <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
                 <RefreshCw className="h-6 w-6 text-[#005AA9] animate-spin" />
                 <span className="text-xs text-slate-500 font-bold mt-2">Loading chart data...</span>
@@ -474,10 +491,10 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-400 font-bold mt-2">No {timeframe} analytics data available</span>
               </div>
             ) : (
-              <div className="h-full min-w-[650px] lg:min-w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  {chartTab === "revenue" ? (
-                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <div ref={chartContainerRef} className="h-[300px] min-w-[650px] lg:min-w-full relative">
+                {chartDimensions.width > 0 && (
+                  chartTab === "revenue" ? (
+                    <AreaChart width={chartDimensions.width} height={chartDimensions.height} data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#005AA9" stopOpacity={0.2} />
@@ -494,7 +511,7 @@ export default function AdminDashboard() {
                       <Area type="monotone" dataKey="revenue" stroke="#005AA9" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                     </AreaChart>
                   ) : (
-                    <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <BarChart width={chartDimensions.width} height={chartDimensions.height} data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                       <XAxis dataKey="label" stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} />
                       <YAxis stroke="#94a3b8" fontSize={11} fontWeight={600} tickLine={false} axisLine={false} allowDecimals={false} />
@@ -508,8 +525,8 @@ export default function AdminDashboard() {
                         ))}
                       </Bar>
                     </BarChart>
-                  )}
-                </ResponsiveContainer>
+                  )
+                )}
               </div>
             )}
           </div>
@@ -526,31 +543,29 @@ export default function AdminDashboard() {
           </div>
 
           <div className="h-[260px] w-full flex items-center justify-center relative">
-            {loading ? (
+            {!mounted || loading ? (
               <RefreshCw className="h-6 w-6 text-[#005AA9] animate-spin" />
             ) : statusDistribution.length === 0 ? (
               <span className="text-xs text-slate-400 font-bold">No order status breakdown</span>
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={statusDistribution}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={85}
-                    paddingAngle={3}
-                    dataKey="value"
-                  >
-                    {statusDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9" }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <PieChart width={280} height={220}>
+                <Pie
+                  data={statusDistribution}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={85}
+                  paddingAngle={3}
+                  dataKey="value"
+                >
+                  {statusDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #f1f5f9" }}
+                />
+              </PieChart>
             )}
           </div>
 

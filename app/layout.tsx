@@ -9,6 +9,7 @@ import Providers from "./provider";
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 const nunito = Nunito({
@@ -16,6 +17,7 @@ const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {

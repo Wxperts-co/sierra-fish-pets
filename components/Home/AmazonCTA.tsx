@@ -40,9 +40,9 @@ export default function AmazonCTA() {
             <Image
               src="/images/logo/logo.png"
               alt="Sierra Fish & Pets"
-              width={400}
-              height={100}
-              className="object-contain object-left w-[300px]"
+              width={300}
+              height={75}
+              className="object-contain object-left"
             />
           </div>
 

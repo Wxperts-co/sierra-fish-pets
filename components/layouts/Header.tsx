@@ -413,9 +413,10 @@ export default function Header() {
                 height={100}
                 priority
                 className={cn(
-                  "block h-auto w-[260px] object-contain object-center transition-all duration-300",
+                  "block object-contain object-center transition-all duration-300",
                   showSolidBackground ? "rounded-xl" : "",
                 )}
+                style={{ width: "260px", height: "auto" }}
               />
             </Link>
 

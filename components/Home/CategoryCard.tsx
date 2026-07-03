@@ -36,7 +36,7 @@ const CARD_DIRECTIONS: { x: number; y: number }[] = [
 export default function CategoryCards({ initialCategories = [] }: { initialCategories?: Category[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
+  const [canNext, setCanNext] = useState(false);
   const [current, setCurrent] = useState(0);
 
   const getSortedCategories = (cats: Category[]) => {
@@ -114,6 +114,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
             <button
               onClick={scrollPrev}
               disabled={!canPrev}
+              suppressHydrationWarning
               aria-label="Previous category"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:bg-[#005AA9] hover:border-[#005AA9] hover:text-white hover:shadow-md hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
             >
@@ -122,6 +123,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
             <button
               onClick={scrollNext}
               disabled={!canNext}
+              suppressHydrationWarning
               aria-label="Next category"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:bg-[#005AA9] hover:border-[#005AA9] hover:text-white hover:shadow-md hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
             >

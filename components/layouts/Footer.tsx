@@ -111,7 +111,8 @@ export default function Footer() {
                 alt="Visa"
                 width={56}
                 height={32}
-                className="h-7 w-auto object-contain"
+                className="object-contain"
+                style={{ height: "1.75rem", width: "auto" }}
               />
             </div>
 
@@ -125,7 +126,8 @@ export default function Footer() {
                 alt="Mastercard"
                 width={56}
                 height={32}
-                className="h-7 w-auto object-contain"
+                className="object-contain"
+                style={{ height: "1.75rem", width: "auto" }}
               />
             </div>
 
@@ -139,7 +141,8 @@ export default function Footer() {
                 alt="American Express"
                 width={56}
                 height={32}
-                className="h-7 w-auto object-contain"
+                className="object-contain"
+                style={{ height: "1.75rem", width: "auto" }}
               />
             </div>
 
@@ -153,7 +156,8 @@ export default function Footer() {
                 alt="Discover"
                 width={56}
                 height={32}
-                className="h-7 w-auto object-contain"
+                className="object-contain"
+                style={{ height: "1.75rem", width: "auto" }}
               />
             </div>
           </div>
@@ -174,7 +178,8 @@ export default function Footer() {
                 alt="Sierra Fish & Pets"
                 width={150}
                 height={48}
-                className="h-auto w-auto max-h-25 object-contain"
+                className="object-contain"
+                style={{ maxHeight: "6.25rem", width: "auto", height: "auto" }}
               />
             </Link>
 
