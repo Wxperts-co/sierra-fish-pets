@@ -92,7 +92,7 @@ export default function AdminLayout({
               <Menu className="h-6 w-6" />
             </button>
 
-            {/* Logo on Mobile view — centered absolutely */}
+            {/* Logo on Mobile view —  */}
             <div className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-10 w-28 overflow-hidden rounded-xl bg-white/5 border border-white/10 shrink-0 select-none">
               <Image
                 src="/images/logo/logo.png"
