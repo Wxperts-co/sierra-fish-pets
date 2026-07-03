@@ -398,6 +398,11 @@
         "label": "Gift cards",
         "href": "/gift-cards",
         "type": "link"
+      },
+      {
+        "label": "Flyers",
+        "href": "/flyers",
+        "type": "link"
       }
     ]
   }

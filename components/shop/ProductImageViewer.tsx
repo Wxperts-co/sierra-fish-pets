@@ -8,6 +8,26 @@ interface ProductImageViewerProps {
   product: Product;
 }
 
+// Helper function to strip sizes, colors, weights, and volumes from product names
+function getBaseProductName(name: string): string {
+  let base = name;
+
+  // 1. Remove parenthesized sizes like (10 lb), (4 lb)
+  base = base.replace(/\s*\([^)]*\)/gi, "");
+
+  // 2. Remove standalone volume/weight keywords like 8 oz, 250ml, 100g
+  base = base.replace(/\s*\d+\s*(lb|oz|ml|g|ct|pack|pk)s?\b/gi, "");
+
+  // 3. Remove dimensions and layout tags like 9"-13", 4*3*2
+  base = base.replace(/\s*\d+(["']?)\s*[-*]\s*\d+\1(\s*[-*]\s*\d+\1)?/gi, "");
+  base = base.replace(/\s*\d+\s*\*\s*\d+(\s*\*\s*\d+)?/gi, "");
+
+  // 4. Remove trailing generic size qualifiers
+  base = base.replace(/\s+(sm|md|lrg|small|medium|large|med|mini)\b/gi, "");
+
+  return base.replace(/\s+/g, " ").trim();
+}
+
 export default function ProductImageViewer({ product }: ProductImageViewerProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [variantImages, setVariantImages] = useState<string[]>([]);
@@ -16,12 +36,15 @@ export default function ProductImageViewer({ product }: ProductImageViewerProps)
   useEffect(() => {
     const loadVariants = async () => {
       try {
-        const res = await fetch(`/api/products?category=${product.categorySlug}&limit=6`);
+        const baseName = getBaseProductName(product.name);
+        const res = await fetch(`/api/products?q=${encodeURIComponent(baseName)}&limit=10`);
         const data = await res.json();
         if (data.success && data.products) {
+          const targetBase = baseName.toLowerCase();
           const imgs = data.products
-            .map((p: any) => p.images?.[0])
-            .filter((img: string) => img && img !== product.images?.[0]);
+            .filter((p: Product) => p.id !== product.id && getBaseProductName(p.name).toLowerCase() === targetBase)
+            .map((p: Product) => p.images?.[0])
+            .filter(Boolean);
           const uniqueImgs = Array.from(new Set(imgs)) as string[];
           setVariantImages(uniqueImgs);
         }
@@ -30,7 +53,7 @@ export default function ProductImageViewer({ product }: ProductImageViewerProps)
       }
     };
     loadVariants();
-  }, [product.categorySlug, product.images]);
+  }, [product.id, product.name, product.images]);
 
   // Ensure we always have multiple premium product options for demonstration
   const images = useMemo(() => {
@@ -66,7 +89,7 @@ export default function ProductImageViewer({ product }: ProductImageViewerProps)
         }
       }
     }
-    return list.slice(0, 4);
+    return list.slice(0, 3);
   }, [product, variantImages]);
 
   const activeImage = images[activeIndex] || images[0];

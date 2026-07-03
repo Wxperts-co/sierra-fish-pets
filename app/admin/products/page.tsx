@@ -307,6 +307,50 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleUpdateStock = async (productId: string, newStock: number) => {
+    try {
+      const response = await axios.patch(`/api/admin/products/${productId}`, {
+        stockCount: newStock,
+      });
+      if (response.data?.success) {
+        setProducts((prev) =>
+          prev.map((p) =>
+            p._id === productId
+              ? {
+                  ...p,
+                  stockCount: response.data.product.stockCount,
+                  stockStatus: response.data.product.stockStatus,
+                }
+              : p
+          )
+        );
+        const params = new URLSearchParams();
+        params.set("page", String(paginationModel.page + 1));
+        params.set("limit", String(paginationModel.pageSize));
+        if (filters.search) params.set("search", filters.search);
+        if (filters.stockStatus !== "all")
+          params.set("stockStatus", filters.stockStatus);
+
+        const res = await axios.get(
+          `/api/admin/products?${params.toString()}`,
+        );
+        if (res.data?.success) {
+          if (res.data.stats) {
+            setStats(res.data.stats);
+          }
+        }
+        return true;
+      } else {
+        showErrorToast(response.data?.message || "Failed to update stock");
+        return false;
+      }
+    } catch (error: any) {
+      console.error("Failed to update stock:", error);
+      showErrorToast(error?.response?.data?.message || "Failed to update stock");
+      return false;
+    }
+  };
+
   const displayedProducts = products;
 
   const columns = [
@@ -526,6 +570,7 @@ export default function AdminProductsPage() {
         rowCount={totalCount}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        onUpdateStock={handleUpdateStock}
       />
 
       {selectedProductForView && (

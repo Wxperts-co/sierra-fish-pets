@@ -126,21 +126,6 @@ export default function MegaMenu({
             </div>
           </div>
 
-          {/* Footer CTA strip */}
-          <div className="flex items-center gap-4 border-t border-slate-100 bg-slate-50 px-6 py-3">
-            <span className="text-xs text-slate-500">Popular:</span>
-            {["Freshwater Fish", "Dog Food", "Aquarium Tanks", "Cat Toys"].map(
-              (tag) => (
-                <Link
-                  key={tag}
-                  href="#"
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm transition-all hover:border-[#005AA9] hover:text-[#005AA9]"
-                >
-                  {tag}
-                </Link>
-              )
-            )}
-          </div>
 
         </div>
       </div>

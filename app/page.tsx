@@ -10,12 +10,23 @@ import React from 'react'
 import TasteGuarantee from '@/components/Home/TasteGuarantee'
 import PopularBrands from '@/components/Home/PopularBrand'
 import InstagramGallery from '@/components/Home/InstagramGallery'
+import { connectDB } from '@/lib/mongodb'
+import CategoryModel from '@/models/Category'
 
-const page = () => {
+const page = async () => {
+  let categories = [];
+  try {
+    await connectDB();
+    const rawCategories = await CategoryModel.find({}).sort({ name: 1 }).lean();
+    categories = JSON.parse(JSON.stringify(rawCategories));
+  } catch (error) {
+    console.error("Failed to pre-fetch categories on server:", error);
+  }
+
   return (
     <>
       <HeroBanner/>
-      <CategoryCards/>
+      <CategoryCards initialCategories={categories}/>
       <PromoBlocksCarousel/>
       <NewArrivals/>
       {/* <FeaturedProducts/> */}

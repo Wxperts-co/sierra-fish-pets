@@ -146,12 +146,13 @@ export async function POST(request: NextRequest) {
     console.log(`[Import] Starting bulk import of ${importedProducts.length} entries.`);
 
     // 1. Optimize lookup: Fetch all existing product IDs, SKUs, and Slugs in a single light query
-    const existingProducts = await Product.find({}, "id sku slug").lean();
-    const existingIdSet = new Set(existingProducts.map(p => p.id));
+    const existingProducts = await Product.find({}, "id sku slug images imageStatus imageSource imageLastChecked createdAt").lean();
+    const existingIdMap = new Map<string, any>(existingProducts.map(p => [p.id, p]));
     const existingSkuSet = new Set(existingProducts.map(p => p.sku));
     const slugSet = new Set(existingProducts.map(p => p.slug));
 
     const productsToInsert: any[] = [];
+    const productsToUpdate: any[] = [];
 
     for (const productData of importedProducts) {
       try {
@@ -162,17 +163,30 @@ export async function POST(request: NextRequest) {
         }
 
         // Map imported data
-        const rawId = getValue(productData, "product_internal_id", "sku_id", "upc_id", "product_sku", "id", "sku") || "";
-        const rawName = getValue(productData, "item_name", "product_name", "name") || "";
-        const rawSku = getValue(productData, "sku_id", "product_sku", "sku") || "";
-        const rawUpc = getValue(productData, "product_upc", "upc_id", "upc", "barcode", "gtin") || "";
+        const rawId = getValue(productData, "product_internal_id", "sku_id", "upc_id", "product_sku", "id", "sku", "item", "6 digits") || "";
+        const rawName = getValue(productData, "item_name", "product_name", "name", "des", "description") || "";
+        const rawSku = getValue(productData, "sku_id", "product_sku", "sku", "item", "6 digits") || "";
+        const rawUpc = getValue(productData, "product_upc", "upc_id", "upc", "barcode", "gtin", "each upc", "upc_no") || "";
         
         const id = cleanExcelText(rawId);
         const name = cleanExcelText(rawName);
         const sku = cleanExcelText(rawSku);
         const upc = cleanExcelText(rawUpc);
 
-        const quantityRaw = getValue(productData, "product_quantity", "quantity", "stock_count", "stockCount");
+        // Silently skip completely empty padding rows
+        if (!id && !name && !sku) {
+          continue;
+        }
+
+        // Skip instruction/description helper rows (e.g. from sample6)
+        if (
+          id.toLowerCase().includes("unique product id") ||
+          name.toLowerCase().includes("consumer would see")
+        ) {
+          continue;
+        }
+
+        const quantityRaw = getValue(productData, "product_quantity", "quantity", "stock_count", "stockCount", "instock");
         const statusRaw = getValue(productData, "status");
         
         let quantity = 50; // Default in_stock count if quantity column is missing (e.g. feedback template)
@@ -188,10 +202,14 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-        // Verify duplicates in-memory
-        if (existingIdSet.has(id) || existingSkuSet.has(sku)) {
+        // Verify duplicates / updates in-memory
+        const existingProduct = existingIdMap.get(id);
+        const isUpdate = !!existingProduct;
+
+        // If it's a new product, check if the SKU is already taken by another product
+        if (!isUpdate && existingSkuSet.has(sku)) {
           results.failed++;
-          results.errors.push(`Product "${name}" (ID: ${id}, SKU: ${sku}) already exists.`);
+          results.errors.push(`Product "${name}" (SKU: ${sku}) is already taken by another product.`);
           continue;
         }
 
@@ -199,7 +217,7 @@ export async function POST(request: NextRequest) {
         const cleanBrandVal = cleanExcelText(brandRaw);
         const brand = (cleanBrandVal && cleanBrandVal !== "Unknown") ? cleanBrandVal : (name.split(" ")[0] || "Unknown");
 
-        const priceRaw = getValue(productData, "default_price", "product_price", "price");
+        const priceRaw = getValue(productData, "default_price", "product_price", "price", "price 1", "item price");
         const price = priceRaw != null ? parseFloat(priceRaw) || 0 : 0;
         
         const compareAtPriceRaw = getValue(productData, "product_compare_to_price", "compareAtPrice", "compare_at_price");
@@ -246,26 +264,42 @@ export async function POST(request: NextRequest) {
         const imageLastChecked = images.length > 0 ? new Date() : null;
 
         // Resolve slug in-memory using sets
-        let baseSlug = String(name)
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "")
-          .slice(0, 180);
-        if (!baseSlug) baseSlug = "product";
-        let slug = baseSlug;
-        let slugCounter = 1;
-        while (slugSet.has(slug)) {
-          const suffix = `-${slugCounter}`;
-          slug = baseSlug.slice(0, 200 - suffix.length) + suffix;
-          slugCounter++;
+        let slug = existingProduct ? existingProduct.slug : "";
+        if (!slug) {
+          let baseSlug = String(name)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "")
+            .slice(0, 180);
+          if (!baseSlug) baseSlug = "product";
+          slug = baseSlug;
+          let slugCounter = 1;
+          while (slugSet.has(slug)) {
+            const suffix = `-${slugCounter}`;
+            slug = baseSlug.slice(0, 200 - suffix.length) + suffix;
+            slugCounter++;
+          }
+          slugSet.add(slug); // Reserve slug in-memory
         }
-        slugSet.add(slug); // Reserve slug in-memory
 
-        // Pre-allocate ObjectId in-memory
-        const mongoId = new mongoose.Types.ObjectId();
+        // Smart image mapping merging
+        let finalImages = images;
+        let finalImageStatus = imageStatus;
+        let finalImageSource = imageSource;
+        let finalImageLastChecked = imageLastChecked;
+
+        if (isUpdate && existingProduct) {
+          const hasNewValidImage = images.length > 0 && !isPlaceholder;
+          if (!hasNewValidImage && existingProduct.images && existingProduct.images.length > 0) {
+            finalImages = existingProduct.images;
+            finalImageStatus = existingProduct.imageStatus || "completed";
+            finalImageSource = existingProduct.imageSource || "";
+            finalImageLastChecked = existingProduct.imageLastChecked || null;
+          }
+        }
 
         const mappedProduct = {
-          _id: mongoId,
+          _id: existingProduct ? existingProduct._id : new mongoose.Types.ObjectId(),
           id: String(id).slice(0, 100),
           name: String(name).slice(0, 200),
           slug,
@@ -278,10 +312,10 @@ export async function POST(request: NextRequest) {
           stockStatus: getStockStatus(quantity),
           categorySlug,
           subcategorySlug: subcategorySlugVal,
-          images,
-          imageStatus,
-          imageSource,
-          imageLastChecked,
+          images: finalImages,
+          imageStatus: finalImageStatus,
+          imageSource: finalImageSource,
+          imageLastChecked: finalImageLastChecked,
           shortDescription: parseDescription(parsedDesc.description) || String(name),
           description: parsedDesc.description || String(name),
           features: parsedDesc.features || [],
@@ -289,15 +323,18 @@ export async function POST(request: NextRequest) {
           isNewArrival: isFeatured,
           isFeatured,
           isBestSeller: false,
-          createdAt: new Date().toISOString(),
+          createdAt: existingProduct ? existingProduct.createdAt : new Date().toISOString(),
           retailerCsvData: mapRetailerCsvData(productData),
         };
 
-        // Track in-memory sets to avoid duplicating within the same CSV upload
-        existingIdSet.add(id);
-        existingSkuSet.add(sku);
-
-        productsToInsert.push(mappedProduct);
+        if (isUpdate) {
+          productsToUpdate.push(mappedProduct);
+          existingIdMap.set(id, mappedProduct);
+        } else {
+          productsToInsert.push(mappedProduct);
+          existingSkuSet.add(sku);
+          existingIdMap.set(id, mappedProduct);
+        }
         results.successful++;
       } catch (error: any) {
         results.failed++;
@@ -305,10 +342,43 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 2. Perform bulk insertion in a single DB operation
+    // 2. Perform bulk insertion and updates
     if (productsToInsert.length > 0) {
-      console.log(`[Import] Writing ${productsToInsert.length} products to database...`);
+      console.log(`[Import] Writing ${productsToInsert.length} new products to database...`);
       await Product.insertMany(productsToInsert, { ordered: false });
+    }
+
+    if (productsToUpdate.length > 0) {
+      console.log(`[Import] Updating ${productsToUpdate.length} existing products...`);
+      const bulkOps = productsToUpdate.map(p => ({
+        updateOne: {
+          filter: { id: p.id },
+          update: {
+            $set: {
+              name: p.name,
+              sku: p.sku,
+              upc: p.upc,
+              brand: p.brand,
+              price: p.price,
+              compareAtPrice: p.compareAtPrice,
+              stockCount: p.stockCount,
+              stockStatus: p.stockStatus,
+              categorySlug: p.categorySlug,
+              subcategorySlug: p.subcategorySlug,
+              images: p.images,
+              imageStatus: p.imageStatus,
+              imageSource: p.imageSource,
+              imageLastChecked: p.imageLastChecked,
+              shortDescription: p.shortDescription,
+              description: p.description,
+              features: p.features,
+              tags: p.tags,
+              retailerCsvData: p.retailerCsvData,
+            }
+          }
+        }
+      }));
+      await Product.bulkWrite(bulkOps, { ordered: false });
     }
 
     return NextResponse.json(

@@ -199,11 +199,13 @@ function ShopPageContent() {
     minRating,
     stockStatus,
     sortBy,
+    search,
   ]);
 
   const handleCategoryChange = (slug: string) => {
     dispatch(setCategory(slug as CategorySlug));
     dispatch(setSubcategory(null));
+    dispatch(setSearch(""));
 
     setCurrentPage(1);
 
@@ -212,6 +214,7 @@ function ShopPageContent() {
     params.set("category", slug);
     params.delete("subcategory");
     params.delete("brand");
+    params.delete("q");
     params.set("page", "1");
 
     const newUrl = `/shop?${params.toString()}`;
@@ -222,6 +225,7 @@ function ShopPageContent() {
     const newValue = selectedSubcategory === slug ? null : slug;
 
     dispatch(setSubcategory(newValue));
+    dispatch(setSearch(""));
     setCurrentPage(1);
 
     const params = new URLSearchParams(window.location.search);
@@ -232,6 +236,7 @@ function ShopPageContent() {
       params.delete("subcategory");
     }
 
+    params.delete("q");
     params.set("page", "1");
     const newUrl = `/shop?${params.toString()}`;
     window.history.replaceState(null, "", newUrl);
@@ -239,6 +244,7 @@ function ShopPageContent() {
 
   const handleBrandToggle = (slug: string) => {
     dispatch(toggleBrand(slug));
+    dispatch(setSearch(""));
     setCurrentPage(1);
 
     const params = new URLSearchParams(window.location.search);
@@ -259,6 +265,7 @@ function ShopPageContent() {
       params.delete("brand");
     }
 
+    params.delete("q");
     params.set("page", "1");
     const newUrl = `/shop?${params.toString()}`;
     window.history.replaceState(null, "", newUrl);
@@ -266,6 +273,7 @@ function ShopPageContent() {
 
   const handleRatingChange = (rating: number | null) => {
     dispatch(setMinRating(rating));
+    dispatch(setSearch(""));
     setCurrentPage(1);
 
     const params = new URLSearchParams(window.location.search);
@@ -276,6 +284,7 @@ function ShopPageContent() {
       params.delete("rating");
     }
 
+    params.delete("q");
     params.set("page", "1");
     const newUrl = `/shop?${params.toString()}`;
     window.history.replaceState(null, "", newUrl);
@@ -283,6 +292,7 @@ function ShopPageContent() {
 
   const handlePriceChange = (min: number, max: number) => {
     dispatch(setPriceRange({ min, max }));
+    dispatch(setSearch(""));
     setCurrentPage(1);
 
     const params = new URLSearchParams(window.location.search);
@@ -295,6 +305,7 @@ function ShopPageContent() {
       params.set("maxPrice", String(max));
     }
 
+    params.delete("q");
     params.set("page", "1");
     const newUrl = `/shop?${params.toString()}`;
     window.history.replaceState(null, "", newUrl);
@@ -302,6 +313,7 @@ function ShopPageContent() {
 
   const handleClearFilters = () => {
     dispatch(clearFilters());
+    dispatch(setSearch(""));
     setCurrentPage(1);
 
     const params = new URLSearchParams(window.location.search);
@@ -315,6 +327,7 @@ function ShopPageContent() {
     params.delete("rating");
     params.delete("minPrice");
     params.delete("maxPrice");
+    params.delete("q");
     params.set("page", "1");
 
     const newUrl = `/shop?${params.toString()}`;
@@ -403,6 +416,7 @@ function ShopPageContent() {
               else {
                 dispatch(setCategory(null));
                 dispatch(setSubcategory(null));
+                dispatch(setSearch(""));
                 setCurrentPage(1);
                 window.history.replaceState(null, "", "/shop");
               }

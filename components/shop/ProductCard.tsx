@@ -69,7 +69,11 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         "relative flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2",
         className
       )}
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+          setHovered(true);
+        }
+      }}
       onMouseLeave={() => setHovered(false)}
     >
 

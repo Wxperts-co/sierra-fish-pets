@@ -565,55 +565,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent Activity Table using standard DataGrid */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-black text-slate-800">Recent Orders</h3>
-            <p className="text-slate-500 text-xs font-medium mt-1">Review the five most recently placed customer orders.</p>
-          </div>
-          <Link
-            href="/admin/orders"
-            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-slate-50 border border-slate-150 px-4 text-xs font-bold text-slate-700 shadow-sm transition-all hover:bg-slate-100 active:scale-95"
-          >
-            Manage All Orders
-            <ArrowRight className="h-4 w-4 text-[#005AA9]" />
-          </Link>
-        </div>
-
-        <div className="bg-white rounded-2xl overflow-x-auto border border-slate-200/60 shadow-sm">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            loading={loading}
-            disableRowSelectionOnClick
-            autoHeight
-            rowHeight={68}
-            hideFooter
-            sx={{
-              border: "none",
-              "& .MuiDataGrid-columnHeader": {
-                backgroundColor: "#f8fafc",
-                color: "#475569",
-                fontWeight: 900,
-                fontSize: "12px",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                borderBottom: "1px solid #f1f5f9"
-              },
-              "& .MuiDataGrid-row": {
-                borderBottom: "1px solid #f8fafc",
-                "&:hover": {
-                  backgroundColor: "#f8fafc/50"
-                }
-              },
-              "& .MuiDataGrid-cell": {
-                outline: "none !important"
-              }
-            }}
-          />
-        </div>
-      </div>
+      
     </div>
   );
 }

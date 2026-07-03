@@ -28,6 +28,7 @@ type Props = {
   rowCount: number;
   paginationModel: { page: number; pageSize: number };
   onPaginationModelChange: (model: { page: number; pageSize: number }) => void;
+  onUpdateStock?: (productId: string, newStock: number) => Promise<boolean>;
 };
 
 export default function ProductDataGrid({
@@ -39,6 +40,7 @@ export default function ProductDataGrid({
   rowCount,
   paginationModel,
   onPaginationModelChange,
+  onUpdateStock,
 }: Props) {
   const rows = products.map((p, index) => ({
     ...p,
@@ -88,17 +90,45 @@ export default function ProductDataGrid({
       },
     },
     {
-      field: "stock",
-      headerName: "Stock",
+      field: "stockCount",
+      headerName: "Stock Qty",
+      type: "number",
+      flex: 0.7,
+      minWidth: 110,
+      editable: true,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (value: any, row: Product) => {
+        return typeof row?.stockCount === "number" ? row.stockCount : Number(value ?? 0);
+      },
+      renderCell: (params: GridRenderCellParams<Product>) => (
+        <div className="flex items-center gap-1.5 font-bold text-slate-800 cursor-pointer hover:bg-slate-50 px-2.5 py-1.5 rounded-xl border border-dashed border-slate-200 hover:border-slate-400/80 transition-all select-none">
+          <span>{params.row.stockCount}</span>
+          <Edit3 className="h-3 w-3 text-slate-400 opacity-60" />
+        </div>
+      ),
+    },
+    {
+      field: "stockStatus",
+      headerName: "Stock Status",
       flex: 0.8,
       minWidth: 110,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params: GridRenderCellParams<Product>) => {
-        const row = (params.row ?? {}) as Partial<Product>;
-        const count = typeof row.stockCount === "number" ? row.stockCount : params.value ?? 0;
-        const status = row.stockStatus ?? "unknown";
-        return `${count} (${String(status).replace("_", " ")})`;
+        const status = params.row.stockStatus ?? "in_stock";
+        let colorClass = "bg-emerald-50 text-emerald-700 border-emerald-100";
+        if (status === "out_of_stock") {
+          colorClass = "bg-rose-50 text-rose-700 border-rose-100";
+        } else if (status === "low_stock") {
+          colorClass = "bg-amber-50 text-amber-700 border-amber-100";
+        }
+        return (
+          <span className={`inline-flex items-center leading-none border text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${colorClass}`}>
+            {status.replace("_", " ")}
+          </span>
+        );
       },
-      sortable: false,
     },
     {
       field: "createdAt",
@@ -152,6 +182,18 @@ export default function ProductDataGrid({
         loading={loading}
         autoHeight
         rowHeight={72}
+        processRowUpdate={async (newRow, oldRow) => {
+          if (onUpdateStock && newRow.stockCount !== oldRow.stockCount) {
+            const success = await onUpdateStock(newRow._id, newRow.stockCount);
+            if (success) {
+              return newRow;
+            }
+          }
+          return oldRow;
+        }}
+        onProcessRowUpdateError={(error) => {
+          console.error("Row update error:", error);
+        }}
         sx={{
           minHeight: 560,
           '& .MuiDataGrid-cell': { overflow: 'visible !important' },

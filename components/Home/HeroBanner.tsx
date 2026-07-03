@@ -13,7 +13,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import RunningDog from "../ui/RunningDog";
+import defaultBanners from "@/data/banners.json";
 import {
   Bot,
   Heart,
@@ -36,7 +36,11 @@ interface Banner {
 }
 
 export default function HeroBanner() {
-  const [activeBanners, setActiveBanners] = useState<Banner[]>([]);
+  const [activeBanners, setActiveBanners] = useState<Banner[]>(() =>
+    Array.isArray(defaultBanners)
+      ? (defaultBanners as Banner[]).filter((b) => b.status === "active")
+      : []
+  );
   const [api, setApi] = useState<CarouselApi>();
   const [mobApi, setMobApi] = useState<CarouselApi>();
   const [currentMobIndex, setCurrentMobIndex] = useState(0);

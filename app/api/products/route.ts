@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import ProductModel from "@/models/Product";
+import CategoryModel from "@/models/Category";
 import { connectDB } from "@/lib/mongodb";
 import { brands } from "@/data";
 
@@ -8,9 +9,43 @@ import { brands } from "@/data";
 const productCache = new Map<string, { data: any; expiresAt: number }>();
 const CACHE_TTL = 60 * 1000; // 1 minute cache duration
 
+// Projection definition to fetch only lightweight product card fields
+const PRODUCT_CARD_FIELDS = {
+  id: 1,
+  name: 1,
+  slug: 1,
+  sku: 1,
+  categorySlug: 1,
+  subcategorySlug: 1,
+  brand: 1,
+  price: 1,
+  compareAtPrice: 1,
+  images: 1,
+  rating: 1,
+  reviewCount: 1,
+  stockStatus: 1,
+  isNewArrival: 1,
+  isFeatured: 1,
+  isBestSeller: 1,
+  createdAt: 1,
+};
+
 export async function GET(request: NextRequest) {
   try {
+
+    const start = Date.now();
+
+console.log("Connecting DB...");
+
     await connectDB();
+
+    console.log("DB:", Date.now() - start);
+
+
+
+
+
+    
 
     const { searchParams } = new URL(request.url);
     searchParams.sort();
@@ -56,7 +91,7 @@ export async function GET(request: NextRequest) {
             { categorySlug: { $regex: new RegExp(`^${slug}-\\/\\-`, "i") } },
           ],
         };
-        return ProductModel.find(catFilter)
+        return ProductModel.find(catFilter, PRODUCT_CARD_FIELDS)
           .sort({ createdAt: -1 })
           .limit(2)
           .lean();
@@ -95,25 +130,48 @@ export async function GET(request: NextRequest) {
       filter.id = id;
     }
     if (q) {
-      filter.$and = filter.$and || [];
-      filter.$and.push({
-        $or: [
-          { name: { $regex: q, $options: "i" } },
-          { description: { $regex: q, $options: "i" } },
-          { brand: { $regex: q, $options: "i" } },
-          { categorySlug: { $regex: q, $options: "i" } },
-        ]
-      });
+      filter.$text = { $search: q };
     }
 
-    if (category) {
+    // Normalize category slug discrepancy
+    let queryCategory = category;
+    if (category === "small-pet" || category === "small-pets") {
+      queryCategory = "small-animal";
+    }
+
+    if (queryCategory) {
       filter.$and = filter.$and || [];
-      filter.$and.push({
-        $or: [
-          { categorySlug: category },
-          { categorySlug: { $regex: new RegExp(`^${category}-\\/\\-`, "i") } },
-        ]
-      });
+      if (queryCategory === "other-pet") {
+        const dbCategories = await CategoryModel.find().lean();
+        const activeSlugs = dbCategories
+          .map((c) => c.slug)
+          .filter((slug) => slug && !slug.includes("other"));
+
+        // Map "small-pet" slugs to "small-animal" to properly exclude them from the other-pet category
+        const activeSearchSlugs = activeSlugs.map(slug => 
+          ((slug as string) === "small-pet" || (slug as string) === "small-pets") ? "small-animal" : slug
+        );
+
+        const escapedSlugs = activeSearchSlugs.map((s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"));
+        const regexPattern = escapedSlugs.length > 0
+          ? new RegExp(`^(${escapedSlugs.join("|")})(-\\/-|$)`, "i")
+          : /^$/;
+
+        filter.$and.push({
+          $or: [
+            { categorySlug: { $not: regexPattern } },
+            { categorySlug: { $exists: false } },
+            { categorySlug: null }
+          ]
+        });
+      } else {
+        filter.$and.push({
+          $or: [
+            { categorySlug: queryCategory },
+            { categorySlug: { $regex: new RegExp(`^${queryCategory}-\\/\\-`, "i") } },
+          ]
+        });
+      }
     }
     if (subcategory) filter.subcategorySlug = subcategory;
 
@@ -128,7 +186,7 @@ export async function GET(request: NextRequest) {
 
       if (brandNames.length > 0) {
         filter.brand = {
-          $in: brandNames.map((name) => new RegExp(`^${name}$`, "i")),
+          $in: brandNames,
         };
       }
     }
@@ -191,7 +249,18 @@ export async function GET(request: NextRequest) {
     const limitNum = limit ? parseInt(limit, 10) : null;
     const isPaginated = pageNum && limitNum && !isNaN(pageNum) && !isNaN(limitNum);
 
-    let query = ProductModel.find(filter).sort(sortOption);
+    const projection: Record<string, any> = { ...PRODUCT_CARD_FIELDS };
+    if (q) {
+      projection.score = { $meta: "textScore" };
+    }
+
+    let query = ProductModel.find(filter, projection);
+
+    if (q && !sort) {
+      query = query.sort({ score: { $meta: "textScore" } });
+    } else {
+      query = query.sort(sortOption);
+    }
 
     if (isPaginated) {
       const skip = (pageNum! - 1) * limitNum!;
@@ -206,7 +275,7 @@ export async function GET(request: NextRequest) {
     if (isBestSeller === "true") {
       products = await query.lean();
       if (products.length === 0) {
-        const fallbackQuery = ProductModel.find().sort({ isBestSeller: -1, reviewCount: -1 }).limit(limitNum || 10);
+        const fallbackQuery = ProductModel.find({}, PRODUCT_CARD_FIELDS).sort({ isBestSeller: -1, reviewCount: -1 }).limit(limitNum || 10);
         products = await fallbackQuery.lean();
         totalCount = products.length;
       } else {
@@ -215,7 +284,7 @@ export async function GET(request: NextRequest) {
     } else if (isNewArrival === "true") {
       products = await query.lean();
       if (products.length === 0) {
-        const fallbackQuery = ProductModel.find().sort({ createdAt: -1 }).limit(limitNum || 12);
+        const fallbackQuery = ProductModel.find({}, PRODUCT_CARD_FIELDS).sort({ createdAt: -1 }).limit(limitNum || 12);
         products = await fallbackQuery.lean();
         totalCount = products.length;
       } else {
@@ -224,7 +293,7 @@ export async function GET(request: NextRequest) {
     } else if (isFeatured === "true") {
       products = await query.lean();
       if (products.length === 0) {
-        const fallbackQuery = ProductModel.find().sort({ isFeatured: -1, rating: -1 }).limit(limitNum || 5);
+        const fallbackQuery = ProductModel.find({}, PRODUCT_CARD_FIELDS).sort({ isFeatured: -1, rating: -1 }).limit(limitNum || 5);
         products = await fallbackQuery.lean();
         totalCount = products.length;
       } else {

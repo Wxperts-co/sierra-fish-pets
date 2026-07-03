@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X, CheckCircle2, ChevronRight, Gift, ShoppingBag, Minus, Plus } from "lucide-react";
+import { useAppDispatch } from "@/store/hooks";
+import { addToCart } from "@/store/slices/cartSlice";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface GiftCardItem {
@@ -46,6 +48,7 @@ const staggerContainer: Variants = {
 };
 
 export default function GiftCardsPage() {
+  const dispatch = useAppDispatch();
   const [giftCards, setGiftCards] = useState<GiftCardItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCard, setActiveCard] = useState<GiftCardItem | null>(null);
@@ -95,7 +98,46 @@ export default function GiftCardsPage() {
   };
 
   const handleAddToCart = () => {
-    if (!selectedAmount) return;
+    if (!buyCard || !selectedAmount) return;
+
+    const parsedAmount = selectedAmount === "custom"
+      ? Number(customAmount)
+      : Number(selectedAmount.replace(/[^0-9.]/g, ""));
+
+    if (isNaN(parsedAmount) || parsedAmount <= 0) return;
+
+    const giftCardProduct: any = {
+      id: `${buyCard.id}-${parsedAmount}`,
+      name: `${buyCard.name} ($${parsedAmount})`,
+      slug: `${buyCard.id}-${parsedAmount}`,
+      sku: `GC-${buyCard.id.toUpperCase()}-${parsedAmount}`,
+      categorySlug: "gift-card" as any,
+      subcategorySlug: "gift-card",
+      brand: "Sierra Fish & Pets",
+      price: parsedAmount,
+      images: [buyCard.image],
+      description: buyCard.description,
+      shortDescription: buyCard.shortDescription,
+      features: buyCard.features,
+      tags: ["giftcard", "gift-card"],
+      rating: 5,
+      reviewCount: 0,
+      reviews: [],
+      stockStatus: "in_stock",
+      stockCount: 9999,
+      isNewArrival: false,
+      isFeatured: false,
+      isBestSeller: false,
+      createdAt: new Date().toISOString(),
+    };
+
+    dispatch(
+      addToCart({
+        product: giftCardProduct,
+        quantity: form.quantity,
+      })
+    );
+
     setAddedToCart(true);
   };
 

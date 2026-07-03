@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
 import UserModel from "@/models/User";
+import ProductModel from "@/models/Product";
+import GiftCardModel from "@/models/GiftCard";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
 
@@ -227,6 +230,68 @@ export async function POST(req: NextRequest) {
       estimatedDelivery,
     };
 
+    // Verify and deduct stock
+    const productsToUpdate = [];
+    for (const item of items) {
+      const productId = item.product._id || item.product.id;
+      let cleanId = productId;
+      if (productId.includes("-")) {
+        const parts = productId.split("-");
+        const lastPart = parts[parts.length - 1];
+        if (!isNaN(Number(lastPart))) {
+          parts.pop();
+          cleanId = parts.join("-");
+        }
+      }
+
+      let product = null;
+      if (mongoose.Types.ObjectId.isValid(cleanId)) {
+        try {
+          product = await ProductModel.findById(cleanId);
+        } catch (err) {
+          // Ignore cast error
+        }
+      }
+
+      if (!product) {
+        // Check if it exists in GiftCardModel (as gift cards do not use physical stock)
+        let giftCard = null;
+        if (mongoose.Types.ObjectId.isValid(cleanId)) {
+          giftCard = await GiftCardModel.findById(cleanId);
+        }
+        if (!giftCard) {
+          giftCard = await GiftCardModel.findOne({ id: cleanId });
+        }
+
+        if (giftCard) {
+          // It's a gift card, skip stock checks/deductions
+          continue;
+        }
+
+        return NextResponse.json(
+          { success: false, message: `Product "${item.product.name}" not found.` },
+          { status: 404 }
+        );
+      }
+
+      if (product.stockCount < item.quantity) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `Product "${product.name}" has insufficient stock. Only ${product.stockCount} units available.`,
+          },
+          { status: 400 }
+        );
+      }
+      productsToUpdate.push({ product, quantity: item.quantity });
+    }
+
+    // All products have sufficient stock, apply deduction
+    for (const { product, quantity } of productsToUpdate) {
+      product.stockCount -= quantity;
+      await product.save();
+    }
+
     const newOrder = await OrderModel.create(orderData);
 
     // Generate Invoice PDF
@@ -331,6 +396,34 @@ export async function PUT(req: NextRequest) {
     order.status = "cancelled";
     order.updatedAt = new Date();
     await order.save();
+
+    // Restore product stock
+    for (const item of order.items) {
+      if (item.productId) {
+        let cleanId = item.productId;
+        if (item.productId.includes("-")) {
+          const parts = item.productId.split("-");
+          const lastPart = parts[parts.length - 1];
+          if (!isNaN(Number(lastPart))) {
+            parts.pop();
+            cleanId = parts.join("-");
+          }
+        }
+
+        let product = null;
+        if (mongoose.Types.ObjectId.isValid(cleanId)) {
+          try {
+            product = await ProductModel.findById(cleanId);
+          } catch (err) {
+            // Ignore cast error
+          }
+        }
+        if (product) {
+          product.stockCount += item.quantity;
+          await product.save();
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,

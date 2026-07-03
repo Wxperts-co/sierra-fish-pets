@@ -1,0 +1,30 @@
+Read only,Read only,Read only,Read only,Read only,Read only,Read only,Can update,Can update,Read only
+business_id,store_id,upc_id,sku_id,item_name,category_l1,category_l2,default_price,status,currency
+880483,1974613,|64992612108|,|31911|,ACANA Bountiful Catch Dry Cat Food (10 lb),Cat,Cat Food Dry,39.99,Active,USD
+880483,1974613,|64992612047|,|31910|,ACANA Bountiful Catch Dry Cat Food (4 lb),Cat,Cat Food Dry,19.99,Active,USD
+880483,1974613,|64992620684|,|19917|,ACANA Dry Cat Food Regionals Grasslands (12 lb),Cat,Cat Food Dry,47.99,Active,USD
+880483,1974613,|64992620134|,|19898|,ACANA Dry Cat Food Regionals Meadowland (12 lb),Cat,Cat Food Dry,46.99,Active,USD
+880483,1974613,|064992665119|,|19895|,ACANA Dry Cat Food Regionals Wild Atlantic (12 lb),Cat,Cat Food Dry,52.99,Active,USD
+880483,1974613,|64992610043|,|31907|,ACANA First Feast Kitten Dry Cat Food (4 lb),Cat,Cat Food Dry,19.99,Active,USD
+880483,1974613,|64992502454|,|2170|,ACANA Freshwater Fish Grain Free Dry Dog Food (4.5 lb),Dog,Dog Food Dry,21.99,Active,USD
+880483,1974613,|64992503130|,|19890|,Acana Grain Free Red Meat Dry Dog Food (13 lb),Dog,Dog Food Dry,49.99,Active,USD
+880483,1974613,|64992686116|,|31228|,ACANA Grasslands Grain Free Dry Cat Food (10 lb),Cat,Cat Food Dry,48.99,Active,USD
+880483,1974613,|64992686048|,|31227|,ACANA Grasslands Grain Free Dry Cat Food (4 lb),Cat,Cat Food Dry,26.99,Active,USD
+880483,1974613,|64992611040|,|31908|,ACANA Homestead Harvest Dry Cat Food (4 lb),Cat,Cat Food Dry,19.99,Active,USD
+880483,1974613,|64992613105|,|31914|,ACANA Indoor Entree Dry Cat Food (10 lb),Cat,Cat Food Dry,39.99,Active,USD
+880483,1974613,|64992613044|,|31913|,ACANA Indoor Entree Dry Cat Food (4 lb),Cat,Cat Food Dry,19.99,Active,USD
+880483,1974613,|64992684112|,|31231|,ACANA Meadowlands Grain Free Dry Cat Food (10 lb),Cat,Cat Food Dry,44.99,Active,USD
+880483,1974613,|64992684044|,|31230|,ACANA Meadowlands Grain Free Dry Cat Food (4 lb),Cat,Cat Food Dry,24.99,Active,USD
+880483,1974613,|064992714048|,|19919|,ACANA Singles Limited Ingredient Diet Dry Dog Food Beef and Pumpkin Formula (13 lb),Dog,Dog Food Dry,39.99,Active,USD
+880483,1974613,||,|19913|,ACANA Singles Limited Ingredient Diet Dry Dog Food Duck and Pear Formula (25 lb),Dog,Dog Food Dry,74.99,Active,USD
+880483,1974613,||,|19891|,ACANA Singles Limited Ingredient Diet Dry Dog Food Lamb and Apple Formula (25 lb x 2 ct),Dog,Dog Food Dry,143.98,Active,USD
+880483,1974613,|64992714055|,|31861|,ACANA Singles Limited Ingredient Grain Free Dry Dog Food Beef and Pumpkin (25 lb),Dog,Dog Food Dry,89.99,Active,USD
+880483,1974613,|64992714031|,|31859|,ACANA Singles Limited Ingredient Grain Free Dry Dog Food Beef and Pumpkin (4.5 lb),Dog,Dog Food Dry,25.99,Active,USD
+880483,1974613,|64992713959|,|31086|,ACANA Singles Limited Ingredient Grain Free Dry Dog Food Duck & Pear Recipe (4.5 lb),Dog,Dog Food Dry,28.99,Active,USD
+880483,1974613,|64992713935|,|31085|,ACANA Singles Limited Ingredient Grain Free Dry Dog Food Lamb & Apple Recipe (25 lb),Dog,Dog Food Dry,89.99,Active,USD
+880483,1974613,|64992713911|,|31084|,ACANA Singles Limited Ingredient Grain Free Dry Dog Food Lamb & Apple Recipe (4.5 lb),Dog,Dog Food Dry,28.99,Active,USD
+880483,1974613,|64992517250|,|30822|,ACANA Wholesome Grains Dog Food Duck and Pumpkin Recipe (22.5 lb),Dog,Dog Food Dry,89.99,Active,USD
+880483,1974613,|64992517458|,|30821|,ACANA Wholesome Grains Dog Food Duck and Pumpkin Recipe (4 lb),Dog,Dog Food Dry,25.99,Active,USD
+880483,1974613,|64992516253|,|30825|,ACANA Wholesome Grains Dog Food Lamb and Pumpkin Recipe (22.5 lb),Dog,Dog Food Dry,86.99,Active,USD
+880483,1974613,|64992516451|,|30824|,ACANA Wholesome Grains Dog Food Lamb and Pumpkin Recipe (4 lb),Dog,Dog Food Dry,26.99,Active,USD
+880483,1974613,|64992685119|,|31234|,ACANA Wild Atlantic Grain Free Dry Cat Food (10 lb),Cat,Dog Food Dry,49.99,Active,USD

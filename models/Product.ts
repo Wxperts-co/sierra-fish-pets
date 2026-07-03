@@ -230,6 +230,63 @@ const productSchema = new mongoose.Schema<IProduct>(
   }
 );
 
+productSchema.pre("save", function (this: any) {
+  const count = Number(this.stockCount);
+  if (isNaN(count) || count <= 0) {
+    this.stockStatus = "out_of_stock";
+    this.stockCount = 0;
+  } else if (count <= 5) {
+    this.stockStatus = "low_stock";
+  } else {
+    this.stockStatus = "in_stock";
+  }
+});
+
+
+// Compound Text Index for fast full-text searching
+productSchema.index(
+  {
+    name: "text",
+    brand: "text",
+    categorySlug: "text",
+    shortDescription: "text",
+    description: "text"
+  },
+  {
+    weights: {
+      name: 10,
+      brand: 5,
+      categorySlug: 3,
+      shortDescription: 2,
+      description: 1
+    },
+    name: "ProductTextIndex",
+    background: true
+  }
+);
+
+// Compound Indexes for Category Queries + Common Sort Options
+productSchema.index({ categorySlug: 1, createdAt: -1 }, { background: true });
+productSchema.index({ categorySlug: 1, price: 1 }, { background: true });
+productSchema.index({ categorySlug: 1, price: -1 }, { background: true });
+
+// Compound Indexes for Subcategory Queries + Common Sort Options
+productSchema.index({ subcategorySlug: 1, createdAt: -1 }, { background: true });
+productSchema.index({ subcategorySlug: 1, price: 1 }, { background: true });
+productSchema.index({ subcategorySlug: 1, price: -1 }, { background: true });
+
+// Compound Indexes for Brand Queries + Common Sort Options
+productSchema.index({ brand: 1, createdAt: -1 }, { background: true });
+productSchema.index({ brand: 1, price: 1 }, { background: true });
+productSchema.index({ brand: 1, price: -1 }, { background: true });
+
+// Global Sort Indexes
+productSchema.index({ price: 1 }, { background: true });
+productSchema.index({ price: -1 }, { background: true });
+productSchema.index({ rating: -1 }, { background: true });
+productSchema.index({ isBestSeller: -1, reviewCount: -1 }, { background: true });
+productSchema.index({ isFeatured: -1, rating: -1 }, { background: true });
+
 const ProductModel: Model<IProduct> =
   mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
 

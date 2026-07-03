@@ -44,7 +44,18 @@ export default function Header() {
   useEffect(() => {
     fetch("/api/categories")
       .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
+      .then((data) => {
+        if (data.success && Array.isArray(data.categories)) {
+          const sorted = [...data.categories].sort((a: any, b: any) => {
+            const aIsOther = a.slug.includes("other");
+            const bIsOther = b.slug.includes("other");
+            if (aIsOther && !bIsOther) return 1;
+            if (!aIsOther && bIsOther) return -1;
+            return 0;
+          });
+          setCategories(sorted);
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -150,8 +161,9 @@ export default function Header() {
     (state) => state.wishlist.productIds.length,
   );
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const isAdminRoute = pathname?.startsWith("/admin");
-  const shouldShowAccount = isAuthenticated && (user?.role !== "admin" || isAdminRoute);
+  const shouldShowAccount = isAuthenticated;
+  const accountLink = user?.role === "admin" ? "/admin" : "/account";
+  const selectedCategory = useAppSelector((state) => state.filters.category);
 
   const isHome = pathname === "/";
   const isShopHero = pathname === "/shop"; // transparent overlay on shop page too
@@ -160,6 +172,7 @@ export default function Header() {
   const isEventCalendar = pathname === "/event-calendar";
   const isGallery = pathname === "/gallery";
   const isGiftCards = pathname === "/gift-cards";
+  const isFlyers = pathname === "/flyers";
   const isServiceDetail = pathname ? pathname.startsWith("/services/") : false;
   const isBrandsPage =
     pathname === "/brands" ||
@@ -183,6 +196,7 @@ export default function Header() {
     isServiceDetail ||
     isGallery ||
     isGiftCards ||
+    isFlyers ||
     isBrandsPage ||
     isArrivals ||
     isBlogs ||
@@ -196,7 +210,7 @@ export default function Header() {
     }
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      window.scrollY > 20 ? setScrolled(true) : setScrolled(false);
     };
 
     // Run once on mount to handle pre-scrolled page loads
@@ -205,7 +219,7 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, isTransparentPage]);
 
   // Determine if header should have a solid background or be transparent overlay
   const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
@@ -217,6 +231,7 @@ export default function Header() {
     isServiceDetail ||
     isGallery ||
     isGiftCards ||
+    isFlyers ||
     isBrandsPage ||
     isArrivals ||
     isBlogs ||
@@ -255,15 +270,21 @@ export default function Header() {
             <SearchBar className="relative flex-1 max-w-[200px]" />
 
             <Link
-              href="/account"
+              href={shouldShowAccount ? accountLink : "#"}
+              onClick={(e) => {
+                if (!shouldShowAccount) {
+                  e.preventDefault();
+                  dispatch(openLoginModal());
+                }
+              }}
               className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
               aria-label="Account"
             >
-              {shouldShowAccount && user?.avatar?.url ? (
+              {shouldShowAccount ? (
                 <span className="relative h-7 w-7 overflow-hidden rounded-full border border-white/20 bg-slate-100">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={user.avatar.url}
+                    src={user?.avatar?.url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"}
                     alt={user?.name || "User"}
                     className="h-full w-full object-cover"
                   />
@@ -329,7 +350,7 @@ export default function Header() {
 
           {categories.map((category) => {
             const href = `/shop?category=${category.slug}`;
-            const isActive = pathname?.startsWith("/shop");
+            const isActive = pathname?.startsWith("/shop") && selectedCategory === category.slug;
             return (
               <Link
                 key={category.id}
@@ -665,7 +686,7 @@ export default function Header() {
               {/* Account */}
               {shouldShowAccount ? (
                 <Link
-                  href="/account"
+                  href={accountLink}
                   className="flex items-center gap-2 px-2.5 py-1 rounded-full transition-colors hover:bg-white/15"
                   aria-label="Account"
                 >

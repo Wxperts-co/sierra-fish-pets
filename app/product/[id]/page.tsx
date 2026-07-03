@@ -43,10 +43,28 @@ export default async function ProductPage({
 
   const recentReview = rawRecentReview ? JSON.parse(JSON.stringify(rawRecentReview)) : null;
 
-  const rawRelated = await ProductModel.find({
-    categorySlug: product.categorySlug,
-    id: { $ne: product.id },
-  })
+  const rawRelated = await ProductModel.find(
+    {
+      categorySlug: product.categorySlug,
+      id: { $ne: product.id },
+    },
+    {
+      id: 1,
+      name: 1,
+      slug: 1,
+      price: 1,
+      compareAtPrice: 1,
+      images: 1,
+      rating: 1,
+      reviewCount: 1,
+      stockStatus: 1,
+      categorySlug: 1,
+      isNewArrival: 1,
+      isFeatured: 1,
+      isBestSeller: 1,
+      createdAt: 1,
+    }
+  )
     .limit(4)
     .lean();
 

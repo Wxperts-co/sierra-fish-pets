@@ -33,23 +33,42 @@ const CARD_DIRECTIONS: { x: number; y: number }[] = [
   { x: -50, y: 50  },  // 5 — from bottom-left
 ];
 
-export default function CategoryCards() {
+export default function CategoryCards({ initialCategories = [] }: { initialCategories?: Category[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
   const [current, setCurrent] = useState(0);
-  const [categories, setCategories] = useState<Category[]>([]);
+
+  const getSortedCategories = (cats: Category[]) => {
+    return [...cats].sort((a: Category, b: Category) => {
+      const aIsOther = a.slug.includes("other");
+      const bIsOther = b.slug.includes("other");
+      if (aIsOther && !bIsOther) return 1;
+      if (!aIsOther && bIsOther) return -1;
+      return 0;
+    });
+  };
+
+  const [categories, setCategories] = useState<Category[]>(() => getSortedCategories(initialCategories));
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
-      .catch(() => {});
-  }, []);
+    if (initialCategories && initialCategories.length > 0) {
+      setCategories(getSortedCategories(initialCategories));
+    } else {
+      fetch("/api/categories")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && Array.isArray(data.categories)) {
+            setCategories(getSortedCategories(data.categories));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [initialCategories]);
 
   // Trigger card animations when the carousel scrolls into view
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: false, margin: "-100px 0px" });
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px 0px" });
   const [animKey, setAnimKey] = useState(0);
 
   // Increment key each time section enters view → remounts cards → replays animation
