@@ -32,6 +32,11 @@ export async function GET(request: NextRequest) {
       status: { $in: ["pending", "confirmed", "processing", "shipped"] }
     });
 
+    // 2b. Count Total valid orders for AOV calculation (all except cancelled/refunded)
+    const totalOrdersCount = await OrderModel.countDocuments({
+      status: { $nin: ["cancelled", "refunded"] }
+    });
+
     // 3. Count Total Products
     const totalProductsCount = await ProductModel.countDocuments({});
     const productsWithImagesCount = await ProductModel.countDocuments({ images: { $exists: true, $not: { $size: 0 } } });
@@ -149,6 +154,7 @@ export async function GET(request: NextRequest) {
       stats: {
         totalRevenue,
         activeOrders: activeOrdersCount,
+        totalOrders: totalOrdersCount,
         totalProducts: totalProductsCount,
         registeredCustomers: registeredCustomersCount,
         productsWithImages: productsWithImagesCount,

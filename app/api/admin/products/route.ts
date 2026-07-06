@@ -160,3 +160,26 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectDB();
+    await Product.deleteMany({});
+    return NextResponse.json(
+      {
+        success: true,
+        message: "All products deleted successfully."
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("DELETE /api/admin/products error:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to delete products"
+      },
+      { status: 500 }
+    );
+  }
+}

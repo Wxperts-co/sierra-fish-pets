@@ -63,6 +63,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [isDeletingAll, setIsDeletingAll] = useState(false);
   const [filters, setFilters] = useState({ search: "", stockStatus: "all" });
   const [searchInput, setSearchInput] = useState("");
   const [paginationModel, setPaginationModel] = useState({
@@ -275,6 +276,36 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleDeleteAllProducts = async () => {
+    const confirmed = window.confirm(
+      "WARNING: Are you sure you want to delete ALL products? This action is permanent and cannot be undone!"
+    );
+    if (!confirmed) return;
+
+    try {
+      setIsDeletingAll(true);
+      const response = await axios.delete("/api/admin/products");
+      if (response.data?.success) {
+        alert("All products have been deleted successfully.");
+        setProducts([]);
+        setTotalCount(0);
+        setStats({
+          total: 0,
+          inStock: 0,
+          lowStock: 0,
+          outOfStock: 0,
+        });
+      } else {
+        showErrorToast(response.data?.message || "Failed to delete products");
+      }
+    } catch (error) {
+      console.error("Failed to delete all products:", error);
+      showErrorToast("Failed to delete all products");
+    } finally {
+      setIsDeletingAll(false);
+    }
+  };
+
   const handleDeleteProduct = async (productId: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this product?",
@@ -462,6 +493,16 @@ export default function AdminProductsPage() {
             disabled={isImporting}
             style={{ display: "none" }}
           />
+
+          <Button
+            onClick={handleDeleteAllProducts}
+            disabled={isDeletingAll}
+            variant="outline"
+            className="h-11 rounded-2xl border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 font-semibold px-5 active:scale-95 transition-all"
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            {isDeletingAll ? "Deleting..." : "Delete All"}
+          </Button>
 
           <Button
             onClick={() => router.push("/admin/products/add")}

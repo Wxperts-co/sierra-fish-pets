@@ -175,7 +175,7 @@ export default function CheckoutPage() {
       showErrorToast(error);
       return;
     }
-    setStep("payment");
+    setStep("review");
   };
 
   const validateCardForm = () => {
@@ -285,14 +285,22 @@ export default function CheckoutPage() {
       };
 
       const response = await axios.post("/api/orders", orderPayload);
+      // Replace lines 288-295 with:
       if (response.data.success) {
         // Clear Redux Cart
         dispatch(clearCart());
-        // Redirect to success page
-        router.push(`/order-success?id=${response.data.order.id}`);
+
+        if (response.data.checkoutUrl) {
+          // Redirect user to Stripe Checkout page
+          window.location.href = response.data.checkoutUrl;
+        } else {
+          // Redirect directly for cash_on_delivery or other methods
+          router.push(`/order-success?id=${response.data.order.id}`);
+        }
       } else {
         showErrorToast(response.data.message || "Failed to place order.");
       }
+
     } catch (err: any) {
       console.error(err);
       showErrorToast(err.response?.data?.message || "Something went wrong while placing order.");
@@ -366,7 +374,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] md:py-24 py-8 font-lato">
       <div className="max-w-6xl mx-auto px-4 mt-8">
-        
+
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between mb-8">
           <Link
@@ -376,7 +384,7 @@ export default function CheckoutPage() {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Shopping Cart</span>
           </Link>
-         
+
         </div>
 
         {/* STEPPER COMPONENT */}
@@ -385,18 +393,17 @@ export default function CheckoutPage() {
             {/* Step 1 */}
             <div className="flex items-center gap-3">
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                  step === "shipping"
+                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${step === "shipping"
                     ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
                     : "bg-emerald-500 text-white"
-                }`}
+                  }`}
               >
                 {step !== "shipping" ? <Check className="w-4.5 h-4.5 stroke-[3px]" /> : "1"}
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 1</p>
                 <p className={`text-sm font-black ${step === "shipping" ? "text-[#005AA9]" : "text-slate-800"}`}>
-                  Shipping Details
+                  Address
                 </p>
               </div>
             </div>
@@ -406,28 +413,17 @@ export default function CheckoutPage() {
             {/* Step 2 */}
             <div className="flex items-center gap-3">
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                  step === "payment"
+                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${step === "review"
                     ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
-                    : step === "review"
-                    ? "bg-emerald-500 text-white"
                     : "bg-slate-100 text-slate-500 border border-slate-200"
-                }`}
+                  }`}
               >
-                {step === "review" ? <Check className="w-4.5 h-4.5 stroke-[3px]" /> : "2"}
+                2
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 2</p>
-                <p
-                  className={`text-sm font-black ${
-                    step === "payment"
-                      ? "text-[#005AA9]"
-                      : step === "review"
-                      ? "text-slate-800"
-                      : "text-slate-400"
-                  }`}
-                >
-                  Payment Selection
+                <p className={`text-sm font-black ${step === "review" ? "text-[#005AA9]" : "text-slate-400"}`}>
+                  Order Summary
                 </p>
               </div>
             </div>
@@ -437,18 +433,14 @@ export default function CheckoutPage() {
             {/* Step 3 */}
             <div className="flex items-center gap-3">
               <div
-                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                  step === "review"
-                    ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
-                    : "bg-slate-100 text-slate-500 border border-slate-200"
-                }`}
+                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 bg-slate-100 text-slate-500 border border-slate-200"
               >
                 3
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 3</p>
-                <p className={`text-sm font-black ${step === "review" ? "text-[#005AA9]" : "text-slate-400"}`}>
-                  Review & Place
+                <p className="text-sm font-black text-slate-400">
+                  Payment
                 </p>
               </div>
             </div>
@@ -457,11 +449,11 @@ export default function CheckoutPage() {
 
         {/* MAIN LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* LEFT: STEP PANELS (8 Columns) */}
           <div className="lg:col-span-8 space-y-6">
             <AnimatePresence mode="wait">
-              
+
               {/* STEP 1: SHIPPING DETAILS */}
               {step === "shipping" && (
                 <motion.div
@@ -483,7 +475,7 @@ export default function CheckoutPage() {
                   {isAuthenticated && user && user.addresses && user.addresses.length > 0 && (
                     <div className="space-y-4">
                       <p className="text-sm font-bold text-slate-700">Choose from Saved Addresses</p>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {user.addresses.map((addr) => {
                           const isSelected = selectedAddressId === addr.id && !useCustomAddress;
@@ -491,11 +483,10 @@ export default function CheckoutPage() {
                             <div
                               key={addr.id}
                               onClick={() => handleSelectSavedAddress(addr.id)}
-                              className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 hover:shadow-md relative ${
-                                isSelected
+                              className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 hover:shadow-md relative ${isSelected
                                   ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
                                   : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
-                              }`}
+                                }`}
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-[#005AA9]/10 text-[#005AA9] uppercase">
@@ -537,15 +528,13 @@ export default function CheckoutPage() {
                               country: "United States",
                             });
                           }}
-                          className={`cursor-pointer rounded-2xl border border-dashed p-5 transition-all duration-200 hover:shadow-md flex flex-col items-center justify-center text-center gap-2 group ${
-                            useCustomAddress
+                          className={`cursor-pointer rounded-2xl border border-dashed p-5 transition-all duration-200 hover:shadow-md flex flex-col items-center justify-center text-center gap-2 group ${useCustomAddress
                               ? "border-[#005AA9] bg-blue-50/10"
                               : "border-slate-200 bg-white hover:border-slate-400"
-                          }`}
+                            }`}
                         >
-                          <Plus className={`w-5 h-5 transition-transform group-hover:scale-110 ${
-                            useCustomAddress ? "text-[#005AA9]" : "text-slate-400"
-                          }`} />
+                          <Plus className={`w-5 h-5 transition-transform group-hover:scale-110 ${useCustomAddress ? "text-[#005AA9]" : "text-slate-400"
+                            }`} />
                           <div>
                             <p className={`text-sm font-extrabold ${useCustomAddress ? "text-[#005AA9]" : "text-slate-700"}`}>
                               Ship to Custom Address
@@ -581,7 +570,7 @@ export default function CheckoutPage() {
                   {useCustomAddress && (
                     <div className="space-y-4 pt-2">
                       <p className="text-sm font-bold text-slate-700">Enter Shipping Address Details</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Email Address */}
                         <div className="space-y-1 md:col-span-2">
@@ -592,9 +581,8 @@ export default function CheckoutPage() {
                             onChange={(e) => setShippingDetails({ ...shippingDetails, email: e.target.value })}
                             placeholder="e.g. john@example.com"
                             disabled={isAuthenticated}
-                            className={`w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400 ${
-                              isAuthenticated ? "bg-slate-50 cursor-not-allowed text-slate-400 border-slate-100" : ""
-                            }`}
+                            className={`w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400 ${isAuthenticated ? "bg-slate-50 cursor-not-allowed text-slate-400 border-slate-100" : ""
+                              }`}
                           />
                         </div>
 
@@ -688,7 +676,7 @@ export default function CheckoutPage() {
                       onClick={handleContinueToPayment}
                       className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide"
                     >
-                      <span>Continue to Payment</span>
+                      <span>Continue to Order Summary</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -717,11 +705,10 @@ export default function CheckoutPage() {
                     {/* Credit Card selection */}
                     <div
                       onClick={() => setPaymentMethod("credit_card")}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${
-                        paymentMethod === "credit_card"
+                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "credit_card"
                           ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
                           : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <CreditCard className={`w-5 h-5 ${paymentMethod === "credit_card" ? "text-[#005AA9]" : "text-slate-400"}`} />
@@ -740,11 +727,10 @@ export default function CheckoutPage() {
                     {/* Cash on delivery selection */}
                     <div
                       onClick={() => setPaymentMethod("cash_on_delivery")}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${
-                        paymentMethod === "cash_on_delivery"
+                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "cash_on_delivery"
                           ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
                           : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <Truck className={`w-5 h-5 ${paymentMethod === "cash_on_delivery" ? "text-[#005AA9]" : "text-slate-400"}`} />
@@ -763,11 +749,10 @@ export default function CheckoutPage() {
                     {/* PayPal selection */}
                     <div
                       onClick={() => setPaymentMethod("paypal")}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${
-                        paymentMethod === "paypal"
+                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "paypal"
                           ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
                           : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <HelpCircle className={`w-5 h-5 ${paymentMethod === "paypal" ? "text-[#005AA9]" : "text-slate-400"}`} />
@@ -786,7 +771,7 @@ export default function CheckoutPage() {
 
                   {/* DETAIL CONFIGURATIONS FOR SELECTED METHOD */}
                   <div className="pt-2">
-                    
+
                     {/* Simulated Credit Card Form */}
                     {paymentMethod === "credit_card" && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
@@ -983,26 +968,19 @@ export default function CheckoutPage() {
                           <span>Selected Payment</span>
                         </h4>
                         <p className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                          {paymentMethod.replace(/_/g, " ")}
+                          Stripe Gateway
                         </p>
-                        {paymentMethod === "credit_card" && (
-                          <p className="text-[11px] font-mono text-slate-500">
-                            Card ending in {cardData.number.slice(-4) || "••••"}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-[10px] text-slate-400 font-semibold">
-                        * Simulated purchase, no billing action will occur.
+                        <p className="text-[11px] font-semibold text-slate-500 leading-normal">
+                          You will be securely redirected to Stripe to complete your payment.
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  
-
                   {/* Actions */}
                   <div className="pt-4 border-t border-slate-50 flex justify-between">
                     <button
-                      onClick={() => setStep("payment")}
+                      onClick={() => setStep("shipping")}
                       className="px-6 py-3.5 border border-slate-200 text-slate-600 rounded-2xl font-bold transition-all hover:bg-slate-50 cursor-pointer text-sm"
                     >
                       Back
@@ -1010,17 +988,17 @@ export default function CheckoutPage() {
                     <button
                       onClick={handlePlaceOrder}
                       disabled={loading}
-                      className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-emerald-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide disabled:opacity-60"
+                      className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide disabled:opacity-60"
                     >
                       {loading ? (
                         <>
                           <div className="w-4.5 h-4.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Placing Order...</span>
+                           <span>Connecting to Stripe...</span>
                         </>
                       ) : (
                         <>
                           <Lock className="w-4 h-4" />
-                          <span>Place Secure Order</span>
+                          <span>Continue to Payment</span>
                         </>
                       )}
                     </button>
@@ -1109,7 +1087,7 @@ export default function CheckoutPage() {
                   <span>Subtotal</span>
                   <span className="text-slate-800 font-mono">{formatPrice(subtotal)}</span>
                 </div>
-                
+
                 {initialDiscount + couponDiscount > 0 && (
                   <div className="flex justify-between text-emerald-600 font-bold">
                     <span>Discount</span>

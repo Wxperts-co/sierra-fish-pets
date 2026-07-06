@@ -17,6 +17,16 @@ type Product = {
   stockCount: number;
   createdAt: string;
   images?: string[];
+  compareAtPrice?: number | null;
+  categorySlug?: string;
+  subcategorySlug?: string;
+  upc?: string;
+  rating?: number;
+  reviewCount?: number;
+  isNewArrival?: boolean;
+  isFeatured?: boolean;
+  isBestSeller?: boolean;
+  dimensions?: string;
 };
 
 type Props = {
@@ -59,6 +69,11 @@ export default function ProductDataGrid({
       headerAlign: "center",
     },
     {
+      field: "id",
+      headerName: "ID",
+      width: 120,
+    },
+    {
       field: "name",
       headerName: "Name",
       flex: 1.5,
@@ -77,7 +92,17 @@ export default function ProductDataGrid({
         </div>
       ),
     },
+    {
+      field: "slug",
+      headerName: "Slug",
+      width: 150,
+    },
     { field: "sku", headerName: "SKU", flex: 0.6, minWidth: 90 },
+    {
+      field: "upc",
+      headerName: "UPC",
+      width: 120,
+    },
     { field: "brand", headerName: "Brand", flex: 0.8, minWidth: 100 },
     {
       field: "price",
@@ -87,6 +112,15 @@ export default function ProductDataGrid({
       valueGetter: (value: any, row: Product) => {
         const price = typeof row?.price === "number" ? row.price : Number(value ?? 0);
         return `$${Number(price || 0).toFixed(2)}`;
+      },
+    },
+    {
+      field: "compareAtPrice",
+      headerName: "Compare Price",
+      width: 120,
+      valueGetter: (value: any, row: Product) => {
+        const val = row?.compareAtPrice ?? value;
+        return val != null ? `$${Number(val).toFixed(2)}` : "-";
       },
     },
     {
@@ -129,6 +163,63 @@ export default function ProductDataGrid({
           </span>
         );
       },
+    },
+    {
+      field: "categorySlug",
+      headerName: "Category",
+      width: 150,
+    },
+    {
+      field: "subcategorySlug",
+      headerName: "Subcategory",
+      width: 150,
+    },
+    {
+      field: "rating",
+      headerName: "Rating",
+      width: 90,
+      type: "number",
+    },
+    {
+      field: "reviewCount",
+      headerName: "Reviews",
+      width: 90,
+      type: "number",
+    },
+    {
+      field: "isNewArrival",
+      headerName: "New Arrival",
+      width: 110,
+      type: "boolean",
+      valueGetter: (value: any, row: Product) => row?.isNewArrival ?? value,
+      renderCell: (params: GridRenderCellParams<Product>) => (
+        <span>{params.row.isNewArrival ? "Yes" : "No"}</span>
+      ),
+    },
+    {
+      field: "isFeatured",
+      headerName: "Featured",
+      width: 100,
+      type: "boolean",
+      valueGetter: (value: any, row: Product) => row?.isFeatured ?? value,
+      renderCell: (params: GridRenderCellParams<Product>) => (
+        <span>{params.row.isFeatured ? "Yes" : "No"}</span>
+      ),
+    },
+    {
+      field: "isBestSeller",
+      headerName: "Best Seller",
+      width: 110,
+      type: "boolean",
+      valueGetter: (value: any, row: Product) => row?.isBestSeller ?? value,
+      renderCell: (params: GridRenderCellParams<Product>) => (
+        <span>{params.row.isBestSeller ? "Yes" : "No"}</span>
+      ),
+    },
+    {
+      field: "dimensions",
+      headerName: "Dimensions",
+      width: 120,
     },
     {
       field: "createdAt",

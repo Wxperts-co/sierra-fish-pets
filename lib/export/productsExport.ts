@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
-import { type RetailerCsvExportProduct } from "@/lib/products/retailerCsvColumns";
+import { RETAILER_CSV_COLUMNS, type RetailerCsvExportProduct } from "@/lib/products/retailerCsvColumns";
 
 export type ExportProduct = RetailerCsvExportProduct;
 
@@ -63,19 +63,38 @@ export async function importProductsFromExcel(file: File) {
         const data = e.target?.result;
         const workbook = XLSX.read(data, { type: "array" });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        let range = 0;
-        // Detect if the first row is instruction/metadata (like "Read only") and skip it
-        const a1Val = worksheet["A1"]?.v;
-        if (
-          typeof a1Val === "string" &&
-          (a1Val.toLowerCase().includes("read only") ||
-            a1Val.toLowerCase().includes("can update") ||
-            a1Val.toLowerCase().includes("instruction"))
-        ) {
-          range = 1;
+        const sheetData: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        if (!sheetData || sheetData.length === 0) {
+          throw new Error("No data found in file");
         }
 
-        const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { range });
+        let jsonData: any[] = [];
+        const firstRow = sheetData[0];
+        const firstCell = firstRow && typeof firstRow[0] === "string" ? firstRow[0].toLowerCase().trim() : "";
+        const isHeaderlessStandard = (firstCell === "product" || firstCell === "product_option") && firstRow.length > 50;
+
+        if (isHeaderlessStandard) {
+          jsonData = sheetData.map((row) => {
+            const obj: any = {};
+            RETAILER_CSV_COLUMNS.forEach((col: string, idx: number) => {
+              obj[col] = row[idx] !== undefined ? row[idx] : "";
+            });
+            return obj;
+          });
+        } else {
+          let range = 0;
+          // Detect if the first row is instruction/metadata (like "Read only") and skip it
+          const a1Val = worksheet["A1"]?.v;
+          if (
+            typeof a1Val === "string" &&
+            (a1Val.toLowerCase().includes("read only") ||
+              a1Val.toLowerCase().includes("can update") ||
+              a1Val.toLowerCase().includes("instruction"))
+          ) {
+            range = 1;
+          }
+          jsonData = XLSX.utils.sheet_to_json(worksheet, { range });
+        }
 
         if (!jsonData || jsonData.length === 0) {
           throw new Error("No data found in file");

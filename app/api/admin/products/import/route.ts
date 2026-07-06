@@ -174,7 +174,12 @@ export async function POST(request: NextRequest) {
         const upc = cleanExcelText(rawUpc);
 
         // Silently skip completely empty padding rows
+        const hasAnyData = Object.values(productData).some(v => v != null && String(v).trim() !== "");
         if (!id && !name && !sku) {
+          if (hasAnyData) {
+            results.failed++;
+            results.errors.push("Row contains data but column headers for ID, Name, or SKU were not recognized.");
+          }
           continue;
         }
 
@@ -345,7 +350,23 @@ export async function POST(request: NextRequest) {
     // 2. Perform bulk insertion and updates
     if (productsToInsert.length > 0) {
       console.log(`[Import] Writing ${productsToInsert.length} new products to database...`);
-      await Product.insertMany(productsToInsert, { ordered: false });
+      try {
+        await Product.insertMany(productsToInsert, { ordered: false });
+      } catch (err: any) {
+        console.error("[Import] insertMany partial/complete failure:", err);
+        if (err.writeErrors) {
+          results.failed += err.writeErrors.length;
+          results.successful -= err.writeErrors.length;
+          for (const we of err.writeErrors) {
+            const failedDoc = productsToInsert[we.index];
+            results.errors.push(`Failed to insert "${failedDoc?.name || 'Unknown'}": ${we.errmsg || 'Duplicate key or validation error'}`);
+          }
+        } else {
+          results.failed += productsToInsert.length;
+          results.successful -= productsToInsert.length;
+          results.errors.push(`Bulk insertion failed: ${err.message || 'Validation or database error'}`);
+        }
+      }
     }
 
     if (productsToUpdate.length > 0) {
@@ -378,7 +399,23 @@ export async function POST(request: NextRequest) {
           }
         }
       }));
-      await Product.bulkWrite(bulkOps, { ordered: false });
+      try {
+        await Product.bulkWrite(bulkOps, { ordered: false });
+      } catch (err: any) {
+        console.error("[Import] bulkWrite partial/complete failure:", err);
+        if (err.writeErrors) {
+          results.failed += err.writeErrors.length;
+          results.successful -= err.writeErrors.length;
+          for (const we of err.writeErrors) {
+            const failedDoc = productsToUpdate[we.index];
+            results.errors.push(`Failed to update "${failedDoc?.name || 'Unknown'}": ${we.errmsg || 'Database write error'}`);
+          }
+        } else {
+          results.failed += productsToUpdate.length;
+          results.successful -= productsToUpdate.length;
+          results.errors.push(`Bulk update failed: ${err.message || 'Database error'}`);
+        }
+      }
     }
 
     return NextResponse.json(
