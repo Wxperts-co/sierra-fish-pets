@@ -397,12 +397,12 @@ export async function POST(req: NextRequest) {
         }
 
         const sessionPayload: Stripe.Checkout.SessionCreateParams = {
-          payment_method_types: ["card"],
+         
           line_items: lineItems,
           mode: "payment",
           customer_email: finalGuestEmail.toLowerCase().trim(),
-          success_url: `${req.nextUrl.origin}/order-success?id=${newOrder._id.toString()}`,
-          cancel_url: `${req.nextUrl.origin}/checkout`,
+          success_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/order-success?id=${newOrder._id.toString()}`,
+          cancel_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/checkout`,
           metadata: {
             orderId: newOrder._id.toString(),
             orderNumber: newOrder.orderNumber,
@@ -442,25 +442,26 @@ export async function POST(req: NextRequest) {
 
     // For Cash on Delivery (immediate processing tasks):
     if (paymentMethod === "cash_on_delivery") {
-      // Generate Invoice PDF
-      try {
-        const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
-        const relativeInvoiceUrl = await generateInvoicePDF(newOrder);
+      // Generate Invoice PDF and Send Confirmation Email in the background
+      (async () => {
+        try {
+          const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
+          const relativeInvoiceUrl = await generateInvoicePDF(newOrder);
 
-        newOrder.invoiceUrl = relativeInvoiceUrl;
-        newOrder.invoiceGeneratedAt = new Date();
-        await newOrder.save();
-      } catch (pdfError) {
-        console.error("Failed to generate invoice during order placement:", pdfError);
-      }
+          newOrder.invoiceUrl = relativeInvoiceUrl;
+          newOrder.invoiceGeneratedAt = new Date();
+          await newOrder.save();
+        } catch (pdfError) {
+          console.error("Failed to generate invoice during order placement:", pdfError);
+        }
 
-      // Send Confirmation Email
-      try {
-        const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
-        await sendOrderConfirmationEmail(newOrder);
-      } catch (mailError) {
-        console.error("Failed to send order confirmation email during placement:", mailError);
-      }
+        try {
+          const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
+          await sendOrderConfirmationEmail(newOrder);
+        } catch (mailError) {
+          console.error("Failed to send order confirmation email during placement:", mailError);
+        }
+      })();
     }
     return NextResponse.json({
       success: true,

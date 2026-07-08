@@ -66,12 +66,7 @@ export default function CheckoutPage() {
 
   // Payment states
   const [paymentMethod, setPaymentMethod] = useState<"credit_card" | "cash_on_delivery" | "paypal">("credit_card");
-  const [cardData, setCardData] = useState({
-    number: "",
-    name: "",
-    expiry: "",
-    cvv: "",
-  });
+
 
   // Delivery Notes
   const [orderNotes, setOrderNotes] = useState("");
@@ -178,26 +173,7 @@ export default function CheckoutPage() {
     setStep("review");
   };
 
-  const validateCardForm = () => {
-    const { number, name, expiry, cvv } = cardData;
-    const cleanedNum = number.replace(/\s+/g, "");
-    if (cleanedNum.length < 15 || cleanedNum.length > 16) return "Please enter a valid credit card number.";
-    if (!name.trim()) return "Please enter the cardholder name.";
-    if (!expiry.includes("/") || expiry.length < 5) return "Please enter expiry date (MM/YY).";
-    if (cvv.length < 3) return "Please enter a valid CVV.";
-    return null;
-  };
 
-  const handleContinueToReview = () => {
-    if (paymentMethod === "credit_card") {
-      const error = validateCardForm();
-      if (error) {
-        showErrorToast(error);
-        return;
-      }
-    }
-    setStep("review");
-  };
 
   // Price Calculations
   const calculatedShippingCost = useMemo(() => {
@@ -316,37 +292,7 @@ export default function CheckoutPage() {
       currency: "USD",
     }).format(amount);
 
-  // Credit Card formatting helpers
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    value = value.slice(0, 16);
-    const formatted = value.replace(/(\d{4})(?=\d)/g, "$1 ");
-    setCardData({ ...cardData, number: formatted });
-  };
 
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    value = value.slice(0, 4);
-    if (value.length > 2) {
-      value = `${value.slice(0, 2)}/${value.slice(2)}`;
-    }
-    setCardData({ ...cardData, expiry: value });
-  };
-
-  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    value = value.slice(0, 4);
-    setCardData({ ...cardData, cvv: value });
-  };
-
-  // Detect card network logo
-  const cardTypeLogo = useMemo(() => {
-    const num = cardData.number.replace(/\s+/g, "");
-    if (/^4/.test(num)) return "visa";
-    if (/^5[1-5]/.test(num)) return "mastercard";
-    if (/^3[47]/.test(num)) return "amex";
-    return "generic";
-  }, [cardData.number]);
 
   if (items.length === 0) {
     return (
@@ -394,8 +340,8 @@ export default function CheckoutPage() {
             <div className="flex items-center gap-3">
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${step === "shipping"
-                    ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
-                    : "bg-emerald-500 text-white"
+                  ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
+                  : "bg-emerald-500 text-white"
                   }`}
               >
                 {step !== "shipping" ? <Check className="w-4.5 h-4.5 stroke-[3px]" /> : "1"}
@@ -414,16 +360,18 @@ export default function CheckoutPage() {
             <div className="flex items-center gap-3">
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${step === "review"
-                    ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
-                    : "bg-slate-100 text-slate-500 border border-slate-200"
+                  ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
+                  : step === "payment"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-slate-100 text-slate-500 border border-slate-200"
                   }`}
               >
-                2
+                {step === "payment" ? <Check className="w-4.5 h-4.5 stroke-[3px]" /> : "2"}
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 2</p>
-                <p className={`text-sm font-black ${step === "review" ? "text-[#005AA9]" : "text-slate-400"}`}>
-                  Order Summary
+                <p className={`text-sm font-black ${step === "review" ? "text-[#005AA9]" : step === "payment" ? "text-slate-800" : "text-slate-400"}`}>
+                  Summary
                 </p>
               </div>
             </div>
@@ -433,13 +381,16 @@ export default function CheckoutPage() {
             {/* Step 3 */}
             <div className="flex items-center gap-3">
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 bg-slate-100 text-slate-500 border border-slate-200"
+                className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${step === "payment"
+                  ? "bg-[#005AA9] text-white ring-4 ring-blue-100"
+                  : "bg-slate-100 text-slate-500 border border-slate-200"
+                  }`}
               >
                 3
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 3</p>
-                <p className="text-sm font-black text-slate-400">
+                <p className={`text-sm font-black ${step === "payment" ? "text-[#005AA9]" : "text-slate-400"}`}>
                   Payment
                 </p>
               </div>
@@ -484,8 +435,8 @@ export default function CheckoutPage() {
                               key={addr.id}
                               onClick={() => handleSelectSavedAddress(addr.id)}
                               className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 hover:shadow-md relative ${isSelected
-                                  ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                                  : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
+                                ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                                : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
                                 }`}
                             >
                               <div className="flex items-center justify-between mb-2">
@@ -529,8 +480,8 @@ export default function CheckoutPage() {
                             });
                           }}
                           className={`cursor-pointer rounded-2xl border border-dashed p-5 transition-all duration-200 hover:shadow-md flex flex-col items-center justify-center text-center gap-2 group ${useCustomAddress
-                              ? "border-[#005AA9] bg-blue-50/10"
-                              : "border-slate-200 bg-white hover:border-slate-400"
+                            ? "border-[#005AA9] bg-blue-50/10"
+                            : "border-slate-200 bg-white hover:border-slate-400"
                             }`}
                         >
                           <Plus className={`w-5 h-5 transition-transform group-hover:scale-110 ${useCustomAddress ? "text-[#005AA9]" : "text-slate-400"
@@ -676,7 +627,7 @@ export default function CheckoutPage() {
                       onClick={handleContinueToPayment}
                       className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide"
                     >
-                      <span>Continue to Order Summary</span>
+                      <span>Continue to Payment</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -701,13 +652,13 @@ export default function CheckoutPage() {
                   </div>
 
                   {/* Selection Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Credit Card selection */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Credit Card / Stripe selection */}
                     <div
                       onClick={() => setPaymentMethod("credit_card")}
                       className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "credit_card"
-                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                          : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
+                        ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                        : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -719,8 +670,8 @@ export default function CheckoutPage() {
                         )}
                       </div>
                       <div>
-                        <p className="font-extrabold text-sm text-slate-800">Simulated Card</p>
-                        <p className="text-[11px] text-slate-500 leading-normal mt-0.5">Pay securely with simulated card numbers.</p>
+                        <p className="font-extrabold text-sm text-slate-800">Pay Online (Stripe)</p>
+                        <p className="text-[11px] text-slate-500 leading-normal mt-0.5">Pay securely via Credit/Debit Cards, UPI, PayPal, or Wallets.</p>
                       </div>
                     </div>
 
@@ -728,8 +679,8 @@ export default function CheckoutPage() {
                     <div
                       onClick={() => setPaymentMethod("cash_on_delivery")}
                       className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "cash_on_delivery"
-                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                          : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
+                        ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                        : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -745,133 +696,20 @@ export default function CheckoutPage() {
                         <p className="text-[11px] text-slate-500 leading-normal mt-0.5">Pay with cash when package reaches your door.</p>
                       </div>
                     </div>
-
-                    {/* PayPal selection */}
-                    <div
-                      onClick={() => setPaymentMethod("paypal")}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 flex flex-col gap-3 hover:shadow-md relative ${paymentMethod === "paypal"
-                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                          : "border-slate-100 bg-slate-50/30 hover:border-slate-300"
-                        }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <HelpCircle className={`w-5 h-5 ${paymentMethod === "paypal" ? "text-[#005AA9]" : "text-slate-400"}`} />
-                        {paymentMethod === "paypal" && (
-                          <div className="w-4 h-4 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 stroke-[3px]" />
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-extrabold text-sm text-slate-800">PayPal / UPI</p>
-                        <p className="text-[11px] text-slate-500 leading-normal mt-0.5">Scan a simulated QR code or redirect.</p>
-                      </div>
-                    </div>
                   </div>
 
                   {/* DETAIL CONFIGURATIONS FOR SELECTED METHOD */}
                   <div className="pt-2">
 
-                    {/* Simulated Credit Card Form */}
+                    {/* Pay Online details */}
                     {paymentMethod === "credit_card" && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                        {/* CC Preview Mockup */}
-                        <div className="flex items-center justify-center">
-                          <div className="relative w-full max-w-[280px] h-44 rounded-2xl bg-gradient-to-tr from-[#0f172a] via-[#1e293b] to-[#334155] shadow-lg p-5 text-white flex flex-col justify-between overflow-hidden">
-                            {/* Chip & Logo */}
-                            <div className="flex items-center justify-between">
-                              <div className="w-10 h-7 bg-amber-200/80 rounded-md shadow-inner relative flex items-center justify-center">
-                                <div className="absolute inset-x-1.5 h-px bg-slate-800/10 top-2" />
-                                <div className="absolute inset-y-1.5 w-px bg-slate-800/10 left-3" />
-                                <div className="absolute inset-y-1.5 w-px bg-slate-800/10 right-3" />
-                              </div>
-                              <span className="font-black italic text-cyan-300 tracking-wide text-xs">SIERRA PETS</span>
-                            </div>
-
-                            {/* Card Number */}
-                            <div className="text-base sm:text-lg font-mono tracking-widest text-slate-100 py-2">
-                              {cardData.number || "•••• •••• •••• ••••"}
-                            </div>
-
-                            {/* Holder Name & Expiry */}
-                            <div className="flex justify-between items-end">
-                              <div className="space-y-0.5 max-w-[70%]">
-                                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Card Holder</span>
-                                <p className="text-xs font-black truncate uppercase">{cardData.name || "YOUR FULL NAME"}</p>
-                              </div>
-                              <div className="flex gap-4 shrink-0 text-right">
-                                <div className="space-y-0.5">
-                                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold font-mono">Expires</span>
-                                  <p className="text-xs font-black font-mono">{cardData.expiry || "MM/YY"}</p>
-                                </div>
-                                {cardData.cvv && (
-                                  <div className="space-y-0.5">
-                                    <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold font-mono">CVV</span>
-                                    <p className="text-xs font-black font-mono">{cardData.cvv}</p>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Card network logo watermark */}
-                            <div className="absolute -bottom-2 -right-2 opacity-15">
-                              {cardTypeLogo === "visa" && <span className="text-6xl font-black italic">VISA</span>}
-                              {cardTypeLogo === "mastercard" && <span className="text-6xl font-black italic">M/C</span>}
-                              {cardTypeLogo === "amex" && <span className="text-6xl font-black italic">AMEX</span>}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Card input forms */}
-                        <div className="space-y-3.5">
-                          {/* Cardholder name */}
-                          <div className="space-y-0.5">
-                            <label className="text-[10px] font-extrabold text-slate-500 uppercase">Cardholder Name</label>
-                            <input
-                              type="text"
-                              value={cardData.name}
-                              onChange={(e) => setCardData({ ...cardData, name: e.target.value })}
-                              placeholder="Full Name"
-                              className="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-bold text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          {/* Card number */}
-                          <div className="space-y-0.5">
-                            <label className="text-[10px] font-extrabold text-slate-500 uppercase">Card Number</label>
-                            <input
-                              type="text"
-                              value={cardData.number}
-                              onChange={handleCardNumberChange}
-                              placeholder="4000 1234 5678 9010"
-                              className="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-mono font-bold text-slate-800 text-sm"
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-4">
-                            {/* Expiry */}
-                            <div className="space-y-0.5">
-                              <label className="text-[10px] font-extrabold text-slate-500 uppercase">Expiry Date</label>
-                              <input
-                                type="text"
-                                value={cardData.expiry}
-                                onChange={handleExpiryChange}
-                                placeholder="MM/YY"
-                                className="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-mono font-bold text-slate-800 text-sm"
-                              />
-                            </div>
-                            {/* CVV */}
-                            <div className="space-y-0.5">
-                              <label className="text-[10px] font-extrabold text-slate-500 uppercase">CVV / CVC</label>
-                              <input
-                                type="password"
-                                value={cardData.cvv}
-                                onChange={handleCvvChange}
-                                placeholder="•••"
-                                className="w-full border border-slate-200 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-mono font-bold text-slate-800 text-sm"
-                              />
-                            </div>
-                          </div>
+                      <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-5 text-sm flex gap-3 text-blue-800">
+                        <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                        <div className="space-y-1 font-semibold">
+                          <p className="font-extrabold">Pay Online (Stripe)</p>
+                          <p className="text-xs text-blue-700 leading-relaxed">
+                            You will be securely redirected to the Stripe payment gateway to complete your checkout. All transactions are fully encrypted and secure.
+                          </p>
                         </div>
                       </div>
                     )}
@@ -890,43 +728,46 @@ export default function CheckoutPage() {
                       </div>
                     )}
 
-                    {/* PayPal / UPI Simulated Details */}
-                    {paymentMethod === "paypal" && (
-                      <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-5 text-sm space-y-4">
-                        <div className="flex gap-3 text-blue-800">
-                          <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                          <div className="space-y-1 font-semibold">
-                            <p className="font-extrabold">UPI / Digital Wallet Simulation</p>
-                            <p className="text-xs text-blue-700 leading-relaxed">
-                              Upon clicking "Place Order", a simulated QR scanner modal will show briefly to emulate Razorpay / PayPal payments.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
                   </div>
 
                   {/* Actions */}
                   <div className="pt-4 border-t border-slate-50 flex justify-between">
                     <button
-                      onClick={() => setStep("shipping")}
+                      onClick={() => setStep("review")}
                       className="px-6 py-3.5 border border-slate-200 text-slate-600 rounded-2xl font-bold transition-all hover:bg-slate-50 cursor-pointer text-sm"
                     >
                       Back
                     </button>
                     <button
-                      onClick={handleContinueToReview}
-                      className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide"
+                      onClick={handlePlaceOrder}
+                      disabled={loading}
+                      className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide disabled:opacity-60"
                     >
-                      <span>Review Order</span>
-                      <ArrowRight className="w-4 h-4" />
+                      {loading ? (
+                        <>
+                          <div className="w-4.5 h-4.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span>
+                            {paymentMethod === "credit_card" ? "Connecting to Stripe..." : "Placing Order..."}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          {paymentMethod === "credit_card" ? (
+                            <Lock className="w-4 h-4" />
+                          ) : (
+                            <CheckCircle2 className="w-4 h-4" />
+                          )}
+                          <span>
+                            {paymentMethod === "credit_card" ? "Continue to Payment" : "Place Order"}
+                          </span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </motion.div>
               )}
 
-              {/* STEP 3: REVIEW & CONFIRM */}
+              {/* STEP 2: REVIEW & CONFIRM */}
               {step === "review" && (
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -940,11 +781,11 @@ export default function CheckoutPage() {
                       <CheckCircle2 className="w-5 h-5 text-[#005AA9]" />
                       Review Your Order
                     </h2>
-                    <p className="text-xs text-slate-500 mt-1">Review your delivery address, billing choices and confirm placement.</p>
+                    <p className="text-xs text-slate-500 mt-1">Review your order details and delivery destination.</p>
                   </div>
 
-                  {/* Split Summary Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-slate-100 pb-6">
+                  {/* Summary Grid */}
+                  <div className="grid grid-cols-1 gap-6 border-b border-slate-100 pb-6">
                     {/* Delivery summary */}
                     <div className="space-y-3 bg-slate-50/50 p-5 rounded-2xl border border-slate-100">
                       <h4 className="font-extrabold text-sm text-slate-700 flex items-center gap-2">
@@ -959,22 +800,6 @@ export default function CheckoutPage() {
                         <p className="pt-2 font-bold text-slate-700">Phone: {shippingDetails.phone}</p>
                       </div>
                     </div>
-
-                    {/* Payment Summary */}
-                    <div className="space-y-3 bg-slate-50/50 p-5 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <h4 className="font-extrabold text-sm text-slate-700 flex items-center gap-2">
-                          <CreditCard className="w-4 h-4 text-slate-400" />
-                          <span>Selected Payment</span>
-                        </h4>
-                        <p className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                          Stripe Gateway
-                        </p>
-                        <p className="text-[11px] font-semibold text-slate-500 leading-normal">
-                          You will be securely redirected to Stripe to complete your payment.
-                        </p>
-                      </div>
-                    </div>
                   </div>
 
                   {/* Actions */}
@@ -986,21 +811,11 @@ export default function CheckoutPage() {
                       Back
                     </button>
                     <button
-                      onClick={handlePlaceOrder}
-                      disabled={loading}
-                      className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide disabled:opacity-60"
+                      onClick={() => setStep("payment")}
+                      className="px-8 py-3.5 bg-[#005AA9] hover:bg-blue-700 text-white rounded-2xl font-black transition-all hover:scale-[1.01] shadow-lg shadow-blue-500/15 flex items-center gap-2 cursor-pointer text-sm tracking-wide"
                     >
-                      {loading ? (
-                        <>
-                          <div className="w-4.5 h-4.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                           <span>Connecting to Stripe...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="w-4 h-4" />
-                          <span>Continue to Payment</span>
-                        </>
-                      )}
+                      <span>Continue to Payment</span>
+                      <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
                 </motion.div>
