@@ -15,29 +15,13 @@ export const config = {
   },
 };
 
-// Setup Multer to store files on disk in public/uploads/avatars
-const uploadDir = path.join(process.cwd(), "public", "uploads", "avatars");
-
-// Ensure upload directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `avatar-${uniqueSuffix}${ext}`);
-  },
-});
+// Setup Multer to store files in memory as buffer
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 3 * 1024 * 1024, // Limit size to 3MB
+    fileSize: 1 * 1024 * 1024, // Limit size to 1MB (suitable for Base64 storage)
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
@@ -102,22 +86,13 @@ export default async function handler(
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Delete old avatar from disk if it exists locally
-    if (user.avatar?.url && user.avatar.url.startsWith("/uploads/avatars/")) {
-      const oldPath = path.join(process.cwd(), "public", user.avatar.url);
-      if (fs.existsSync(oldPath)) {
-        try {
-          fs.unlinkSync(oldPath);
-        } catch (unlinkErr) {
-          console.error("Failed to delete old avatar file:", unlinkErr);
-        }
-      }
-    }
+    // 4. Update user's avatar in MongoDB with the Base64 Data URL
+    const base64Data = file.buffer.toString("base64");
+    const avatarUrl = `data:${file.mimetype};base64,${base64Data}`;
 
-    // 4. Update user's avatar in MongoDB with the local path
     user.avatar = {
-      url: `/uploads/avatars/${file.filename}`,
-      public_id: file.filename,
+      url: avatarUrl,
+      public_id: `base64-${Date.now()}`,
     };
 
     await user.save();
