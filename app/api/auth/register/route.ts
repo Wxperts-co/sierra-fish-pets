@@ -85,13 +85,13 @@ export async function POST(req: NextRequest) {
       message:
         "Registration successful. Please verify your email.",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Registration failed",
+        message: error.message || "Registration failed",
       },
       {
         status: 500,
