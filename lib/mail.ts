@@ -9,4 +9,7 @@ export const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // Bypass SSL certificate checks for hijacked/proxied mail servers
+  },
 });
