@@ -42,22 +42,23 @@ export async function POST(req: NextRequest) {
     const allowedRoles = ["user", "admin"];
     const assignedRole = role && allowedRoles.includes(role) ? role : "user";
 
-    const user = await UserModel.create({
-      name,
-      email: cleanEmail,
-      password,
-      phone: phone || "",
-      role: assignedRole,
-    });
+    // Clean up any stale/unverified verification entries for this email
+    await OTPVerificationModel.deleteMany({ "signupData.email": cleanEmail });
 
     const otp = generateOTP();
 
     await OTPVerificationModel.create({
-      userId: user._id,
       otp,
       expiresAt: new Date(
         Date.now() + 10 * 60 * 1000
       ),
+      signupData: {
+        name,
+        email: cleanEmail,
+        password,
+        phone: phone || "",
+        role: assignedRole,
+      }
     });
 
     try {
@@ -75,9 +76,8 @@ export async function POST(req: NextRequest) {
         `,
       });
     } catch (mailError) {
-      // Clean up the created user and OTP to allow retry if sending mail fails
-      await UserModel.deleteOne({ _id: user._id });
-      await OTPVerificationModel.deleteOne({ userId: user._id });
+      // Clean up the created OTP to allow retry if sending mail fails
+      await OTPVerificationModel.deleteOne({ "signupData.email": cleanEmail });
       throw mailError;
     }
 

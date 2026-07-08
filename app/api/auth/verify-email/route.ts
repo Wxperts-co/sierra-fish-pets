@@ -20,21 +20,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Find user by email
-    const user = await UserModel.findOne({ email, deletedAt: null });
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "User not found",
-        },
-        { status: 404 }
-      );
-    }
+    const cleanEmail = email.toLowerCase().trim();
 
-    // 2. Find active OTP verification record for this user
+    // 1. Find active OTP verification record for this email and otp
     const verification = await OTPVerificationModel.findOne({
-      userId: user._id,
+      "signupData.email": cleanEmail,
       otp,
     });
 
@@ -48,7 +38,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 3. Check if OTP is expired
+    // 2. Check if OTP is expired
     if (new Date() > verification.expiresAt) {
       // Clean up the expired OTP
       await OTPVerificationModel.deleteOne({ _id: verification._id });
@@ -62,9 +52,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Update user verification status
-    user.isEmailVerified = true;
-    await user.save();
+    // 3. Ensure signup data is present
+    if (!verification.signupData) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid verification data. Please register again.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 4. Check if the user was already created while this OTP was pending
+    const existingUser = await UserModel.findOne({ email: cleanEmail });
+    if (existingUser) {
+      await OTPVerificationModel.deleteOne({ _id: verification._id });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email already exists",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 5. Create user in database now that email is verified
+    const user = await UserModel.create({
+      name: verification.signupData.name,
+      email: verification.signupData.email,
+      password: verification.signupData.password,
+      phone: verification.signupData.phone || "",
+      role: verification.signupData.role || "user",
+      isEmailVerified: true,
+    });
 
     // Link guest orders to verified user account
     try {
@@ -73,7 +93,7 @@ export async function POST(req: NextRequest) {
       console.error("Failed to link guest orders during verification:", err);
     }
 
-    // 5. Clean up the used OTP record
+    // 6. Clean up the used OTP record
     await OTPVerificationModel.deleteOne({ _id: verification._id });
 
     return NextResponse.json({

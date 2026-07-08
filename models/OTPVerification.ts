@@ -1,9 +1,16 @@
 import mongoose, { Document, Model } from "mongoose";
 
 export interface IOTPVerification extends Document {
-  userId: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
   otp: string;
   expiresAt: Date;
+  signupData?: {
+    name: string;
+    email: string;
+    password?: string;
+    phone?: string;
+    role?: string;
+  };
 }
 
 const otpVerificationSchema =
@@ -12,7 +19,7 @@ const otpVerificationSchema =
       userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        required: false,
       },
 
       otp: {
@@ -24,6 +31,14 @@ const otpVerificationSchema =
         type: Date,
         required: true,
         expires: 0, // Automatically deletes the document when it expires
+      },
+
+      signupData: {
+        name: { type: String },
+        email: { type: String },
+        password: { type: String },
+        phone: { type: String },
+        role: { type: String },
       },
     },
     {
