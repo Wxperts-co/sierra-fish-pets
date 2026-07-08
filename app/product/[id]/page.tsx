@@ -24,7 +24,15 @@ export default async function ProductPage({
 
   await connectDB();
 
-  const rawProduct = await ProductModel.findOne({ id }).lean();
+  const [rawProduct, rawRecentReview] = await Promise.all([
+    ProductModel.findOne({ id }).lean(),
+    ReviewModel.findOne({
+      productId: id,
+      status: "published",
+    })
+      .sort({ createdAt: -1 })
+      .lean(),
+  ]);
 
   if (!rawProduct) {
     notFound();
@@ -32,15 +40,6 @@ export default async function ProductPage({
 
   // Cast lean Mongoose document to our frontend Product type and serialize to a plain object
   const product = JSON.parse(JSON.stringify(rawProduct)) as Product;
-
-  // Fetch the single most recent published review for this product
-  const rawRecentReview = await ReviewModel.findOne({
-    productId: id,
-    status: "published",
-  })
-    .sort({ createdAt: -1 })
-    .lean();
-
   const recentReview = rawRecentReview ? JSON.parse(JSON.stringify(rawRecentReview)) : null;
 
   const rawRelated = await ProductModel.find(

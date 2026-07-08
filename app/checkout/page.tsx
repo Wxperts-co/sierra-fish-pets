@@ -178,7 +178,7 @@ export default function CheckoutPage() {
   // Price Calculations
   const calculatedShippingCost = useMemo(() => {
     // If subtotal is greater than 49, shipping is free
-    return subtotal > 49 ? 0 : 9.99;
+    return subtotal > 49 ? 0 : 0;
   }, [subtotal]);
 
   const finalTotal = useMemo(() => {

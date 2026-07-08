@@ -142,7 +142,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
             {categories.map((category, index) => (
               <CarouselItem
                 key={category.id}
-                className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+                className="pl-4 basis-1/3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
               >
                 <Link
                   href={`/shop/?category=${category.slug}`}
@@ -163,7 +163,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
                       ease: [0.25, 0.46, 0.45, 0.94],
                       delay: index * 0.06,
                     }}
-                    className={`aspect-square w-full rounded-[2rem] relative overflow-hidden transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-xl ${
+                    className={`aspect-square w-[90%] mx-auto rounded-[1.2rem] sm:w-full sm:rounded-[2rem] relative overflow-hidden transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-xl ${
                       CATEGORY_BACKGROUNDS[category.slug] || "bg-slate-100"
                     }`}
                   >
@@ -172,7 +172,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
                       alt={category.name}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                      sizes="(max-width: 640px) 33vw, (max-width: 1024px) 33vw, 16vw"
                     />
 
                     {/* Plus icon overlay on hover */}
@@ -193,9 +193,9 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
                       ease: [0.25, 0.46, 0.45, 0.94],
                       delay: index * 0.06 + 0.15,
                     }}
-                    className="mt-4 text-center"
+                    className="mt-3 text-center"
                   >
-                    <h3 className="text-[17px] font-bold text-slate-800 group-hover:text-[#005AA9] transition-colors">
+                    <h3 className="text-[13px] sm:text-[17px] font-black tracking-tight text-slate-800 group-hover:text-[#005AA9] transition-colors">
                       {category.name}
                     </h3>
                   </motion.div>

@@ -158,25 +158,25 @@ const SPOTLIGHT_ITEMS = [
     image: "/images/categories/bird-toy.avif",
     label: "Popular",
     title: "Special offer",
-    href: "/shop/bird/toys",
+    href: "/shop?category=bird&subcategory=bird-toys-and-perches",
   },
   {
     image: "/images/categories/catfood.avif",
     label: "Don't Miss",
     title: "Top Rated",
-    href: "/shop/cat/cat-food",
+    href: "/shop?category=cat&subcategory=cat-food-dry",
   },
   {
     image: "/images/categories/aquaticcategory.avif",
     label: "Trending",
     title: "Min. 30% Off",
-    href: "/shop/aquatic",
+    href: "/shop?category=aquatic",
   },
   {
     image: "/images/categories/reptilecategory.avif",
     label: "Popular",
     title: "Special offer",
-    href: "/shop/reptile",
+    href: "/shop?category=reptile",
   },
 ];
 

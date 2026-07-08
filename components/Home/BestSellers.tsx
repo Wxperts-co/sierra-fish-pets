@@ -54,15 +54,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
     : 0;
 
   const getFallbackImage = () => {
-    switch (product.categorySlug) {
-      case "cat":
-        return "/images/placeholder-product.png";
-      case "aquatic":
-        return "/images/placeholder-product.png";
-      case "dog":
-      default:
-        return "/images/placeholder-product.png";
-    }
+    return "/placeholder-product.png";
   };
 
   return (
