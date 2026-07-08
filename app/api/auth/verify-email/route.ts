@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       email: verification.signupData.email,
       password: verification.signupData.password,
       phone: verification.signupData.phone || "",
-      role: verification.signupData.role || "user",
+      role: (verification.signupData.role as "user" | "admin") || "user",
       isEmailVerified: true,
     });
 

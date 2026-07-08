@@ -9,7 +9,7 @@ export interface IOTPVerification extends Document {
     email: string;
     password?: string;
     phone?: string;
-    role?: string;
+    role?: "user" | "admin";
   };
 }
 
