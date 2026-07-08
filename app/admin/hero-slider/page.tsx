@@ -4,7 +4,8 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Plus, Edit2, Trash2, Layers, Search, X, Star, ShoppingBag, Upload, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import DataGrid from "@/components/admin/common/PersistentDataGrid";
 import { showErrorToast } from "@/lib/toast";
 
 interface AdminBanner {
@@ -431,6 +432,7 @@ export default function AdminHeroSliderPage() {
       {/* ── Grid/Table ── */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <DataGrid
+          storageKey="admin_grid_hero_slider"
           rows={rows}
           columns={columns}
           pagination

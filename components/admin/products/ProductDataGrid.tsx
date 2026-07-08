@@ -1,6 +1,7 @@
 "use client";
 
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
+import DataGrid from "../common/PersistentDataGrid";
 import Image from "next/image";
 import { Eye, Edit3, Trash2 } from "lucide-react";
 import ActionsDropdown from "../common/ActionsDropdown";
@@ -261,6 +262,7 @@ export default function ProductDataGrid({
   return (
     <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
       <DataGrid
+        storageKey="admin_grid_products"
         rows={rows}
         columns={columns}
         pagination

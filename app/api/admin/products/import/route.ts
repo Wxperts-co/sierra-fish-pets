@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import mongoose from "mongoose";
+import { join } from "path";
+import { readFile } from "fs/promises";
 
 import Product, { mapRetailerCsvData } from "@/models/Product";
 import { connectDB } from "@/lib/mongodb";
@@ -143,6 +145,26 @@ export async function POST(request: NextRequest) {
       errors: [] as string[],
     };
 
+    // Load category mapping JSON
+    const categoryMappingMap = new Map<string, { categorySlug: string; subcategorySlug: string }>();
+    try {
+      const mappingPath = join(process.cwd(), "data", "category_mapping.json");
+      const mappingRaw = await readFile(mappingPath, "utf-8");
+      const mappingList = JSON.parse(mappingRaw);
+      if (Array.isArray(mappingList)) {
+        for (const item of mappingList) {
+          if (item.code) {
+            categoryMappingMap.set(String(item.code).trim(), {
+              categorySlug: item.categorySlug,
+              subcategorySlug: item.subcategorySlug,
+            });
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("[Import] No category_mapping.json found or failed to parse:", err);
+    }
+
     console.log(`[Import] Starting bulk import of ${importedProducts.length} entries.`);
 
     // 1. Optimize lookup: Fetch all existing product IDs, SKUs, and Slugs in a single light query
@@ -228,14 +250,25 @@ export async function POST(request: NextRequest) {
         const compareAtPriceRaw = getValue(productData, "product_compare_to_price", "compareAtPrice", "compare_at_price");
         const compareAtPrice = (compareAtPriceRaw != null && !isNaN(parseFloat(compareAtPriceRaw))) ? parseFloat(compareAtPriceRaw) : null;
         
-        const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category");
+        const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category", "category_code", "class");
         const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory");
         
-        const categorySlugVal = normalizeCategorySlug(cat1Raw);
-        const subcategorySlugVal = cleanExcelText(cat2Raw).toLowerCase().replace(/\s+/g, "-") || "uncategorized";
-        
+        let categorySlugVal = "";
+        let subcategorySlugVal = "";
+
+        const cleanCat1 = cleanExcelText(cat1Raw);
+        const mapped = categoryMappingMap.get(cleanCat1);
+
+        if (mapped) {
+          categorySlugVal = mapped.categorySlug;
+          subcategorySlugVal = mapped.subcategorySlug;
+        } else {
+          categorySlugVal = normalizeCategorySlug(cat1Raw);
+          subcategorySlugVal = cleanExcelText(cat2Raw).toLowerCase().replace(/\s+/g, "-") || "uncategorized";
+        }
+
         let categorySlug = categorySlugVal;
-        if (cat2Raw && !categorySlugVal.includes("-/-")) {
+        if (cat2Raw && !categorySlugVal.includes("-/-") && !mapped) {
           categorySlug = `${categorySlugVal}-/-${subcategorySlugVal}`;
         }
 

@@ -4,7 +4,8 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Plus, Edit2, Trash2, BookOpen, Search, X, Check, FileText, Sparkles, Clock, Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import DataGrid from "@/components/admin/common/PersistentDataGrid";
 import { showErrorToast } from "@/lib/toast";
 import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
@@ -571,6 +572,7 @@ export default function AdminBlogPostsPage() {
       {/* ── Grid/Table ── */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <DataGrid
+          storageKey="admin_grid_blogs"
           rows={rows}
           columns={columns}
           pagination

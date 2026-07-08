@@ -1,0 +1,117 @@
+[
+  {
+    "code": "100",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-food"
+  },
+  {
+    "code": "110",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-food"
+  },
+  {
+    "code": "120",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-treatment"
+  },
+  {
+    "code": "140",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-filters-and-pumps"
+  },
+  {
+    "code": "150",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-tanks-and-aquariums"
+  },
+  {
+    "code": "160",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-tanks-and-aquariums"
+  },
+  {
+    "code": "165",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-tanks-and-aquariums"
+  },
+  {
+    "code": "210",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-food"
+  },
+  {
+    "code": "220",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-food"
+  },
+  {
+    "code": "239",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-tanks-and-aquariums"
+  },
+  {
+    "code": "300",
+    "categorySlug": "bird",
+    "subcategorySlug": "bird-food"
+  },
+  {
+    "code": "310",
+    "categorySlug": "bird",
+    "subcategorySlug": "bird-health-vitamins"
+  },
+  {
+    "code": "320",
+    "categorySlug": "bird",
+    "subcategorySlug": "bird-toys-and-perches"
+  },
+  {
+    "code": "330",
+    "categorySlug": "bird",
+    "subcategorySlug": "bird-cages-and-stands"
+  },
+  {
+    "code": "580",
+    "categorySlug": "dog",
+    "subcategorySlug": "dog-bowls-and-feeders"
+  },
+  {
+    "code": "585",
+    "categorySlug": "cat",
+    "subcategorySlug": "cat-beds-and-furniture"
+  },
+  {
+    "code": "640",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-food"
+  },
+  {
+    "code": "645",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-food"
+  },
+  {
+    "code": "660",
+    "categorySlug": "aquatic",
+    "subcategorySlug": "fish-heating-and-lighting"
+  },
+  {
+    "code": "710",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-food"
+  },
+  {
+    "code": "715",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-lighting"
+  },
+  {
+    "code": "720",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-habitat"
+  },
+  {
+    "code": "730",
+    "categorySlug": "reptile",
+    "subcategorySlug": "reptile-food"
+  }
+]

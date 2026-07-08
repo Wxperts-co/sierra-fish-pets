@@ -16,7 +16,8 @@ import {
   Calendar,
   Eye,
 } from "lucide-react";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import DataGrid from "@/components/admin/common/PersistentDataGrid";
 import { showErrorToast } from "@/lib/toast";
 import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
 
@@ -577,6 +578,7 @@ export default function AdminNewArrivalsPage() {
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <div style={{ height: 500, width: "100%" }}>
           <DataGrid
+            storageKey="admin_grid_new_arrivals"
             rows={rows}
             columns={columns}
             pagination

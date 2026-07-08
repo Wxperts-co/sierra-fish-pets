@@ -1,6 +1,7 @@
 "use client";
 
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
+import DataGrid from "../common/PersistentDataGrid";
 import { Button } from "@mui/material";
 import CategoryActions from "./CategoryActions";
 import type { AdminCategory } from "./types";
@@ -79,6 +80,7 @@ export default function CategoryDataGrid({ categories, loading = false, onView, 
     <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" style={{ width: "100%" }}>
       <div style={{ height: 560, width: "100%" }}>
         <DataGrid
+          storageKey="admin_grid_categories"
           rows={rows}
           columns={columns}
           pageSizeOptions={[10, 25, 50]}

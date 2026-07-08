@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import DataGrid from "@/components/admin/common/PersistentDataGrid";
 import { showErrorToast } from "@/lib/toast";
 
 interface Review {
@@ -512,6 +513,7 @@ export default function AdminReviewsPage() {
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-x-auto" style={{ width: "100%" }}>
         <div style={{ height: 500, width: "100%" }}>
           <DataGrid
+            storageKey="admin_grid_reviews"
             rows={rows}
             columns={columns}
             pagination
