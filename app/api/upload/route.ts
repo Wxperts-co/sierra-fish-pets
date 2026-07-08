@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const folder = (formData.get("folder") as string | null) || "general";
-
+    
     // Gather all uploaded files from both "file" and "files" keys
     const files: File[] = [];
     
@@ -29,14 +29,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Target directory: public/uploads/${folder}
-    const dirPath = join(process.cwd(), "public", "uploads", folder);
+    // Write destination is outside the project root: parent/sierra-uploads/folder
+    const dirPath = join(process.cwd(), "..", "sierra-uploads", folder);
     await mkdir(dirPath, { recursive: true });
 
     const uploadedUrls: string[] = [];
 
     for (const file of files) {
       if (!file || !file.name) continue;
+
+      // Limit file size to 10MB for disk storage
+      if (file.size > 10 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, message: `File ${file.name} exceeds 10MB limit` },
+          { status: 400 }
+        );
+      }
       
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
@@ -49,7 +57,9 @@ export async function POST(request: NextRequest) {
       const filePath = join(dirPath, cleanFilename);
 
       await writeFile(filePath, buffer);
-      uploadedUrls.push(`/uploads/${folder}/${cleanFilename}`);
+      
+      // Serve via the dynamic api/uploads endpoint
+      uploadedUrls.push(`/api/uploads/${folder}/${cleanFilename}`);
     }
 
     return NextResponse.json({

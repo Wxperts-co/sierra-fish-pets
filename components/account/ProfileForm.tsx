@@ -189,7 +189,7 @@ export default function ProfileForm() {
               <span>Choose Photo</span>
             </button>
             <p className="text-[10px] text-slate-400 font-bold leading-normal">
-              JPG, PNG or GIF. Max size: 3MB.
+              JPG, PNG or GIF. Max size: 1MB.
             </p>
           </div>
         </div>

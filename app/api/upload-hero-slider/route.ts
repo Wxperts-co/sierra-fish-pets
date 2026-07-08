@@ -14,11 +14,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Limit file size to 10MB for disk storage
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json(
+        { success: false, message: "File size exceeds 10MB limit" },
+        { status: 400 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Target directory: public/images/heroslider
-    const dirPath = join(process.cwd(), "public", "images", "heroslider");
+    // Target directory outside project root: parent/sierra-uploads/heroslider
+    const dirPath = join(process.cwd(), "..", "sierra-uploads", "heroslider");
     await mkdir(dirPath, { recursive: true });
 
     // Clean up filename and generate a unique identifier
@@ -30,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     await writeFile(filePath, buffer);
 
-    const relativeUrl = `/images/heroslider/${cleanFilename}`;
+    const relativeUrl = `/api/uploads/heroslider/${cleanFilename}`;
     return NextResponse.json({ success: true, url: relativeUrl }, { status: 200 });
   } catch (error) {
     console.error("Error uploading hero banner image:", error);
