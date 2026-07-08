@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const isEmailVerified = searchParams.get("isEmailVerified");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filter: Record<string, any> = { deletedAt: null };
+    const filter: Record<string, any> = {};
 
     if (search) {
       filter.$or = [
@@ -58,10 +58,10 @@ export async function GET(request: NextRequest) {
         .limit(limitNum)
         .lean(),
       User.countDocuments(filter),
-      User.countDocuments({ deletedAt: null }),
-      User.countDocuments({ deletedAt: null, status: "active" }),
-      User.countDocuments({ deletedAt: null, role: "admin" }),
-      User.countDocuments({ deletedAt: null, status: { $in: ["inactive", "banned"] } }),
+      User.countDocuments({}),
+      User.countDocuments({ status: "active" }),
+      User.countDocuments({ role: "admin" }),
+      User.countDocuments({ status: { $in: ["inactive", "banned"] } }),
     ]);
 
     return NextResponse.json(

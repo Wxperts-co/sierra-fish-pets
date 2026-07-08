@@ -29,12 +29,7 @@ export default function UserStats({ users, stats, loading = false }: UserStatsPr
     banned: stats?.banned ?? 0,
   };
 
-  if (users && users.length > 0) {
-    computedStats.total = users.length;
-    computedStats.active = users.filter((u) => u.status === "active").length;
-    computedStats.admins = users.filter((u) => u.role === "admin").length;
-    computedStats.banned = users.filter((u) => u.status === "inactive" || u.status === "banned").length;
-  }
+
 
   const cards = [
     {

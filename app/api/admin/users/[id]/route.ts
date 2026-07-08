@@ -39,6 +39,7 @@ export async function DELETE(
     }
 
     user.deletedAt = new Date();
+    user.status = "inactive";
     await user.save();
 
     return NextResponse.json(
@@ -110,6 +111,9 @@ export async function PATCH(
       );
     }
 
+    if (updateData.status === "active" && user.deletedAt) {
+      user.deletedAt = null;
+    }
     Object.assign(user, updateData);
     await user.save();
 

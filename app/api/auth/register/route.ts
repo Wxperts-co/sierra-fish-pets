@@ -24,8 +24,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingUser =
-      await UserModel.findOne({ email, deletedAt: null });
+    const cleanEmail = email.toLowerCase().trim();
+
+    const existingUser = await UserModel.findOne({ email: cleanEmail });
 
     if (existingUser) {
       return NextResponse.json(
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     const user = await UserModel.create({
       name,
-      email,
+      email: cleanEmail,
       password,
       phone: phone || "",
       role: assignedRole,
@@ -62,7 +63,7 @@ export async function POST(req: NextRequest) {
     try {
       await transporter.sendMail({
         from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
-        to: email,
+        to: cleanEmail,
         subject: "Verify Your Email",
         html: `
           <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px;">
