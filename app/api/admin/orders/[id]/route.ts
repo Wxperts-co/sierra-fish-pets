@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
 import ProductModel from "@/models/Product";
@@ -59,12 +60,28 @@ export async function PATCH(
         const productsToUpdate = [];
         for (const item of order.items) {
           if (item.productId) {
-            const product = await ProductModel.findById(item.productId);
+            let cleanId = item.productId;
+            if (item.productId.includes("-")) {
+              const parts = item.productId.split("-");
+              const lastPart = parts[parts.length - 1];
+              if (!isNaN(Number(lastPart))) {
+                parts.pop();
+                cleanId = parts.join("-");
+              }
+            }
+
+            let product = null;
+            if (mongoose.Types.ObjectId.isValid(cleanId)) {
+              try {
+                product = await ProductModel.findById(cleanId);
+              } catch (err) {
+                // Ignore cast error
+              }
+            }
+
             if (!product) {
-              return NextResponse.json(
-                { success: false, message: `Product "${item.productName}" not found.` },
-                { status: 400 }
-              );
+              // If it's a gift card or external barcode product, we skip stock validation/deduction
+              continue;
             }
             if (product.stockCount < item.quantity) {
               return NextResponse.json(
@@ -88,7 +105,25 @@ export async function PATCH(
         // Moving from active to cancelled/refunded -> restore stock
         for (const item of order.items) {
           if (item.productId) {
-            const product = await ProductModel.findById(item.productId);
+            let cleanId = item.productId;
+            if (item.productId.includes("-")) {
+              const parts = item.productId.split("-");
+              const lastPart = parts[parts.length - 1];
+              if (!isNaN(Number(lastPart))) {
+                parts.pop();
+                cleanId = parts.join("-");
+              }
+            }
+
+            let product = null;
+            if (mongoose.Types.ObjectId.isValid(cleanId)) {
+              try {
+                product = await ProductModel.findById(cleanId);
+              } catch (err) {
+                // Ignore cast error
+              }
+            }
+
             if (product) {
               product.stockCount += item.quantity;
               await product.save();
@@ -191,7 +226,25 @@ export async function DELETE(
     if (!["cancelled", "refunded"].includes(order.status)) {
       for (const item of order.items) {
         if (item.productId) {
-          const product = await ProductModel.findById(item.productId);
+          let cleanId = item.productId;
+          if (item.productId.includes("-")) {
+            const parts = item.productId.split("-");
+            const lastPart = parts[parts.length - 1];
+            if (!isNaN(Number(lastPart))) {
+              parts.pop();
+              cleanId = parts.join("-");
+            }
+          }
+
+          let product = null;
+          if (mongoose.Types.ObjectId.isValid(cleanId)) {
+            try {
+              product = await ProductModel.findById(cleanId);
+            } catch (err) {
+              // Ignore cast error
+            }
+          }
+
           if (product) {
             product.stockCount += item.quantity;
             await product.save();
