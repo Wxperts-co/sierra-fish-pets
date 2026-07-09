@@ -18,7 +18,7 @@ const editUserSchema = z.object({
   state: z.string().optional(),
   zipCode: z.string().optional(),
   country: z.string().optional(),
-  role: z.enum(["user", "admin"]),
+  role: z.enum(["user", "admin", "manager", "sales", "delivery boy"]),
   status: z.enum(["active", "inactive", "banned"]),
 });
 
@@ -28,7 +28,7 @@ type User = {
   _id: string;
   name: string;
   email: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | "manager" | "sales" | "delivery boy";
   status: "active" | "inactive" | "banned";
   isEmailVerified: boolean;
   phone?: string;
@@ -164,6 +164,9 @@ export default function UserEditModal({ isOpen, user, onClose, onSave }: UserEdi
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="sales">Sales</option>
+                <option value="delivery boy">Delivery Boy</option>
               </select>
               {errors.role && <p className="text-xs text-red-600">{errors.role.message}</p>}
             </div>

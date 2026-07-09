@@ -57,7 +57,8 @@ export default function AdminLayout({
   }
 
   // ── Not authenticated / not admin → show login page ────────────────────────
-  if (!isAuthenticated || user?.role !== "admin") {
+  const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+  if (!isAuthenticated || !user?.role || !ALLOWED_ADMIN_ROLES.includes(user.role)) {
     return (
       <div className="fixed inset-0 z-[200] overflow-auto">
         <Suspense fallback={

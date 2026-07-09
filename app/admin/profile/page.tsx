@@ -34,6 +34,13 @@ export default function AdminProfilePage() {
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Invite User States
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("manager");
+  const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteSuccess, setInviteSuccess] = useState("");
+  const [inviteError, setInviteError] = useState("");
+
   // Initialize data from Redux user state
   useEffect(() => {
     if (user) {
@@ -115,6 +122,33 @@ export default function AdminProfilePage() {
       setErrorMsg(err.response?.data?.message || "Failed to save profile details.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleInviteUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setInviteLoading(true);
+    setInviteSuccess("");
+    setInviteError("");
+
+    try {
+      const res = await axios.post("/api/admin/users/invite", {
+        email: inviteEmail,
+        role: inviteRole,
+      });
+
+      if (res.data.success) {
+        setInviteSuccess(res.data.message || "Invitation email sent successfully.");
+        setInviteEmail("");
+        setInviteRole("manager");
+      } else {
+        setInviteError(res.data.message || "Failed to send invitation.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setInviteError(err.response?.data?.message || "An error occurred during invitation.");
+    } finally {
+      setInviteLoading(false);
     }
   };
 
@@ -347,6 +381,84 @@ export default function AdminProfilePage() {
           </form>
         </div>
       </div>
+
+      {user.role === "admin" && (
+        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col mt-6">
+          {/* Card Header */}
+          <div className="p-6 border-b border-slate-100 bg-slate-50/50">
+            <h3 className="text-base font-extrabold text-slate-800">Invite Team Member</h3>
+            <p className="text-xs text-slate-500 font-semibold mt-0.5">Send email invitation containing an account activation OTP code.</p>
+          </div>
+
+          <form onSubmit={handleInviteUser} className="p-6 space-y-4">
+            {inviteSuccess && (
+              <div className="flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-2xl p-4 text-sm font-semibold">
+                <Check className="h-5 w-5 shrink-0 bg-emerald-100 p-0.5 rounded-full" />
+                <span>{inviteSuccess}</span>
+              </div>
+            )}
+            {inviteError && (
+              <div className="flex items-center gap-3 bg-rose-50 text-rose-700 border border-rose-100 rounded-2xl p-4 text-sm font-semibold">
+                <AlertCircle className="h-5 w-5 shrink-0 bg-rose-100 p-0.5 rounded-full" />
+                <span>{inviteError}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Email Address */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <input
+                    type="email"
+                    name="inviteEmail"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    required
+                    placeholder="Enter email to invite"
+                    className="w-full h-10 pl-10 pr-3 text-sm rounded-xl border border-slate-200 outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9] transition font-semibold"
+                  />
+                </div>
+              </div>
+
+              {/* Role Select */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Dashboard Role
+                </label>
+                <div className="relative">
+                  <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <select
+                    name="inviteRole"
+                    value={inviteRole}
+                    onChange={(e) => setInviteRole(e.target.value)}
+                    className="w-full h-10 pl-10 pr-3 text-sm rounded-xl border border-slate-200 bg-white outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9] transition font-bold text-slate-700 cursor-pointer"
+                  >
+                    <option value="manager">Manager</option>
+                    <option value="admin">Admin</option>
+                    <option value="sales">Sales</option>
+                    <option value="delivery boy">Delivery Boy</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-100 pt-6 flex items-center justify-end">
+              <button
+                type="submit"
+                disabled={inviteLoading}
+                className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#005AA9] hover:bg-[#003B73] text-white px-5 text-xs font-bold shadow-md transition active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                <Check className="w-4 h-4" />
+                {inviteLoading ? "Sending Invite..." : "Send Invitation"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

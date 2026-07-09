@@ -5,7 +5,7 @@ import User from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -13,6 +13,7 @@ export async function DELETE(
 
     const { id } = await params;
     const normalizedId = typeof id === "string" ? id.trim() : "";
+    const permanent = new URL(request.url).searchParams.get("permanent") === "true";
 
     if (!normalizedId) {
       return NextResponse.json(
@@ -38,6 +39,16 @@ export async function DELETE(
       );
     }
 
+    if (permanent) {
+      // Hard delete — permanently removes from database
+      await User.deleteOne({ _id: normalizedId });
+      return NextResponse.json(
+        { success: true, message: "User permanently deleted." },
+        { status: 200 }
+      );
+    }
+
+    // Soft delete — marks as inactive and sets deletedAt
     user.deletedAt = new Date();
     user.status = "inactive";
     await user.save();

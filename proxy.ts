@@ -20,7 +20,8 @@ export function proxy(req: NextRequest) {
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { role?: string };
-      if (decoded.role !== "admin") {
+      const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+      if (!decoded.role || !ALLOWED_ADMIN_ROLES.includes(decoded.role)) {
         return NextResponse.redirect(new URL("/admin?error=InvalidRole", req.url));
       }
       return NextResponse.next();

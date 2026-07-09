@@ -10,7 +10,7 @@ type User = {
   name: string;
   email: string;
   phone?: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | "manager" | "sales" | "delivery boy";
   status: "active" | "inactive" | "banned";
   isEmailVerified: boolean;
   avatar?: { url: string; public_id: string };

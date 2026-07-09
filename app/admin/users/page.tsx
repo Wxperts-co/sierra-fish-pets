@@ -21,7 +21,7 @@ type User = {
   name: string;
   email: string;
   phone?: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | "manager" | "sales" | "delivery boy";
   status: "active" | "inactive" | "banned";
   isEmailVerified: boolean;
   avatar?: { url: string; public_id: string };
@@ -166,7 +166,20 @@ export default function UsersPage() {
   };
 
   const handleConfirmDelete = async () => {
+    if (!selectedUser) return;
     try {
+      // Permanently delete if user is inactive, otherwise soft-delete
+      const isPermanent = selectedUser.status === "inactive";
+      const url = isPermanent
+        ? `/api/admin/users/${selectedUser._id}?permanent=true`
+        : `/api/admin/users/${selectedUser._id}`;
+
+      const { data } = await axios.delete(url);
+      if (!data?.success) {
+        showErrorToast(data?.message || "Failed to delete user");
+        return;
+      }
+
       // Re-fetch current page users and stats
       const params = new URLSearchParams();
       params.set("page", String(paginationModel.page + 1));
@@ -188,6 +201,7 @@ export default function UsersPage() {
       setSelectedUser(null);
     } catch (error) {
       console.error("Failed to delete user:", error);
+      showErrorToast("Failed to delete user");
     }
   };
 

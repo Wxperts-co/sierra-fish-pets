@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
 
-    const { email, otp, password } = await req.json();
+    const { email, otp, password, name, phone } = await req.json();
 
     if (!email || !otp || !password) {
       return NextResponse.json(
@@ -54,8 +54,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Update password (pre-save hook will hash it)
+    // Update password (pre-save hook will hash it), name, and phone if provided
     user.password = password;
+    user.isEmailVerified = true;
+    if (name) user.name = name;
+    if (phone) user.phone = phone;
     await user.save();
 
     // Delete verification record

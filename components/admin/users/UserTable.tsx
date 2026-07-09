@@ -9,7 +9,7 @@ type User = {
   name: string;
   email: string;
   phone?: string;
-  role: "user" | "admin";
+  role: "user" | "admin" | "manager" | "sales" | "delivery boy";
   status: "active" | "inactive" | "banned";
   isEmailVerified: boolean;
   avatar?: {
@@ -69,9 +69,12 @@ export default function UserTable({
     banned: "bg-rose-50 text-rose-700 border border-rose-200/50",
   };
 
-  const roleBadges = {
+  const roleBadges: Record<string, string> = {
     user: "bg-blue-50 text-blue-700 border border-blue-200/50",
     admin: "bg-purple-50 text-purple-700 border border-purple-200/50",
+    manager: "bg-amber-50 text-amber-700 border border-amber-200/50",
+    sales: "bg-teal-50 text-teal-700 border border-teal-200/50",
+    "delivery boy": "bg-sky-50 text-sky-700 border border-sky-200/50",
   };
 
   // Helper for computing page display entries

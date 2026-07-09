@@ -46,6 +46,12 @@ export async function GET(request: NextRequest) {
       filter.isEmailVerified = isEmailVerified === "verified";
     }
 
+    // Only exclude soft-deleted users when viewing active or banned status.
+    // "inactive" shows soft-deleted users, "all" shows everyone.
+    if (status === "active" || status === "banned") {
+      filter.deletedAt = null;
+    }
+
     const pageNum = page ? parseInt(page, 10) : 1;
     const limitNum = limit ? parseInt(limit, 10) : 10;
     const skip = (pageNum - 1) * limitNum;
@@ -58,10 +64,10 @@ export async function GET(request: NextRequest) {
         .limit(limitNum)
         .lean(),
       User.countDocuments(filter),
-      User.countDocuments({}),
-      User.countDocuments({ status: "active" }),
-      User.countDocuments({ role: "admin" }),
-      User.countDocuments({ status: { $in: ["inactive", "banned"] } }),
+      User.countDocuments({ deletedAt: null }),
+      User.countDocuments({ deletedAt: null, status: "active" }),
+      User.countDocuments({ deletedAt: null, role: "admin" }),
+      User.countDocuments({ deletedAt: null, status: { $in: ["inactive", "banned"] } }),
     ]);
 
     return NextResponse.json(

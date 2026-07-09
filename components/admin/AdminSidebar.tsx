@@ -32,9 +32,8 @@ import { logout } from "@/store/slices/authSlice";
 
 const menuItems = [
   { name: "Dashboard",    href: "/admin",              icon: LayoutDashboard },
-  { name: "Users",        href: "/admin/users",        icon: Users },
-  { name: "Products",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Orders",       href: "/admin/orders",       icon: ClipboardList },
+  { name: "Inventory",     href: "/admin/products",     icon: ShoppingBag },
   { name: "Categories",   href: "/admin/categories",   icon: Tag },
   { name: "Events", href: "/admin/events", icon: CalendarDays },
   { name: "New Arrivals", href: "/admin/new-arrivals", icon: PawPrint },
@@ -45,6 +44,7 @@ const menuItems = [
   { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blogs", icon: FileText },
   { name: "Hero Slider",  href: "/admin/hero-slider",  icon: Layers },
+  { name: "Users",        href: "/admin/users",        icon: Users },
   { name: "Profile",      href: "/admin/profile",      icon: User },
 ];
 

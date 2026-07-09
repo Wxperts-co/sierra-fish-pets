@@ -37,8 +37,9 @@ export async function POST(req: NextRequest) {
       const order = await OrderModel.findById(orderId);
 
       if (order && order.paymentStatus !== "paid") {
-        // 1. Update Payment Status to Paid
+        // 1. Update Payment Status to Paid & Order Status to Confirmed
         order.paymentStatus = "paid";
+        order.status = "confirmed";
         order.updatedAt = new Date();
         await order.save();
 

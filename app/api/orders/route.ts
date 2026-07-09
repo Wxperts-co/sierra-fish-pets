@@ -287,7 +287,7 @@ export async function POST(req: NextRequest) {
         zipCode: shippingAddress.zipCode || shippingAddress.pincode, // handle pincode / zipCode
         country: shippingAddress.country || "United States",
       },
-      status: "processing" as const, // default status for placed orders
+      status: (paymentMethod === "cash_on_delivery" ? "confirmed" : "processing") as any,
       paymentStatus: paymentStatus as "pending" | "paid" | "failed" | "refunded",
       paymentMethod: paymentMethod as "credit_card" | "debit_card" | "paypal" | "cash_on_delivery",
       subtotal,

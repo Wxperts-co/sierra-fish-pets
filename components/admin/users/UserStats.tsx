@@ -7,7 +7,7 @@ type UserStatsProps = {
     _id: string;
     name: string;
     email: string;
-    role: "user" | "admin";
+    role: "user" | "admin" | "manager" | "sales" | "delivery boy";
     status: "active" | "inactive" | "banned";
     isEmailVerified: boolean;
     createdAt: string;

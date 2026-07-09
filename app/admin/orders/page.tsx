@@ -17,6 +17,7 @@ import {
   Clock,
   MessageSquare,
   Eye,
+  Users,
 } from "lucide-react";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import DataGrid from "@/components/admin/common/PersistentDataGrid";
@@ -77,6 +78,7 @@ export default function AdminOrdersPage() {
     shipped: 0,
     delivered: 0,
     cancelled: 0,
+    totalUsers: 0,
   });
 
   // Modal States
@@ -418,7 +420,18 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* ── Stats Summary Cards ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+
+         {/* Registered Users */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+          <div>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Registered Users</p>
+            <h3 className="text-2xl font-black text-blue-600 mt-2">{loading && stats.totalUsers === 0 ? "..." : stats.totalUsers}</h3>
+          </div>
+          <div className="p-3 bg-blue-50 rounded-xl text-blue-500">
+            <Users className="w-6 h-6" />
+          </div>
+        </div>
         
         {/* Total Orders */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
@@ -431,16 +444,7 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
-        {/* Processing */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Processing</p>
-            <h3 className="text-2xl font-black text-amber-600 mt-2">{loading && stats.processing === 0 ? "..." : stats.processing}</h3>
-          </div>
-          <div className="p-3 bg-amber-50 rounded-xl text-amber-500">
-            <Clock className="w-6 h-6" />
-          </div>
-        </div>
+       
 
         {/* Shipped */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
@@ -475,6 +479,8 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
+       
+
       </div>
 
       {/* ── Filters ── */}
@@ -499,8 +505,7 @@ export default function AdminOrdersPage() {
             className="w-full px-4 py-2.5 rounded-2xl border border-slate-100 bg-white text-sm font-semibold outline-none focus:border-[#005AA9]/30 cursor-pointer shadow-sm text-slate-700"
           >
             <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
+            <option value="confirmed">Confirmed</option>
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
             <option value="cancelled">Cancelled</option>
@@ -729,9 +734,8 @@ export default function AdminOrdersPage() {
                   onChange={(e) => setEditStatus(e.target.value as Order["status"])}
                   className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 bg-white text-sm font-semibold outline-none focus:border-[#005AA9]/30 cursor-pointer"
                 >
-                  <option value="pending">Pending</option>
+                 
                   <option value="confirmed">Confirmed</option>
-                  <option value="processing">Processing</option>
                   <option value="shipped">Shipped</option>
                   <option value="delivered">Delivered</option>
                   <option value="cancelled">Cancelled</option>

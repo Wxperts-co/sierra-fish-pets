@@ -72,6 +72,9 @@ export default function UserFilters({
             <option value="all">All Roles</option>
             <option value="user">User</option>
             <option value="admin">Administrator</option>
+            <option value="manager">Manager</option>
+            <option value="sales">Sales</option>
+            <option value="delivery boy">Delivery Boy</option>
           </select>
         </div>
 

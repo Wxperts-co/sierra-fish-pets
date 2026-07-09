@@ -16,7 +16,7 @@ export interface IUserAddress {
 
 // Interface for User Document
 export interface IUser extends Document {
-  role: "user" | "admin";
+  role: "user" | "admin" | "manager" | "sales" | "delivery boy";
   name: string;
   email: string;
   status: "active" | "inactive" | "banned";
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "manager", "sales", "delivery boy"],
       default: "user",
       required: true,
     },

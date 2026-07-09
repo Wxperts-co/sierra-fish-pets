@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import UserModel from "@/models/User";
+import OTPVerificationModel from "@/models/OTPVerification";
+import { generateOTP } from "@/lib/generateOTP";
+import { transporter } from "@/lib/mail";
 import { connectDB } from "@/lib/mongodb";
 import { linkGuestOrders } from "@/lib/auth/linking";
+
+const LOGO_URL = "https://sierra-fish.w-serve.com/images/logo/logo.png";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
 
@@ -51,7 +56,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. Admin route guard — verify role from DB, never mutate it
-    if (role === "admin" && user.role !== "admin") {
+    const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+    if (role === "admin" && !ALLOWED_ADMIN_ROLES.includes(user.role)) {
       return NextResponse.json(
         { success: false, message: "Invalid role" },
         { status: 403 }
@@ -64,6 +70,50 @@ export async function POST(req: NextRequest) {
         { success: false, message: "Invalid role" },
         { status: 403 }
       );
+    }
+
+    // 4b. Admin OTP Verification Intercept — send verification code and return early
+    if (ALLOWED_ADMIN_ROLES.includes(user.role)) {
+      const otp = generateOTP();
+
+      // Clean old OTPs and create a new one
+      await OTPVerificationModel.deleteMany({ userId: user._id });
+      await OTPVerificationModel.create({
+        userId: user._id,
+        otp,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+      });
+
+      // Send the OTP email to the admin
+      try {
+        await transporter.sendMail({
+          from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
+          to: user.email,
+          subject: "Your Admin Login Verification Code",
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center;">
+              <img src="${LOGO_URL}" alt="Sierra Fish & Pets" style="max-height: 50px; margin-bottom: 24px; display: inline-block;" />
+              <p style="text-align: left; font-size: 15px; line-height: 1.6; color: #4a5568;">Hello Admin,</p>
+              <p style="text-align: left; font-size: 15px; line-height: 1.6; color: #4a5568;">Please use the following One-Time Password (OTP) to verify your identity and log in to the Admin Portal:</p>
+              <h1 style="background: #E8F3FF; padding: 15px; text-align: center; letter-spacing: 5px; color: #005AA9; border-radius: 8px; font-size: 32px; margin: 20px 0;">${otp}</h1>
+              <p style="text-align: left; color: #718096; font-size: 14px; margin-bottom: 0;">This OTP will expire in 10 minutes. If you did not attempt this login, please change your password immediately.</p>
+            </div>
+          `,
+        });
+      } catch (mailError) {
+        console.error("Failed to send admin login OTP email:", mailError);
+        return NextResponse.json(
+          { success: false, message: "Failed to send verification email. Please try again." },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        requireOTP: true,
+        email: user.email,
+        message: "A verification code has been sent to your admin email address.",
+      });
     }
 
     // 5. Link guest orders to user account

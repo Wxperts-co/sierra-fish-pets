@@ -2,25 +2,14 @@
 
 import { useSearchParams } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
-import RegisterForm from "@/components/auth/RegisterForm";
 import { ShieldCheck, AlertCircle, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
-
-type Tab = "login" | "register";
 
 export default function AdminLoginForm() {
   const searchParams = useSearchParams();
-    const [tab, setTab] = useState<Tab>("login");
 
   // Google OAuth redirect error codes
   const googleError = searchParams?.get("error");
-    const googleSuccess = searchParams?.get("success");
-
-  // const errorMessage: Record<string, string> = {
-  //   UserAlreadyExists: "An account with this Google email already exists. Please sign in instead.",
-  //   UserNotExist:      "No account found for this Google address. Contact a super-admin.",
-  //   NotAdmin:          "Your Google account does not have admin privileges.",
-  // };
+  const googleSuccess = searchParams?.get("success");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#001f3f] via-[#003B73] to-[#005ea8] flex items-center justify-center p-4">
@@ -37,42 +26,27 @@ export default function AdminLoginForm() {
             <ShieldCheck className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight">Sierra Admin Portal</h1>
-             <p className="mt-1 text-sm text-blue-200">Restricted to authorized administrators only</p>
+          <p className="mt-1 text-sm text-blue-200">Restricted to authorized administrators only</p>
         </div>
 
         {/* Card */}
         <div className="rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden">
-
-         {/* Tab switcher */}
-          {/* Single tab header — no self-registration */}
-          <div className="flex border-b border-white/10">
-            {(["login", "register"] as Tab[]).map((t) => (
-              <button
-                key={t}
-                id={`admin-tab-${t}`}
-                onClick={() => setTab(t)}
-                className={`flex-1 py-4 text-sm font-semibold transition-colors ${
-                  tab === t
-                    ? "bg-white/15 text-white border-b-2 border-blue-300"
-                    : "text-blue-200 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {t === "login" ? "Sign In" : "Create Account"}
-              </button>
-            ))}
+          {/* Header */}
+          <div className="border-b border-white/10 p-5 text-center bg-white/5">
+            <h2 className="text-lg font-bold text-white">Administrator Sign In</h2>
           </div>
 
-                   <div className="p-7">
- {googleError === "UserAlreadyExists" && (
-   <div className="mb-4 flex items-center gap-3 rounded-xl bg-rose-500/20 border border-rose-400/30 px-4 py-3 text-sm text-rose-200">
-    <AlertCircle className="h-4 w-4 shrink-0" />
-An account with this Google email already exists.
-</div>
- )}
- {googleError === "UserNotExist" && (
+          <div className="p-7">
+            {googleError === "UserAlreadyExists" && (
               <div className="mb-4 flex items-center gap-3 rounded-xl bg-rose-500/20 border border-rose-400/30 px-4 py-3 text-sm text-rose-200">
                 <AlertCircle className="h-4 w-4 shrink-0" />
-                No admin account found. Please register first.
+                An account with this Google email already exists.
+              </div>
+            )}
+            {googleError === "UserNotExist" && (
+              <div className="mb-4 flex items-center gap-3 rounded-xl bg-rose-500/20 border border-rose-400/30 px-4 py-3 text-sm text-rose-200">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                No admin account found. Please contact an administrator.
               </div>
             )}
             {googleSuccess === "GoogleAccountCreated" && (
@@ -82,8 +56,9 @@ An account with this Google email already exists.
               </div>
             )}
 
-            {tab === "login" ? <LoginForm /> : <RegisterForm  />}
-            </div></div>
+            <LoginForm />
+          </div>
+        </div>
 
         {/* Footer */}
         <p className="mt-6 text-center text-xs text-blue-300">

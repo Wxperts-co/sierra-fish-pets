@@ -214,7 +214,7 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
     console.error("Failed to send customer order confirmation email:", customerMailError);
   }
 
-  // Also notify the admin using the exact same rich template and invoice attachment to bypass spam filters
+  // Also notify the admin using the exact same rich template (without PDF invoice attachment to improve deliverability)
   try {
     const adminEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
     if (adminEmail) {
@@ -223,7 +223,6 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
         to: adminEmail,
         subject: `🔔 New Order Received #${order.orderNumber} - Sierra Fish & Pets`,
         html: emailHtml,
-        attachments,
       });
     }
   } catch (adminMailError) {

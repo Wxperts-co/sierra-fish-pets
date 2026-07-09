@@ -81,7 +81,8 @@ export const authOptions: AuthOptions = {
             }
 
             // Admin route: reject if user does not already have admin role in DB
-            if (isAdminRoute && existingUser.role !== "admin") {
+            const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+            if (isAdminRoute && !ALLOWED_ADMIN_ROLES.includes(existingUser.role)) {
               return getRedirectUrl(decodedCallbackUrl, "error", "InvalidRole");
             }
 

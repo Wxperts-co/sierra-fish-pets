@@ -15,7 +15,8 @@ export async function PATCH(
     await connectDB();
 
     const user = await getAuthenticatedUser(request);
-    if (!user || user.role !== "admin") {
+    const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+    if (!user || !ALLOWED_ADMIN_ROLES.includes(user.role)) {
       return NextResponse.json(
         { success: false, message: "Access denied. Admin authorization required." },
         { status: 403 }
@@ -91,7 +92,8 @@ export async function DELETE(
     await connectDB();
 
     const user = await getAuthenticatedUser(request);
-    if (!user || user.role !== "admin") {
+    const ALLOWED_ADMIN_ROLES = ["admin", "manager", "sales", "delivery boy"];
+    if (!user || !ALLOWED_ADMIN_ROLES.includes(user.role)) {
       return NextResponse.json(
         { success: false, message: "Access denied. Admin authorization required." },
         { status: 403 }
