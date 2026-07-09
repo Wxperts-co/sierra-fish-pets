@@ -152,13 +152,16 @@ export async function PATCH(
           }
         }
 
-        // Send confirmation email
-        try {
-          const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
-          await sendOrderConfirmationEmail(order);
-        } catch (mailErr) {
-          console.error("Failed to send order confirmation email:", mailErr);
-        }
+        // Send confirmation email in background to prevent blocking the API response
+        import("@/lib/services/emailService")
+          .then(({ sendOrderConfirmationEmail }) => {
+            sendOrderConfirmationEmail(order).catch((mailErr) => {
+              console.error("Failed to send order confirmation email in background:", mailErr);
+            });
+          })
+          .catch((err) => {
+            console.error("Failed to import emailService:", err);
+          });
       } else if (newStatus === "delivered") {
         // Ensure invoice is generated
         if (!order.invoiceUrl) {
@@ -173,13 +176,16 @@ export async function PATCH(
           }
         }
 
-        // Send delivery email (with invoice attached)
-        try {
-          const { sendOrderDeliveredEmail } = await import("@/lib/services/emailService");
-          await sendOrderDeliveredEmail(order);
-        } catch (mailErr) {
-          console.error("Failed to send order delivered email:", mailErr);
-        }
+        // Send delivery email (with invoice attached) in background to prevent blocking the API response
+        import("@/lib/services/emailService")
+          .then(({ sendOrderDeliveredEmail }) => {
+            sendOrderDeliveredEmail(order).catch((mailErr) => {
+              console.error("Failed to send order delivered email in background:", mailErr);
+            });
+          })
+          .catch((err) => {
+            console.error("Failed to import emailService:", err);
+          });
       }
     }
 

@@ -6,9 +6,14 @@ export async function GET() {
   try {
     await connectDB();
 
-    const categories = await Category.find({})
+    const rawCategories = await Category.find({})
       .sort({ name: 1 })
       .lean();
+
+    const categories = rawCategories.map((cat) => ({
+      ...cat,
+      subcategories: (cat.subcategories || []).filter((sub: any) => sub.isActive !== false),
+    }));
 
     return NextResponse.json(
       { success: true, categories },

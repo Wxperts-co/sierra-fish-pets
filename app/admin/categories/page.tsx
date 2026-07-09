@@ -10,6 +10,7 @@ import CategoryFilters from "@/components/admin/categories/CategoryFilters";
 import CategoryStats from "@/components/admin/categories/CategoryStats";
 import CategoryDataGrid from "@/components/admin/categories/CategoryDataGrid";
 import CategoryDetailModal from "@/components/admin/categories/CategoryDetailModal";
+import SubcategoriesManageModal from "@/components/admin/categories/SubcategoriesManageModal";
 import type { AdminCategory } from "@/components/admin/categories/types";
 import { Button } from "@/components/ui/button";
 import { showErrorToast } from "@/lib/toast";
@@ -22,6 +23,7 @@ export default function AdminCategoriesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<AdminCategory | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isSubcategoriesModalOpen, setIsSubcategoriesModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -141,12 +143,28 @@ export default function AdminCategoriesPage() {
           onView={handleViewCategory}
           onEdit={handleEditCategory}
           onDelete={(category) => handleDeleteCategory(category._id)}
+          onManageSubcategories={(category) => {
+            setSelectedCategory(category);
+            setIsSubcategoriesModalOpen(true);
+          }}
         />
 
         <CategoryDetailModal
           isOpen={isDetailModalOpen}
           category={selectedCategory}
           onClose={() => setIsDetailModalOpen(false)}
+        />
+
+        <SubcategoriesManageModal
+          isOpen={isSubcategoriesModalOpen}
+          category={selectedCategory}
+          onClose={() => setIsSubcategoriesModalOpen(false)}
+          onUpdateCategory={(updatedCategory) => {
+            setCategories((prev) =>
+              prev.map((c) => (c._id === updatedCategory._id ? updatedCategory : c))
+            );
+            setSelectedCategory(updatedCategory);
+          }}
         />
       </div>
     </div>

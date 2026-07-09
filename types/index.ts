@@ -12,6 +12,7 @@ export interface SubCategory {
   id: string;
   name: string;
   slug: string;
+  isActive?: boolean;
 }
 
 export interface Category {

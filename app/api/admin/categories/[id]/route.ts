@@ -18,6 +18,7 @@ const categoryUpdateSchema = z.object({
         id: z.string().min(1, "Subcategory ID is required"),
         name: z.string().min(1, "Subcategory name is required"),
         slug: z.string().min(1, "Subcategory slug is required"),
+        isActive: z.boolean().optional().default(true),
       })
     )
     .optional(),

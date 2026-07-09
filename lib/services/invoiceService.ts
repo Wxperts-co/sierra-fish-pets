@@ -72,15 +72,20 @@ class InvoiceGenerator {
    */
   public drawHeader() {
     // Top-left: Company details
-    this.doc
-      .fillColor(COLORS.primary)
-      .fontSize(22)
-      .font("Helvetica-Bold")
-      .text("Sierra Fish & Pets", 50, 50)
-      .font("Helvetica")
-      .fontSize(9)
-      .fillColor(COLORS.secondary)
-      .text("Your Local Pet & Aquarium Specialists", 50, 75);
+    const logoPath = path.join(process.cwd(), "public", "images", "logo", "logo3.png");
+    if (fs.existsSync(logoPath)) {
+      this.doc.image(logoPath, 50, 45, { height: 35 });
+    } else {
+      this.doc
+        .fillColor(COLORS.primary)
+        .fontSize(22)
+        .font("Helvetica-Bold")
+        .text("Sierra Fish & Pets", 50, 50)
+        .font("Helvetica")
+        .fontSize(9)
+        .fillColor(COLORS.secondary)
+        .text("Your Local Pet & Aquarium Specialists", 50, 75);
+    }
 
     // Top-right: Invoice Metadata
     this.doc

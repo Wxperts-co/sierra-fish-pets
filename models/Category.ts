@@ -5,6 +5,7 @@ export interface ISubCategory {
   id: string;
   name: string;
   slug: string;
+  isActive?: boolean;
 }
 
 export interface ICategory extends Document {
@@ -23,6 +24,7 @@ const subCategorySchema = new mongoose.Schema<ISubCategory>(
     id: { type: String, required: [true, "Subcategory ID is required"], trim: true },
     name: { type: String, required: [true, "Subcategory name is required"], trim: true },
     slug: { type: String, required: [true, "Subcategory slug is required"], trim: true },
+    isActive: { type: Boolean, default: true },
   },
   { _id: false }
 );

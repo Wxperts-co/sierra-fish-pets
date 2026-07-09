@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import axios from "axios";
 import AdminModal from "@/components/admin/common/AdminModal";
 import type { AdminCategory } from "./types";
 
@@ -15,11 +17,28 @@ export default function CategoryDetailModal({
   category,
   onClose,
 }: CategoryDetailModalProps) {
+  const [realProductCount, setRealProductCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isOpen && category?.slug) {
+      setRealProductCount(null);
+      axios.get(`/api/products?category=${category.slug}&limit=1`)
+        .then((res) => {
+          if (res.data?.success) {
+            setRealProductCount(res.data.count);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch real product count:", err);
+        });
+    }
+  }, [isOpen, category?.slug]);
+
   if (!isOpen || !category) return null;
 
   const imageSrc = category.image ?? "/images/categories/default.png";
   const description = category.description ?? "No description available";
-  const productCount = category.productCount ?? 0;
+  const productCount = realProductCount !== null ? realProductCount : (category.productCount ?? 0);
   const subcategories = Array.from(
     new Map((category.subcategories ?? []).map((sub) => [sub.slug || sub.id, sub])).values()
   );
@@ -53,13 +72,7 @@ export default function CategoryDetailModal({
           </div>
         </div>
 
-        {/* Description Box */}
-        <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description</p>
-          <p className="mt-1.5 text-xs text-slate-600 leading-relaxed bg-slate-50/60 p-3 rounded-xl border border-slate-100/80">
-            {description}
-          </p>
-        </div>
+     
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 gap-4">

@@ -12,9 +12,10 @@ type Props = {
   onView: (category: AdminCategory) => void;
   onEdit: (category: AdminCategory) => void;
   onDelete: (category: AdminCategory) => void;
+  onManageSubcategories: (category: AdminCategory) => void;
 };
 
-export default function CategoryDataGrid({ categories, loading = false, onView, onEdit, onDelete }: Props) {
+export default function CategoryDataGrid({ categories, loading = false, onView, onEdit, onDelete, onManageSubcategories }: Props) {
   const rows = categories.map((c, index) => ({
     ...c,
     id: String(c._id),
@@ -53,7 +54,17 @@ export default function CategoryDataGrid({ categories, loading = false, onView, 
       headerName: "Subcategories",
       type: "number",
       flex: 0.6,
-      minWidth: 120,
+      minWidth: 140,
+      renderCell: (params: GridRenderCellParams<any>) => (
+        <div className="flex items-center justify-end w-full pr-2 h-full">
+          <button
+            onClick={() => onManageSubcategories(params.row)}
+            className="px-3.5 py-1 text-xs font-extrabold text-[#005AA9] bg-[#005AA9]/10 hover:bg-[#005AA9]/20 hover:border-[#005AA9]/30 active:scale-95 transition-all rounded-full border border-[#005AA9]/15 shadow-sm inline-flex items-center justify-center"
+          >
+            Manage ({params.row.subcategoriesCount})
+          </button>
+        </div>
+      ),
     },
     {
       field: "actions",

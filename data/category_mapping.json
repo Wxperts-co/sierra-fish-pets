@@ -1,117 +1,77 @@
 [
-  {
-    "code": "100",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-food"
-  },
-  {
-    "code": "110",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-food"
-  },
-  {
-    "code": "120",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-treatment"
-  },
-  {
-    "code": "140",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-filters-and-pumps"
-  },
-  {
-    "code": "150",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-tanks-and-aquariums"
-  },
-  {
-    "code": "160",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-tanks-and-aquariums"
-  },
-  {
-    "code": "165",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-tanks-and-aquariums"
-  },
-  {
-    "code": "210",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-food"
-  },
-  {
-    "code": "220",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-food"
-  },
-  {
-    "code": "239",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-tanks-and-aquariums"
-  },
-  {
-    "code": "300",
-    "categorySlug": "bird",
-    "subcategorySlug": "bird-food"
-  },
-  {
-    "code": "310",
-    "categorySlug": "bird",
-    "subcategorySlug": "bird-health-vitamins"
-  },
-  {
-    "code": "320",
-    "categorySlug": "bird",
-    "subcategorySlug": "bird-toys-and-perches"
-  },
-  {
-    "code": "330",
-    "categorySlug": "bird",
-    "subcategorySlug": "bird-cages-and-stands"
-  },
-  {
-    "code": "580",
-    "categorySlug": "dog",
-    "subcategorySlug": "dog-bowls-and-feeders"
-  },
-  {
-    "code": "585",
-    "categorySlug": "cat",
-    "subcategorySlug": "cat-beds-and-furniture"
-  },
-  {
-    "code": "640",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-food"
-  },
-  {
-    "code": "645",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-food"
-  },
-  {
-    "code": "660",
-    "categorySlug": "aquatic",
-    "subcategorySlug": "fish-heating-and-lighting"
-  },
-  {
-    "code": "710",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-food"
-  },
-  {
-    "code": "715",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-lighting"
-  },
-  {
-    "code": "720",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-habitat"
-  },
-  {
-    "code": "730",
-    "categorySlug": "reptile",
-    "subcategorySlug": "reptile-food"
-  }
+  { "code": "100", "categorySlug": "aquatic", "subcategorySlug": "fish-food" },
+  { "code": "105", "categorySlug": "aquatic", "subcategorySlug": "live-fish-food" },
+  { "code": "110", "categorySlug": "aquatic", "subcategorySlug": "fish-food" },
+  { "code": "120", "categorySlug": "aquatic", "subcategorySlug": "fish-treatment" },
+  { "code": "130", "categorySlug": "aquatic", "subcategorySlug": "fish-sup-decor" },
+  { "code": "135", "categorySlug": "aquatic", "subcategorySlug": "decorative-corals" },
+  { "code": "140", "categorySlug": "aquatic", "subcategorySlug": "fish-filters-and-pumps" },
+  { "code": "145", "categorySlug": "aquatic", "subcategorySlug": "aquarium-test-kits" },
+  { "code": "150", "categorySlug": "aquatic", "subcategorySlug": "fish-tanks-and-aquariums" },
+  { "code": "160", "categorySlug": "aquatic", "subcategorySlug": "fish-tanks-and-aquariums" },
+  { "code": "165", "categorySlug": "aquatic", "subcategorySlug": "fish-tanks-and-aquariums" },
+  { "code": "170", "categorySlug": "aquatic", "subcategorySlug": "pond-supplies" },
+  { "code": "180", "categorySlug": "aquatic", "subcategorySlug": "saltwater-supplies" },
+  { "code": "181", "categorySlug": "aquatic", "subcategorySlug": "saltwater-filtration" },
+  { "code": "182", "categorySlug": "aquatic", "subcategorySlug": "saltwater-lighting" },
+  { "code": "183", "categorySlug": "aquatic", "subcategorySlug": "saltwater-lighting" },
+  { "code": "184", "categorySlug": "aquatic", "subcategorySlug": "saltwater-lighting" },
+  { "code": "185", "categorySlug": "aquatic", "subcategorySlug": "saltwater-lighting" },
+  { "code": "186", "categorySlug": "aquatic", "subcategorySlug": "saltwater-lighting" },
+  { "code": "190", "categorySlug": "aquatic", "subcategorySlug": "live-plants-freshwater" },
+  { "code": "191", "categorySlug": "aquatic", "subcategorySlug": "live-plants-tropical" },
+  { "code": "195", "categorySlug": "aquatic", "subcategorySlug": "live-plants-pond" },
+  { "code": "196", "categorySlug": "aquatic", "subcategorySlug": "live-plants-terrarium" },
+  { "code": "200", "categorySlug": "aquatic", "subcategorySlug": "live-fish" },
+  { "code": "205", "categorySlug": "aquatic", "subcategorySlug": "freshwater-shrimp" },
+  { "code": "210", "categorySlug": "aquatic", "subcategorySlug": "fish-food" },
+  { "code": "215", "categorySlug": "aquatic", "subcategorySlug": "freshwater-snails" },
+  { "code": "220", "categorySlug": "aquatic", "subcategorySlug": "fish-food" },
+  { "code": "230", "categorySlug": "aquatic", "subcategorySlug": "fancy-goldfish" },
+  { "code": "235", "categorySlug": "aquatic", "subcategorySlug": "pond-fish" },
+  { "code": "239", "categorySlug": "aquatic", "subcategorySlug": "fish-tanks-and-aquariums" },
+  { "code": "240", "categorySlug": "aquatic", "subcategorySlug": "fish-feeders" },
+  { "code": "245", "categorySlug": "aquatic", "subcategorySlug": "saltwater-plants" },
+  { "code": "250", "categorySlug": "aquatic", "subcategorySlug": "saltwater-fish" },
+  { "code": "255", "categorySlug": "aquatic", "subcategorySlug": "saltwater-invertebrates" },
+  { "code": "260", "categorySlug": "aquatic", "subcategorySlug": "saltwater-corals" },
+  { "code": "265", "categorySlug": "aquatic", "subcategorySlug": "saltwater-corals" },
+  { "code": "266", "categorySlug": "aquatic", "subcategorySlug": "corals" },
+  { "code": "270", "categorySlug": "aquatic", "subcategorySlug": "saltwater-invertebrates" },
+  { "code": "275", "categorySlug": "aquatic", "subcategorySlug": "saltwater-invertebrates" },
+  { "code": "280", "categorySlug": "aquatic", "subcategorySlug": "saltwater-invertebrates" },
+  { "code": "285", "categorySlug": "aquatic", "subcategorySlug": "saltwater-invertebrates" },
+  { "code": "290", "categorySlug": "aquatic", "subcategorySlug": "live-rock" },
+  { "code": "295", "categorySlug": "aquatic", "subcategorySlug": "live-sand" },
+  { "code": "300", "categorySlug": "bird", "subcategorySlug": "bird-food" },
+  { "code": "310", "categorySlug": "bird", "subcategorySlug": "bird-health-vitamins" },
+  { "code": "320", "categorySlug": "bird", "subcategorySlug": "bird-toys-and-perches" },
+  { "code": "330", "categorySlug": "bird", "subcategorySlug": "bird-cages-and-stands" },
+  { "code": "350", "categorySlug": "bird", "subcategorySlug": "live-birds" },
+  { "code": "390", "categorySlug": "bird", "subcategorySlug": "wild-bird-supplies" },
+  { "code": "530", "categorySlug": "dog", "subcategorySlug": "canine-caviar" },
+  { "code": "545", "categorySlug": "cat", "subcategorySlug": "fussie-cat-food" },
+  { "code": "560", "categorySlug": "dog", "subcategorySlug": "collars-and-apparel" },
+  { "code": "570", "categorySlug": "dog", "subcategorySlug": "grooming-and-health" },
+  { "code": "580", "categorySlug": "dog", "subcategorySlug": "dog-bowls-and-feeders" },
+  { "code": "585", "categorySlug": "cat", "subcategorySlug": "cat-beds-and-furniture" },
+  { "code": "590", "categorySlug": "dog", "subcategorySlug": "toys-and-treats" },
+  { "code": "599", "categorySlug": "dog", "subcategorySlug": "pat-grooming" },
+  { "code": "600", "categorySlug": "small-animal", "subcategorySlug": "small-animal-cages" },
+  { "code": "610", "categorySlug": "small-animal", "subcategorySlug": "small-animal-supplies" },
+  { "code": "620", "categorySlug": "small-animal", "subcategorySlug": "small-animal-foods-treats" },
+  { "code": "630", "categorySlug": "small-animal", "subcategorySlug": "live-small-animals" },
+  { "code": "640", "categorySlug": "reptile", "subcategorySlug": "live-reptiles" },
+  { "code": "645", "categorySlug": "reptile", "subcategorySlug": "reptile-food" },
+  { "code": "660", "categorySlug": "aquatic", "subcategorySlug": "fish-heating-and-lighting" },
+  { "code": "662", "categorySlug": "reptile", "subcategorySlug": "reptile-lighting" },
+  { "code": "700", "categorySlug": "reptile", "subcategorySlug": "live-insects" },
+  { "code": "701", "categorySlug": "reptile", "subcategorySlug": "feeder-rodents" },
+  { "code": "710", "categorySlug": "reptile", "subcategorySlug": "reptile-food" },
+  { "code": "715", "categorySlug": "reptile", "subcategorySlug": "reptile-lighting" },
+  { "code": "720", "categorySlug": "reptile", "subcategorySlug": "reptile-habitat" },
+  { "code": "730", "categorySlug": "reptile", "subcategorySlug": "reptile-food" },
+  { "code": "840", "categorySlug": "dog", "subcategorySlug": "dogswell-foods" },
+  { "code": "860", "categorySlug": "cat", "subcategorySlug": "cat-food" },
+  { "code": "870", "categorySlug": "cat", "subcategorySlug": "cat-food" }
 ]

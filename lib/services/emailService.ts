@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 
 const APP_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
+const LOGO_URL = `${APP_URL.replace(/\/$/, "")}/images/logo/logo.png`;
 
 /**
  * Format price as USD
@@ -59,11 +60,8 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
               <!-- Brand Header -->
               <tr>
                 <td style="background-color: #003B73; padding: 32px; text-align: center;">
-                  <img src="cid:logo3" alt="Sierra Fish & Pets" style="max-height: 50px; margin-bottom: 12px; display: inline-block;" />
-                  <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">
-                    Sierra Fish & Pets
-                  </h1>
-                  <p style="margin: 6px 0 0; color: #93c5fd; font-size: 14px; font-weight: 500;">
+                  <img src="${LOGO_URL}" alt="Sierra Fish & Pets" style="max-height: 65px; max-width: 260px; margin-bottom: 4px; display: inline-block; object-fit: contain;" />
+                  <p style="margin: 10px 0 0; color: #93c5fd; font-size: 15px; font-weight: 600;">
                     Your Order Has Been Confirmed! 🎉
                   </p>
                 </td>
@@ -202,29 +200,34 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
     });
   }
 
-  // Attach logo image via CID for reliable offline/local loading
-  const logoPath = path.join(process.cwd(), "public", "images", "logo", "logo3.png");
-  if (fs.existsSync(logoPath)) {
-    attachments.push({
-      filename: "logo3.png",
-      path: logoPath,
-      cid: "logo3",
+
+  // Send customer confirmation email
+  try {
+    await transporter.sendMail({
+      from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
+      to: order.guestEmail,
+      subject: `🛒 Order Confirmation #${order.orderNumber} - Sierra Fish & Pets`,
+      html: emailHtml,
+      attachments,
     });
+  } catch (customerMailError) {
+    console.error("Failed to send customer order confirmation email:", customerMailError);
   }
 
-  await transporter.sendMail({
-    from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
-    to: order.guestEmail,
-    subject: `🛒 Order Confirmation #${order.orderNumber} - Sierra Fish & Pets`,
-    html: emailHtml,
-    attachments,
-  });
-
-  // Also notify the admin (Option B)
+  // Also notify the admin using the exact same rich template and invoice attachment to bypass spam filters
   try {
-    await sendAdminNewOrderEmail(order);
+    const adminEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
+    if (adminEmail) {
+      await transporter.sendMail({
+        from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
+        to: adminEmail,
+        subject: `🔔 New Order Received #${order.orderNumber} - Sierra Fish & Pets`,
+        html: emailHtml,
+        attachments,
+      });
+    }
   } catch (adminMailError) {
-    console.error("Failed to send admin order notification email:", adminMailError);
+    console.error("Failed to send admin order confirmation email copy:", adminMailError);
   }
 }
 
@@ -236,73 +239,90 @@ export async function sendAdminNewOrderEmail(order: IOrder) {
   if (!adminEmail) return;
 
   const emailHtml = `
-    <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f7fafc; color: #2d3748;">
-      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-        
-        <!-- Brand Header -->
-        <div style="background-color: #003B73; padding: 32px; text-align: center; color: #ffffff;">
-          <img src="cid:logo3" alt="Sierra Fish & Pets" style="max-height: 50px; margin-bottom: 12px; display: inline-block;" />
-          <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">
-            Sierra Fish & Pets
-          </h1>
-          <p style="margin: 6px 0 0; color: #93c5fd; font-size: 14px; font-weight: 500;">
-            New Order Placed! 🎉
-          </p>
-        </div>
+    <div style="margin: 0; padding: 40px 0; background-color: #f7fafc; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+              
+              <!-- Brand Header -->
+              <tr>
+                <td style="background-color: #003B73; padding: 32px; text-align: center;">
+                  <img src="${LOGO_URL}" alt="Sierra Fish & Pets" style="max-height: 65px; max-width: 260px; margin-bottom: 4px; display: inline-block; object-fit: contain;" />
+                  <p style="margin: 10px 0 0; color: #93c5fd; font-size: 15px; font-weight: 600;">
+                    New Order Placed! 🎉
+                  </p>
+                </td>
+              </tr>
 
-        <div style="padding: 32px;">
-          <p style="font-size: 15px; line-height: 1.6; margin-top: 0;">
-            Hello Admin,
-          </p>
-          <p style="font-size: 15px; line-height: 1.6;">
-            A new order has been successfully placed on Sierra Fish & Pets. Here are the details:
-          </p>
-        <table width="100%" style="font-size: 14px; border-collapse: collapse; margin: 20px 0;">
-          <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 10px 0; font-weight: bold; width: 140px;">Order Number:</td>
-            <td style="padding: 10px 0; color: #1a202c; font-weight: bold;">#${order.orderNumber}</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 10px 0; font-weight: bold;">Customer Name:</td>
-            <td style="padding: 10px 0;">${order.shippingAddress.fullName}</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 10px 0; font-weight: bold;">Customer Email:</td>
-            <td style="padding: 10px 0;"><a href="mailto:${order.guestEmail}" style="color: #005AA9; text-decoration: none;">${order.guestEmail}</a></td>
-          </tr>
-          <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 10px 0; font-weight: bold;">Total Amount:</td>
-            <td style="padding: 10px 0; font-weight: bold; color: #10b981;">${formatPrice(order.total)}</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 10px 0; font-weight: bold;">Payment Method:</td>
-            <td style="padding: 10px 0; text-transform: uppercase;">${order.paymentMethod.replace(/_/g, " ")}</td>
-          </tr>
-        </table>
-        <div style="margin-top: 30px; text-align: center;">
-          <a href="${APP_URL}/admin/orders" style="background-color: #003B73; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block;">
-            Manage Order in Admin Panel
-          </a>
-        </div>
-      </div>
+              <!-- Content Body -->
+              <tr>
+                <td style="padding: 32px;">
+                  <p style="font-size: 15px; line-height: 1.6; margin-top: 0; color: #2d3748;">
+                    Hello Admin,
+                  </p>
+                  <p style="font-size: 15px; line-height: 1.6; color: #4a5568;">
+                    A new order has been successfully placed on Sierra Fish & Pets. Here are the details:
+                  </p>
+                  
+                  <table width="100%" style="font-size: 14px; border-collapse: collapse; margin: 20px 0; color: #4a5568;">
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold; width: 140px;">Order Number:</td>
+                      <td style="padding: 10px 0; color: #1a202c; font-weight: bold;">#${order.orderNumber}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold;">Customer Name:</td>
+                      <td style="padding: 10px 0; color: #2d3748;">${order.shippingAddress.fullName}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold;">Customer Email:</td>
+                      <td style="padding: 10px 0;"><a href="mailto:${order.guestEmail}" style="color: #005AA9; text-decoration: none;">${order.guestEmail}</a></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold;">Total Amount:</td>
+                      <td style="padding: 10px 0; font-weight: bold; color: #10b981;">${formatPrice(order.total)}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold;">Payment Method:</td>
+                      <td style="padding: 10px 0; text-transform: uppercase;">${order.paymentMethod.replace(/_/g, " ")}</td>
+                    </tr>
+                  </table>
+                  
+                  <div style="margin-top: 30px; text-align: center;">
+                    <a href="${APP_URL}/admin/orders" style="background-color: #003B73; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                      Manage Order in Admin Panel
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Footer Section -->
+              <tr>
+                <td style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #e2e8f0;">
+                  <p style="margin: 0; color: #a0aec0; font-size: 12px;">
+                    &copy; ${new Date().getFullYear()} Sierra Fish & Pets. All rights reserved.
+                  </p>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
     </div>
   `;
 
   const attachments: any[] = [];
-  const logoPath = path.join(process.cwd(), "public", "images", "logo", "logo3.png");
-  if (fs.existsSync(logoPath)) {
-    attachments.push({
-      filename: "logo3.png",
-      path: logoPath,
-      cid: "logo3",
-    });
-  }
 
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
     to: adminEmail,
     subject: `🔔 New Order Received #${order.orderNumber} - Sierra Fish & Pets`,
     html: emailHtml,
+     headers: {
+      "X-Entity-Ref-ID": order.orderNumber,
+      "X-Priority": "1", // High priority
+    },
     attachments,
   });
 }
@@ -341,10 +361,8 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
               <!-- Brand Header -->
               <tr>
                 <td style="background-color: #10b981; padding: 32px; text-align: center;">
-                  <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">
-                    Sierra Fish & Pets
-                  </h1>
-                  <p style="margin: 6px 0 0; color: #d1fae5; font-size: 14px; font-weight: 500;">
+                  <img src="${LOGO_URL}" alt="Sierra Fish & Pets" style="max-height: 65px; max-width: 260px; margin-bottom: 4px; display: inline-block; object-fit: contain;" />
+                  <p style="margin: 10px 0 0; color: #d1fae5; font-size: 15px; font-weight: 600;">
                     Your Order Has Been Delivered! 📦🚚
                   </p>
                 </td>
@@ -431,6 +449,7 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
       path: filePath,
     });
   }
+
 
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
