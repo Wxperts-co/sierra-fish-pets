@@ -11,7 +11,7 @@ import Stripe from "stripe";
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
 
 // Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.TEST_SECRET_KEY || "", {
+const stripe = new Stripe(process.env.LIVE_SECRET_KEY || "", {
   apiVersion: "2026-06-24.dahlia" as any,
   typescript: true,
 });

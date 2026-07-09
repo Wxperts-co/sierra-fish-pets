@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
 
-const stripe = new Stripe(process.env.TEST_SECRET_KEY!, {
+const stripe = new Stripe(process.env.LIVE_SECRET_KEY!, {
   apiVersion: "2026-06-24.dahlia" as any,
 });
 
