@@ -397,12 +397,12 @@ export async function POST(req: NextRequest) {
         }
 
         const sessionPayload: Stripe.Checkout.SessionCreateParams = {
-         
           line_items: lineItems,
           mode: "payment",
           customer_email: finalGuestEmail.toLowerCase().trim(),
           success_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/order-success?id=${newOrder._id.toString()}`,
-          cancel_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/checkout`,
+          cancel_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/api/orders/cancel?orderId=${newOrder._id.toString()}&session_id={CHECKOUT_SESSION_ID}`,
+          expires_at: Math.floor(Date.now() / 1000) + 31 * 60, // Expire in 31 minutes
           metadata: {
             orderId: newOrder._id.toString(),
             orderNumber: newOrder.orderNumber,

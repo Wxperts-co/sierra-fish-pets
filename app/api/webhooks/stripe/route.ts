@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
+import ProductModel from "@/models/Product";
 
 const stripe = new Stripe(process.env.LIVE_SECRET_KEY!, {
   apiVersion: "2026-06-24.dahlia" as any,
@@ -57,6 +59,54 @@ export async function POST(req: NextRequest) {
           await sendOrderConfirmationEmail(order);
         } catch (mailError) {
           console.error("Failed to send order confirmation email in webhook:", mailError);
+        }
+      }
+    }
+  }
+
+  // Handle expired/abandoned checkout sessions
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const orderId = session.metadata?.orderId;
+
+    if (orderId) {
+      await connectDB();
+      const order = await OrderModel.findById(orderId);
+
+      // Only cancel and restore stock if the order exists, payment is still pending, and it is not already cancelled
+      if (order && order.paymentStatus === "pending" && order.status !== "cancelled") {
+        order.status = "cancelled";
+        order.paymentStatus = "failed";
+        order.updatedAt = new Date();
+        await order.save();
+
+        // Restore product stock
+        for (const item of order.items) {
+          if (item.productId) {
+            let cleanId = item.productId;
+            if (item.productId.includes("-")) {
+              const parts = item.productId.split("-");
+              const lastPart = parts[parts.length - 1];
+              if (!isNaN(Number(lastPart))) {
+                parts.pop();
+                cleanId = parts.join("-");
+              }
+            }
+
+            let product = null;
+            if (mongoose.Types.ObjectId.isValid(cleanId)) {
+              try {
+                product = await ProductModel.findById(cleanId);
+              } catch (err) {
+                // Ignore cast error
+              }
+            }
+            if (product) {
+              product.stockCount += item.quantity;
+              await product.save();
+              console.log(`[Stripe Webhook] Restored ${item.quantity} units for product ${cleanId} (Order ${order.orderNumber} expired)`);
+            }
+          }
         }
       }
     }
