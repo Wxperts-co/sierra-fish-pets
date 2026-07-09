@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import Category from "@/models/Category";
+import Product from "@/models/Product";
 import { connectDB } from "@/lib/mongodb";
 
 const categorySchema = z.object({
@@ -33,8 +34,43 @@ export async function GET() {
       .sort({ name: 1 })
       .lean();
 
+    const categoriesWithCount = await Promise.all(
+      categories.map(async (category) => {
+        let querySlug = category.slug as string;
+        if (querySlug === "small-pet" || querySlug === "small-pets") {
+          querySlug = "small-animal";
+        }
+
+        let count = 0;
+        if (querySlug === "other-pet") {
+          const otherSlugs = categories
+            .map((c) => c.slug as string)
+            .filter((slug) => slug && slug !== "other-pet");
+
+          const activeSearchSlugs = otherSlugs.map(slug => 
+            (slug === "small-pet" || slug === "small-pets") ? "small-animal" : slug
+          );
+
+          count = await Product.countDocuments({
+            $or: [
+              { categorySlug: { $nin: activeSearchSlugs } },
+              { categorySlug: { $exists: false } },
+              { categorySlug: null }
+            ]
+          });
+        } else {
+          count = await Product.countDocuments({ categorySlug: querySlug });
+        }
+
+        return {
+          ...category,
+          productCount: count,
+        };
+      })
+    );
+
     return NextResponse.json(
-      { success: true, count: categories.length, categories },
+      { success: true, count: categoriesWithCount.length, categories: categoriesWithCount },
       { status: 200 }
     );
   } catch (error) {
