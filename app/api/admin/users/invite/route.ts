@@ -71,7 +71,8 @@ export async function POST(req: NextRequest) {
     });
 
     // 6. Send Invitation Email
-    const activationLink = `${process.env.NEXTAUTH_URL}/reset-password?email=${encodeURIComponent(cleanEmail)}&otp=${otp}`;
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "http://localhost:3000").replace(/\/$/, "");
+    const activationLink = `${appUrl}/reset-password?email=${encodeURIComponent(cleanEmail)}&otp=${otp}`;
     
     await transporter.sendMail({
       from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
