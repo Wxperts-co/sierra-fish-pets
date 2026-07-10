@@ -1,8 +1,9 @@
 import GiftCardInstanceModel from "@/models/GiftCardInstance";
+import { IOrder } from "@/models/Order";
 
-export async function generateGiftCardsForOrder(order: any) {
+export async function generateGiftCardsForOrder(order: IOrder) {
   for (const item of order.items) {
-    if (item.giftCardDetails && item.productId) {
+    if (item.productId && (item.productId.startsWith("giftcard-") || (item.giftCardDetails && item.giftCardDetails.recipientEmail))) {
       const amount = item.unitPrice;
       const details = item.giftCardDetails;
 
@@ -15,10 +16,10 @@ export async function generateGiftCardsForOrder(order: any) {
           code,
           initialBalance: amount,
           currentBalance: amount,
-          recipientEmail: details.recipientEmail || order.guestEmail,
-          recipientName: details.recipientName || "Valued Customer",
-          senderName: details.senderName || "Friend",
-          message: details.message || "",
+          recipientEmail: details?.recipientEmail || order.guestEmail,
+          recipientName: details?.recipientName || "Valued Customer",
+          senderName: details?.senderName || "Friend",
+          message: details?.message || "",
           orderId: order._id,
           isActive: true,
         });
