@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
 import ProductModel from "@/models/Product";
+import GiftCardInstanceModel from "@/models/GiftCardInstance";
 
 const stripe = new Stripe(process.env.LIVE_SECRET_KEY!, {
   apiVersion: "2026-06-24.dahlia" as any,
@@ -35,7 +36,6 @@ export async function POST(req: NextRequest) {
     if (orderId) {
       await connectDB();
       const order = await OrderModel.findById(orderId);
-
       if (order && order.paymentStatus !== "paid") {
         // 1. Update Payment Status to Paid & Order Status to Confirmed
         order.paymentStatus = "paid";
@@ -43,7 +43,32 @@ export async function POST(req: NextRequest) {
         order.updatedAt = new Date();
         await order.save();
 
-        // 2. Generate Invoice PDF
+        // 2. Deduct applied gift card balance
+        if (order.giftCardCode && order.giftCardAmount && order.giftCardAmount > 0) {
+          try {
+            const giftCardInst = await GiftCardInstanceModel.findOne({ code: order.giftCardCode });
+            if (giftCardInst) {
+              giftCardInst.currentBalance = Math.max(0, giftCardInst.currentBalance - order.giftCardAmount);
+              if (giftCardInst.currentBalance === 0) {
+                giftCardInst.isActive = false;
+              }
+              await giftCardInst.save();
+              console.log(`[Stripe Webhook] Deducted $${order.giftCardAmount} from Gift Card ${order.giftCardCode}`);
+            }
+          } catch (err) {
+            console.error("Failed to deduct gift card balance in Stripe webhook:", err);
+          }
+        }
+
+        // 3. Generate newly purchased gift cards if any
+        try {
+          const { generateGiftCardsForOrder } = await import("@/lib/services/giftCardService");
+          await generateGiftCardsForOrder(order);
+        } catch (gcGenErr) {
+          console.error("Failed to generate gift cards in Stripe webhook:", gcGenErr);
+        }
+
+        // 4. Generate Invoice PDF
         try {
           const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
           const relativeInvoiceUrl = await generateInvoicePDF(order);
@@ -54,7 +79,7 @@ export async function POST(req: NextRequest) {
           console.error("Failed to generate invoice in webhook:", pdfError);
         }
 
-        // 3. Send Confirmation Email
+        // 5. Send Confirmation Email
         try {
           const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
           await sendOrderConfirmationEmail(order);
@@ -85,7 +110,10 @@ export async function POST(req: NextRequest) {
         for (const item of order.items) {
           if (item.productId) {
             let cleanId = item.productId;
-            if (item.productId.includes("-")) {
+            if (item.productId.startsWith("giftcard-")) {
+              const parts = item.productId.split("-");
+              cleanId = `${parts[0]}-${parts[1]}`;
+            } else if (item.productId.includes("-")) {
               const parts = item.productId.split("-");
               const lastPart = parts[parts.length - 1];
               if (!isNaN(Number(lastPart))) {

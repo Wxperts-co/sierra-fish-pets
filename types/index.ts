@@ -67,6 +67,12 @@ export interface Product {
   weight?: string;
   dimensions?: string;
   createdAt: string;
+  giftCardDetails?: {
+    recipientName: string;
+    recipientEmail: string;
+    senderName: string;
+    message: string;
+  };
 }
 
 // ─── CART ───────────────────────────────────────────────────────────────────

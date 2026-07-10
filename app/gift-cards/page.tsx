@@ -7,6 +7,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X, CheckCircle2, ChevronRight, Gift, ShoppingBag, Minus, Plus } from "lucide-react";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
+import { showErrorToast } from "@/lib/toast";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface GiftCardItem {
@@ -24,6 +25,7 @@ interface GiftCardItem {
 
 interface PurchaseForm {
   recipientName: string;
+  recipientEmail: string;
   senderName: string;
   message: string;
   quantity: number;
@@ -56,6 +58,7 @@ export default function GiftCardsPage() {
   const [selectedAmount, setSelectedAmount] = useState<string>("");
   const [form, setForm] = useState<PurchaseForm>({
     recipientName: "",
+    recipientEmail: "",
     senderName: "",
     message: "",
     quantity: 1,
@@ -67,7 +70,7 @@ export default function GiftCardsPage() {
     e?.stopPropagation();
     setBuyCard(card);
     setSelectedAmount(card.priceOptions[0] ?? "");
-    setForm({ recipientName: "", senderName: "", message: "", quantity: 1 });
+    setForm({ recipientName: "", recipientEmail: "", senderName: "", message: "", quantity: 1 });
     setAddedToCart(false);
     setCustomAmount("");
   };
@@ -106,10 +109,33 @@ export default function GiftCardsPage() {
 
     if (isNaN(parsedAmount) || parsedAmount <= 0) return;
 
+    if (!form.recipientName.trim()) {
+      showErrorToast("Please enter a recipient name.");
+      return;
+    }
+
+    if (buyCard.type === "egift") {
+      if (!form.recipientEmail.trim()) {
+        showErrorToast("Please enter a recipient email address.");
+        return;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(form.recipientEmail.trim())) {
+        showErrorToast("Please enter a valid email address.");
+        return;
+      }
+    }
+
+    if (!form.senderName.trim()) {
+      showErrorToast("Please enter your name.");
+      return;
+    }
+
+    const uniqueId = `${buyCard.id}-${parsedAmount}-${Date.now()}`;
+
     const giftCardProduct: any = {
-      id: `${buyCard.id}-${parsedAmount}`,
+      id: uniqueId,
       name: `${buyCard.name} ($${parsedAmount})`,
-      slug: `${buyCard.id}-${parsedAmount}`,
+      slug: uniqueId,
       sku: `GC-${buyCard.id.toUpperCase()}-${parsedAmount}`,
       categorySlug: "gift-card" as any,
       subcategorySlug: "gift-card",
@@ -129,6 +155,12 @@ export default function GiftCardsPage() {
       isFeatured: false,
       isBestSeller: false,
       createdAt: new Date().toISOString(),
+      giftCardDetails: {
+        recipientName: form.recipientName.trim(),
+        recipientEmail: buyCard.type === "egift" ? form.recipientEmail.trim() : "",
+        senderName: form.senderName.trim(),
+        message: form.message.trim(),
+      },
     };
 
     dispatch(
@@ -452,6 +484,8 @@ export default function GiftCardsPage() {
                         <label className="block text-xs text-slate-600 mb-1">Email:</label>
                         <input
                           type="email"
+                          value={form.recipientEmail}
+                          onChange={(e) => setForm({ ...form, recipientEmail: e.target.value })}
                           placeholder="Recipient's email address"
                           className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all"
                         />

@@ -6,6 +6,7 @@ import OrderModel from "@/models/Order";
 import UserModel from "@/models/User";
 import ProductModel from "@/models/Product";
 import GiftCardModel from "@/models/GiftCard";
+import GiftCardInstanceModel from "@/models/GiftCardInstance";
 import Stripe from "stripe";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
@@ -116,6 +117,7 @@ export async function POST(req: NextRequest) {
       shippingCost,
       total,
       couponCode,
+      giftCardCode,
       notes,
       guestEmail,
       guestPhone,
@@ -262,6 +264,7 @@ export async function POST(req: NextRequest) {
       quantity: item.quantity,
       unitPrice: item.product.price,
       totalPrice: item.product.price * item.quantity,
+      giftCardDetails: item.product.giftCardDetails || undefined,
     }));
 
     const paymentStatus = paymentMethod === "cash_on_delivery" ? "pending" : "pending";
@@ -270,6 +273,21 @@ export async function POST(req: NextRequest) {
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 4);
     const estimatedDelivery = deliveryDate.toISOString().split("T")[0];
+
+    let appliedGiftCardCode: string | undefined = undefined;
+    let appliedGiftCardAmount = 0;
+
+    if (giftCardCode) {
+      const cleanCode = giftCardCode.trim().toUpperCase();
+      const giftCardInst = await GiftCardInstanceModel.findOne({ code: cleanCode });
+      if (giftCardInst && giftCardInst.isActive && giftCardInst.currentBalance > 0) {
+        if (!giftCardInst.expiryDate || new Date(giftCardInst.expiryDate) >= new Date()) {
+          appliedGiftCardCode = cleanCode;
+          const remainingAmountToPay = Math.max(0, subtotal - discount + shippingCost);
+          appliedGiftCardAmount = Math.min(giftCardInst.currentBalance, remainingAmountToPay);
+        }
+      }
+    }
 
     const orderData = {
       userId,
@@ -291,10 +309,12 @@ export async function POST(req: NextRequest) {
       paymentStatus: paymentStatus as "pending" | "paid" | "failed" | "refunded",
       paymentMethod: paymentMethod as "credit_card" | "debit_card" | "paypal" | "cash_on_delivery",
       subtotal,
-      discount,
+      discount: discount + appliedGiftCardAmount,
       shippingCost,
-      total,
+      total: Math.max(0, subtotal - (discount + appliedGiftCardAmount) + shippingCost),
       couponCode: couponCode || undefined,
+      giftCardCode: appliedGiftCardCode,
+      giftCardAmount: appliedGiftCardAmount,
       notes: notes || undefined,
       estimatedDelivery,
     };
@@ -304,13 +324,20 @@ export async function POST(req: NextRequest) {
     for (const item of items) {
       const productId = item.product._id || item.product.id;
       let cleanId = productId;
-      if (productId.includes("-")) {
+      if (productId.startsWith("giftcard-")) {
         const parts = productId.split("-");
-        const lastPart = parts[parts.length - 1];
-        if (!isNaN(Number(lastPart))) {
-          parts.pop();
-          cleanId = parts.join("-");
+        cleanId = `${parts[0]}-${parts[1]}`;
+      } else if (productId.includes("-")) {
+        const parts = productId.split("-");
+        while (parts.length > 0) {
+          const lastPart = parts[parts.length - 1];
+          if (!isNaN(Number(lastPart)) || lastPart === "unique" || /^\d+$/.test(lastPart)) {
+            parts.pop();
+          } else {
+            break;
+          }
         }
+        cleanId = parts.join("-");
       }
 
       let product = null;
@@ -442,8 +469,34 @@ export async function POST(req: NextRequest) {
 
     // For Cash on Delivery (immediate processing tasks):
     if (paymentMethod === "cash_on_delivery") {
-      // Generate Invoice PDF and Send Confirmation Email in the background
+      // Generate Invoice PDF, process gift cards, and Send Confirmation Email in the background
       (async () => {
+        // 1. Deduct applied gift card balance
+        if (newOrder.giftCardCode && newOrder.giftCardAmount && newOrder.giftCardAmount > 0) {
+          try {
+            const giftCardInst = await GiftCardInstanceModel.findOne({ code: newOrder.giftCardCode });
+            if (giftCardInst) {
+              giftCardInst.currentBalance = Math.max(0, giftCardInst.currentBalance - newOrder.giftCardAmount);
+              if (giftCardInst.currentBalance === 0) {
+                giftCardInst.isActive = false;
+              }
+              await giftCardInst.save();
+              console.log(`[COD Order] Deducted $${newOrder.giftCardAmount} from Gift Card ${newOrder.giftCardCode}`);
+            }
+          } catch (err) {
+            console.error("Failed to deduct gift card balance during COD placement:", err);
+          }
+        }
+
+        // 2. Generate newly purchased gift cards if any
+        try {
+          const { generateGiftCardsForOrder } = await import("@/lib/services/giftCardService");
+          await generateGiftCardsForOrder(newOrder);
+        } catch (gcGenErr) {
+          console.error("Failed to generate gift cards for COD order:", gcGenErr);
+        }
+
+        // 3. Generate Invoice
         try {
           const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
           const relativeInvoiceUrl = await generateInvoicePDF(newOrder);
@@ -455,6 +508,7 @@ export async function POST(req: NextRequest) {
           console.error("Failed to generate invoice during order placement:", pdfError);
         }
 
+        // 4. Send confirmation email
         try {
           const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
           await sendOrderConfirmationEmail(newOrder);
@@ -546,11 +600,29 @@ export async function PUT(req: NextRequest) {
     order.updatedAt = new Date();
     await order.save();
 
+    // Refund applied gift card balance if any
+    if (order.giftCardCode && order.giftCardAmount && order.giftCardAmount > 0) {
+      try {
+        const giftCardInst = await GiftCardInstanceModel.findOne({ code: order.giftCardCode });
+        if (giftCardInst) {
+          giftCardInst.currentBalance += order.giftCardAmount;
+          giftCardInst.isActive = true;
+          await giftCardInst.save();
+          console.log(`[Order Cancelled] Refunded $${order.giftCardAmount} to Gift Card ${order.giftCardCode}`);
+        }
+      } catch (err) {
+        console.error("Failed to refund gift card balance on cancellation:", err);
+      }
+    }
+
     // Restore product stock
     for (const item of order.items) {
       if (item.productId) {
         let cleanId = item.productId;
-        if (item.productId.includes("-")) {
+        if (item.productId.startsWith("giftcard-")) {
+          const parts = item.productId.split("-");
+          cleanId = `${parts[0]}-${parts[1]}`;
+        } else if (item.productId.includes("-")) {
           const parts = item.productId.split("-");
           const lastPart = parts[parts.length - 1];
           if (!isNaN(Number(lastPart))) {

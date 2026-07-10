@@ -61,7 +61,10 @@ export async function PATCH(
         for (const item of order.items) {
           if (item.productId) {
             let cleanId = item.productId;
-            if (item.productId.includes("-")) {
+            if (item.productId.startsWith("giftcard-")) {
+              const parts = item.productId.split("-");
+              cleanId = `${parts[0]}-${parts[1]}`;
+            } else if (item.productId.includes("-")) {
               const parts = item.productId.split("-");
               const lastPart = parts[parts.length - 1];
               if (!isNaN(Number(lastPart))) {
@@ -106,7 +109,10 @@ export async function PATCH(
         for (const item of order.items) {
           if (item.productId) {
             let cleanId = item.productId;
-            if (item.productId.includes("-")) {
+            if (item.productId.startsWith("giftcard-")) {
+              const parts = item.productId.split("-");
+              cleanId = `${parts[0]}-${parts[1]}`;
+            } else if (item.productId.includes("-")) {
               const parts = item.productId.split("-");
               const lastPart = parts[parts.length - 1];
               if (!isNaN(Number(lastPart))) {
@@ -233,7 +239,10 @@ export async function DELETE(
       for (const item of order.items) {
         if (item.productId) {
           let cleanId = item.productId;
-          if (item.productId.includes("-")) {
+          if (item.productId.startsWith("giftcard-")) {
+            const parts = item.productId.split("-");
+            cleanId = `${parts[0]}-${parts[1]}`;
+          } else if (item.productId.includes("-")) {
             const parts = item.productId.split("-");
             const lastPart = parts[parts.length - 1];
             if (!isNaN(Number(lastPart))) {

@@ -49,6 +49,11 @@ export default function CheckoutPage() {
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
 
+  // Gift Card state
+  const [giftCardInput, setGiftCardInput] = useState("");
+  const [appliedGiftCard, setAppliedGiftCard] = useState<string | null>(null);
+  const [appliedGiftCardBalance, setAppliedGiftCardBalance] = useState(0);
+
   // Billing / Shipping inputs
   const [selectedAddressId, setSelectedAddressId] = useState<string>("");
   const [shippingDetails, setShippingDetails] = useState({
@@ -181,11 +186,17 @@ export default function CheckoutPage() {
     return subtotal > 49 ? 0 : 0;
   }, [subtotal]);
 
+  const giftCardDiscount = useMemo(() => {
+    if (!appliedGiftCard || appliedGiftCardBalance <= 0) return 0;
+    const remainingToPay = Math.max(0, subtotal - (initialDiscount + couponDiscount) + calculatedShippingCost);
+    return Math.min(appliedGiftCardBalance, remainingToPay);
+  }, [appliedGiftCard, appliedGiftCardBalance, subtotal, initialDiscount, couponDiscount, calculatedShippingCost]);
+
   const finalTotal = useMemo(() => {
-    const discountAmount = initialDiscount + couponDiscount;
+    const discountAmount = initialDiscount + couponDiscount + giftCardDiscount;
     const finalVal = subtotal - discountAmount + calculatedShippingCost;
     return finalVal < 0 ? 0 : finalVal;
-  }, [subtotal, initialDiscount, couponDiscount, calculatedShippingCost]);
+  }, [subtotal, initialDiscount, couponDiscount, giftCardDiscount, calculatedShippingCost]);
 
   // Apply Coupon Handler
   const handleApplyCoupon = (e: React.FormEvent) => {
@@ -228,6 +239,32 @@ export default function CheckoutPage() {
     setCouponDiscount(0);
   };
 
+  // Apply Gift Card Handler
+  const handleApplyGiftCard = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const code = giftCardInput.trim().toUpperCase();
+    if (!code) return;
+
+    try {
+      const response = await axios.post("/api/gift-cards/validate", { code });
+      if (response.data.success) {
+        setAppliedGiftCard(code);
+        setAppliedGiftCardBalance(response.data.balance);
+        setGiftCardInput("");
+      } else {
+        showErrorToast(response.data.message || "Failed to validate gift card.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      showErrorToast(err.response?.data?.message || "Invalid or unrecognized gift card code.");
+    }
+  };
+
+  const handleRemoveGiftCard = () => {
+    setAppliedGiftCard(null);
+    setAppliedGiftCardBalance(0);
+  };
+
   // Place Order Action (MongoDB integration)
   const handlePlaceOrder = async () => {
     if (items.length === 0) {
@@ -251,10 +288,11 @@ export default function CheckoutPage() {
         },
         paymentMethod: paymentMethod === "credit_card" ? "credit_card" : paymentMethod === "paypal" ? "paypal" : "cash_on_delivery",
         subtotal,
-        discount: initialDiscount + couponDiscount,
+        discount: initialDiscount + couponDiscount + giftCardDiscount,
         shippingCost: calculatedShippingCost,
         total: finalTotal,
         couponCode: appliedCoupon || undefined,
+        giftCardCode: appliedGiftCard || undefined,
         notes: orderNotes || undefined,
         guestEmail: shippingDetails.email,
         guestPhone: shippingDetails.phone,
@@ -896,6 +934,40 @@ export default function CheckoutPage() {
                 )}
               </div>
 
+              {/* Gift Card apply form */}
+              <div className="border-t border-slate-50 pt-4">
+                {appliedGiftCard ? (
+                  <div className="flex items-center justify-between bg-blue-50 border border-blue-100 px-3 py-2 rounded-xl text-blue-800 text-xs font-bold animate-fade-in">
+                    <div className="flex items-center gap-1.5">
+                      <CreditCard className="w-4.5 h-4.5 text-blue-600" />
+                      <span>Gift Card Applied (${appliedGiftCardBalance.toFixed(2)})</span>
+                    </div>
+                    <button
+                      onClick={handleRemoveGiftCard}
+                      className="text-red-500 hover:text-red-700 underline text-[10px] uppercase font-black tracking-wide"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleApplyGiftCard} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={giftCardInput}
+                      onChange={(e) => setGiftCardInput(e.target.value)}
+                      placeholder="Gift Card Code (e.g. SFP-XXXX)"
+                      className="flex-grow border border-slate-200 px-3 py-2 text-xs rounded-xl outline-none focus:border-[#005AA9] transition font-bold"
+                    />
+                    <button
+                      type="submit"
+                      className="bg-slate-900 hover:bg-slate-800 text-white text-xs px-4 py-2 rounded-xl font-bold transition"
+                    >
+                      Apply
+                    </button>
+                  </form>
+                )}
+              </div>
+
               {/* Cost Calculations */}
               <div className="space-y-2.5 border-t border-slate-50 pt-4 text-xs font-semibold text-slate-600">
                 <div className="flex justify-between">
@@ -905,8 +977,15 @@ export default function CheckoutPage() {
 
                 {initialDiscount + couponDiscount > 0 && (
                   <div className="flex justify-between text-emerald-600 font-bold">
-                    <span>Discount</span>
+                    <span>Coupon Discount</span>
                     <span className="font-mono">-{formatPrice(initialDiscount + couponDiscount)}</span>
+                  </div>
+                )}
+
+                {giftCardDiscount > 0 && (
+                  <div className="flex justify-between text-blue-600 font-bold">
+                    <span>Gift Card Discount</span>
+                    <span className="font-mono">-{formatPrice(giftCardDiscount)}</span>
                   </div>
                 )}
 

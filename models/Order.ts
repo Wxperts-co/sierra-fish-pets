@@ -1,6 +1,13 @@
 import mongoose, { Document, Model } from "mongoose";
 import { OrderStatus, PaymentStatus, PaymentMethod } from "@/types";
 
+export interface IGiftCardDetails {
+  recipientName: string;
+  recipientEmail: string;
+  senderName: string;
+  message?: string;
+}
+
 export interface IOrderItem {
   productId: string;
   productName: string;
@@ -9,6 +16,7 @@ export interface IOrderItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  giftCardDetails?: IGiftCardDetails;
 }
 
 export interface IShippingAddress {
@@ -37,6 +45,8 @@ export interface IOrder extends Document {
   shippingCost: number;
   total: number;
   couponCode?: string;
+  giftCardCode?: string;
+  giftCardAmount?: number;
   notes?: string;
   placedAt: Date;
   updatedAt: Date;
@@ -55,6 +65,12 @@ const orderItemSchema = new mongoose.Schema<IOrderItem>(
     quantity: { type: Number, required: true, min: 1 },
     unitPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
+    giftCardDetails: {
+      recipientName: { type: String },
+      recipientEmail: { type: String },
+      senderName: { type: String },
+      message: { type: String },
+    },
   },
   { _id: false }
 );
@@ -103,6 +119,8 @@ const orderSchema = new mongoose.Schema<IOrder>(
     shippingCost: { type: Number, required: true, default: 0, min: 0 },
     total: { type: Number, required: true, min: 0 },
     couponCode: { type: String },
+    giftCardCode: { type: String },
+    giftCardAmount: { type: Number, default: 0 },
     notes: { type: String },
     placedAt: { type: Date, default: Date.now, required: true },
     updatedAt: { type: Date, default: Date.now, required: true },

@@ -22,8 +22,8 @@ if (!MONGODB_URI) {
 }
 
 // ─── Admin credentials ───────────────────────────────────────────────────────
-const ADMIN_EMAIL = "info@sierrafishandpets.com";
-const ADMIN_PASSWORD = "123456";
+const ADMIN_EMAIL = "jonas@sierrafishandpets.net";
+const ADMIN_PASSWORD = "Jonas@sierrafishandpets2026";
 const ADMIN_NAME = "Admin";
 // ─────────────────────────────────────────────────────────────────────────────
 

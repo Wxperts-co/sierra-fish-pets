@@ -458,3 +458,114 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
     attachments,
   });
 }
+
+/**
+ * Send a Gift Card Delivery Email to the Recipient
+ */
+export async function sendGiftCardEmail(
+  code: string,
+  amount: number,
+  senderName: string,
+  recipientName: string,
+  recipientEmail: string,
+  message?: string
+) {
+  const formattedAmount = formatPrice(amount);
+
+  const emailHtml = `
+    <div style="margin: 0; padding: 40px 0; background-color: #f7fafc; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+              
+              <!-- Brand Header -->
+              <tr>
+                <td style="background-color: #003B73; padding: 32px; text-align: center;">
+                  <img src="${LOGO_URL}" alt="Sierra Fish & Pets" style="max-height: 65px; max-width: 260px; margin-bottom: 4px; display: inline-block; object-fit: contain;" />
+                  <p style="margin: 10px 0 0; color: #93c5fd; font-size: 15px; font-weight: 600;">
+                    You Received a Gift Card! 🎁
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Content Body -->
+              <tr>
+                <td style="padding: 32px;">
+                  <h2 style="margin: 0 0 16px; color: #1a202c; font-size: 20px; font-weight: 700;">
+                    Hello ${recipientName},
+                  </h2>
+                  <p style="margin: 0 0 24px; color: #4a5568; font-size: 15px; line-height: 1.6;">
+                    Great news! <strong>${senderName}</strong> has sent you a digital e-Gift Card for <strong>Sierra Fish & Pets</strong>.
+                  </p>
+
+                  <!-- Gift Card Graphic Block -->
+                  <div style="background: linear-gradient(135deg, #003B73 0%, #0077C8 100%); border-radius: 16px; padding: 32px; color: #ffffff; text-align: center; margin-bottom: 28px; box-shadow: 0 10px 15px -3px rgba(0, 59, 115, 0.3);">
+                    <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #93c5fd; font-weight: bold; margin-bottom: 12px;">e-Gift Card</div>
+                    <div style="font-size: 44px; font-weight: 900; margin-bottom: 20px;">${formattedAmount}</div>
+                    
+                    <div style="background-color: rgba(255, 255, 255, 0.15); border: 2px dashed rgba(255, 255, 255, 0.4); border-radius: 10px; padding: 14px; display: inline-block; font-family: monospace; font-size: 20px; font-weight: bold; letter-spacing: 1.5px; color: #ffffff;">
+                      ${code}
+                    </div>
+                    
+                    <div style="font-size: 11px; margin-top: 16px; color: #e0f2fe;">Redeemable online at checkout</div>
+                  </div>
+
+                  <!-- Personal Message -->
+                  ${
+                    message
+                      ? `
+                  <div style="background-color: #f8fafc; border-left: 4px solid #005AA9; border-radius: 8px; padding: 16px; margin-bottom: 28px; font-style: italic; color: #4a5568; font-size: 14px; line-height: 1.5;">
+                    "${message}"
+                  </div>
+                  `
+                      : ""
+                  }
+
+                  <!-- How to Redeem -->
+                  <h3 style="margin: 0 0 12px; color: #1a202c; font-size: 16px; font-weight: 700;">
+                    How to Redeem Your Gift Card
+                  </h3>
+                  <ol style="margin: 0 0 24px; padding-left: 20px; color: #4a5568; font-size: 14px; line-height: 1.6;">
+                    <li style="margin-bottom: 8px;">Go to the <a href="${APP_URL}" style="color: #005AA9; text-decoration: none; font-weight: bold;">Sierra Fish & Pets Store</a>.</li>
+                    <li style="margin-bottom: 8px;">Add your favorite pet foods, toys, or aquatic supplies to your shopping cart.</li>
+                    <li style="margin-bottom: 8px;">During checkout, enter the code <strong>${code}</strong> in the <strong>Gift Card</strong> application box.</li>
+                    <li style="margin-bottom: 8px;">The card balance will automatically deduct from your order total!</li>
+                  </ol>
+
+                  <div style="text-align: center; margin-top: 32px;">
+                    <a href="${APP_URL}" style="background-color: #005AA9; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-weight: bold; font-size: 15px; text-decoration: none; display: inline-block; box-shadow: 0 4px 6px rgba(0, 90, 169, 0.2);">
+                      Shop Now & Redeem
+                    </a>
+                  </div>
+
+                </td>
+              </tr>
+
+              <!-- Footer Section -->
+              <tr>
+                <td style="background-color: #f8fafc; padding: 24px; text-align: center; border-top: 1px solid #e2e8f0;">
+                  <p style="margin: 0 0 8px; color: #718096; font-size: 13px;">
+                    Have questions? Contact us at <a href="mailto:contact@sierrafishpets.com" style="color: #005AA9; text-decoration: none;">contact@sierrafishpets.com</a>
+                  </p>
+                  <p style="margin: 0; color: #a0aec0; font-size: 12px;">
+                    &copy; ${new Date().getFullYear()} Sierra Fish & Pets. All rights reserved.
+                  </p>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
+    to: recipientEmail,
+    subject: `🎁 You received a ${formattedAmount} Sierra Fish & Pets Gift Card from ${senderName}!`,
+    html: emailHtml,
+  });
+}
+
