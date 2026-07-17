@@ -85,11 +85,11 @@ export default function AudienceTab({ timeframe }: AudienceTabProps) {
 
   // Geographical state split
   const stateData = [
-    { state: "California", users: "6,240 users", pct: "73.8%", progress: "w-[73.8%]", color: BRAND_BLUE },
-    { state: "Texas", users: "920 users", pct: "10.8%", progress: "w-[10.8%]", color: BRAND_TEAL },
-    { state: "Florida", users: "510 users", pct: "6.0%", progress: "w-[6.0%]", color: BRAND_PINK },
-    { state: "New York", users: "245 users", pct: "2.9%", progress: "w-[2.9%]", color: BRAND_ORANGE },
-    { state: "Other states", users: "537 users", pct: "6.5%", progress: "w-[6.5%]", color: BRAND_PURPLE }
+    { state: "California", users: "6,240 users", pct: "73.8%", pctNum: 73.8, color: BRAND_BLUE },
+    { state: "Texas", users: "920 users", pct: "10.8%", pctNum: 10.8, color: BRAND_TEAL },
+    { state: "Florida", users: "510 users", pct: "6.0%", pctNum: 6.0, color: BRAND_PINK },
+    { state: "New York", users: "245 users", pct: "2.9%", pctNum: 2.9, color: BRAND_ORANGE },
+    { state: "Other states", users: "537 users", pct: "6.5%", pctNum: 6.5, color: BRAND_PURPLE }
   ];
 
   // Summary Cards
@@ -236,7 +236,10 @@ export default function AudienceTab({ timeframe }: AudienceTabProps) {
                     </div>
                   </div>
                   <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className={`h-full ${item.color} rounded-full ${item.progress}`} />
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: `${item.pctNum}%`, backgroundColor: item.color }}
+                    />
                   </div>
                 </div>
               ))}
