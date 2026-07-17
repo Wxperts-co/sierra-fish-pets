@@ -30,7 +30,7 @@ const page = async () => {
       <PromoBlocksCarousel/>
       <NewArrivals/>
       {/* <FeaturedProducts/> */}
-      <AmazonCTA/>
+      {/* <AmazonCTA/> */}
       <FeaturesSection/>
       <TasteGuarantee/>
       <BestSellers/>
