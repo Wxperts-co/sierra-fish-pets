@@ -12,7 +12,7 @@ export default function AdminLoginForm() {
   const googleSuccess = searchParams?.get("success");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#001f3f] via-[#003B73] to-[#005ea8] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#001f3f] via-[#003B73] to-[#005ea8] flex items-center justify-center p-4 admin-login-bg-fallback">
       {/* Decorative blur orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
@@ -30,7 +30,7 @@ export default function AdminLoginForm() {
         </div>
 
         {/* Card */}
-        <div className="rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden">
+        <div className="rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden admin-login-card-fallback">
           {/* Header */}
           <div className="border-b border-white/10 p-5 text-center bg-white/5">
             <h2 className="text-lg font-bold text-white">Administrator Sign In</h2>

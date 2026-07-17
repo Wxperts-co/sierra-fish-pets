@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Nunito } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layouts/Header";
-import Footer from "@/components/layouts/Footer";
-import AuthModal from "@/components/auth/AuthModal";
 import Providers from "./provider";
+import LayoutSelector from "@/components/layouts/LayoutSelector";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -38,10 +36,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-[family-name:var(--font-nunito)]">
   <Providers>
-    <Header />
-    {children}
-    <AuthModal />
-    <Footer />
+    <LayoutSelector>{children}</LayoutSelector>
   </Providers>
 </body>
     </html>

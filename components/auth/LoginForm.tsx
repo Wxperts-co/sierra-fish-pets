@@ -73,7 +73,7 @@ export default function LoginForm() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-slate-200 bg-white/70 px-4 py-3 pl-11 text-sm text-slate-800 outline-none ring-0 transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
+    `w-full rounded-xl border border-slate-200 bg-white/70 px-4 py-3 pl-11 text-sm text-slate-800 outline-none ring-0 transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${isAdminRoute ? "admin-login-input-fallback" : ""}`;
 
   return (
     <div>
@@ -111,7 +111,7 @@ export default function LoginForm() {
 
             {/* OTP Input */}
             <div className="relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 ${isAdminRoute ? "admin-login-icon-fallback" : ""}`} />
               <input
                 id="login-otp"
                 type="text"
@@ -139,7 +139,7 @@ export default function LoginForm() {
               id="login-otp-submit"
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-700 hover:to-blue-800 disabled:opacity-60 disabled:cursor-not-allowed"
+              className={`w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-700 hover:to-blue-800 disabled:opacity-60 disabled:cursor-not-allowed ${isAdminRoute ? "admin-login-btn-fallback" : ""}`}
             >
               {loading ? "Verifying..." : "Verify & Sign In"}
             </button>
@@ -148,7 +148,7 @@ export default function LoginForm() {
           <>
             {/* Email */}
             <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Mail className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 ${isAdminRoute ? "admin-login-icon-fallback" : ""}`} />
               <input
                 id="login-email"
                 type="email"
@@ -163,7 +163,7 @@ export default function LoginForm() {
 
             {/* Password */}
             <div className="relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 ${isAdminRoute ? "admin-login-icon-fallback" : ""}`} />
               <input
                 id="login-password"
                 type={showPassword ? "text" : "password"}
@@ -179,7 +179,11 @@ export default function LoginForm() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? (
+                  <EyeOff className={`h-4 w-4 ${isAdminRoute ? "admin-login-icon-fallback" : ""}`} />
+                ) : (
+                  <Eye className={`h-4 w-4 ${isAdminRoute ? "admin-login-icon-fallback" : ""}`} />
+                )}
               </button>
             </div>
 
@@ -201,7 +205,7 @@ export default function LoginForm() {
               id="login-submit"
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-700 hover:to-blue-800 disabled:opacity-60 disabled:cursor-not-allowed"
+              className={`w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-700 hover:to-blue-800 disabled:opacity-60 disabled:cursor-not-allowed ${isAdminRoute ? "admin-login-btn-fallback" : ""}`}
             >
               {loading ? "Signing in..." : isAdminRoute ? "Sign In as Admin" : "Login"}
             </button>
