@@ -134,43 +134,7 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
     }
   }, [timeframe]);
 
-  // Twitter / X
-  const twitterData = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { name: "Mon", Followers: 865, Engagement: 96 },
-        { name: "Tue", Followers: 870, Engagement: 98 },
-        { name: "Wed", Followers: 874, Engagement: 100 },
-        { name: "Thu", Followers: 879, Engagement: 104 },
-        { name: "Fri", Followers: 883, Engagement: 106 },
-        { name: "Sat", Followers: 887, Engagement: 108 },
-        { name: "Sun", Followers: 890, Engagement: 110 }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { name: "Jul", Followers: 600, Engagement: 70 },
-        { name: "Aug", Followers: 630, Engagement: 75 },
-        { name: "Sep", Followers: 660, Engagement: 78 },
-        { name: "Oct", Followers: 690, Engagement: 82 },
-        { name: "Nov", Followers: 720, Engagement: 85 },
-        { name: "Dec", Followers: 750, Engagement: 90 },
-        { name: "Jan", Followers: 780, Engagement: 92 },
-        { name: "Feb", Followers: 800, Engagement: 95 },
-        { name: "Mar", Followers: 820, Engagement: 98 },
-        { name: "Apr", Followers: 840, Engagement: 102 },
-        { name: "May", Followers: 865, Engagement: 106 },
-        { name: "Jun", Followers: 890, Engagement: 110 }
-      ];
-    } else {
-      return [
-        { name: "W1", Followers: 650, Engagement: 85 },
-        { name: "W2", Followers: 720, Engagement: 95 },
-        { name: "W3", Followers: 810, Engagement: 102 },
-        { name: "W4", Followers: 890, Engagement: 110 }
-      ];
-    }
-  }, [timeframe]);
-
+ 
   // Scale utility
   const scale = useMemo(() => {
     return timeframe === "1year" ? 12 : timeframe === "7days" ? 0.25 : 1;
@@ -431,78 +395,6 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
         </div>
       </div>
 
-      {/* ── 4. TWITTER / X ── */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
-        <div className="bg-[#003B73] px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-black">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase font-black text-white tracking-widest">Twitter / X Analytics</span>
-              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/10">
-                @SierraFishPets
-              </span>
-            </div>
-          </div>
-          <div className="text-right">
-            <span className="text-sm font-black text-white">890</span>
-            <span className="text-[10px] text-blue-100/70 font-semibold block uppercase">followers</span>
-          </div>
-        </div>
-
-        <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-4">
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={twitterData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" iconSize={8} formatter={(value) => <span className="text-xs font-semibold text-slate-500">{value}</span>} />
-                  <Line type="monotone" dataKey="Followers" stroke="#0f172a" strokeWidth={2.5} dot={false} activeDot={{ r: 5 }} />
-                  <Line type="monotone" dataKey="Engagement" stroke="#0ea5e9" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div className="space-y-4 border-t lg:border-t-0 lg:border-l border-slate-100 pt-6 lg:pt-0 lg:pl-8">
-            <h4 className="text-[11px] text-slate-400 font-extrabold tracking-widest uppercase mb-2">
-              Tweet Performance
-            </h4>
-            <div className="space-y-4">
-              {twPerformance.map((post, idx) => {
-                const Icon = post.icon;
-                return (
-                  <div key={idx} className="flex items-center justify-between text-xs font-semibold">
-                    <div className="flex-1">
-                      <span className="font-bold text-slate-800 block text-xs">{post.type}</span>
-                      <div className="flex items-center gap-3 text-slate-400 text-[11px] font-medium mt-1">
-                        <span className="flex items-center gap-1">
-                          <MessageCircle className="w-3 h-3 text-slate-300" />
-                          {post.comments} {post.subLabel1}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3 text-slate-300" />
-                          {post.likes} {post.subLabel2}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-sky-500 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100 font-extrabold shrink-0">
-                      <Flame className="w-3.5 h-3.5 fill-sky-500" />
-                      <span>{post.score}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
 
     </div>
   );
