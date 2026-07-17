@@ -39,6 +39,7 @@ import AudienceTab from "@/components/admin/analytics/AudienceTab";
 import PagesTab from "@/components/admin/analytics/PagesTab";
 import CustomTooltip from "@/components/admin/analytics/CustomTooltip";
 import SocialMediaTab from "@/components/admin/analytics/SocialMediaTab";
+import InsightOverviewTab from "@/components/admin/analytics/InsightOverviewTab";
 
 interface OrderItem {
   productId: string;
@@ -445,7 +446,7 @@ export default function AdminDashboard() {
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             Analytics Overview
           </h1>
-         
+
         </div>
 
         {/* Action Panel matching user's visual exactly */}
@@ -517,15 +518,15 @@ export default function AdminDashboard() {
       {/* Tabs navigation under header */}
       <div className="border-b border-slate-200/80 px-2 mt-4 mb-2">
         <div className="flex items-center gap-6 overflow-x-auto scrollbar-none -mb-[1px]" style={{ scrollbarWidth: 'none' }}>
-          {["Overview", "E-commerce", "Traffic & Acquisition", "Marketing & Ads", "Audience & Demographics", "Pages & Screens", "Social Media"].map((tab) => {
+          {["Overview", "E-commerce", "Traffic & Acquisition", "Marketing & Ads", "Audience & Demographics", "Pages & Screens", "Social Media", "Insight Overview"].map((tab) => {
             const isActive = tab === activeTab;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`pb-3 text-[13px] font-semibold whitespace-nowrap transition-all relative ${isActive
-                    ? "text-[#1e40af]"
-                    : "text-slate-400 hover:text-slate-700"
+                  ? "text-[#1e40af]"
+                  : "text-slate-400 hover:text-slate-700"
                   }`}
               >
                 {tab}
@@ -557,11 +558,11 @@ export default function AdminDashboard() {
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <span className="text-emerald-500">↑ 12.5%</span>
-                 
+
                   </div>
                 </div>
               </div>
-             
+
             </div>
 
             {/* Orders */}
@@ -579,11 +580,11 @@ export default function AdminDashboard() {
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <span className="text-emerald-500">↑ 8.2%</span>
-                    
+
                   </div>
                 </div>
               </div>
-             
+
             </div>
 
             {/* Customers */}
@@ -601,11 +602,11 @@ export default function AdminDashboard() {
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <span className="text-emerald-500">↑ 15.7%</span>
-                    
+
                   </div>
                 </div>
               </div>
-             
+
             </div>
 
             {/* Conversion Rate */}
@@ -621,11 +622,11 @@ export default function AdminDashboard() {
                   <h2 className="text-2xl font-black text-slate-800 tracking-tight">3.89%</h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
                     <span className="text-emerald-500">↑ 6.4%</span>
-                   
+
                   </div>
                 </div>
               </div>
-              
+
             </div>
 
             {/* Avg. Order Value */}
@@ -646,7 +647,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
-             
+
             </div>
           </div>
 
@@ -1090,7 +1091,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-4 pt-1">
                   <div className="w-[85px] h-[85px] flex items-center justify-center relative">
                     <PieChart width={85} height={85}>
-                  <Tooltip content={<CustomTooltip />} />
+                      <Tooltip content={<CustomTooltip />} />
                       <Pie
                         data={insightsDonutData}
                         cx="50%"
@@ -1151,13 +1152,14 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
-                <Link
-                  href=""
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("Insight Overview")}
                   className="w-full inline-flex items-center justify-center gap-1 text-[12px] font-black text-[#005AA9] hover:underline pt-4 mt-3 border-t border-slate-100"
                 >
                   Get More Details
                   <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -1186,6 +1188,9 @@ export default function AdminDashboard() {
 
       {activeTab === "Social Media" && (
         <SocialMediaTab timeframe={timeframe} />
+      )}
+      {activeTab === "Insight Overview" && (
+        <InsightOverviewTab timeframe={timeframe} />
       )}
     </div>
   );
