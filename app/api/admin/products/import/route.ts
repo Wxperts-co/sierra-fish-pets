@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
         const rawName = getValue(productData, "item_name", "product_name", "name", "des", "description") || "";
         const rawSku = getValue(productData, "sku_id", "product_sku", "sku", "item", "6 digits") || "";
         const rawUpc = getValue(productData, "product_upc", "upc_id", "upc", "barcode", "gtin", "each upc", "upc_no") || "";
-        
+
         const id = cleanExcelText(rawId);
         const name = cleanExcelText(rawName);
         const sku = cleanExcelText(rawSku);
@@ -198,10 +198,15 @@ export async function POST(request: NextRequest) {
         // Silently skip completely empty padding rows
         const hasAnyData = Object.values(productData).some(v => v != null && String(v).trim() !== "");
         if (!id && !name && !sku) {
-          if (hasAnyData) {
+          // Detect category-only rows from the catalog CSV (product columns empty, but category columns populated)
+          const hasCategoryData =
+            String(getValue(productData, "category_internal_id") || "").trim() !== "" ||
+            String(getValue(productData, "category_path") || "").trim() !== "";
+          if (!hasCategoryData && hasAnyData) {
             results.failed++;
             results.errors.push("Row contains data but column headers for ID, Name, or SKU were not recognized.");
           }
+          // Either way it's not a product row — skip it
           continue;
         }
 
@@ -215,7 +220,7 @@ export async function POST(request: NextRequest) {
 
         const quantityRaw = getValue(productData, "product_quantity", "quantity", "stock_count", "stockCount", "instock");
         const statusRaw = getValue(productData, "status");
-        
+
         let quantity = 50; // Default in_stock count if quantity column is missing (e.g. feedback template)
         if (quantityRaw != null) {
           quantity = parseInt(quantityRaw) || 0;
@@ -230,15 +235,12 @@ export async function POST(request: NextRequest) {
         }
 
         // Verify duplicates / updates in-memory
-        const existingProduct = existingIdMap.get(id);
-        const isUpdate = !!existingProduct;
-
-        // If it's a new product, check if the SKU is already taken by another product
-        if (!isUpdate && existingSkuSet.has(sku)) {
-          results.failed++;
-          results.errors.push(`Product "${name}" (SKU: ${sku}) is already taken by another product.`);
-          continue;
+        // First try matching by internal ID, then fall back to SKU (to support re-importing same catalog)
+        let existingProduct: any = existingIdMap.get(id);
+        if (!existingProduct && existingSkuSet.has(sku)) {
+          existingProduct = existingProducts.find((p: any) => p.sku === sku) || null;
         }
+        const isUpdate = !!existingProduct;
 
         const brandRaw = getValue(productData, "product_brand", "brand");
         const cleanBrandVal = cleanExcelText(brandRaw);
@@ -246,13 +248,13 @@ export async function POST(request: NextRequest) {
 
         const priceRaw = getValue(productData, "default_price", "product_price", "price", "price 1", "item price");
         const price = priceRaw != null ? parseFloat(priceRaw) || 0 : 0;
-        
+
         const compareAtPriceRaw = getValue(productData, "product_compare_to_price", "compareAtPrice", "compare_at_price");
         const compareAtPrice = (compareAtPriceRaw != null && !isNaN(parseFloat(compareAtPriceRaw))) ? parseFloat(compareAtPriceRaw) : null;
-        
+
         const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category", "category_code", "class");
         const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory");
-        
+
         let categorySlugVal = "";
         let subcategorySlugVal = "";
 
