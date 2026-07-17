@@ -240,7 +240,7 @@ export default function ShopHero({
                         {/* Inner circle image */}
                         <span className="relative block h-[100px] w-[100px] overflow-hidden rounded-full bg-[#f0f9fa] md:h-[80px] md:w-[80px] sm:h-[64px] sm:w-[64px]">
                           <Image
-                            src={categoryImages[cat.slug] ?? cat.image ?? "/placeholder-product.png"}
+                            src={categoryImages[cat.slug] ?? cat.image ?? "/placeholderimg.png"}
                             alt={cat.name}
                             fill
                             className="object-cover transition-transform duration-[350ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110"

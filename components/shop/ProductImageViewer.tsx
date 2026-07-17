@@ -59,7 +59,7 @@ export default function ProductImageViewer({ product }: ProductImageViewerProps)
   const images = useMemo(() => {
     const list = [...(product.images || [])];
     if (list.length === 0) {
-      list.push("/placeholder-product.png");
+       list.push("/placeholderimg.png");
     }
 
     // Append fetched variant images

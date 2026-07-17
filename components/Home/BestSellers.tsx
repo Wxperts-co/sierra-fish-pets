@@ -54,7 +54,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
     : 0;
 
   const getFallbackImage = () => {
-    return "/placeholder-product.png";
+    return "/placeholderimg.png";
   };
 
   return (

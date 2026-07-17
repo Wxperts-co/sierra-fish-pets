@@ -115,7 +115,7 @@ export default function SearchBar({
                 >
                   <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md bg-slate-100 lg:h-10 lg:w-10">
                     <Image
-                      src={product.images?.[0] || "/placeholder-product.png"}
+                      src={product.images?.[0] || "/placeholderimg.png"}
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform"

@@ -52,8 +52,8 @@ export async function GET(
       });
     }
 
-    // Fallback: If requested image is missing, serve placeholder-product.png
-    const placeholderPath = path.join(process.cwd(), "public", "placeholder-product.png");
+    // Fallback: If requested image is missing, serve placeholderimg.png
+    const placeholderPath = path.join(process.cwd(), "public", "placeholderimg.png");
     if (fs.existsSync(placeholderPath)) {
       const fileBuffer = fs.readFileSync(placeholderPath);
       return new NextResponse(fileBuffer, {

@@ -60,7 +60,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
   // Category specific fallback images
   const getFallbackImage = () => {
-    return "/placeholder-product.png";
+    return "/placeholderimg.png";
   };
 
   return (

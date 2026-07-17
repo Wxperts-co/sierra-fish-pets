@@ -292,6 +292,7 @@ export async function POST(request: NextRequest) {
           imageUrl === "/images/products/aqua1.avif" ||
           imageUrl === "/images/products/bird/bird1.avif" ||
           imageUrl === "/placeholder-product.png" ||
+          imageUrl === "/placeholderimg.png" ||
           imageUrl.toLowerCase().includes("placeholder") ||
           imageUrl.toLowerCase().includes("fallback")
         );
