@@ -111,7 +111,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
             
             <img
               src={
-                imgError || !product.images?.[0]
+                imgError || !product.images?.[0] || product.images[0] === "/placeholder-product.png" || product.images[0] === "placeholder-product.png"
                   ? getFallbackImage()
                   : (product.images[0].startsWith("http") || product.images[0].startsWith("/")
                       ? product.images[0]
