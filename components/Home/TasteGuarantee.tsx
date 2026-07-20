@@ -121,7 +121,7 @@ export default function TasteGuarantee() {
             {/* CTA Button */}
             <motion.div variants={itemVariants} className="w-full sm:w-auto">
               <Link
-                href="/services"
+                href="/shop"
                 className="inline-flex items-center justify-center md:gap-2.5 rounded-full bg-[#005AA9] text-white hover:bg-[#00407a] md:font-bold px-8 py-2 md:py-3.5 text-base tracking-wide shadow-lg shadow-[#005AA9]/25 transition-all duration-300 hover:scale-105 active:scale-95 group"
               >
                 <span>Find Out More</span>
