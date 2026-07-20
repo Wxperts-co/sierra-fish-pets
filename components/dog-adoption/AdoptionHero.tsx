@@ -67,7 +67,7 @@ export default function AdoptionHero() {
             </span>
 
             {/* Main Title */}
-            <h1 className="text-white font-extrabold leading-[1.05] text-4xl md:text-5xl mb-4 tracking-tight">
+            <h1 className="text-white font-extrabold leading-[1.05] text-3xl md:text-5xl mb-4 tracking-tight">
               Giving Rescued Dogs <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#00aaff] drop-shadow-sm">
                 A Second Chance

@@ -76,7 +76,7 @@ export default function AvailableDogsPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
              
-              <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
+              <h1 className="text-2xl md:text-5xl font-black tracking-tight text-white mb-3">
                 All Available Rescued Dogs
               </h1>
              

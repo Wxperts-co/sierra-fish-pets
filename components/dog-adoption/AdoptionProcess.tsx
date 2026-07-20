@@ -34,7 +34,7 @@ export default function AdoptionProcess() {
   ];
 
   return (
-    <section className="relative py-24 bg-white text-slate-800 overflow-hidden border-b border-slate-100">
+    <section className="relative py-12 md:py-24 bg-white text-slate-800 overflow-hidden border-b border-slate-100">
       <div className="container mx-auto px-6 max-w-6xl relative z-10">
         
         {/* Title Block */}
