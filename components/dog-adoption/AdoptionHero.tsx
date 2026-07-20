@@ -63,20 +63,19 @@ export default function AdoptionHero() {
 
             {/* Sub-label */}
             <span className="block mb-2 text-[#00aaff] uppercase tracking-[0.3em] text-xs font-bold">
-              Sierra Dog Adoption
+              Sierra Adoption Event Host
             </span>
 
             {/* Main Title */}
-            <h1 className="text-white font-extrabold leading-[1.05] text-4xl md:text-6xl mb-4 tracking-tight">
-              Find Your <br />
+            <h1 className="text-white font-extrabold leading-[1.05] text-4xl md:text-5xl mb-4 tracking-tight">
+              Giving Rescued Dogs <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#00aaff] drop-shadow-sm">
-                Forever Friend
+                A Second Chance
               </span>
             </h1>
 
           
-            {/* CTA Buttons */}
-         
+
             {/* Trust Badges / Dynamic Quick Stats */}
             <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl">
               <div className="flex items-center gap-2.5">
@@ -87,7 +86,7 @@ export default function AdoptionHero() {
                   <div className="text-base font-bold text-white leading-tight">
                     {availableDogsCount} Dogs
                   </div>
-                  <div className="text-[10px] text-slate-400">Available now</div>
+                  <div className="text-[10px] text-slate-400">Available at events</div>
                 </div>
               </div>
 
@@ -97,9 +96,9 @@ export default function AdoptionHero() {
                 </div>
                 <div>
                   <div className="text-base font-bold text-white leading-tight">
-                    100% Loved
+                    Foster Hosted
                   </div>
-                  <div className="text-[10px] text-slate-400">Vet-checked & spayed</div>
+                  <div className="text-[10px] text-slate-400">Saved from kill shelters</div>
                 </div>
               </div>
 
@@ -109,9 +108,9 @@ export default function AdoptionHero() {
                 </div>
                 <div>
                   <div className="text-base font-bold text-white leading-tight">
-                    Full Support
+                    Event Host
                   </div>
-                  <div className="text-[10px] text-slate-400">Care counseling</div>
+                  <div className="text-[10px] text-slate-400">In-store rescue events</div>
                 </div>
               </div>
             </div>

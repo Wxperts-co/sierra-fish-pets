@@ -167,7 +167,7 @@ export default function AdoptionModal({ dog, isOpen, onClose }: AdoptionModalPro
                 )}
                 <div className="flex items-start gap-1.5 mt-3 text-slate-400 text-[10px] leading-relaxed">
                   <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                  <span>Submitting an inquiry notifies our adoption counselor who will contact you within 24 hours to schedule a meet & greet.</span>
+                  <span>Sierra Fish &amp; Pets hosts adoption events for partner rescue agencies. Submitting an inquiry connects you with the foster family and rescue organization handling this dog.</span>
                 </div>
               </div>
             </div>

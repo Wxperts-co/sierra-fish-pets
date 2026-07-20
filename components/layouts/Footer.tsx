@@ -31,9 +31,10 @@ const CUSTOMER_SERVICE = [
 
 const SERVICES = [
   { label: "Aquarium Setup", href: "/services" },
-  { label: "Live Fish Consultation", href: "/services" },
-  { label: "Pet Adoption", href: "/services" },
-  { label: "In-Store Events", href: "/events" },
+  { label: "Aqua Jet Cleaning System", href: "/about-aqua-jet-water-cleaning-system" },
+  { label: "Special Order Animals", href: "/special-order-animals" },
+  { label: "Pet Adoption Events", href: "/services/dog-adoption" },
+  { label: "In-Store Events", href: "/event-calendar" },
 ];
 
 const SOCIAL = [

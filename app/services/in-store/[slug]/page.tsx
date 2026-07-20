@@ -131,10 +131,10 @@ export default async function ServiceDetailPage({
         </section>
 
         {/* ─── Service Description & Details Section ─── */}
-        <section className="relative py-16 md:py-24 bg-[#001e3d]/90 text-white border-b border-slate-900">
-          <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        <section className="relative py-16 md:py-24 text-white border-b border-slate-900">
+          {/* <div className="container mx-auto px-6 max-w-6xl relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-              {/* Left Column - Detailed Description */}
+             
               <div className="lg:col-span-7 space-y-6">
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#00aaff] bg-[#00aaff]/10 px-3.5 py-1.5 rounded-full select-none">
                   Overview
@@ -152,10 +152,10 @@ export default async function ServiceDetailPage({
                 </div>
               </div>
 
-              {/* Right Column - Service Details & Features Card */}
+             
               <div className="lg:col-span-5 lg:sticky lg:top-24">
                 <div className="backdrop-blur-md bg-white/[0.03] border border-white/10 rounded-3xl p-8 shadow-xl shadow-blue-500/5 relative overflow-hidden group hover:border-[#00aaff]/30 transition-all duration-300">
-                  {/* Decorative glowing gradient */}
+                 
                   <div className="absolute -right-24 -top-24 w-48 h-48 bg-[#00aaff]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00aaff]/15 transition-all duration-500" />
                   
                   <h3 className="font-extrabold text-lg text-white mb-6 border-b border-white/10 pb-4">
@@ -163,7 +163,7 @@ export default async function ServiceDetailPage({
                   </h3>
 
                   <div className="space-y-6">
-                    {/* Price Info */}
+                   
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-slate-400">Pricing:</span>
                       <span className="text-lg font-bold text-[#00aaff] bg-blue-500/10 px-3 py-1 rounded-xl">
@@ -171,7 +171,7 @@ export default async function ServiceDetailPage({
                       </span>
                     </div>
 
-                    {/* Features List */}
+                 
                     <div>
                       <h4 className="text-sm font-bold text-slate-300 mb-4">Key Benefits & Features:</h4>
                       <ul className="space-y-3">
@@ -187,7 +187,9 @@ export default async function ServiceDetailPage({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          <h1 className="text-center font-black text-3xl text-white  border-b border-slate-900 py-16">Service available soon...</h1>
         </section>
 
       

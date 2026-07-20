@@ -46,20 +46,26 @@ export async function GET() {
           const otherSlugs = categories
             .map((c) => c.slug as string)
             .filter((slug) => slug && slug !== "other-pet");
-
           const activeSearchSlugs = otherSlugs.map(slug => 
             (slug === "small-pet" || slug === "small-pets") ? "small-animal" : slug
           );
+          const escapedSlugs = activeSearchSlugs.map((s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"));
+          const regexPattern = escapedSlugs.length > 0
+            ? new RegExp(`^(${escapedSlugs.join("|")})`, "i")
+            : /^$/;
 
           count = await Product.countDocuments({
             $or: [
-              { categorySlug: { $nin: activeSearchSlugs } },
+              { categorySlug: { $not: regexPattern } },
               { categorySlug: { $exists: false } },
               { categorySlug: null }
             ]
           });
         } else {
-          count = await Product.countDocuments({ categorySlug: querySlug });
+          const escaped = querySlug.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+          count = await Product.countDocuments({
+            categorySlug: new RegExp(`^${escaped}`, "i")
+          });
         }
 
         return {

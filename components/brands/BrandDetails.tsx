@@ -104,14 +104,17 @@ export default function BrandDetail({
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href="#"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#005AA9] text-white font-bold hover:bg-[#003d73] transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  <Globe size={18} />
-                  Official Website
-                </a>
+                {brand.website && (
+                  <a
+                    href={brand.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#005AA9] text-white font-bold hover:bg-[#003d73] transition-all duration-200 shadow-lg hover:shadow-xl"
+                  >
+                    <Globe size={18} />
+                    Official Website
+                  </a>
+                )}
                 <Link
                   href={`/shop?brand=${brand.slug}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-[#005AA9] text-[#005AA9] font-bold hover:bg-blue-50 transition-all duration-200"

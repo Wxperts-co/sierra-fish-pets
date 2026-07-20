@@ -186,6 +186,9 @@ export default function Header() {
   const isSierraEdu =
     pathname === "/sierra-edu" ||
     (pathname ? pathname.startsWith("/edu/") : false);
+  const isSpecialOrderAnimals = pathname === "/special-order-animals";
+  const isAquaJetSystem = pathname === "/about-aqua-jet-water-cleaning-system";
+  const isCoupons = pathname === "/coupons";
 
   const isTransparentPage =
     isHome ||
@@ -200,7 +203,10 @@ export default function Header() {
     isBrandsPage ||
     isArrivals ||
     isBlogs ||
-    isSierraEdu;
+    isSierraEdu ||
+    isSpecialOrderAnimals ||
+    isAquaJetSystem ||
+    isCoupons;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -235,7 +241,9 @@ export default function Header() {
     isBrandsPage ||
     isArrivals ||
     isBlogs ||
-    isSierraEdu;
+    isSierraEdu ||
+    isSpecialOrderAnimals ||
+    isAquaJetSystem;
   const useWhiteText = showSolidBackground || isDarkTransparentPage;
 
   return (

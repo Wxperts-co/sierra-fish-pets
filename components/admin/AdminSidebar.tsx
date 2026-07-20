@@ -25,6 +25,7 @@ import {
   X,
   User,
   Newspaper,
+  Ticket,
 } from "lucide-react";
 import axios from "axios";
 import { useAppDispatch } from "@/store/hooks";
@@ -38,8 +39,10 @@ const menuItems = [
   { name: "Events", href: "/admin/events", icon: CalendarDays },
   { name: "New Arrivals", href: "/admin/new-arrivals", icon: PawPrint },
   { name: "Dog Adoption", href: "/admin/dog-adoption", icon: PawPrint },
+  { name: "Special Order Pets", href: "/admin/special-order-pets", icon: Fish },
   { name: "Brands", href: "/admin/brands", icon: BadgePercent },
   { name: "Gift Cards", href: "/admin/gift-cards", icon: Gift },
+  { name: "Coupons",    href: "/admin/coupons",    icon: Ticket },
   { name: "Flyers", href: "/admin/flyers", icon: Newspaper },
   { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blogs", icon: FileText },

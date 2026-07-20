@@ -18,6 +18,10 @@ interface ServiceItem {
 }
 
 const CATEGORY_MAP: Record<string, { parent: string; icon: React.ReactNode }> = {
+  "about-aqua-jet-water-cleaning-system": {
+    parent: "aquarium",
+    icon: <ShieldCheck className="w-6 h-6 text-[#00aaff]" />,
+  },
   "aquarium-consulting-design": {
     parent: "aquarium",
     icon: <ShieldCheck className="w-6 h-6 text-[#00aaff]" />,
@@ -51,9 +55,14 @@ const CATEGORY_MAP: Record<string, { parent: string; icon: React.ReactNode }> = 
 const SERVICE_GROUPS = [
   {
     title: "Aquarium Services",
-    description: "Bespoke consultations, custom designs, and professional installations.",
+    description: "Bespoke consultations, custom designs, water cleaning systems, and professional installations.",
     slug: "aquarium",
-    slugs: ["aquarium-consulting-design", "custom-aquariums", "aquarium-installation"],
+    slugs: [
+      "about-aqua-jet-water-cleaning-system",
+      "aquarium-consulting-design",
+      "custom-aquariums",
+      "aquarium-installation",
+    ],
   },
   {
     title: "In-Store Services",
@@ -123,7 +132,10 @@ export default function ServicesPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {groupServices.map((service) => {
                       const mapping = CATEGORY_MAP[service.slug];
-                      const detailUrl = `/services/${mapping?.parent || "consulting"}/${service.slug}`;
+                      const detailUrl =
+                        service.slug === "about-aqua-jet-water-cleaning-system"
+                          ? "/about-aqua-jet-water-cleaning-system"
+                          : `/services/${mapping?.parent || "consulting"}/${service.slug}`;
 
                       return (
                         <div

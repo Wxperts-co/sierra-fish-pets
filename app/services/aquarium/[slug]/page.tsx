@@ -32,7 +32,6 @@ interface ServiceItem {
 
 const ALLOWED_SLUGS = [
   "aquarium-consulting-design",
-  "custom-aquariums",
   "aquarium-installation",
 ];
 

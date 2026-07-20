@@ -1,5 +1,22 @@
 [
   {
+    "id": "svc-008",
+    "name": "Aqua Jet Water Cleaning System",
+    "slug": "about-aqua-jet-water-cleaning-system",
+    "category": "aquarium",
+    "shortDescription": "Effortless faucet-connected aquarium water changing and gravel cleaning system.",
+    "description": "The Sierra Aqua Jet system connects directly to standard faucets to drain dirty aquarium water and refill with clean water in minutes—eliminating heavy buckets and water spills.",
+    "image": "/images/services/aquarium-consulting.jpg",
+    "price": "System Kits Available",
+    "features": [
+      "No heavy bucket lifting",
+      "Direct faucet connection",
+      "Gravel vacuum & waste extractor",
+      "Includes brass universal adapters",
+      "Available in 25ft & 50ft hose lengths"
+    ]
+  },
+  {
     "id": "svc-001",
     "name": "Aquarium Consulting & Design",
     "slug": "aquarium-consulting-design",
@@ -106,16 +123,16 @@
     "name": "Dog Adoption Events",
     "slug": "dog-adoption-events",
     "category": "adoption",
-    "shortDescription": "Partner rescue organizations host adoption events in-store every 2nd and 4th weekend.",
-    "description": "Sierra Fish & Pets partners with local rescue organizations to host dog adoption events every 2nd and 4th weekend of the month. Adoptable dogs come with a vet check, flea treatment, and their first set of vaccinations.",
+    "shortDescription": "Sierra Fish & Pets hosts in-store adoption events for partner rescue organizations.",
+    "description": "Sierra Fish & Pets proudly hosts dog adoption events every 2nd and 4th weekend of the month. Adoptable dogs are rescued from kill shelters around the world and hosted by foster families until they find their forever homes.",
     "image": "/images/services/dog-adoption.jpg",
-    "price": "Adoption fees vary by rescue",
+    "price": "Adoption fees set by rescue agency",
     "features": [
       "Every 2nd & 4th weekend",
-      "Multiple rescue organizations",
-      "All dogs vet-checked",
-      "Includes flea treatment & first shots",
-      "On-site adoption counselors"
+      "Saved from kill shelters worldwide",
+      "Cared for & hosted by foster homes",
+      "Sierra Fish & Pets hosts events",
+      "All dogs vet-checked & vaccinated"
     ]
   }
 ]

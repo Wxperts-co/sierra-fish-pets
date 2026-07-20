@@ -9,26 +9,26 @@ export default function AdoptionProcess() {
   const steps = [
     {
       step: 1,
-      title: "Browse Dogs",
-      description: "Explore our adorable dogs looking for loving homes.",
+      title: "Browse Rescued Dogs",
+      description: "Explore dogs rescued from kill shelters around the world and cared for by foster parents.",
       image: "/images/logo/d1.png",
     },
     {
       step: 2,
-      title: "Submit Application",
-      description: "Fill out our easy adoption application form online.",
+      title: "Submit Rescue Application",
+      description: "Fill out the easy adoption application form with our partner rescue agency.",
       image: "/images/logo/d4.png",
     },
     {
       step: 3,
-      title: "Meet & Greet",
-      description: "Meet your potential new family member and spend time together.",
+      title: "In-Store Meet & Greet",
+      description: "Meet the foster parents and your potential new family member at our Sierra Fish & Pets event.",
       image: "/images/logo/d2.png",
     },
     {
       step: 4,
-      title: "Take Home",
-      description: "Complete the adoption and take your new best friend home!",
+      title: "Welcome Home",
+      description: "Complete the rescue agency adoption and bring your new best friend home!",
       image: "/images/logo/d3.png",
     },
   ];
@@ -46,7 +46,7 @@ export default function AdoptionProcess() {
             transition={{ duration: 0.6 }}
             className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#003d73] mb-3"
           >
-            The Adoption Process
+            The Adoption Event Process
           </motion.h2>
           
           <motion.p
@@ -54,9 +54,9 @@ export default function AdoptionProcess() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto leading-relaxed"
+            className="text-slate-500 text-sm md:text-base font-medium max-w-2xl mx-auto leading-relaxed"
           >
-            We make it simple and stress-free to bring home your new best friend.
+            Sierra Fish &amp; Pets proudly hosts adoption events for partner rescue agencies. Here is how you can meet foster dogs saved from kill shelters and bring them home.
           </motion.p>
         </div>
 

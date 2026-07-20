@@ -128,13 +128,14 @@
             "label": "Aquarium Consulting & Design",
             "href": "/services/aquarium/aquarium-consulting-design"
           },
-          {
-            "label": "Custom Aquariums",
-            "href": "/services/aquarium/custom-aquariums"
-          },
+         
           {
             "label": "Aquarium Installation",
             "href": "/services/aquarium/aquarium-installation"
+          },
+          {
+            "label": "Aqua Jet Water Cleaning System",
+            "href": "/about-aqua-jet-water-cleaning-system"
           }
         ]
       },
@@ -160,6 +161,11 @@
       {
         "label": "Dog Adoption Events",
         "href": "/services/dog-adoption",
+        "type": "link"
+      },
+      {
+        "label": "Special Order Animals",
+        "href": "/special-order-animals",
         "type": "link"
       }
     ]
@@ -397,6 +403,11 @@
       {
         "label": "Gift cards",
         "href": "/gift-cards",
+        "type": "link"
+      },
+      {
+        "label": "Coupons",
+        "href": "/coupons",
         "type": "link"
       },
       {
