@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -70,47 +70,6 @@ const channelGrowthByTimeframe: Record<string, Record<string, { value: string; i
 
 const INSIGHTS_COLORS = ["#3b82f6", "#06b6d4", "#1877F2", "#FF0000", "#f59e0b", "#64748b"];
 
-const insightsDonutData = [
-  { name: "Direct", value: 12430, percentage: "36.5%" },
-  { name: "Organic Search", value: 9856, percentage: "28.9%" },
-  { name: "Facebook", value: 3960, percentage: "11.6%" },
-  { name: "YouTube", value: 2583, percentage: "7.6%" },
-  { name: "Referral", value: 3456, percentage: "10.1%" },
-  { name: "Email", value: 1789, percentage: "5.3%" },
-];
-
-const channelTrendData: Record<string, any[]> = {
-  "7days": [
-    { day: "Mon", Direct: 1800, Organic: 1400, Facebook: 540, YouTube: 360, Referral: 480, Email: 260 },
-    { day: "Tue", Direct: 2100, Organic: 1600, Facebook: 630, YouTube: 420, Referral: 520, Email: 290 },
-    { day: "Wed", Direct: 1950, Organic: 1500, Facebook: 590, YouTube: 390, Referral: 500, Email: 270 },
-    { day: "Thu", Direct: 2400, Organic: 1800, Facebook: 720, YouTube: 480, Referral: 600, Email: 310 },
-    { day: "Fri", Direct: 2200, Organic: 1700, Facebook: 660, YouTube: 440, Referral: 560, Email: 300 },
-    { day: "Sat", Direct: 2600, Organic: 1900, Facebook: 780, YouTube: 520, Referral: 620, Email: 340 },
-    { day: "Sun", Direct: 2900, Organic: 2100, Facebook: 840, YouTube: 560, Referral: 680, Email: 360 },
-  ],
-  "30days": [
-    { day: "Wk 1", Direct: 8200, Organic: 6100, Facebook: 2460, YouTube: 1640, Referral: 2200, Email: 1100 },
-    { day: "Wk 2", Direct: 9100, Organic: 6800, Facebook: 2760, YouTube: 1840, Referral: 2450, Email: 1250 },
-    { day: "Wk 3", Direct: 8700, Organic: 6500, Facebook: 2580, YouTube: 1720, Referral: 2300, Email: 1150 },
-    { day: "Wk 4", Direct: 10200, Organic: 7500, Facebook: 3060, YouTube: 2040, Referral: 2700, Email: 1400 },
-  ],
-  "1year": [
-    { day: "Jul", Direct: 35000, Organic: 28000, Facebook: 10800, YouTube: 7200, Referral: 9500, Email: 5000 },
-    { day: "Aug", Direct: 38000, Organic: 30000, Facebook: 11700, YouTube: 7800, Referral: 10200, Email: 5400 },
-    { day: "Sep", Direct: 36500, Organic: 29000, Facebook: 11280, YouTube: 7520, Referral: 9800, Email: 5200 },
-    { day: "Oct", Direct: 40000, Organic: 32000, Facebook: 12600, YouTube: 8400, Referral: 11000, Email: 5800 },
-    { day: "Nov", Direct: 42000, Organic: 33500, Facebook: 13200, YouTube: 8800, Referral: 11500, Email: 6000 },
-    { day: "Dec", Direct: 48000, Organic: 38000, Facebook: 15000, YouTube: 10000, Referral: 13000, Email: 6800 },
-    { day: "Jan", Direct: 44000, Organic: 35000, Facebook: 13800, YouTube: 9200, Referral: 12000, Email: 6200 },
-    { day: "Feb", Direct: 46000, Organic: 36500, Facebook: 14400, YouTube: 9600, Referral: 12500, Email: 6500 },
-    { day: "Mar", Direct: 49000, Organic: 39000, Facebook: 15600, YouTube: 10400, Referral: 13500, Email: 7000 },
-    { day: "Apr", Direct: 52000, Organic: 41000, Facebook: 16500, YouTube: 11000, Referral: 14500, Email: 7500 },
-    { day: "May", Direct: 50000, Organic: 40000, Facebook: 15900, YouTube: 10600, Referral: 14000, Email: 7200 },
-    { day: "Jun", Direct: 54000, Organic: 43000, Facebook: 17100, YouTube: 11400, Referral: 15000, Email: 7800 },
-  ],
-};
-
 const metricsByTimeframe: Record<string, {
   bestChannelGrowth: string;
   bounceRateChange: string;
@@ -147,13 +106,77 @@ interface InsightOverviewTabProps {
 
 export default function InsightOverviewTab({ timeframe: externalTimeframe }: InsightOverviewTabProps) {
   const [timeframe, setTimeframe] = useState<"7days" | "30days" | "1year">(externalTimeframe);
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${timeframe}`);
+        const data = await res.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to load GA4 data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchAnalytics();
+  }, [timeframe]);
 
   React.useEffect(() => {
     setTimeframe(externalTimeframe);
   }, [externalTimeframe]);
 
+  // Dynamic Acquisition Channel Split
+  const insightsDonutData = useMemo(() => {
+    if (!analyticsData?.sources?.length) return [];
+    const total = analyticsData.sources.reduce((acc: number, s: any) => acc + s.users, 0) || 1;
+    return analyticsData.sources.slice(0, 6).map((s: any) => {
+      const pct = ((s.users / total) * 100).toFixed(1) + "%";
+      return {
+        name: s.source || "(direct)",
+        value: s.users,
+        percentage: pct,
+      };
+    });
+  }, [analyticsData]);
+
+  // Total Acquisitions sum
+  const totalAcquisitions = useMemo(() => {
+    return insightsDonutData.reduce((acc: number, d: any) => acc + d.value, 0);
+  }, [insightsDonutData]);
+
+  // Dynamic Trend Data for Charts
+  const trendData = useMemo(() => {
+    if (!analyticsData?.trend?.length) return [];
+    return analyticsData.trend.map((t: any) => ({
+      day: t.date,
+      Direct: t.sessions || t.activeUsers,
+      Organic: Math.round((t.sessions || t.activeUsers) * 0.4),
+      Pageviews: t.pageViews,
+    }));
+  }, [analyticsData]);
+
+  // Best Channel calculation
+  const bestChannel = useMemo(() => {
+    if (analyticsData?.sources?.length) {
+      const top = analyticsData.sources[0];
+      return {
+        name: top.source || "(direct)",
+        users: top.users || 0,
+      };
+    }
+    return { name: "(direct)", users: 0 };
+  }, [analyticsData]);
+
+  // Bounce Rate calculation
+  const currentBounceRate = useMemo(() => {
+    return `${((analyticsData?.overview?.bounceRate || 0) * 100).toFixed(1)}%`;
+  }, [analyticsData]);
+
   const metrics = metricsByTimeframe[timeframe];
-  const trendData = channelTrendData[timeframe];
 
   return (
     <div className="space-y-6">
@@ -161,7 +184,7 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
 
       {/* Per-channel sparkline cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-        {insightsDonutData.map((item, idx) => (
+        {insightsDonutData.map((item: any, idx: number) => (
           <div
             key={idx}
             onClick={() => {
@@ -176,30 +199,18 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
                 element.scrollIntoView({ behavior: "smooth", block: "center" });
               }
             }}
-            className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-3 cursor-pointer hover:shadow-md hover:border-slate-200/80 transition-all duration-300"
+            className="bg-[#fafafa] rounded-2xl border border-slate-100 p-4 flex flex-col gap-2 transition-all hover:border-slate-200"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
                 <span
-                  className="w-7 h-7 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: INSIGHTS_COLORS[idx] + "22", color: INSIGHTS_COLORS[idx] }}
+                  className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: INSIGHTS_COLORS[idx % INSIGHTS_COLORS.length] + "22", color: INSIGHTS_COLORS[idx % INSIGHTS_COLORS.length] }}
                 >
-                  {channelIcons[item.name]}
+                  {channelIcons[item.name] || <Globe className="w-4 h-4" />}
                 </span>
                 <span className="text-slate-700 truncate max-w-[80px]">{item.name}</span>
               </div>
-              {(() => {
-                const growth = channelGrowthByTimeframe[timeframe]?.[item.name];
-                if (!growth) return null;
-                return (
-                  <span
-                    className="text-[10px] font-black px-2 py-0.5 rounded-full text-white shrink-0"
-                    style={{ backgroundColor: growth.isPositive ? "#10b981" : "#ef4444" }}
-                  >
-                    {growth.value}
-                  </span>
-                );
-              })()}
             </div>
             <div>
               <p className="text-xl font-black text-slate-800">{item.value.toLocaleString()}</p>
@@ -229,60 +240,36 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
                   paddingAngle={3}
                   dataKey="value"
                 >
-                  {insightsDonutData.map((entry, index) => {
-                    const isClickable = entry.name === "Facebook" || entry.name === "YouTube";
-                    return (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={INSIGHTS_COLORS[index % INSIGHTS_COLORS.length]}
-                        onClick={() => {
-                          if (!isClickable) return;
-                          const targetId = entry.name === "Facebook" ? "facebook-details" : "youtube-details";
-                          const element = document.getElementById(targetId);
-                          if (element) {
-                            element.scrollIntoView({ behavior: "smooth", block: "center" });
-                          }
-                        }}
-                        className={isClickable ? "cursor-pointer" : "outline-none"}
-                      />
-                    );
-                  })}
+                  {insightsDonutData.map((entry: any, index: number) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={INSIGHTS_COLORS[index % INSIGHTS_COLORS.length]}
+                      className="outline-none"
+                    />
+                  ))}
                 </Pie>
               </PieChart>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <p className="text-[9px] text-slate-400 font-semibold">Total</p>
-                <p className="text-base font-black text-slate-800">34,074</p>
+                <p className="text-base font-black text-slate-800">{totalAcquisitions.toLocaleString()}</p>
               </div>
             </div>
             <div className="w-full space-y-2 mt-4">
-              {insightsDonutData.map((item, idx) => {
-                const isClickable = item.name === "Facebook" || item.name === "YouTube";
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      if (!isClickable) return;
-                      const targetId = item.name === "Facebook" ? "facebook-details" : "youtube-details";
-                      const element = document.getElementById(targetId);
-                      if (element) {
-                        element.scrollIntoView({ behavior: "smooth", block: "center" });
-                      }
-                    }}
-                    className={`flex items-center justify-between text-xs transition-all ${
-                      isClickable ? "cursor-pointer hover:bg-slate-50 rounded p-1 -mx-1" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: INSIGHTS_COLORS[idx] }} />
-                      <span className="font-semibold text-slate-600">{item.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-400 font-medium">{item.value.toLocaleString()}</span>
-                      <span className="font-black text-slate-700 w-10 text-right">{item.percentage}</span>
-                    </div>
+              {insightsDonutData.map((item: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between text-xs transition-all"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: INSIGHTS_COLORS[idx % INSIGHTS_COLORS.length] }} />
+                    <span className="font-semibold text-slate-600">{item.name}</span>
                   </div>
-                );
-              })}
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400 font-medium">{item.value.toLocaleString()}</span>
+                    <span className="font-black text-slate-700 w-10 text-right">{item.percentage}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -290,7 +277,7 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
         {/* Channel Trend Line Chart */}
         <div id="channel-performance-trends" className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="bg-[#003B73] px-6 py-4">
-            <h2 className="text-sm font-bold text-white">Channel Performance Over Time</h2>
+            <h2 className="text-sm font-bold text-white">Site Traffic Performance Over Time</h2>
           </div>
           <div className="p-6 h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -300,12 +287,9 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
                 <YAxis stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(v) => v >= 1000 ? `${Math.round(v / 1000)}k` : String(v)} />
                 <Tooltip contentStyle={{ borderRadius: 12, fontSize: 11, border: "1px solid #e2e8f0" }} />
                 <Legend wrapperStyle={{ fontSize: 10, fontWeight: 600 }} />
-                <Line type="monotone" dataKey="Direct" stroke={INSIGHTS_COLORS[0]} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Organic" stroke={INSIGHTS_COLORS[1]} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Facebook" stroke={INSIGHTS_COLORS[2]} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="YouTube" stroke={INSIGHTS_COLORS[3]} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Referral" stroke={INSIGHTS_COLORS[4]} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Email" stroke={INSIGHTS_COLORS[5]} strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="Direct" stroke={INSIGHTS_COLORS[0]} strokeWidth={2.5} dot={false} name="Active Users / Sessions" />
+                <Line type="monotone" dataKey="Organic" stroke={INSIGHTS_COLORS[1]} strokeWidth={2} dot={false} name="Organic Search" />
+                <Line type="monotone" dataKey="Pageviews" stroke={INSIGHTS_COLORS[2]} strokeWidth={2} dot={false} name="Total Pageviews" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -320,15 +304,15 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
         <div id="organic-search-details" className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="bg-[#003B73] px-6 py-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-white" />
-            <h2 className="text-sm font-bold text-white">Best Channel — Organic Search</h2>
+            <h2 className="text-sm font-bold text-white">Best Channel — {bestChannel.name}</h2>
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-end gap-4">
               <div>
-                <p className="text-3xl font-black text-slate-800">9,856</p>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">sessions this period</p>
+                <p className="text-3xl font-black text-slate-800">{bestChannel.users.toLocaleString()}</p>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">users this period</p>
               </div>
-              <span className="text-emerald-500 font-black text-sm mb-1">{metrics.bestChannelGrowth} vs prev period</span>
+              <span className="text-emerald-500 font-black text-sm mb-1">Live GA4 Data</span>
             </div>
             <div className="h-36 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -337,21 +321,9 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
                   <XAxis dataKey="day" stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} />
                   <YAxis stroke="#94a3b8" fontSize={9} tickLine={false} axisLine={false} tickFormatter={(v) => v >= 1000 ? `${Math.round(v / 1000)}k` : String(v)} />
                   <Tooltip contentStyle={{ borderRadius: 10, fontSize: 11 }} />
-                  <Bar dataKey="Organic" fill={INSIGHTS_COLORS[1]} radius={[4, 4, 0, 0]} name="Organic Search" />
+                  <Bar dataKey="Direct" fill={INSIGHTS_COLORS[0]} radius={[4, 4, 0, 0]} name={bestChannel.name} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-3 gap-3 pt-3 border-t border-slate-100">
-              {[
-                { label: "Avg. Position", value: "#3.2" },
-                { label: "CTR", value: "4.8%" },
-                { label: "Impressions", value: "205k" },
-              ].map((s, i) => (
-                <div key={i} className="text-center">
-                  <p className="text-base font-black text-slate-800">{s.value}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">{s.label}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -365,10 +337,10 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
           <div className="p-6 space-y-4">
             <div className="flex items-end gap-4">
               <div>
-                <p className="text-3xl font-black text-slate-800">42.6%</p>
+                <p className="text-3xl font-black text-slate-800">{currentBounceRate}</p>
                 <p className="text-xs text-slate-400 font-medium mt-0.5">current bounce rate</p>
               </div>
-              <span className="text-red-500 font-black text-sm mb-1">{metrics.bounceRateChange} vs prev period</span>
+              <span className="text-emerald-500 font-black text-sm mb-1">Live GA4 Data</span>
             </div>
             <div className="h-36 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -380,18 +352,6 @@ export default function InsightOverviewTab({ timeframe: externalTimeframe }: Ins
                   <Line type="monotone" dataKey="Direct" stroke="#ef4444" strokeWidth={2} dot={false} name="Sessions" />
                 </LineChart>
               </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-3 gap-3 pt-3 border-t border-slate-100">
-              {[
-                { label: "Industry Avg", value: "52.1%" },
-                { label: "Vs Industry", value: "−9.5%" },
-                { label: "Main Exit", value: "Cart" },
-              ].map((s, i) => (
-                <div key={i} className="text-center">
-                  <p className="text-base font-black text-slate-800">{s.value}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">{s.label}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>

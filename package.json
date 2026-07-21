@@ -13,6 +13,7 @@
     "@ckeditor/ckeditor5-react": "^11.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@google-analytics/data": "^6.1.0",
     "@hookform/resolvers": "^5.4.0",
     "@mui/material": "^9.1.1",
     "@mui/x-data-grid": "^9.6.0",

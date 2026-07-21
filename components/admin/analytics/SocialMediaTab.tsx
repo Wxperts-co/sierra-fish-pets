@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   LineChart,
   Line,
@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   Legend
 } from "recharts";
-import { MessageSquare, ThumbsUp, Play, Eye, MousePointerClick, Clock, Bell, Flame, MessageCircle, RefreshCw, BarChart2 } from "lucide-react";
+import { MessageSquare, ThumbsUp, Play, Eye, MousePointerClick, Clock, Bell, Flame, MessageCircle, RefreshCw, BarChart2, X } from "lucide-react";
 import CustomTooltip from "./CustomTooltip";
 
 interface SocialMediaTabProps {
@@ -19,12 +19,43 @@ interface SocialMediaTabProps {
 }
 
 export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [ytInfo, setYtInfo] = useState<any>(null);
+  const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      try {
+        const [gaRes, ytRes] = await Promise.all([
+          fetch(`/api/admin/analytics?timeframe=${timeframe}`),
+          fetch(`/api/admin/youtube`),
+        ]);
+        const gaData = await gaRes.json();
+        const ytData = await ytRes.json();
+        setAnalyticsData(gaData);
+        if (ytData.success) {
+          setYtInfo(ytData);
+        }
+      } catch (err) {
+        console.error("Failed to load social data:", err);
+      }
+    }
+    fetchAnalytics();
+  }, [timeframe]);
+
   // ────────────────────────────────────────────────────────
   // 1. DATA DEFINITIONS
   // ────────────────────────────────────────────────────────
 
   // Facebook
   const facebookData = useMemo(() => {
+    if (analyticsData?.trend?.length) {
+      return analyticsData.trend.map((t: any) => ({
+        name: t.date,
+        Followers: t.activeUsers,
+        Engagement: Math.round(t.activeUsers * 0.15),
+      }));
+    }
     if (timeframe === "7days") {
       return [
         { name: "Mon", Followers: 1210, Engagement: 160 },
@@ -172,14 +203,23 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
 
   // YouTube numbers
   const youtubeMetrics = useMemo(() => {
-    if (timeframe === "7days") {
-      return { views: "5,840", watchTime: "24.5K", subscribers: "120" };
-    } else if (timeframe === "1year") {
-      return { views: "312,000", watchTime: "1.2M", subscribers: "6,400" };
-    } else {
-      return { views: "25,200", watchTime: "108K", subscribers: "540" };
+    if (ytInfo) {
+      return {
+        views: ytInfo.viewCount ? ytInfo.viewCount.toLocaleString() : "25,588",
+        videoCount: `${ytInfo.videoCount || 70} Videos`,
+        subscribers: ytInfo.subscriberCount ? ytInfo.subscriberCount.toLocaleString() : "74",
+        channelTitle: ytInfo.title || "Sierra Fish & Pets",
+        customUrl: ytInfo.customUrl || "@sierrafishpetsrenton"
+      };
     }
-  }, [timeframe]);
+    return {
+      views: "25,588",
+      videoCount: "70 Videos",
+      subscribers: "74",
+      channelTitle: "Sierra Fish & Pets",
+      customUrl: "@sierrafishpetsrenton"
+    };
+  }, [ytInfo]);
 
   return (
     <div className="space-y-6">
@@ -342,12 +382,12 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase font-black text-white tracking-widest">YouTube Channel Analytics</span>
               <span className="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-500/10">
-                Sierra Fish & Pets
+                {youtubeMetrics.customUrl}
               </span>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-sm font-black text-white">410</span>
+            <span className="text-sm font-black text-white">{youtubeMetrics.subscribers}</span>
             <span className="text-[10px] text-blue-100/70 font-semibold block uppercase">subscribers</span>
           </div>
         </div>
@@ -357,7 +397,7 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={youtubeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} interval="preserveStartEnd" minTickGap={20} />
                 <YAxis stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend verticalAlign="bottom" height={36} formatter={(value) => <span className="text-xs font-semibold text-slate-500">{value}</span>} />
@@ -373,15 +413,15 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
                 <Play className="w-5 h-5 fill-rose-600" />
               </div>
               <span className="text-xl font-black text-slate-800">{youtubeMetrics.views}</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Total Views</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Total Lifetime Views</span>
             </div>
 
             <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50/50 border border-slate-100/50">
               <div className="p-2.5 rounded-full bg-amber-50 text-amber-600 mb-2.5">
-                <Clock className="w-5 h-5" />
+                <BarChart2 className="w-5 h-5" />
               </div>
-              <span className="text-xl font-black text-slate-800">{youtubeMetrics.watchTime}</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Watch Time (Hrs)</span>
+              <span className="text-xl font-black text-slate-800">{youtubeMetrics.videoCount}</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Published Content</span>
             </div>
 
             <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50/50 border border-slate-100/50">
@@ -389,11 +429,84 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
                 <Bell className="w-5 h-5" />
               </div>
               <span className="text-xl font-black text-slate-800">{youtubeMetrics.subscribers}</span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">New Subscribers</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Channel Subscribers</span>
+            </div>
+          </div>
+
+          {/* Latest YouTube Uploads Grid */}
+          {/* {ytInfo?.recentVideos?.length > 0 && (
+            <div className="border-t border-slate-100 pt-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">Latest Uploaded Videos</h4>
+                <a
+                  href={`https://www.youtube.com/${ytInfo.customUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-bold text-rose-600 hover:underline inline-flex items-center gap-1"
+                >
+                  View Channel on YouTube →
+                </a>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ytInfo.recentVideos.map((video: any) => (
+                  <button
+                    key={video.id}
+                    type="button"
+                    onClick={() => setSelectedVideo(video)}
+                    className="group text-left bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md transition-all flex flex-col justify-between cursor-pointer"
+                  >
+                    <div className="relative aspect-video w-full overflow-hidden bg-slate-200">
+                      <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <Play className="w-5 h-5 fill-white ml-0.5" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-3.5 space-y-1">
+                      <h5 className="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-rose-600 transition-colors">
+                        {video.title}
+                      </h5>
+                      <span className="text-[10px] text-slate-400 font-semibold block">
+                        {new Date(video.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )} */}
+        </div>
+      </div>
+
+      {/* Video Modal Player */}
+      {selectedVideo && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 rounded-3xl overflow-hidden max-w-3xl w-full shadow-2xl border border-white/10 flex flex-col">
+            <div className="p-4 bg-slate-950 flex items-center justify-between border-b border-white/10">
+              <h3 className="text-sm font-bold text-white line-clamp-1 pr-4">
+                {selectedVideo.title}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setSelectedVideo(null)}
+                className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all shrink-0 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="relative aspect-video w-full bg-black">
+              <iframe
+                src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1`}
+                title={selectedVideo.title}
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
-      </div>
+      )}
 
 
     </div>

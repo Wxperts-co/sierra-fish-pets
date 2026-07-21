@@ -132,6 +132,21 @@ export default function AdminDashboard() {
     fetchTopProducts(productsTimeframe);
   }, [productsTimeframe]);
 
+  const [gaOverview, setGaOverview] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchGaTraffic() {
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${trafficTimeframe}`);
+        const data = await res.json();
+        setGaOverview(data);
+      } catch (err) {
+        console.error("Failed to load GA traffic for Overview tab:", err);
+      }
+    }
+    fetchGaTraffic();
+  }, [trafficTimeframe]);
+
 
   // Sync individual timeframe states with global selector changes
   useEffect(() => {
@@ -231,44 +246,14 @@ export default function AdminDashboard() {
     { value: 34.8 }, { value: 35.5 }, { value: 35.2 }, { value: 35.98 }
   ];
 
-  // Dynamic Chart Datasets based on timeframe selection
+  // Dynamic Chart Datasets based on timeframe selection using live GA4 data
   const siteTrafficChartData = useMemo(() => {
-    if (trafficTimeframe === "7days") {
-      return [
-        { date: "Mon", visitors: 4200 },
-        { date: "Tue", visitors: 5100 },
-        { date: "Wed", visitors: 4800 },
-        { date: "Thu", visitors: 6200 },
-        { date: "Fri", visitors: 5900 },
-        { date: "Sat", visitors: 7300 },
-        { date: "Sun", visitors: 8120 }
-      ];
-    } else if (trafficTimeframe === "1year") {
-      return [
-        { date: "Jul 25", visitors: 210000 },
-        { date: "Aug 25", visitors: 225000 },
-        { date: "Sep 25", visitors: 240000 },
-        { date: "Oct 25", visitors: 230000 },
-        { date: "Nov 25", visitors: 250000 },
-        { date: "Dec 25", visitors: 280000 },
-        { date: "Jan 26", visitors: 260000 },
-        { date: "Feb 26", visitors: 275000 },
-        { date: "Mar 26", visitors: 290000 },
-        { date: "Apr 26", visitors: 310000 },
-        { date: "May 26", visitors: 305000 },
-        { date: "Jun 26", visitors: 325000 },
-        { date: "Jul 26", visitors: 345230 }
-      ];
-    } else {
-      return [
-        { date: "May 12", visitors: 15000 },
-        { date: "May 19", visitors: 22000 },
-        { date: "May 26", visitors: 19000 },
-        { date: "Jun 2", visitors: 28000 },
-        { date: "Jun 9", visitors: 32985 }
-      ];
-    }
-  }, [trafficTimeframe]);
+    if (!gaOverview?.trend?.length) return [];
+    return gaOverview.trend.map((t: any) => ({
+      date: t.date,
+      visitors: t.activeUsers,
+    }));
+  }, [gaOverview]);
 
   const ordersOverviewChartData = dbOrdersChartData;
 
@@ -348,12 +333,20 @@ export default function AdminDashboard() {
     }
   }, [subscribersTimeframe]);
 
-  // Labels and Values that adjust according to selected timeframe
+  // Labels and Values derived from live GA4 data
   const trafficValues = useMemo(() => {
-    if (trafficTimeframe === "7days") return { val: "8,120", pct: "↑ 5.4%" };
-    if (trafficTimeframe === "1year") return { val: "345,230", pct: "↑ 42.1%" };
-    return { val: "32,985", pct: "↑ 18.6%" };
-  }, [trafficTimeframe]);
+    const activeUsers = gaOverview?.overview?.activeUsers;
+    const valStr = activeUsers !== undefined ? activeUsers.toLocaleString() : "0";
+    return { val: valStr, pct: "Live" };
+  }, [gaOverview]);
+
+  const conversionRate = useMemo(() => {
+    const ov = gaOverview?.overview;
+    if (ov?.sessions) {
+      return `${((1 - (ov.bounceRate || 0)) * 100).toFixed(1)}%`;
+    }
+    return "0.0%";
+  }, [gaOverview]);
 
   const ordersValues = useMemo(() => {
     const total = dbOrdersChartData.reduce((sum, d) => sum + d.orders, 0);
@@ -393,14 +386,37 @@ export default function AdminDashboard() {
     { name: "Push Notifications", value: 895, percentage: "10.6%" }
   ];
 
-  // Acquisition Channels Donut (Insights)
-  const insightsDonutData = [
-    { name: "Direct", value: 12430, percentage: "37.7%" },
-    { name: "Organic Search", value: 9856, percentage: "29.9%" },
-    { name: "Social Media", value: 6543, percentage: "19.8%" },
-    { name: "Referral", value: 3456, percentage: "10.5%" },
-    { name: "Email", value: 1789, percentage: "5.4%" }
-  ];
+  // Acquisition Channels Donut (Insights) derived from live GA4 data
+  const insightsDonutData = useMemo(() => {
+    if (!gaOverview?.sources?.length) return [];
+    const total = gaOverview.sources.reduce((acc: number, s: any) => acc + s.users, 0) || 1;
+    return gaOverview.sources.slice(0, 5).map((s: any) => {
+      const pct = ((s.users / total) * 100).toFixed(1) + "%";
+      return {
+        name: s.source || "(direct)",
+        value: s.users,
+        percentage: pct,
+      };
+    });
+  }, [gaOverview]);
+
+  const bestChannelInfo = useMemo(() => {
+    if (gaOverview?.sources?.length) {
+      const top = gaOverview.sources[0];
+      return {
+        name: top.source || "(direct)",
+        users: `${top.users.toLocaleString()} visitors`,
+      };
+    }
+    return { name: "(direct)", users: "0 visitors" };
+  }, [gaOverview]);
+
+  const insightsBounceRate = useMemo(() => {
+    if (gaOverview?.overview?.bounceRate !== undefined) {
+      return `${(gaOverview.overview.bounceRate * 100).toFixed(1)}%`;
+    }
+    return "0.0%";
+  }, [gaOverview]);
 
   // Recent Purchases list - merge real orders from DB if any exist, fallback/fill with perfect mocks
   const recentPurchases = useMemo(() => {
@@ -557,12 +573,13 @@ export default function AdminDashboard() {
                     {formatPrice(dbStats.totalRevenue)}
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
-                    <span className="text-emerald-500">↑ 12.5%</span>
-
+                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live DB Data
+                    </span>
                   </div>
                 </div>
               </div>
-
             </div>
 
             {/* Orders */}
@@ -579,12 +596,13 @@ export default function AdminDashboard() {
                     {dbStats.activeOrders.toLocaleString()}
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
-                    <span className="text-emerald-500">↑ 8.2%</span>
-
+                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live DB Data
+                    </span>
                   </div>
                 </div>
               </div>
-
             </div>
 
             {/* Customers */}
@@ -601,32 +619,34 @@ export default function AdminDashboard() {
                     {dbStats.registeredCustomers.toLocaleString()}
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
-                    <span className="text-emerald-500">↑ 15.7%</span>
-
+                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live DB Data
+                    </span>
                   </div>
                 </div>
               </div>
-
             </div>
 
             {/* Conversion Rate */}
             <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between transition-all duration-300 hover:shadow-md">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-bold tracking-tight">Conversion Rate</span>
+                  <span className="text-xs text-slate-400 font-bold tracking-tight">Engagement / Conversion</span>
                   <div className="p-1.5 rounded-full bg-amber-50 w-8 h-8 flex items-center justify-center shrink-0">
                     <img src="/images/icons/conversion.png" className="w-5 h-5 object-contain" alt="Conversion" />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-black text-slate-800 tracking-tight">3.89%</h2>
+                  <h2 className="text-2xl font-black text-slate-800 tracking-tight">{conversionRate}</h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
-                    <span className="text-emerald-500">↑ 6.4%</span>
-
+                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live GA4 Data
+                    </span>
                   </div>
                 </div>
               </div>
-
             </div>
 
             {/* Avg. Order Value */}
@@ -643,11 +663,13 @@ export default function AdminDashboard() {
                     {formatPrice(dbStats.totalOrders > 0 ? dbStats.totalRevenue / dbStats.totalOrders : 0)}
                   </h2>
                   <div className="flex items-center gap-1 text-[11px] font-bold">
-                    <span className="text-emerald-500">↑ 5.3%</span>
+                    <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live DB Data
+                    </span>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -674,7 +696,10 @@ export default function AdminDashboard() {
                 <div>
                   <h2 className="text-2xl font-black text-slate-800 tracking-tight flex items-baseline gap-2">
                     {trafficValues.val}
-                    <span className="text-xs text-emerald-500 font-black">{trafficValues.pct}</span>
+                    <span className="flex items-center gap-1.5 text-xs text-emerald-600 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                      Live GA4 Data
+                    </span>
                   </h2>
                   <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Visitors</span>
                 </div>
@@ -689,7 +714,7 @@ export default function AdminDashboard() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                        <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval={0} />
+                        <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval="preserveStartEnd" minTickGap={20} />
                         <YAxis stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => val >= 1000 ? `${val / 1000}k` : val} />
                         <Tooltip />
                         <Area type="monotone" dataKey="visitors" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorTraffic)" />
@@ -736,7 +761,7 @@ export default function AdminDashboard() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                        <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval={ordersTimeframe === "30days" ? 4 : 0} />
+                        <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval="preserveStartEnd" minTickGap={20} />
                         <YAxis stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => val >= 1000 ? `${val / 1000}k` : val} />
                         <Tooltip />
                         <Area type="monotone" dataKey="orders" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorOrders)" />
@@ -938,7 +963,7 @@ export default function AdminDashboard() {
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={seoOrganicChartData} margin={{ top: 5, bottom: 5, left: -20, right: 0 }}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                          <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval={0} />
+                          <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} interval="preserveStartEnd" minTickGap={20} />
                           <YAxis stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => val >= 1000 ? `${val / 1000}k` : val} />
                           <Tooltip />
                           <Line type="monotone" dataKey="traffic" stroke="#10b981" strokeWidth={2} dot={false} />
@@ -1101,14 +1126,14 @@ export default function AdminDashboard() {
                         paddingAngle={2}
                         dataKey="value"
                       >
-                        {insightsDonutData.map((entry, index) => (
+                        {insightsDonutData.map((entry: any, index: number) => (
                           <Cell key={`cell-${index}`} fill={INSIGHTS_COLORS[index % INSIGHTS_COLORS.length]} />
                         ))}
                       </Pie>
                     </PieChart>
                   </div>
                   <div className="flex-1 space-y-1 text-[10px] text-slate-500">
-                    {insightsDonutData.map((item, idx) => (
+                    {insightsDonutData.map((item: any, idx: number) => (
                       <div key={idx} className="flex items-center justify-between font-semibold">
                         <div className="flex items-center gap-1 truncate max-w-[70px]">
                           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INSIGHTS_COLORS[idx % INSIGHTS_COLORS.length] }} />
@@ -1124,9 +1149,9 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
                   <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 flex flex-col justify-between">
                     <div>
-                      <span className="text-[9px] text-slate-400 font-bold block uppercase font-bold leading-tight">Best Channel</span>
-                      <span className="text-[11px] font-black text-slate-700 block mt-0.5">Organic Search</span>
-                      <span className="text-[9px] text-emerald-500 font-bold mt-1 block">{insightsTimeframe === "1year" ? "↑ 45.1%" : insightsTimeframe === "7days" ? "↑ 8.2%" : "↑ 29.9%"}</span>
+                      <span className="text-[9px] text-slate-400 font-bold block uppercase leading-tight">Best Channel</span>
+                      <span className="text-[11px] font-black text-slate-700 block mt-0.5">{bestChannelInfo.name}</span>
+                      <span className="text-[9px] text-emerald-500 font-bold mt-1 block">{bestChannelInfo.users}</span>
                     </div>
                     <div className="h-6 w-full mt-2">
                       <ResponsiveContainer width="100%" height="100%">
@@ -1139,9 +1164,9 @@ export default function AdminDashboard() {
 
                   <div className="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 flex flex-col justify-between">
                     <div>
-                      <span className="text-[9px] text-slate-400 font-bold block uppercase font-bold leading-tight">Bounce Rate</span>
-                      <span className="text-[12px] font-black text-slate-700 block mt-0.5">42.6%</span>
-                      <span className="text-[9px] text-rose-500 font-bold mt-1 block">{insightsTimeframe === "1year" ? "↓ 2.1%" : insightsTimeframe === "7days" ? "↓ 4.5%" : "↓ 8.4%"}</span>
+                      <span className="text-[9px] text-slate-400 font-bold block uppercase leading-tight">Bounce Rate</span>
+                      <span className="text-[12px] font-black text-slate-700 block mt-0.5">{insightsBounceRate}</span>
+                      <span className="text-[9px] text-emerald-500 font-bold mt-1 block">Live GA4 Data</span>
                     </div>
                     <div className="h-6 w-full mt-2">
                       <ResponsiveContainer width="100%" height="100%">

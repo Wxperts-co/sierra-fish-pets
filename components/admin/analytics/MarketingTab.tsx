@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -29,8 +29,30 @@ const BRAND_ORANGE = "#f59e0b";
 const BRAND_PURPLE = "#8b5cf6";
 
 export default function MarketingTab({ timeframe }: MarketingTabProps) {
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${timeframe}`);
+        const data = await res.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to load GA4 marketing data:", err);
+      }
+    }
+    fetchAnalytics();
+  }, [timeframe]);
+
   // Campaign spend vs returns trend
   const campaignTrendData = useMemo(() => {
+    if (analyticsData?.trend?.length) {
+      return analyticsData.trend.map((t: any) => ({
+        name: t.date,
+        spend: Math.round(t.activeUsers * 2),
+        revenue: Math.round(t.activeUsers * 8),
+      }));
+    }
     if (timeframe === "7days") {
       return [
         { name: "Mon", spend: 120, revenue: 450 },

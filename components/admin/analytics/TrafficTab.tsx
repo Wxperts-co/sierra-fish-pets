@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -35,90 +35,85 @@ const BRAND_SLATE = "#64748b";
 const CHANNEL_COLORS = [BRAND_BLUE, BRAND_TEAL, BRAND_PINK, BRAND_ORANGE, BRAND_PURPLE];
 
 export default function TrafficTab({ timeframe }: TrafficTabProps) {
-  // Session Growth data
-  const sessionData = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { name: "Mon", sessions: 1800, pageviews: 4200 },
-        { name: "Tue", sessions: 2200, pageviews: 5100 },
-        { name: "Wed", sessions: 2100, pageviews: 4800 },
-        { name: "Thu", sessions: 2800, pageviews: 6200 },
-        { name: "Fri", sessions: 2600, pageviews: 5900 },
-        { name: "Sat", sessions: 3200, pageviews: 7300 },
-        { name: "Sun", sessions: 3500, pageviews: 8120 }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { name: "Jul 25", sessions: 85000, pageviews: 210000 },
-        { name: "Aug 25", sessions: 92000, pageviews: 225000 },
-        { name: "Sep 25", sessions: 98000, pageviews: 240000 },
-        { name: "Oct 25", sessions: 95000, pageviews: 230000 },
-        { name: "Nov 25", sessions: 102000, pageviews: 250000 },
-        { name: "Dec 25", sessions: 118000, pageviews: 280000 },
-        { name: "Jan 26", sessions: 108000, pageviews: 260000 },
-        { name: "Feb 26", sessions: 112000, pageviews: 275000 },
-        { name: "Mar 26", sessions: 120000, pageviews: 290000 },
-        { name: "Apr 26", sessions: 128000, pageviews: 310000 },
-        { name: "May 26", sessions: 125000, pageviews: 305000 },
-        { name: "Jun 26", sessions: 135000, pageviews: 325000 }
-      ];
-    } else {
-      return [
-        { name: "Week 1", sessions: 12400, pageviews: 28600 },
-        { name: "Week 2", sessions: 14800, pageviews: 34100 },
-        { name: "Week 3", sessions: 13200, pageviews: 30800 },
-        { name: "Week 4", sessions: 16500, pageviews: 38200 }
-      ];
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${timeframe}`);
+        const data = await res.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to load GA4 traffic data:", err);
+      }
     }
+    fetchAnalytics();
   }, [timeframe]);
 
-  // Traffic Channels breakdown
-  const channelData = [
-    { name: "Direct", value: 37.7, color: BRAND_BLUE },
-    { name: "Organic Search", value: 29.9, color: BRAND_TEAL },
-    { name: "Social Media", value: 19.8, color: BRAND_PINK },
-    { name: "Referral", value: 10.5, color: BRAND_ORANGE },
-    { name: "Email", value: 5.4, color: BRAND_PURPLE }
-  ];
+  // Session Growth data
+  const sessionData = useMemo(() => {
+    if (!analyticsData?.trend?.length) return [];
+    return analyticsData.trend.map((t: any) => ({
+      name: t.date,
+      sessions: t.sessions || t.activeUsers,
+      pageviews: t.pageViews,
+    }));
+  }, [analyticsData]);
 
-  // User type breakdown (New vs Returning)
-  const userTypeData = [
-    { name: "New Users", value: 72, color: BRAND_BLUE },
-    { name: "Returning Users", value: 28, color: BRAND_TEAL }
-  ];
+  // Traffic Channels breakdown
+  const channelData = useMemo(() => {
+    if (!analyticsData?.sources?.length) return [];
+    const total = analyticsData.sources.reduce((acc: number, s: any) => acc + s.users, 0) || 1;
+    return analyticsData.sources.slice(0, 5).map((s: any, idx: number) => ({
+      name: s.source || "(direct)",
+      value: parseFloat(((s.users / total) * 100).toFixed(1)),
+      color: CHANNEL_COLORS[idx % CHANNEL_COLORS.length]
+    }));
+  }, [analyticsData]);
 
   // Device type breakdown
-  const deviceData = [
-    { name: "Mobile", value: 65, color: BRAND_BLUE, icon: Smartphone },
-    { name: "Desktop", value: 30, color: BRAND_TEAL, icon: Monitor },
-    { name: "Tablet", value: 5, color: BRAND_PINK, icon: Tablet }
-  ];
+  const deviceData = useMemo(() => {
+    if (!analyticsData?.devices?.length) return [];
+    const total = analyticsData.devices.reduce((acc: number, d: any) => acc + d.users, 0) || 1;
+    return analyticsData.devices.map((d: any) => {
+      const devName = d.device.charAt(0).toUpperCase() + d.device.slice(1);
+      let Icon = Monitor;
+      let color = BRAND_TEAL;
+      if (d.device.toLowerCase().includes("mobile")) { Icon = Smartphone; color = BRAND_BLUE; }
+      if (d.device.toLowerCase().includes("tablet")) { Icon = Tablet; color = BRAND_PINK; }
+      return {
+        name: devName,
+        value: parseFloat(((d.users / total) * 100).toFixed(1)),
+        color,
+        icon: Icon
+      };
+    });
+  }, [analyticsData]);
+
+  // Organic Acquisition Split
+  const organicSplitData = useMemo(() => {
+    if (!analyticsData?.sources?.length) return [];
+    return analyticsData.sources.map((s: any) => ({
+      name: s.source,
+      value: s.users
+    }));
+  }, [analyticsData]);
 
   // Top Metrics summary
   const topMetrics = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { label: "Unique Users", value: "8,120", pct: "↑ 5.4%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "Avg. Engagement Time", value: "2m 14s", pct: "↑ 1.8%", pngIcon: "/images/icons/web-session.png", color: "bg-teal-50" },
-        { label: "Sessions", value: "18,700", pct: "↑ 6.2%", pngIcon: "/images/icons/sessions.png", color: "bg-violet-50" },
-        { label: "Bounce Rate", value: "42.6%", pct: "↘ 4.5%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { label: "Unique Users", value: "345,230", pct: "↑ 42.1%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "Avg. Engagement Time", value: "2m 28s", pct: "↑ 12.4%", pngIcon: "/images/icons/web-session.png", color: "bg-teal-50" },
-        { label: "Sessions", value: "1,298,000", pct: "↑ 38.5%", pngIcon: "/images/icons/sessions.png", color: "bg-violet-50" },
-        { label: "Bounce Rate", value: "41.2%", pct: "↘ 8.2%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    } else {
-      return [
-        { label: "Unique Users", value: "32,985", pct: "↑ 18.6%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "Avg. Engagement Time", value: "2m 18s", pct: "↑ 3.2%", pngIcon: "/images/icons/web-session.png", color: "bg-teal-50" },
-        { label: "Sessions", value: "56,900", pct: "↑ 14.5%", pngIcon: "/images/icons/sessions.png", color: "bg-violet-50" },
-        { label: "Bounce Rate", value: "42.1%", pct: "↘ 5.8%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    }
-  }, [timeframe]);
+    const ov = analyticsData?.overview || {};
+    const avgSec = Math.round(ov.avgSessionDuration || 0);
+    const mins = Math.floor(avgSec / 60);
+    const secs = avgSec % 60;
+    const durationStr = `${mins}m ${secs.toString().padStart(2, "0")}s`;
+
+    return [
+      { label: "Unique Users", value: (ov.activeUsers || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
+      { label: "Avg. Engagement Time", value: durationStr, pct: "Live", pngIcon: "/images/icons/web-session.png", color: "bg-teal-50" },
+      { label: "Sessions", value: (ov.sessions || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/sessions.png", color: "bg-violet-50" },
+      { label: "Bounce Rate", value: `${((ov.bounceRate || 0) * 100).toFixed(1)}%`, pct: "Live", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
+    ];
+  }, [analyticsData]);
 
   return (
     <div className="space-y-6">
@@ -135,8 +130,17 @@ export default function TrafficTab({ timeframe }: TrafficTabProps) {
             <div className="space-y-1 mt-2">
               <h2 className="text-2xl font-black text-slate-800 tracking-tight">{item.value}</h2>
               <div className="flex items-center gap-1 text-[11px] font-bold">
-                <span className={item.pct.includes("↑") || item.label === "Bounce Rate" ? "text-emerald-500" : "text-rose-500"}>{item.pct}</span>
-                <span className="text-slate-400 font-medium">vs previous period</span>
+                {item.pct === "Live" ? (
+                  <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                    Live GA4 Data
+                  </span>
+                ) : (
+                  <>
+                    <span className={item.pct.includes("↑") || item.label === "Bounce Rate" ? "text-emerald-500" : "text-rose-500"}>{item.pct}</span>
+                    <span className="text-slate-400 font-medium">vs previous period</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -167,7 +171,7 @@ export default function TrafficTab({ timeframe }: TrafficTabProps) {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} interval="preserveStartEnd" minTickGap={20} />
                 <YAxis stroke="#94a3b8" fontSize={10} fontWeight={600} tickLine={false} axisLine={false} tickFormatter={(val) => val >= 1000 ? `${val / 1000}k` : val} />
                 <Tooltip />
                 <Area type="monotone" dataKey="sessions" stroke={BRAND_BLUE} strokeWidth={2.5} fillOpacity={1} fill="url(#colorSessions)" name="Sessions" />
@@ -198,14 +202,14 @@ export default function TrafficTab({ timeframe }: TrafficTabProps) {
                   paddingAngle={3}
                   dataKey="value"
                 >
-                  {channelData.map((entry, index) => (
+                  {channelData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
               </PieChart>
             </div>
             <div className="space-y-1.5 text-xs text-slate-500 font-semibold mt-2">
-              {channelData.map((item, idx) => (
+              {channelData.map((item: any, idx: number) => (
                 <div key={idx} className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 font-semibold text-slate-600">
                     <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
@@ -229,7 +233,7 @@ export default function TrafficTab({ timeframe }: TrafficTabProps) {
           </div>
           <div className="p-5">
             <div className="space-y-4 pt-1">
-              {deviceData.map((device, idx) => {
+              {deviceData.map((device: any, idx: number) => {
                 const Icon = device.icon;
                 return (
                   <div key={idx} className="flex items-center justify-between text-xs font-semibold">
@@ -261,13 +265,7 @@ export default function TrafficTab({ timeframe }: TrafficTabProps) {
           </div>
           <div className="p-5 h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={[
-                { name: "Google", value: 6500 },
-                { name: "Bing", value: 1200 },
-                { name: "DuckDuck", value: 850 },
-                { name: "Yahoo", value: 410 },
-                { name: "Ecosia", value: 240 }
-              ]} margin={{ top: 10, bottom: 5, left: -20, right: 0 }}>
+              <BarChart data={organicSplitData} margin={{ top: 10, bottom: 5, left: -20, right: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="name" stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} />
                 <YAxis stroke="#94a3b8" fontSize={9} fontWeight={600} tickLine={false} axisLine={false} />

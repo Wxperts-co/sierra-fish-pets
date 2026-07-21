@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -30,42 +30,30 @@ const BRAND_ORANGE = "#f59e0b";
 const BRAND_PURPLE = "#8b5cf6";
 
 export default function AudienceTab({ timeframe }: AudienceTabProps) {
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${timeframe}`);
+        const data = await res.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to load GA4 audience data:", err);
+      }
+    }
+    fetchAnalytics();
+  }, [timeframe]);
+
   // Audience growth trend
   const growthData = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { name: "Mon", total: 8100, newUsers: 45 },
-        { name: "Tue", total: 8160, newUsers: 60 },
-        { name: "Wed", total: 8210, newUsers: 50 },
-        { name: "Thu", total: 8280, newUsers: 70 },
-        { name: "Fri", total: 8350, newUsers: 70 },
-        { name: "Sat", total: 8410, newUsers: 60 },
-        { name: "Sun", total: 8452, newUsers: 42 }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { name: "Jul 25", total: 4200, newUsers: 380 },
-        { name: "Aug 25", total: 4600, newUsers: 400 },
-        { name: "Sep 25", total: 5100, newUsers: 500 },
-        { name: "Oct 25", total: 5500, newUsers: 400 },
-        { name: "Nov 25", total: 5900, newUsers: 400 },
-        { name: "Dec 25", total: 6400, newUsers: 500 },
-        { name: "Jan 26", total: 6800, newUsers: 400 },
-        { name: "Feb 26", total: 7100, newUsers: 300 },
-        { name: "Mar 26", total: 7500, newUsers: 400 },
-        { name: "Apr 26", total: 7800, newUsers: 300 },
-        { name: "May 26", total: 8100, newUsers: 300 },
-        { name: "Jun 26", total: 8300, newUsers: 200 }
-      ];
-    } else {
-      return [
-        { name: "Week 1", total: 7200, newUsers: 280 },
-        { name: "Week 2", total: 7600, newUsers: 400 },
-        { name: "Week 3", total: 8000, newUsers: 400 },
-        { name: "Week 4", total: 8452, newUsers: 452 }
-      ];
-    }
-  }, [timeframe]);
+    if (!analyticsData?.trend?.length) return [];
+    return analyticsData.trend.map((t: any) => ({
+      name: t.date,
+      total: t.activeUsers,
+      newUsers: t.newUsers,
+    }));
+  }, [analyticsData]);
 
   // Gender breakdown
   const genderData = [
@@ -83,40 +71,37 @@ export default function AudienceTab({ timeframe }: AudienceTabProps) {
     { name: "55+", value: 8 }
   ];
 
+  const STATE_COLORS = [BRAND_BLUE, BRAND_TEAL, BRAND_PINK, BRAND_ORANGE, BRAND_PURPLE];
+
   // Geographical state split
-  const stateData = [
-    { state: "California", users: "6,240 users", pct: "73.8%", pctNum: 73.8, color: BRAND_BLUE },
-    { state: "Texas", users: "920 users", pct: "10.8%", pctNum: 10.8, color: BRAND_TEAL },
-    { state: "Florida", users: "510 users", pct: "6.0%", pctNum: 6.0, color: BRAND_PINK },
-    { state: "New York", users: "245 users", pct: "2.9%", pctNum: 2.9, color: BRAND_ORANGE },
-    { state: "Other states", users: "537 users", pct: "6.5%", pctNum: 6.5, color: BRAND_PURPLE }
-  ];
+  const stateData = useMemo(() => {
+    if (!analyticsData?.regions?.length) return [];
+    const total = analyticsData.regions.reduce((acc: number, r: any) => acc + r.users, 0) || 1;
+    return analyticsData.regions.map((r: any, idx: number) => {
+      const pctNum = parseFloat(((r.users / total) * 100).toFixed(1));
+      return {
+        state: r.region || "Other",
+        users: `${r.users.toLocaleString()} users`,
+        pct: `${pctNum}%`,
+        pctNum,
+        color: STATE_COLORS[idx % STATE_COLORS.length],
+      };
+    });
+  }, [analyticsData]);
 
   // Summary Cards
   const summaryMetrics = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { label: "Active Customers", value: "8,452", pct: "↑ 0.9%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "New Signups", value: "397", pct: "↑ 4.2%", pngIcon: "/images/icons/website-user.png", color: "bg-teal-50" },
-        { label: "Customer LTV", value: "$185.00", pct: "↑ 2.1%", pngIcon: "/images/icons/salary.png", color: "bg-rose-50" },
-        { label: "Retention Rate", value: "82.4%", pct: "↑ 1.1%", pngIcon: "/images/icons/conversion.png", color: "bg-amber-50" }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { label: "Active Customers", value: "8,452", pct: "↑ 85.3%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "New Signups", value: "4,252", pct: "↑ 64.2%", pngIcon: "/images/icons/website-user.png", color: "bg-teal-50" },
-        { label: "Customer LTV", value: "$198.50", pct: "↑ 12.8%", pngIcon: "/images/icons/salary.png", color: "bg-rose-50" },
-        { label: "Retention Rate", value: "84.2%", pct: "↑ 4.5%", pngIcon: "/images/icons/conversion.png", color: "bg-amber-50" }
-      ];
-    } else {
-      return [
-        { label: "Active Customers", value: "8,452", pct: "↑ 14.5%", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
-        { label: "New Signups", value: "1,482", pct: "↑ 18.4%", pngIcon: "/images/icons/website-user.png", color: "bg-teal-50" },
-        { label: "Customer LTV", value: "$192.00", pct: "↑ 5.2%", pngIcon: "/images/icons/salary.png", color: "bg-rose-50" },
-        { label: "Retention Rate", value: "83.1%", pct: "↑ 2.1%", pngIcon: "/images/icons/conversion.png", color: "bg-amber-50" }
-      ];
-    }
-  }, [timeframe]);
+    const ov = analyticsData?.overview || {};
+    const ltvVal = ov.customerLTV ? `$${ov.customerLTV.toFixed(2)}` : "$0.00";
+    const retentionVal = `${((1 - (ov.bounceRate || 0)) * 100).toFixed(1)}%`;
+
+    return [
+      { label: "Active Customers", value: (ov.activeUsers || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/users.png", color: "bg-blue-50" },
+      { label: "New Signups", value: (ov.newUsers || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/website-user.png", color: "bg-teal-50" },
+      { label: "Customer LTV", value: ltvVal, pct: "Live", pngIcon: "/images/icons/salary.png", color: "bg-rose-50" },
+      { label: "Retention Rate", value: retentionVal, pct: "Live", pngIcon: "/images/icons/conversion.png", color: "bg-amber-50" }
+    ];
+  }, [analyticsData]);
 
   return (
     <div className="space-y-6">
@@ -133,8 +118,17 @@ export default function AudienceTab({ timeframe }: AudienceTabProps) {
             <div className="space-y-1 mt-2">
               <h2 className="text-2xl font-black text-slate-800 tracking-tight">{item.value}</h2>
               <div className="flex items-center gap-1 text-[11px] font-bold">
-                <span className="text-emerald-500">{item.pct}</span>
-                <span className="text-slate-400 font-medium">vs previous period</span>
+                {item.pct === "Live" ? (
+                  <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                    Live GA4 Data
+                  </span>
+                ) : (
+                  <>
+                    <span className="text-emerald-500">{item.pct}</span>
+                    <span className="text-slate-400 font-medium">vs previous period</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -224,7 +218,7 @@ export default function AudienceTab({ timeframe }: AudienceTabProps) {
           </div>
           <div className="p-5">
             <div className="space-y-4 pt-1">
-              {stateData.map((item, idx) => (
+              {stateData.map((item: any, idx: number) => (
                 <div key={idx} className="space-y-1 text-xs">
                   <div className="flex items-center justify-between">
                     <div className="font-semibold text-slate-700">

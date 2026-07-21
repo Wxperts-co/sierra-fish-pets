@@ -12,6 +12,7 @@ import React from 'react'
 import TasteGuarantee from '@/components/Home/TasteGuarantee'
 import PopularBrands from '@/components/Home/PopularBrand'
 import InstagramGallery from '@/components/Home/InstagramGallery'
+import YoutubeSection from '@/components/Home/YoutubeSection'
 import { connectDB } from '@/lib/mongodb'
 import CategoryModel from '@/models/Category'
 
@@ -62,6 +63,7 @@ const page = async () => {
       <TasteGuarantee/>
       <BestSellers/>
       <PopularBrands/>
+      <YoutubeSection/>
       <InstagramGallery/>
     </>
   )

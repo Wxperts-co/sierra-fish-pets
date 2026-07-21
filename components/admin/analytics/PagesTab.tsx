@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -27,121 +27,104 @@ const BRAND_PURPLE = "#8b5cf6";
 
 export default function PagesTab({ timeframe }: PagesTabProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchAnalytics() {
+      try {
+        const res = await fetch(`/api/admin/analytics?timeframe=${timeframe}`);
+        const data = await res.json();
+        setAnalyticsData(data);
+      } catch (err) {
+        console.error("Failed to load GA4 pages data:", err);
+      }
+    }
+    fetchAnalytics();
+  }, [timeframe]);
 
   // Pageviews trend data
   const pageviewsData = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { name: "Mon", pageviews: 4200, unique: 3100 },
-        { name: "Tue", pageviews: 5100, unique: 3900 },
-        { name: "Wed", pageviews: 4800, unique: 3500 },
-        { name: "Thu", pageviews: 6200, unique: 4800 },
-        { name: "Fri", pageviews: 5900, unique: 4400 },
-        { name: "Sat", pageviews: 7300, unique: 5700 },
-        { name: "Sun", pageviews: 8120, unique: 6300 }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { name: "Jul 25", pageviews: 210000, unique: 165000 },
-        { name: "Aug 25", pageviews: 225000, unique: 178000 },
-        { name: "Sep 25", pageviews: 240000, unique: 190000 },
-        { name: "Oct 25", pageviews: 230000, unique: 182000 },
-        { name: "Nov 25", pageviews: 250000, unique: 198000 },
-        { name: "Dec 25", pageviews: 280000, unique: 220000 },
-        { name: "Jan 26", pageviews: 260000, unique: 205000 },
-        { name: "Feb 26", pageviews: 275000, unique: 215000 },
-        { name: "Mar 26", pageviews: 290000, unique: 230000 },
-        { name: "Apr 26", pageviews: 310000, unique: 245000 },
-        { name: "May 26", pageviews: 305000, unique: 240000 },
-        { name: "Jun 26", pageviews: 325000, unique: 255000 }
-      ];
-    } else {
-      return [
-        { name: "Week 1", pageviews: 28600, unique: 22100 },
-        { name: "Week 2", pageviews: 34100, unique: 26400 },
-        { name: "Week 3", pageviews: 30800, unique: 23800 },
-        { name: "Week 4", pageviews: 38200, unique: 29800 }
-      ];
-    }
-  }, [timeframe]);
+    if (!analyticsData?.trend?.length) return [];
+    return analyticsData.trend.map((t: any) => ({
+      name: t.date,
+      pageviews: t.pageViews,
+      unique: t.activeUsers,
+    }));
+  }, [analyticsData]);
 
-  // Top Pages list including all routes in the application
-  const topPages = [
-    // Public Main Routes
-    { path: "/", title: "Sierra Fish & Pets | Home", views: "14,850", unique: "11,200", time: "1m 45s", bounce: "38.2%" },
-    { path: "/shop", title: "Shop Premium Pet Supplies", views: "12,430", unique: "9,150", time: "2m 10s", bounce: "40.5%" },
-    { path: "/product/[id]", title: "Product Detail Page", views: "8,620", unique: "7,100", time: "3m 15s", bounce: "32.1%" },
-    { path: "/cart", title: "Shopping Cart", views: "5,120", unique: "4,200", time: "1m 12s", bounce: "28.4%" },
-    { path: "/checkout", title: "Secure Checkout", views: "3,850", unique: "2,400", time: "2m 55s", bounce: "24.6%" },
-    { path: "/order-success", title: "Order Success Confirmation", views: "980", unique: "950", time: "0m 45s", bounce: "12.2%" },
-
-    // Public Info/Services
-    { path: "/sierra-edu", title: "Sierra Edu - Pet Care Articles", views: "2,980", unique: "2,150", time: "4m 20s", bounce: "52.4%" },
-    { path: "/gallery", title: "Sierra In-Store Gallery", views: "1,850", unique: "1,400", time: "1m 30s", bounce: "45.8%" },
-    { path: "/about", title: "About Us | Sierra Fish & Pets", views: "1,420", unique: "1,150", time: "1m 15s", bounce: "42.7%" },
-    { path: "/contact-us", title: "Contact Us | Get in Touch", views: "1,250", unique: "980", time: "1m 05s", bounce: "39.4%" },
-    { path: "/services", title: "Pet Services & Grooming", views: "1,180", unique: "910", time: "2m 02s", bounce: "35.6%" },
-    { path: "/event-calendar", title: "Store Events Calendar", views: "1,050", unique: "820", time: "2m 40s", bounce: "31.8%" },
-    { path: "/flyers", title: "Weekly Specials & Flyers", views: "950", unique: "750", time: "1m 50s", bounce: "29.1%" },
-    { path: "/gift-cards", title: "Purchase Gift Cards", views: "820", unique: "680", time: "1m 18s", bounce: "36.2%" },
-    { path: "/arrivals", title: "New Arrivals & Stock Updates", views: "780", unique: "610", time: "2m 15s", bounce: "28.5%" },
-    { path: "/blogs", title: "Sierra Pet Blog", views: "710", unique: "540", time: "3m 10s", bounce: "48.2%" },
-    { path: "/brands", title: "Shop by Pet Brand", views: "650", unique: "510", time: "1m 24s", bounce: "41.3%" },
-    { path: "/account", title: "Customer Profile Account", views: "520", unique: "380", time: "2m 05s", bounce: "22.4%" },
-    { path: "/reset-password", title: "Reset Account Password", views: "120", unique: "95", time: "1m 10s", bounce: "15.8%" },
-
-    // Admin Routes
-    { path: "/admin", title: "Admin Portal Dashboard", views: "850", unique: "150", time: "12m 45s", bounce: "18.2%" },
-    { path: "/admin/products", title: "Admin | Products Inventory Management", views: "710", unique: "120", time: "8m 15s", bounce: "14.5%" },
-    { path: "/admin/orders", title: "Admin | Customer Orders Processing", views: "650", unique: "110", time: "9m 30s", bounce: "11.2%" },
-    { path: "/admin/categories", title: "Admin | Categories Configuration", views: "320", unique: "85", time: "4m 10s", bounce: "19.4%" },
-    { path: "/admin/users", title: "Admin | Registered Users List", views: "280", unique: "80", time: "5m 25s", bounce: "16.8%" },
-    { path: "/admin/profile", title: "Admin | Profile Settings", views: "190", unique: "65", time: "2m 15s", bounce: "15.2%" },
-    { path: "/admin/reviews", title: "Admin | Product Reviews Management", views: "180", unique: "60", time: "3m 40s", bounce: "21.6%" },
-    { path: "/admin/events", title: "Admin | Store Events Configuration", views: "160", unique: "55", time: "4m 50s", bounce: "24.3%" },
-    { path: "/admin/dog-adoption", title: "Admin | Dog Adoption Listings", views: "150", unique: "50", time: "6m 12s", bounce: "22.5%" },
-    { path: "/admin/new-arrivals", title: "Admin | New Arrivals Config", views: "140", unique: "48", time: "3m 50s", bounce: "25.1%" },
-    { path: "/admin/brands", title: "Admin | Brands Directory Setup", views: "120", unique: "42", time: "2m 45s", bounce: "28.2%" },
-    { path: "/admin/gift-cards", title: "Admin | Issued Gift Cards", views: "110", unique: "40", time: "3m 15s", bounce: "24.7%" },
-    { path: "/admin/flyers", title: "Admin | Flyers Dashboard Setup", views: "95", unique: "35", time: "4m 05s", bounce: "20.1%" },
-    { path: "/admin/blogs", title: "Admin | Blog Posts Publisher", views: "90", unique: "30", time: "7m 20s", bounce: "18.4%" },
-    { path: "/admin/hero-slider", title: "Admin | Home Slider Management", views: "85", unique: "28", time: "5m 10s", bounce: "15.9%" }
+  // Default Application Routes Manifest
+  const ALL_SITE_ROUTES = [
+    { path: "/", title: "Sierra Fish & Pets | Home Page" },
+    { path: "/shop", title: "Shop Premium Pet Supplies" },
+    { path: "/cart", title: "Shopping Cart" },
+    { path: "/checkout", title: "Secure Checkout" },
+    { path: "/order-success", title: "Order Success Confirmation" },
+    { path: "/about", title: "About Us | Sierra Fish & Pets" },
+    { path: "/contact-us", title: "Contact Us | Get in Touch" },
+    { path: "/services", title: "Pet Services & Grooming" },
+    { path: "/event-calendar", title: "Store Events Calendar" },
+    { path: "/flyers", title: "Weekly Specials & Flyers" },
+    { path: "/gift-cards", title: "Purchase Gift Cards" },
+    { path: "/arrivals", title: "New Arrivals & Stock Updates" },
+    { path: "/blogs", title: "Sierra Pet Blog" },
+    { path: "/brands", title: "Shop by Pet Brand" },
+    { path: "/account", title: "Customer Profile Account" },
+    { path: "/admin", title: "Admin Portal Dashboard" },
   ];
+
+  // Top Pages list combining live GA4 data with application route manifest
+  const topPages = useMemo(() => {
+    const gaMap = new Map<string, any>();
+    if (analyticsData?.pages?.length) {
+      analyticsData.pages.forEach((p: any) => {
+        gaMap.set(p.path, p);
+      });
+    }
+
+    return ALL_SITE_ROUTES.map((route) => {
+      const gaItem = gaMap.get(route.path);
+      const views = gaItem ? gaItem.views : 0;
+      const users = gaItem ? gaItem.users : 0;
+      const avgSec = Math.round(analyticsData?.overview?.avgSessionDuration || 0);
+      const mins = Math.floor(avgSec / 60);
+      const secs = avgSec % 60;
+      const durationStr = `${mins}m ${secs.toString().padStart(2, "0")}s`;
+
+      return {
+        path: route.path,
+        title: route.title,
+        views: views.toLocaleString(),
+        unique: users.toLocaleString(),
+        time: gaItem ? durationStr : "0m 00s",
+        bounce: gaItem ? `${((analyticsData?.overview?.bounceRate || 0) * 100).toFixed(1)}%` : "0.0%",
+      };
+    });
+  }, [analyticsData]);
 
   const filteredPages = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     return topPages.filter(
-      (page) =>
+      (page: any) =>
         page.path.toLowerCase().includes(query) ||
         page.title.toLowerCase().includes(query)
     );
-  }, [searchQuery]);
+  }, [searchQuery, topPages]);
 
   // Summary Metrics
   const summaryMetrics = useMemo(() => {
-    if (timeframe === "7days") {
-      return [
-        { label: "Total Pageviews", value: "47,640", pct: "↑ 6.2%", pngIcon: "/images/icons/page-view.png", color: "bg-blue-50" },
-        { label: "Unique Pageviews", opacity: true, value: "37,000", pct: "↑ 5.8%", pngIcon: "/images/icons/viewbypage.png", color: "bg-teal-50" },
-        { label: "Avg. Time on Page", value: "2m 04s", pct: "↑ 1.5%", pngIcon: "/images/icons/web-session.png", color: "bg-violet-50" },
-        { label: "Exit Rate", value: "31.2%", pct: "↘ 2.4%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    } else if (timeframe === "1year") {
-      return [
-        { label: "Total Pageviews", value: "3,183,000", pct: "↑ 42.1%", pngIcon: "/images/icons/page-view.png", color: "bg-blue-50" },
-        { label: "Unique Pageviews", value: "2,488,000", pct: "↑ 38.6%", pngIcon: "/images/icons/viewbypage.png", color: "bg-teal-50" },
-        { label: "Avg. Time on Page", value: "2m 14s", pct: "↑ 8.6%", pngIcon: "/images/icons/web-session.png", color: "bg-violet-50" },
-        { label: "Exit Rate", value: "29.8%", pct: "↘ 6.4%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    } else {
-      return [
-        { label: "Total Pageviews", value: "131,700", pct: "↑ 14.5%", pngIcon: "/images/icons/page-view.png", color: "bg-blue-50" },
-        { label: "Unique Pageviews", value: "102,100", pct: "↑ 12.3%", pngIcon: "/images/icons/viewbypage.png", color: "bg-teal-50" },
-        { label: "Avg. Time on Page", value: "2m 08s", pct: "↑ 2.1%", pngIcon: "/images/icons/web-session.png", color: "bg-violet-50" },
-        { label: "Exit Rate", value: "30.9%", pct: "↘ 3.8%", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
-      ];
-    }
-  }, [timeframe]);
+    const ov = analyticsData?.overview || {};
+    const avgSec = Math.round(ov.avgSessionDuration || 0);
+    const mins = Math.floor(avgSec / 60);
+    const secs = avgSec % 60;
+    const durationStr = `${mins}m ${secs.toString().padStart(2, "0")}s`;
+
+    return [
+      { label: "Total Pageviews", value: (ov.pageViews || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/page-view.png", color: "bg-blue-50" },
+      { label: "Unique Pageviews", value: (ov.activeUsers || 0).toLocaleString(), pct: "Live", pngIcon: "/images/icons/viewbypage.png", color: "bg-teal-50" },
+      { label: "Avg. Time on Page", value: durationStr, pct: "Live", pngIcon: "/images/icons/web-session.png", color: "bg-violet-50" },
+      { label: "Exit Rate", value: `${((ov.bounceRate || 0) * 100).toFixed(1)}%`, pct: "Live", pngIcon: "/images/icons/bounce-rate.png", color: "bg-rose-50" }
+    ];
+  }, [analyticsData]);
 
   return (
     <div className="space-y-6">
@@ -158,8 +141,17 @@ export default function PagesTab({ timeframe }: PagesTabProps) {
             <div className="space-y-1 mt-2">
               <h2 className="text-2xl font-black text-slate-800 tracking-tight">{item.value}</h2>
               <div className="flex items-center gap-1 text-[11px] font-bold">
-                <span className="text-emerald-500">{item.pct}</span>
-                <span className="text-slate-400 font-medium">vs previous period</span>
+                {item.pct === "Live" ? (
+                  <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                    Live GA4 Data
+                  </span>
+                ) : (
+                  <>
+                    <span className="text-emerald-500">{item.pct}</span>
+                    <span className="text-slate-400 font-medium">vs previous period</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -236,7 +228,7 @@ export default function PagesTab({ timeframe }: PagesTabProps) {
                   </td>
                 </tr>
               ) : (
-                filteredPages.map((page, idx) => (
+                filteredPages.map((page: any, idx: number) => (
                   <tr key={idx} className="hover:bg-slate-50 transition-colors">
                     <td className="py-3">
                       <div className="text-[#005AA9] hover:underline cursor-pointer">{page.path}</div>
