@@ -11,8 +11,51 @@ import {
   ResponsiveContainer,
   Legend
 } from "recharts";
-import { MessageSquare, ThumbsUp, Play, Eye, MousePointerClick, Clock, Bell, Flame, MessageCircle, RefreshCw, BarChart2, X } from "lucide-react";
+import { MessageSquare, ThumbsUp, Play, Eye, MousePointerClick, Clock, Bell, Flame, MessageCircle, RefreshCw, BarChart2, X, ChevronLeft, ChevronRight } from "lucide-react";
 import CustomTooltip from "./CustomTooltip";
+
+const FALLBACK_VIDEOS = [
+  {
+    id: "yvv6LBXX7-g",
+    title: "How to Set Up a Freshwater Aquarium",
+    description: "Learn the step-by-step process of setting up your first freshwater aquarium.",
+    publishedAt: "2026-07-18T21:27:05Z",
+    thumbnail: "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=600&h=340&fit=crop",
+    url: "https://www.youtube.com/watch?v=yvv6LBXX7-g",
+    duration: "8:45",
+    views: "14.2K views"
+  },
+  {
+    id: "m3OtulQxZws",
+    title: "Dog Summer Care Tips & Hydration Guide",
+    description: "Essential summer hydration and safety tips for keeping your dogs cool and happy.",
+    publishedAt: "2026-06-12T22:57:04Z",
+    thumbnail: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600&h=340&fit=crop",
+    url: "https://www.youtube.com/watch?v=m3OtulQxZws",
+    duration: "6:28",
+    views: "9.8K views"
+  },
+  {
+    id: "pW3AXboiPeA",
+    title: "Pond Maintenance & Water Plant Care in Spring",
+    description: "Guide on cleaning backyard ponds and caring for aquatic plants during spring.",
+    publishedAt: "2026-06-04T21:38:21Z",
+    thumbnail: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=600&h=340&fit=crop",
+    url: "https://www.youtube.com/watch?v=pW3AXboiPeA",
+    duration: "7:12",
+    views: "7.1K views"
+  },
+  {
+    id: "OxfU6RbQvg4",
+    title: "Betta Fish Care Guide for Beginners",
+    description: "Everything you need to know about tank size, feeding, and water quality for Betta fish.",
+    publishedAt: "2026-05-22T23:11:47Z",
+    thumbnail: "https://images.unsplash.com/photo-1520301255226-bf5f144451c1?w=600&h=340&fit=crop",
+    url: "https://www.youtube.com/watch?v=OxfU6RbQvg4",
+    duration: "5:33",
+    views: "12.6K views"
+  }
+];
 
 interface SocialMediaTabProps {
   timeframe: "7days" | "30days" | "1year";
@@ -22,6 +65,7 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [ytInfo, setYtInfo] = useState<any>(null);
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
+  const [ytPage, setYtPage] = useState(1);
 
   useEffect(() => {
     async function fetchAnalytics() {
@@ -165,7 +209,7 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
     }
   }, [timeframe]);
 
- 
+
   // Scale utility
   const scale = useMemo(() => {
     return timeframe === "1year" ? 12 : timeframe === "7days" ? 0.25 : 1;
@@ -223,7 +267,7 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
 
   return (
     <div className="space-y-6">
-      
+
       {/* ── 1. FACEBOOK ── */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
         <div className="bg-[#003B73] px-6 py-4 flex items-center justify-between">
@@ -433,49 +477,160 @@ export default function SocialMediaTab({ timeframe }: SocialMediaTabProps) {
             </div>
           </div>
 
-          {/* Latest YouTube Uploads Grid */}
-          {/* {ytInfo?.recentVideos?.length > 0 && (
-            <div className="border-t border-slate-100 pt-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">Latest Uploaded Videos</h4>
-                <a
-                  href={`https://www.youtube.com/${ytInfo.customUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-bold text-rose-600 hover:underline inline-flex items-center gap-1"
-                >
-                  View Channel on YouTube →
-                </a>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {ytInfo.recentVideos.map((video: any) => (
-                  <button
-                    key={video.id}
-                    type="button"
-                    onClick={() => setSelectedVideo(video)}
-                    className="group text-left bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden hover:shadow-md transition-all flex flex-col justify-between cursor-pointer"
+          {/* YouTube Videos Performance Table */}
+          {(() => {
+            const displayVideos = (ytInfo?.recentVideos && ytInfo.recentVideos.length > 0) ? ytInfo.recentVideos : FALLBACK_VIDEOS;
+            const ytItemsPerPage = 5;
+            const totalYtVideos = displayVideos.length;
+            const totalYtPages = Math.ceil(totalYtVideos / ytItemsPerPage) || 1;
+            const currentYtPage = Math.min(ytPage, totalYtPages);
+            const startIndex = (currentYtPage - 1) * ytItemsPerPage;
+            const endIndex = Math.min(startIndex + ytItemsPerPage, totalYtVideos);
+            const paginatedVideos = displayVideos.slice(startIndex, endIndex);
+
+            const getPaginationRange = (current: number, total: number) => {
+              if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
+              if (current <= 3) return [1, 2, 3, 4, -1, total];
+              if (current >= total - 2) return [1, -1, total - 3, total - 2, total - 1, total];
+              return [1, -1, current - 1, current, current + 1, -1, total];
+            };
+            const paginationRange = getPaginationRange(currentYtPage, totalYtPages);
+
+            return (
+              <div className="border-t border-slate-100 pt-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                      YouTube Video Performance
+                    </h4>
+
+                  </div>
+                  <a
+                    href={ytInfo?.customUrl ? `https://www.youtube.com/${ytInfo.customUrl}` : "https://www.youtube.com/@sierrafishpetsrenton"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-bold text-rose-600 hover:text-rose-700 hover:underline inline-flex items-center gap-1.5 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 transition-colors self-start sm:self-auto"
                   >
-                    <div className="relative aspect-video w-full overflow-hidden bg-slate-200">
-                      <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                          <Play className="w-5 h-5 fill-white ml-0.5" />
-                        </div>
-                      </div>
+                    <Play className="w-3.5 h-3.5 fill-rose-600" />
+                    <span>View Channel on YouTube →</span>
+                  </a>
+                </div>
+
+                <div className="overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/80 border-b border-slate-100 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                        <th className="py-3 px-4">Video</th>
+                        <th className="py-3 px-4">Duration</th>
+                        <th className="py-3 px-4">Views</th>
+                        <th className="py-3 px-4">Published Date</th>
+
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                      {paginatedVideos.map((video: any) => (
+                        <tr key={video.id} className="hover:bg-slate-50/60 transition-colors group">
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-3">
+                              <div
+                                onClick={() => setSelectedVideo(video)}
+                                className="relative w-20 h-12 rounded-lg overflow-hidden bg-slate-200 shrink-0 cursor-pointer group-hover:shadow-sm"
+                              >
+                                <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                  <div className="w-6 h-6 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow">
+                                    <Play className="w-3 h-3 fill-white ml-0.5" />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <h5
+                                  onClick={() => setSelectedVideo(video)}
+                                  className="font-bold text-slate-800 line-clamp-1 hover:text-rose-600 cursor-pointer transition-colors"
+                                >
+                                  {video.title}
+                                </h5>
+
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 font-semibold text-slate-600 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-600 text-[11px] font-bold px-2 py-0.5 rounded-md">
+                              <Clock className="w-3 h-3 text-slate-400" />
+                              {video.duration || "0:00"}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 font-bold text-slate-800 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100 text-xs">
+                              <Eye className="w-3.5 h-3.5" />
+                              {video.views || "0 views"}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-500 text-[11px] font-semibold whitespace-nowrap">
+                            {video.publishedAt ? new Date(video.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A"}
+                          </td>
+
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Pagination Controls */}
+                {totalYtVideos > 0 && (
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-slate-500 font-medium">
+                    <div>
+                      Showing <span className="font-bold text-slate-700">{totalYtVideos > 0 ? startIndex + 1 : 0}</span> to{" "}
+                      <span className="font-bold text-slate-700">{endIndex}</span> of{" "}
+                      <span className="font-bold text-slate-700">{totalYtVideos}</span> videos
                     </div>
-                    <div className="p-3.5 space-y-1">
-                      <h5 className="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-rose-600 transition-colors">
-                        {video.title}
-                      </h5>
-                      <span className="text-[10px] text-slate-400 font-semibold block">
-                        {new Date(video.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                      </span>
-                    </div>
-                  </button>
-                ))}
+                    {totalYtPages > 1 && (
+                      <nav className="flex items-center gap-1.5" aria-label="YouTube videos pagination">
+                        <button
+                          type="button"
+                          onClick={() => setYtPage((prev) => Math.max(1, prev - 1))}
+                          disabled={currentYtPage <= 1}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition cursor-pointer disabled:cursor-not-allowed"
+                          aria-label="Previous page"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </button>
+                        {paginationRange.map((pageNumber, idx) =>
+                          pageNumber === -1 ? (
+                            <span key={`ellipsis-${idx}`} className="px-1 text-slate-400 font-bold select-none">
+                              ...
+                            </span>
+                          ) : (
+                            <button
+                              key={pageNumber}
+                              type="button"
+                              onClick={() => setYtPage(pageNumber)}
+                              className={`inline-flex min-w-[32px] h-8 items-center justify-center rounded-lg px-2.5 text-xs font-bold transition cursor-pointer ${
+                                pageNumber === currentYtPage
+                                  ? "bg-rose-600 text-white shadow-xs"
+                                  : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                              }`}
+                            >
+                              {pageNumber}
+                            </button>
+                          )
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setYtPage((prev) => Math.min(totalYtPages, prev + 1))}
+                          disabled={currentYtPage >= totalYtPages}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition cursor-pointer disabled:cursor-not-allowed"
+                          aria-label="Next page"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      </nav>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
-          )} */}
+            );
+          })()}
         </div>
       </div>
 

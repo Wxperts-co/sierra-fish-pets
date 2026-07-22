@@ -57,8 +57,6 @@ const page = async () => {
       <CategoryCards initialCategories={categories}/>
       <PromoBlocksCarousel/>
       <NewArrivals/>
-      {/* <FeaturedProducts/> */}
-      {/* <AmazonCTA/> */}
       <FeaturesSection/>
       <TasteGuarantee/>
       <BestSellers/>

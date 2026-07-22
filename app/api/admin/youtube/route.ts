@@ -30,19 +30,11 @@ export async function GET() {
   }
 
   try {
-    const [channelRes, searchRes] = await Promise.all([
-      fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelId}&key=${apiKey}`,
-        { next: { revalidate: 1800 } }
-      ),
-      fetch(
-        `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=6&type=video`,
-        { next: { revalidate: 1800 } }
-      ),
-    ]);
-
+    const channelRes = await fetch(
+      `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelId}&key=${apiKey}`,
+      { next: { revalidate: 1800 } }
+    );
     const channelData = await channelRes.json();
-    const searchData = await searchRes.json();
 
     if (!channelData.items || channelData.items.length === 0) {
       return NextResponse.json({ error: "YouTube Channel not found." }, { status: 404 });
@@ -52,21 +44,37 @@ export async function GET() {
     const snippet = item.snippet || {};
     const stats = item.statistics || {};
 
-    const rawVideoIds = (searchData.items || [])
-      .map((v: any) => v.id?.videoId)
-      .filter(Boolean)
-      .join(",");
+    let allSearchItems: any[] = [];
+    let pageToken = "";
 
+    // Fetch all video items using nextPageToken (YouTube search API caps at 50 results per single request)
+    do {
+      const pageUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=50&type=video${pageToken ? `&pageToken=${pageToken}` : ""}`;
+      const searchRes = await fetch(pageUrl, { next: { revalidate: 1800 } });
+      const searchData = await searchRes.json();
+
+      if (searchData.items && searchData.items.length > 0) {
+        allSearchItems.push(...searchData.items);
+      }
+
+      pageToken = searchData.nextPageToken || "";
+    } while (pageToken && allSearchItems.length < 500);
+
+    const allVideoIds = allSearchItems.map((v: any) => v.id?.videoId).filter(Boolean);
     let recentVideos: any[] = [];
 
-    if (rawVideoIds) {
+    // Fetch video details in chunks of 50 (max allowed per YouTube videos details call)
+    for (let i = 0; i < allVideoIds.length; i += 50) {
+      const chunkIds = allVideoIds.slice(i, i + 50).join(",");
+      if (!chunkIds) continue;
+
       const detailsRes = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&part=snippet,contentDetails,statistics&id=${rawVideoIds}`,
+        `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&part=snippet,contentDetails,statistics&id=${chunkIds}`,
         { next: { revalidate: 1800 } }
       );
       const detailsData = await detailsRes.json();
 
-      recentVideos = (detailsData.items || []).map((v: any) => ({
+      const chunkVideos = (detailsData.items || []).map((v: any) => ({
         id: v.id,
         title: v.snippet?.title || "",
         description: v.snippet?.description || "",
@@ -77,6 +85,8 @@ export async function GET() {
         url: `https://www.youtube.com/watch?v=${v.id}`,
         embedUrl: `https://www.youtube.com/embed/${v.id}`,
       }));
+
+      recentVideos.push(...chunkVideos);
     }
 
     return NextResponse.json({

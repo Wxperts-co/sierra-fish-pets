@@ -100,14 +100,12 @@ export default function YoutubeSection() {
 
   return (
     <section className="w-full bg-slate-50/60 py-8 lg:py-12 border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header with View All Videos button aligned at the end of the heading row */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-5">
-          <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] block">
-              Watch &amp; Learn
-            </span>
+        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-slate-200/80 pb-5">
+          <div className="space-y-1 text-center">
+         
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight text-[#002244] font-lato">
               Latest Videos from Our <span className="text-[#005AA9]">YouTube</span>
             </h2>
@@ -117,7 +115,7 @@ export default function YoutubeSection() {
             href={channelUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#005AA9] hover:bg-[#004583] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all duration-300 active:scale-95 shrink-0 self-start sm:self-auto"
+            className="inline-flex items-center gap-2 bg-[#005AA9] hover:bg-[#004583] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all duration-300 active:scale-95 shrink-0 self-end sm:self-auto sm:absolute sm:right-0"
           >
             <FaYoutube className="w-4 h-4 text-white" />
             <span>View All Videos</span>
