@@ -147,6 +147,25 @@ export default function AdminDashboard() {
     fetchGaTraffic();
   }, [trafficTimeframe]);
 
+  const [socialAnalyticsData, setSocialAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchSocialAnalytics() {
+      try {
+        const [gaRes, ytRes] = await Promise.all([
+          fetch(`/api/admin/analytics?timeframe=${adsTimeframe}`),
+          fetch(`/api/admin/youtube`),
+        ]);
+        const ga = await gaRes.json();
+        const yt = await ytRes.json();
+        setSocialAnalyticsData({ ga, yt });
+      } catch (err) {
+        console.error("Failed to load social media analytics:", err);
+      }
+    }
+    fetchSocialAnalytics();
+  }, [adsTimeframe]);
+
 
   // Sync individual timeframe states with global selector changes
   useEffect(() => {
@@ -370,14 +389,53 @@ export default function AdminDashboard() {
   }, [seoTimeframe]);
 
   const socialAdsValues = useMemo(() => {
-    if (adsTimeframe === "7days") {
-      return { spend: "$580.00", imps: "52,430", clicks: "1,980", ctr: "3.77%", fb: "$310.00", fbp: "53%", ig: "$180.00", igp: "31%", gg: "$70.00", ggp: "12%", tw: "$20.00", twp: "4%" };
+    const sources = socialAnalyticsData?.ga?.sources || [];
+
+    let googleCount = 0;
+    let youtubeCount = 0;
+    let facebookCount = 0;
+    let instagramCount = 0;
+    let totalClicks = 0;
+
+    if (Array.isArray(sources)) {
+      sources.forEach((s: any) => {
+        const src = (s.source || "").toLowerCase();
+        const users = Number(s.users) || 0;
+        const sessions = Number(s.sessions) || 0;
+
+        if (src.includes("google")) {
+          googleCount += users;
+          totalClicks += sessions;
+        } else if (src.includes("youtube")) {
+          youtubeCount += users;
+          totalClicks += sessions;
+        } else if (src.includes("facebook")) {
+          facebookCount += users;
+          totalClicks += sessions;
+        } else if (src.includes("instagram")) {
+          instagramCount += users;
+          totalClicks += sessions;
+        }
+      });
     }
-    if (adsTimeframe === "1year") {
-      return { spend: "$28,450.00", imps: "2.8M", clicks: "98,420", ctr: "3.45%", fb: "$14,800.00", fbp: "52%", ig: "$9,960.00", igp: "35%", gg: "$2,850.00", ggp: "10%", tw: "$840.00", twp: "3%" };
-    }
-    return { spend: "$2,450.00", imps: "245,620", clicks: "8,620", ctr: "3.51%", fb: "$1,250.00", fbp: "52%", ig: "$850.00", igp: "35%", gg: "$250.00", ggp: "10%", tw: "$100.00", twp: "3%" };
-  }, [adsTimeframe]);
+
+    const grandTotal = googleCount + youtubeCount + facebookCount + instagramCount;
+
+    return {
+      spend: "$0.00",
+      imps: "0",
+      clicks: totalClicks.toLocaleString(),
+      ctr: "0.00%",
+      gg: googleCount > 0 ? googleCount.toLocaleString() : "0",
+      ggp: grandTotal > 0 ? `${Math.round((googleCount / grandTotal) * 100)}%` : "0%",
+      yt: youtubeCount > 0 ? youtubeCount.toLocaleString() : "0",
+      ytp: grandTotal > 0 ? `${Math.round((youtubeCount / grandTotal) * 100)}%` : "0%",
+      fb: facebookCount > 0 ? facebookCount.toLocaleString() : "0",
+      fbp: grandTotal > 0 ? `${Math.round((facebookCount / grandTotal) * 100)}%` : "0%",
+      ig: instagramCount > 0 ? instagramCount.toLocaleString() : "0",
+      igp: grandTotal > 0 ? `${Math.round((instagramCount / grandTotal) * 100)}%` : "0%",
+    };
+  }, [socialAnalyticsData, adsTimeframe]);
 
   // Active Subscribers Donut
   const subscribersDonutData = [
@@ -772,12 +830,12 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Social Media Ads */}
+            {/* Social Media Analytics */}
             <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
               <div className="bg-[#003B73] px-5 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <img src="/images/icons/ads.png" className="w-4 h-4 object-contain" alt="Ads" />
-                  <h3 className="text-sm font-bold text-white">Social Media Ads</h3>
+                  <h3 className="text-sm font-bold text-white">Social Media Analytics</h3>
                 </div>
                 <select
                   value={adsTimeframe}
@@ -790,28 +848,35 @@ export default function AdminDashboard() {
                 </select>
               </div>
               <div className="p-5 flex-1 flex flex-col justify-between">
-                <div className="grid grid-cols-4 gap-1 border-b border-slate-100 pb-3 text-center">
-                  <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">Spend</span>
-                    <span className="text-xs font-black text-slate-700">{socialAdsValues.spend}</span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">Impressions</span>
-                    <span className="text-xs font-black text-slate-700">{socialAdsValues.imps}</span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">Clicks</span>
-                    <span className="text-xs font-black text-slate-700">{socialAdsValues.clicks}</span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">CTR</span>
-                    <span className="text-xs font-black text-slate-700">{socialAdsValues.ctr}</span>
-                  </div>
-                </div>
+                
 
                 {/* Ads progress list */}
                 <div className="space-y-3.5 pt-3">
-                  {/* Facebook Ads */}
+                  {/* Google */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-semibold text-slate-600">
+                        <div className="w-5 h-5 rounded-md bg-white border border-slate-100 flex items-center justify-center">
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                          </svg>
+                        </div>
+                        Google
+                      </div>
+                      <span className="font-bold text-slate-700">{socialAdsValues.gg}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: socialAdsValues.ggp }} />
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-400 w-6">{socialAdsValues.ggp}</span>
+                    </div>
+                  </div>
+
+                    {/* Facebook */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1.5 font-semibold text-slate-600">
@@ -820,7 +885,7 @@ export default function AdminDashboard() {
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                           </svg>
                         </div>
-                        Facebook Ads
+                        Facebook
                       </div>
                       <span className="font-bold text-slate-700">{socialAdsValues.fb}</span>
                     </div>
@@ -832,7 +897,30 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  {/* Instagram Ads */}
+                  {/* YouTube */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-1.5 font-semibold text-slate-600">
+                        <div className="w-5 h-5 rounded-md bg-rose-50 flex items-center justify-center">
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="#FF0000">
+                            <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.524 3.545 12 3.545 12 3.545s-7.525 0-9.388.51A3.003 3.003 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108c1.863.51 9.388.51 9.388.51s7.524 0 9.388-.51a3.003 3.003 0 0 0 2.11-2.108c.502-1.907.502-5.837.502-5.837s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                          </svg>
+                        </div>
+                        YouTube
+                      </div>
+                      <span className="font-bold text-slate-700">{socialAdsValues.yt}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-rose-500 rounded-full" style={{ width: socialAdsValues.ytp }} />
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-400 w-6">{socialAdsValues.ytp}</span>
+                    </div>
+                  </div>
+
+                
+
+                  {/* Instagram */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1.5 font-semibold text-slate-600">
@@ -852,7 +940,7 @@ export default function AdminDashboard() {
                             <circle cx="16.8" cy="7.2" r="1" fill="white" />
                           </svg>
                         </div>
-                        Instagram Ads
+                        Instagram
                       </div>
                       <span className="font-bold text-slate-700">{socialAdsValues.ig}</span>
                     </div>
@@ -861,51 +949,6 @@ export default function AdminDashboard() {
                         <div className="h-full bg-pink-500 rounded-full" style={{ width: socialAdsValues.igp }} />
                       </div>
                       <span className="text-[10px] font-bold text-slate-400 w-6">{socialAdsValues.igp}</span>
-                    </div>
-                  </div>
-
-                  {/* Google Ads */}
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5 font-semibold text-slate-600">
-                        <div className="w-5 h-5 rounded-md bg-white border border-slate-100 flex items-center justify-center">
-                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                          </svg>
-                        </div>
-                        Google Ads
-                      </div>
-                      <span className="font-bold text-slate-700">{socialAdsValues.gg}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: socialAdsValues.ggp }} />
-                      </div>
-                      <span className="text-[10px] font-bold text-slate-400 w-6">{socialAdsValues.ggp}</span>
-                    </div>
-                  </div>
-
-                  {/* Twitter Ads */}
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5 font-semibold text-slate-600">
-                        <div className="w-5 h-5 rounded-md bg-slate-900 flex items-center justify-center">
-                          <svg viewBox="0 0 24 24" className="w-3 h-3" fill="white">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                          </svg>
-                        </div>
-                        Twitter Ads
-                      </div>
-                      <span className="font-bold text-slate-700">{socialAdsValues.tw}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-sky-500 rounded-full" style={{ width: socialAdsValues.twp }} />
-                      </div>
-                      <span className="text-[10px] font-bold text-slate-400 w-6">{socialAdsValues.twp}</span>
                     </div>
                   </div>
                 </div>
