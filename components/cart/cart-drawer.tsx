@@ -98,14 +98,31 @@ export function CartDrawer() {
 
         {/* STICKY FOOTER */}
         {cart.items.length > 0 && (
-          <div className="border-t bg-white px-5 py-4 space-y-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">Subtotal</span>
-              <span className="font-semibold">${cart.subtotal.toFixed(2)}</span>
+          <div className="border-t bg-white px-5 py-4 space-y-2.5">
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span>Subtotal</span>
+              <span className="font-semibold text-slate-800">${cart.subtotal.toFixed(2)}</span>
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span>Shipping {cart.fulfillmentMethod === "pickup" ? "(Pickup)" : ""}</span>
+              <span className="font-semibold text-slate-800">
+                {cart.shipping === 0 ? "FREE" : `$${cart.shipping.toFixed(2)}`}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span>Sales Tax (10.5%)</span>
+              <span className="font-semibold text-slate-800">${(cart.tax || 0).toFixed(2)}</span>
+            </div>
+
+            <div className="flex items-center justify-between text-sm font-bold text-slate-900 border-t pt-2">
+              <span>Total</span>
+              <span className="font-mono text-base">${cart.total.toFixed(2)}</span>
             </div>
 
             <Button
-              className="w-full h-11 text-sm font-medium"
+              className="w-full h-11 text-sm font-medium bg-[#005AA9] hover:bg-blue-700 mt-2"
               disabled={cart.items.length === 0}
               onClick={() => {
                 setOpen(false);

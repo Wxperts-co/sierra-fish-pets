@@ -25,10 +25,17 @@ import {
   Check,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { clearCart } from "@/store/slices/cartSlice";
+import { clearCart, setFulfillmentMethod, applyCoupon as applyReduxCoupon, removeCoupon as removeReduxCoupon } from "@/store/slices/cartSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { openLoginModal } from "@/store/slices/authModalSlice";
-import { showErrorToast } from "@/lib/toast";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import {
+  calculateCartShippingAndTax,
+  validateContinentalUSAddress,
+  isLivePlantProduct,
+  isPickupOnlyProduct,
+  isAquaDreamProduct,
+} from "@/lib/shippingAndTax";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -156,16 +163,39 @@ export default function CheckoutPage() {
     setUseCustomAddress(false);
   };
 
+  const cartFulfillmentMethod = useAppSelector((state) => state.cart.fulfillmentMethod || "shipping");
+
+  // Dynamic Shipping & Tax Calculations
+  const shippingAndTaxResult = useMemo(() => {
+    return calculateCartShippingAndTax(items, cartFulfillmentMethod, shippingDetails);
+  }, [items, cartFulfillmentMethod, shippingDetails]);
+
+  const calculatedShippingCost = shippingAndTaxResult.shippingCost;
+  const calculatedTaxAmount = shippingAndTaxResult.taxAmount;
+
   // Form Validation
   const validateShippingForm = () => {
-    const { email, fullName, phone, address, city, state, zipCode } = shippingDetails;
+    const { email, fullName, phone, address, city, state, zipCode, country } = shippingDetails;
     if (!email || !email.trim() || !/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
     if (!fullName.trim()) return "Please enter full name.";
     if (!phone.trim()) return "Please enter phone number.";
-    if (!address.trim()) return "Please enter street address.";
-    if (!city.trim()) return "Please enter city.";
-    if (!state.trim()) return "Please enter state.";
-    if (!zipCode.trim()) return "Please enter pincode/zipcode.";
+
+    // If shipping, validate street address and continental US restriction
+    if (cartFulfillmentMethod === "shipping") {
+      if (!address.trim()) return "Please enter street address.";
+      if (!city.trim()) return "Please enter city.";
+      if (!state.trim()) return "Please enter state.";
+      if (!zipCode.trim()) return "Please enter pincode/zipcode.";
+
+      const usValidation = validateContinentalUSAddress({ state, country, zipCode });
+      if (!usValidation.isValid) {
+        return usValidation.errorMsg || "Shipping is only available within the Continental United States.";
+      }
+
+      if (shippingAndTaxResult.hasPickupOnlyItems) {
+        return "Your cart contains items that are Store Pickup Only (such as Fish Tanks or UNS Aquariums). Please select 'Pick Up In Store'.";
+      }
+    }
     return null;
   };
 
@@ -178,65 +208,53 @@ export default function CheckoutPage() {
     setStep("review");
   };
 
-
-
-  // Price Calculations
-  const calculatedShippingCost = useMemo(() => {
-    // If subtotal is greater than 49, shipping is free
-    return subtotal > 49 ? 0 : 0;
-  }, [subtotal]);
-
   const giftCardDiscount = useMemo(() => {
     if (!appliedGiftCard || appliedGiftCardBalance <= 0) return 0;
-    const remainingToPay = Math.max(0, subtotal - (initialDiscount + couponDiscount) + calculatedShippingCost);
+    const remainingToPay = Math.max(0, subtotal - (initialDiscount + couponDiscount) + calculatedShippingCost + calculatedTaxAmount);
     return Math.min(appliedGiftCardBalance, remainingToPay);
-  }, [appliedGiftCard, appliedGiftCardBalance, subtotal, initialDiscount, couponDiscount, calculatedShippingCost]);
+  }, [appliedGiftCard, appliedGiftCardBalance, subtotal, initialDiscount, couponDiscount, calculatedShippingCost, calculatedTaxAmount]);
 
   const finalTotal = useMemo(() => {
     const discountAmount = initialDiscount + couponDiscount + giftCardDiscount;
-    const finalVal = subtotal - discountAmount + calculatedShippingCost;
+    const finalVal = subtotal - discountAmount + calculatedShippingCost + calculatedTaxAmount;
     return finalVal < 0 ? 0 : finalVal;
-  }, [subtotal, initialDiscount, couponDiscount, giftCardDiscount, calculatedShippingCost]);
+  }, [subtotal, initialDiscount, couponDiscount, giftCardDiscount, calculatedShippingCost, calculatedTaxAmount]);
 
-  // Apply Coupon Handler
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  // Apply Coupon Handler (Production Database Integration)
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = couponCode.trim().toUpperCase();
     if (!code) return;
 
-    // Simulated coupon validation rules
-    if (code === "WELCOME10") {
-      if (subtotal >= 30) {
-        setAppliedCoupon("WELCOME10");
-        setCouponDiscount(Number((subtotal * 0.1).toFixed(2)));
+    try {
+      const response = await axios.post("/api/coupons/validate", {
+        code,
+        subtotal,
+        shippingCost: calculatedShippingCost,
+      });
+
+      if (response.data.success) {
+        const discountAmt = response.data.discountAmount || 0;
+        setAppliedCoupon(response.data.code);
+        setCouponDiscount(discountAmt);
+        dispatch(applyReduxCoupon({ code: response.data.code, discountAmount: discountAmt }));
         setCouponCode("");
+        showSuccessToast(response.data.message || "Promo code applied successfully!");
       } else {
-        showErrorToast("Minimum purchase of $30 required for WELCOME10.");
+        showErrorToast(response.data.message || "Invalid or expired promo code.");
       }
-    } else if (code === "FREESHIP") {
-      if (subtotal >= 49) {
-        setAppliedCoupon("FREESHIP");
-        setCouponDiscount(calculatedShippingCost);
-        setCouponCode("");
-      } else {
-        showErrorToast("Minimum purchase of $49 required for FREESHIP.");
-      }
-    } else if (code === "PETLOVE20") {
-      if (subtotal >= 100) {
-        setAppliedCoupon("PETLOVE20");
-        setCouponDiscount(20);
-        setCouponCode("");
-      } else {
-        showErrorToast("Minimum purchase of $100 required for PETLOVE20.");
-      }
-    } else {
-      showErrorToast("Invalid or expired promo code.");
+    } catch (err: any) {
+      console.error("Coupon validation error:", err);
+      showErrorToast(
+        err.response?.data?.message || "Failed to validate promo code. Please check the code and try again."
+      );
     }
   };
 
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponDiscount(0);
+    dispatch(removeReduxCoupon());
   };
 
   // Apply Gift Card Handler
@@ -287,9 +305,11 @@ export default function CheckoutPage() {
           country: shippingDetails.country,
         },
         paymentMethod: paymentMethod === "credit_card" ? "credit_card" : paymentMethod === "paypal" ? "paypal" : "cash_on_delivery",
+        fulfillmentMethod: cartFulfillmentMethod,
         subtotal,
         discount: initialDiscount + couponDiscount + giftCardDiscount,
         shippingCost: calculatedShippingCost,
+        tax: calculatedTaxAmount,
         total: finalTotal,
         couponCode: appliedCoupon || undefined,
         giftCardCode: appliedGiftCard || undefined,
@@ -455,10 +475,99 @@ export default function CheckoutPage() {
                   <div className="border-b border-slate-50 pb-4">
                     <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
                       <Truck className="w-5 h-5 text-[#005AA9]" />
-                      Shipping Destinations
+                      Order Fulfillment Method
                     </h2>
-                    <p className="text-xs text-slate-500 mt-1">Specify where you would like your order delivered.</p>
+                    <p className="text-xs text-slate-500 mt-1">Choose how you would like to receive your order.</p>
                   </div>
+
+                  {/* FULFILLMENT SELECTOR */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Home Delivery */}
+                    <div
+                      onClick={() => {
+                        if (shippingAndTaxResult.hasPickupOnlyItems) {
+                          showErrorToast("Your cart contains Pickup Only items (Fish Tanks / UNS Aquariums). Store Pickup is required.");
+                          return;
+                        }
+                        dispatch(setFulfillmentMethod("shipping"));
+                      }}
+                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
+                        cartFulfillmentMethod === "shipping"
+                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                          : shippingAndTaxResult.hasPickupOnlyItems
+                          ? "border-slate-200 bg-slate-100 opacity-60 cursor-not-allowed"
+                          : "border-slate-200 bg-white hover:border-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-[#005AA9]/10 text-[#005AA9] uppercase">
+                          🚚 Standard Freight Delivery
+                        </span>
+                        {cartFulfillmentMethod === "shipping" && (
+                          <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
+                            <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="font-extrabold text-slate-800 text-sm">Ship to Continental US</p>
+                      <p className="text-xs text-slate-500 mt-1 font-medium">
+                        {shippingAndTaxResult.shippingTierLabel}
+                      </p>
+                      {shippingAndTaxResult.hasPickupOnlyItems && (
+                        <p className="text-[11px] text-amber-600 font-bold mt-2">
+                          ⚠️ Contains items for Store Pickup Only
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Store Pickup */}
+                    <div
+                      onClick={() => {
+                        if (shippingAndTaxResult.hasDropShipOnlyItems) {
+                          showErrorToast("AquaDREAM tanks are drop-shipped direct from manufacturer and will be shipped to your address.");
+                        }
+                        dispatch(setFulfillmentMethod("pickup"));
+                      }}
+                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
+                        cartFulfillmentMethod === "pickup"
+                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                          : "border-slate-200 bg-white hover:border-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-700 uppercase">
+                          🏪 Pick Up In Store (FREE)
+                        </span>
+                        {cartFulfillmentMethod === "pickup" && (
+                          <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
+                            <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="font-extrabold text-slate-800 text-sm">Sierra Fish & Pets Store</p>
+                      <p className="text-xs text-slate-500 mt-1 font-medium">
+                        Renton, WA • 10.5% Tax Calculated
+                      </p>
+                      {shippingAndTaxResult.hasDropShipOnlyItems && (
+                        <p className="text-[11px] text-blue-600 font-bold mt-2">
+                          ℹ️ AquaDREAM tanks drop-ship direct from manufacturer
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* LIVE PLANTS NOTICE */}
+                  {shippingAndTaxResult.hasLivePlants && (
+                    <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs font-semibold text-amber-900">
+                     
+                      <div>
+                        <p className="font-extrabold text-amber-900">🌱 Live Plants Shipping Requirement</p>
+                        <p className="text-amber-800 text-[12px] mt-0.5 leading-relaxed">
+                          Your order includes live plants. Live Plants require <strong>2nd Day Shipping </strong> to ensure fresh and healthy arrival (approx 0.25 lbs & 6&quot;x2&quot;x2&quot; per plant).
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* SAVED ADDRESS SELECTOR */}
                   {isAuthenticated && user && user.addresses && user.addresses.length > 0 && (
@@ -921,7 +1030,7 @@ export default function CheckoutPage() {
                       type="text"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder="Promo Code (e.g. WELCOME10)"
+                      placeholder="Enter Promo Code"
                       className="flex-grow border border-slate-200 px-3 py-2 text-xs rounded-xl outline-none focus:border-[#005AA9] transition font-bold"
                     />
                     <button
@@ -990,10 +1099,17 @@ export default function CheckoutPage() {
                 )}
 
                 <div className="flex justify-between">
-                  <span>Shipping Cost</span>
-                  <span className="text-slate-800 font-mono">
+                  <span>
+                    Shipping {cartFulfillmentMethod === "pickup" ? "(Store Pickup)" : ""}
+                  </span>
+                  <span className="text-slate-800 font-mono font-bold">
                     {calculatedShippingCost === 0 ? "FREE" : formatPrice(calculatedShippingCost)}
                   </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Sales Tax (10.5%)</span>
+                  <span className="text-slate-800 font-mono font-bold">{formatPrice(calculatedTaxAmount)}</span>
                 </div>
 
                 <div className="border-t border-slate-100 mt-3 pt-3 flex justify-between font-black text-slate-800 text-base">

@@ -43,6 +43,8 @@ export interface IOrder extends Document {
   subtotal: number;
   discount: number;
   shippingCost: number;
+  tax?: number;
+  fulfillmentMethod?: "shipping" | "pickup";
   total: number;
   couponCode?: string;
   giftCardCode?: string;
@@ -117,6 +119,8 @@ const orderSchema = new mongoose.Schema<IOrder>(
     subtotal: { type: Number, required: true, min: 0 },
     discount: { type: Number, required: true, default: 0, min: 0 },
     shippingCost: { type: Number, required: true, default: 0, min: 0 },
+    tax: { type: Number, default: 0, min: 0 },
+    fulfillmentMethod: { type: String, enum: ["shipping", "pickup"], default: "shipping" },
     total: { type: Number, required: true, min: 0 },
     couponCode: { type: String },
     giftCardCode: { type: String },

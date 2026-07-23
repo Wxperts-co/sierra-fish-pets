@@ -120,6 +120,44 @@ function parseHtmlDescription(descHtml: any) {
   };
 }
 
+// Helper to normalize and clean brand names (handling numeric supplier IDs & name variations)
+function normalizeBrandName(rawBrandVal: any, productName: string): string {
+  let text = cleanExcelText(rawBrandVal);
+
+  // If rawBrand is missing, numeric supplier code (like "606" or "880"), or "Unknown", extract from productName
+  if (!text || /^\d+$/.test(text) || text.toLowerCase() === "unknown") {
+    const words = (productName || "").trim().split(/\s+/);
+    if (words.length >= 2) {
+      const twoWords = `${words[0]} ${words[1]}`.toUpperCase();
+      if (twoWords.includes("BIRDS DELIGHT") || twoWords.includes("BIRD'S DELIGHT") || twoWords.includes("BIRD DELIGHT")) {
+        text = "Bird's Delight";
+      } else if (twoWords.includes("VOLKMAN SEED") || twoWords.includes("VOLKMAN FEATHERGLOW")) {
+        text = "Volkman";
+      } else if (twoWords.includes("ZUPREEM") || twoWords.includes("ZUPREEN")) {
+        text = "ZuPreem";
+      } else {
+        text = words[0] || "";
+      }
+    } else {
+      text = words[0] || "";
+    }
+  }
+
+  // Normalize common brand variations into standardized clean titles
+  const upper = text.toUpperCase().trim();
+  if (upper.startsWith("HARRISON")) return "Harrison's";
+  if (upper.includes("BIRD") && upper.includes("DELIGHT")) return "Bird's Delight";
+  if (upper.startsWith("VOLKMAN")) return "Volkman";
+  if (upper.startsWith("ZUPREEM") || upper.startsWith("ZUPREEN")) return "ZuPreem";
+  if (upper.startsWith("KAYTEE")) return "Kaytee";
+  if (upper.startsWith("HIGGINS")) return "Higgins";
+  if (upper.startsWith("OXBOW")) return "Oxbow";
+
+  if (!text || text === "0" || /^\d+$/.test(text)) return "Sierra Pets";
+
+  return text;
+}
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -185,14 +223,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Map imported data
-        const rawId = getValue(productData, "product_internal_id", "sku_id", "upc_id", "product_sku", "id", "sku", "item", "6 digits") || "";
+        const rawId = getValue(productData, "product_internal_id", "product_id", "sku_id", "upc_id", "product_sku", "id", "sku", "item", "6 digits") || "";
         const rawName = getValue(productData, "item_name", "product_name", "name", "des", "description") || "";
-        const rawSku = getValue(productData, "sku_id", "product_sku", "sku", "item", "6 digits") || "";
+        const rawSku = getValue(productData, "sku_id", "product_sku", "product_id", "sku", "item", "6 digits") || "";
         const rawUpc = getValue(productData, "product_upc", "upc_id", "upc", "barcode", "gtin", "each upc", "upc_no") || "";
 
         const id = cleanExcelText(rawId);
         const name = cleanExcelText(rawName);
-        const sku = cleanExcelText(rawSku);
+        const sku = cleanExcelText(rawSku) || id;
         const upc = cleanExcelText(rawUpc);
 
         // Silently skip completely empty padding rows
@@ -242,9 +280,8 @@ export async function POST(request: NextRequest) {
         }
         const isUpdate = !!existingProduct;
 
-        const brandRaw = getValue(productData, "product_brand", "brand");
-        const cleanBrandVal = cleanExcelText(brandRaw);
-        const brand = (cleanBrandVal && cleanBrandVal !== "Unknown") ? cleanBrandVal : (name.split(" ")[0] || "Unknown");
+        const brandRaw = getValue(productData, "product_brand", "brand", "supplier_id", "vendor");
+        const brand = normalizeBrandName(brandRaw, name);
 
         const priceRaw = getValue(productData, "default_price", "product_price", "price", "price 1", "item price");
         const price = priceRaw != null ? parseFloat(priceRaw) || 0 : 0;
@@ -252,7 +289,7 @@ export async function POST(request: NextRequest) {
         const compareAtPriceRaw = getValue(productData, "product_compare_to_price", "compareAtPrice", "compare_at_price");
         const compareAtPrice = (compareAtPriceRaw != null && !isNaN(parseFloat(compareAtPriceRaw))) ? parseFloat(compareAtPriceRaw) : null;
 
-        const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category", "category_code", "class");
+        const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category", "category_code", "category_id", "class");
         const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory");
 
         let categorySlugVal = "";

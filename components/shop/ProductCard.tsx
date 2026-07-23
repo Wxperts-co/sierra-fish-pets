@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import { toggleWishlistDb } from "@/store/slices/wishlistSlice";
+import { isAquaDreamProduct, isPickupOnlyProduct, isFilterProduct } from "@/lib/shippingAndTax";
 
 interface ProductCardProps {
   product: Product;
@@ -92,6 +93,20 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             New
           </span>
         )}
+        {/* Pickup Only or Free Shipping badge */}
+        {isPickupOnlyProduct(product) ? (
+          <span className="absolute left-3 bottom-3 z-20 rounded-full bg-amber-600 px-2.5 py-1 text-[10px] font-black text-white leading-none shadow uppercase">
+            Store Pickup Only
+          </span>
+        ) : isAquaDreamProduct(product) ? (
+          <span className="absolute left-3 bottom-3 z-20 rounded-full bg-blue-700 px-2.5 py-1 text-[10px] font-black text-white leading-none shadow uppercase">
+            Free Shipping (Drop-Ship)
+          </span>
+        ) : isFilterProduct(product) ? (
+          <span className="absolute left-3 bottom-3 z-20 rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-black text-white leading-none shadow uppercase">
+            Free Shipping
+          </span>
+        ) : null}
 
         {/* Flip inner wrapper */}
         <div

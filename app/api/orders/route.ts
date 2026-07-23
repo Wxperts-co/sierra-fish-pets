@@ -7,6 +7,7 @@ import UserModel from "@/models/User";
 import ProductModel from "@/models/Product";
 import GiftCardModel from "@/models/GiftCard";
 import GiftCardInstanceModel from "@/models/GiftCardInstance";
+import { linkGuestOrders } from "@/lib/auth/linking";
 import Stripe from "stripe";
 
 const JWT_SECRET = process.env.JWT_SECRET || process.env.SECRET_KEY || "your-fallback-jwt-secret";
@@ -85,7 +86,22 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const orders = await OrderModel.find({ userId: decoded.id })
+    // Auto-link guest orders for user's email if any exist
+    const userObj = await UserModel.findById(decoded.id).select("email").lean();
+    if (userObj && userObj.email) {
+      try {
+        await linkGuestOrders(userObj.email, decoded.id);
+      } catch (linkErr) {
+        console.error("Auto-linking guest orders error on GET /api/orders:", linkErr);
+      }
+    }
+
+    const cleanEmail = userObj?.email ? userObj.email.toLowerCase().trim() : "";
+    const filter = cleanEmail
+      ? { $or: [{ userId: decoded.id }, { guestEmail: cleanEmail }] }
+      : { userId: decoded.id };
+
+    const orders = await OrderModel.find(filter)
       .sort({ placedAt: -1 })
       .lean();
 
@@ -115,6 +131,8 @@ export async function POST(req: NextRequest) {
       subtotal,
       discount,
       shippingCost,
+      tax,
+      fulfillmentMethod,
       total,
       couponCode,
       giftCardCode,
@@ -311,7 +329,9 @@ export async function POST(req: NextRequest) {
       subtotal,
       discount: discount + appliedGiftCardAmount,
       shippingCost,
-      total: Math.max(0, subtotal - (discount + appliedGiftCardAmount) + shippingCost),
+      tax: tax || 0,
+      fulfillmentMethod: fulfillmentMethod || "shipping",
+      total: Math.max(0, subtotal - (discount + appliedGiftCardAmount) + shippingCost + (tax || 0)),
       couponCode: couponCode || undefined,
       giftCardCode: appliedGiftCardCode,
       giftCardAmount: appliedGiftCardAmount,
@@ -578,12 +598,25 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Security: Check if order belongs to the authenticated user
-    if (order.userId !== decoded.id) {
+    // Security: Check if order belongs to the authenticated user (by userId, matching guestEmail, or admin role)
+    const userObj = await UserModel.findById(decoded.id).select("email role").lean();
+    const userEmail = userObj?.email ? userObj.email.toLowerCase().trim() : "";
+    const orderEmail = order.guestEmail ? order.guestEmail.toLowerCase().trim() : "";
+    const isOwner =
+      order.userId === decoded.id ||
+      (orderEmail && userEmail && orderEmail === userEmail) ||
+      userObj?.role === "admin";
+
+    if (!isOwner) {
       return NextResponse.json(
         { success: false, message: "Access denied. You cannot cancel this order." },
         { status: 403 }
       );
+    }
+
+    // Auto-link order to user if not linked yet
+    if (!order.userId && decoded.id) {
+      order.userId = decoded.id;
     }
 
     // Check if the order status allows cancellation

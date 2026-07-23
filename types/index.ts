@@ -87,8 +87,10 @@ export interface Cart {
   subtotal: number;
   discount: number;
   shipping: number;
+  tax: number;
   total: number;
   couponCode?: string;
+  fulfillmentMethod?: "shipping" | "pickup";
 }
 
 // ─── ORDER ──────────────────────────────────────────────────────────────────
@@ -139,7 +141,9 @@ export interface Order {
   subtotal: number;
   discount: number;
   shippingCost: number;
+  tax?: number;
   total: number;
+  fulfillmentMethod?: "shipping" | "pickup";
   couponCode?: string;
   notes?: string;
   placedAt: string;

@@ -9,6 +9,7 @@ import ProductCard from "@/components/shop/ProductCard";
 import ProductDetailsTabs from "@/components/shop/ProductDetailsTabs";
 import ProductImageViewer from "@/components/shop/ProductImageViewer";
 import { Star, Check } from "lucide-react";
+import { isAquaDreamProduct, isPickupOnlyProduct, isFilterProduct, isLivePlantProduct } from "@/lib/shippingAndTax";
 
 
 interface ProductPageProps {
@@ -126,8 +127,8 @@ export default async function ProductPage({
             )}
           </div>
 
-          {/* Stock */}
-          <div className="mb-6">
+          {/* Stock & Shipping Information */}
+          <div className="mb-6 flex flex-wrap items-center gap-3">
             <span
               className={`rounded-full px-4 py-2 md:text-sm text-[10px] font-medium ${stockColor}`}
             >
@@ -135,7 +136,37 @@ export default async function ProductPage({
                 .replace("_", " ")
                 .toUpperCase()}
             </span>
+
+            {isPickupOnlyProduct(product) ? (
+              <span className="rounded-full bg-amber-100 text-amber-900 border border-amber-300 px-4 py-2 text-xs md:text-sm font-bold flex items-center gap-1.5">
+                🏪 In-Store Pickup Only (Renton, WA)
+              </span>
+            ) : isAquaDreamProduct(product) ? (
+              <span className="rounded-full bg-blue-100 text-blue-900 border border-blue-300 px-4 py-2 text-xs md:text-sm font-bold flex items-center gap-1.5">
+                🚚 Free Shipping (Drop-Ship Direct from Manufacturer)
+              </span>
+            ) : isFilterProduct(product) ? (
+              <span className="rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 px-4 py-2 text-xs md:text-sm font-bold flex items-center gap-1.5">
+                🚚 Free Shipping (Filters & Systems)
+              </span>
+            ) : (
+              <span className="rounded-full bg-slate-100 text-slate-700 border border-slate-200 px-4 py-2 text-xs md:text-sm font-semibold flex items-center gap-1.5">
+                🚚 Standard Tiered Freight Shipping / Store Pickup
+              </span>
+            )}
           </div>
+
+          {/* Live Plant Special Requirement Notice */}
+          {isLivePlantProduct(product) && (
+            <div className="mb-6 rounded-2xl bg-emerald-50 border border-emerald-200 p-4 text-xs md:text-sm font-semibold text-emerald-900 space-y-1">
+              <p className="font-bold flex items-center gap-1.5 text-emerald-800">
+                🌱 Live Plant Shipping Notice
+              </p>
+              <p className="text-emerald-700 text-xs font-normal">
+                Requires <strong>2nd Day Shipping</strong> to ensure healthy arrival. Weight: 0.25 lbs | Package Size: 6&quot; x 2&quot; x 2&quot;.
+              </p>
+            </div>
+          )}
 
           {/* Description */}
           <div className="mb-8">
