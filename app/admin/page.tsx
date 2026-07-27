@@ -590,17 +590,17 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tabs navigation under header */}
-      <div className="border-b border-slate-200/80 px-2 mt-4 mb-2">
-        <div className="flex items-center gap-6 overflow-x-auto scrollbar-none -mb-[1px]" style={{ scrollbarWidth: 'none' }}>
-          {["Overview", "E-commerce", "Traffic & Acquisition", "Marketing & Ads", "Audience & Demographics", "Pages & Screens", "Social Media", "Insight Overview"].map((tab) => {
+      <div className="border-b border-slate-300/80 px-2 mt-4 mb-5 bg-slate-100">
+        <div className="flex items-center gap-6 overflow-x-auto scrollbar-none -mb-[1px] " style={{ scrollbarWidth: 'none' }}>
+          {["Overview", "E-commerce", "Traffic & Acquisition", "Social Media", "Insight Overview", "Audience & Demographics", "Pages & Screens", "Marketing & Ads"].map((tab) => {
             const isActive = tab === activeTab;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-3 text-[13px] font-semibold whitespace-nowrap transition-all relative ${isActive
+                className={`py-4 text-[14px] font-semibold whitespace-nowrap transition-all relative ${isActive
                   ? "text-[#1e40af]"
-                  : "text-slate-400 hover:text-slate-700"
+                  : "text-slate-700 hover:text-primary-900"
                   }`}
               >
                 {tab}
@@ -835,7 +835,7 @@ export default function AdminDashboard() {
               <div className="bg-[#003B73] px-5 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <img src="/images/icons/ads.png" className="w-4 h-4 object-contain" alt="Ads" />
-                  <h3 className="text-sm font-bold text-white">Social Media Analytics</h3>
+                  <h3 className="text-sm font-bold text-white">Social Web Traffic</h3>
                 </div>
                 <select
                   value={adsTimeframe}
@@ -1242,8 +1242,12 @@ export default function AdminDashboard() {
         <TrafficTab timeframe={timeframe} />
       )}
 
-      {activeTab === "Marketing & Ads" && (
-        <MarketingTab timeframe={timeframe} />
+      {activeTab === "Social Media" && (
+        <SocialMediaTab timeframe={timeframe} />
+      )}
+
+      {activeTab === "Insight Overview" && (
+        <InsightOverviewTab timeframe={timeframe} />
       )}
 
       {activeTab === "Audience & Demographics" && (
@@ -1254,12 +1258,10 @@ export default function AdminDashboard() {
         <PagesTab timeframe={timeframe} />
       )}
 
-      {activeTab === "Social Media" && (
-        <SocialMediaTab timeframe={timeframe} />
+      {activeTab === "Marketing & Ads" && (
+        <MarketingTab timeframe={timeframe} />
       )}
-      {activeTab === "Insight Overview" && (
-        <InsightOverviewTab timeframe={timeframe} />
-      )}
+      
     </div>
   );
 }
