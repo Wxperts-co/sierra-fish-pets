@@ -7,6 +7,7 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  Flame,
   Heart,
   Search,
   ShoppingCart,
@@ -58,7 +59,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
   };
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-xl border border-slate-100/80 overflow-hidden transition-all duration-300 hover:shadow-lg">
+    <div className="group relative flex flex-col bg-white rounded-xl border border-slate-200 hover:border-[#005AA9]/40 overflow-hidden transition-all duration-300 hover:shadow-lg">
       <div className="pointer-events-none absolute left-3 top-5 z-30 flex -translate-x-8 flex-col gap-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
         <Link
           href={`/product/${product.id}`}
@@ -86,15 +87,19 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
        
       </div>
 
-      {/* Product Image Area - takes up majority of card */}
-      <div className="relative h-[240px] w-full bg-white">
+      {/* Product Image Area - focused and proportional */}
+      <div className="relative h-[200px] w-full bg-slate-50/30">
+        {/* Best Seller Badge */}
+        <span className="absolute top-3 left-3 z-20 rounded-full bg-[#005AA9] px-2.5 py-1 text-[11px] font-bold text-white leading-none shadow-sm flex items-center gap-1">
+          <Flame className="h-3 w-3 text-amber-300 fill-amber-300" />
+          Best Seller
+        </span>
+
         {hasDiscount && (
           <span className="absolute top-3 right-3 z-20 rounded bg-[#FF9800] px-2 py-1 text-xs font-bold text-white shadow-sm">
             -{discountPercentage}%
           </span>
         )}
-
-        
 
         <Link href={`/product/${product.id}`} className="block w-full h-full relative overflow-hidden">
           <motion.div
@@ -106,9 +111,8 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
               damping: 14,
               delay: index * 0.08,
             }}
-            className="w-full h-full relative"
+            className="w-full h-full relative flex items-center justify-center p-2"
           >
-            
             <img
               src={
                 imgError || !product.images?.[0] || product.images[0] === "/placeholder-product.png" || product.images[0] === "placeholder-product.png"
@@ -118,7 +122,7 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
                       : `/${product.images[0]}`)
               }
               alt={product.name}
-              className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+              className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-108"
               onError={() => setImgError(true)}
             />
           </motion.div>
@@ -126,37 +130,67 @@ function BestSellerCard({ product, index }: { product: Product; index: number })
       </div>
 
       {/* Text Content at Bottom */}
-      <div className="flex flex-col p-4 gap-3">
-        {/* Rating stars */}
-        <div className="flex items-center justify-center gap-0.5">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`h-4 w-4 ${
-                i < Math.round(product.rating)
-                  ? "fill-[#FFB300] text-[#FFB300]"
-                  : "fill-slate-200 text-slate-200"
-              }`}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col flex-1 p-4 text-left bg-white border-t border-slate-100">
+        {/* Category tag */}
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#64B5F6]">
+          {product.categorySlug ? product.categorySlug.replace(/-/g, " ") : "UNCATEGORIZED"}
+        </span>
 
         {/* Product Title */}
-        <Link href={`/product/${product.id}`}>
-          <h3 className="text-sm font-semibold text-slate-700 text-center line-clamp-2 hover:text-[#005AA9] transition-colors">
+        <Link href={`/product/${product.id}`} className="mt-1">
+          <h3 className="text-sm font-medium text-slate-800 line-clamp-2 min-h-[40px] hover:text-[#005AA9] transition-colors leading-snug">
             {product.name}
           </h3>
         </Link>
 
-        {/* Pricing */}
-        <div className="flex items-center justify-center gap-2">
-          {hasDiscount && (
-            <span className="text-xs text-slate-400 line-through">
-              ${product.compareAtPrice?.toFixed(2)}
+        {/* Rating stars & review count */}
+        <div className="flex items-center gap-1.5 mt-2">
+          <div className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`h-3.5 w-3.5 ${
+                  i < Math.round(product.rating || 0)
+                    ? "fill-[#FFB300] text-[#FFB300]"
+                    : "fill-slate-200 text-slate-200"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-xs text-slate-400 font-normal">
+            ({product.reviewCount ?? 0})
+          </span>
+        </div>
+
+        {/* Horizontal Divider */}
+        <div className="my-2.5 h-px bg-slate-100" />
+
+        {/* Price & Stock status row */}
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-bold text-[#005AA9]">
+              ${product.price.toFixed(2)}
             </span>
-          )}
-          <span className="text-lg font-bold text-[#002244]">
-            ${product.price.toFixed(2)}
+            {hasDiscount && (
+              <span className="text-xs text-slate-400 line-through">
+                ${product.compareAtPrice?.toFixed(2)}
+              </span>
+            )}
+          </div>
+          <span
+            className={`text-xs font-medium ${
+              product.stockStatus === "out_of_stock" || (product.stockCount !== undefined && product.stockCount <= 0)
+                ? "text-[#FF4A4A]"
+                : product.stockStatus === "low_stock"
+                ? "text-amber-500"
+                : "text-emerald-500"
+            }`}
+          >
+            {product.stockStatus === "out_of_stock" || (product.stockCount !== undefined && product.stockCount <= 0)
+              ? "Out of Stock"
+              : product.stockStatus === "low_stock"
+              ? "Low Stock"
+              : "In Stock"}
           </span>
         </div>
       </div>
@@ -225,10 +259,10 @@ export default function BestSellers() {
   }
 
   return (
-    <section className="py-8 bg-[#fbf9f6] border-b border-slate-100">
+    <section className="py-8 md:py-12 bg-[#fbf9f6] border-b border-slate-100">
       <div className="container mx-auto px-4">
         {/* Centered Heading */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-8">
           <h2 className="text-2xl md:text-5xl font-extrabold leading-tight font-lato">
             <span className="text-[#005AA9]">Best</span> <span className="text-[#002244]">Sellers</span>
           </h2>
