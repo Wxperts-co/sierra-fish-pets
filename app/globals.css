@@ -128,8 +128,11 @@
   }
 
   .animate-marquee {
-    animation: marquee 30s linear infinite;
+    animation: marquee 80s linear infinite;
     will-change: transform;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
   }
 }
 
@@ -214,4 +217,4 @@
 .admin-login-btn-fallback:hover {
   background-color: #1d4ed8 !important;
   background-image: linear-gradient(to right, #1d4ed8, #1e40af) !important;
-}
+}
