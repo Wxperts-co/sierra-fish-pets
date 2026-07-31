@@ -15,13 +15,15 @@ const importProductSchema = z.object({
 function getValue(data: any, ...keys: string[]): any {
   if (!data) return undefined;
   for (const k of keys) {
-    if (data[k] !== undefined) return data[k];
+    if (data[k] !== undefined && data[k] !== null && String(data[k]).trim() !== "") return data[k];
   }
   const normalizedKeys = keys.map(k => k.toLowerCase().replace(/[\s_-]+/g, ""));
   for (const rawKey of Object.keys(data)) {
     const normRawKey = rawKey.toLowerCase().replace(/[\s_-]+/g, "");
     if (normalizedKeys.includes(normRawKey)) {
-      return data[rawKey];
+      if (data[rawKey] !== undefined && data[rawKey] !== null && String(data[rawKey]).trim() !== "") {
+        return data[rawKey];
+      }
     }
   }
   return undefined;
@@ -40,13 +42,78 @@ function getStockStatus(quantity: number | null | undefined): "in_stock" | "low_
   return "in_stock";
 }
 
-// Helper to extract image URL
-function extractImageUrl(productData: any): string {
-  const url = getValue(productData, "product_media_main_image_url", "product_media_main_image", "image", "image_url", "images", "imageUrl");
-  if (Array.isArray(url)) {
-    return url[0] || "";
+// Helper to extract image URLs (primaryImage + allImages gallery URLs)
+function extractImages(productData: any): string[] {
+  const images: string[] = [];
+
+  const cleanUrl = (url: string) => {
+    const trimmed = url.trim();
+    if (!trimmed || trimmed === "0" || trimmed === "undefined" || trimmed === "null") return "";
+    return trimmed;
+  };
+
+  // 1. Get Primary Image
+  const primary = getValue(
+    productData,
+    "primaryImage",
+    "primary_image",
+    "product_media_main_image_url",
+    "product_media_main_image",
+    "image",
+    "image_url",
+    "imageUrl"
+  );
+
+  if (primary && typeof primary === "string") {
+    const cleaned = cleanUrl(primary);
+    if (cleaned) images.push(cleaned);
+  } else if (Array.isArray(primary)) {
+    primary.forEach((img: any) => {
+      if (typeof img === "string") {
+        const cleaned = cleanUrl(img);
+        if (cleaned && !images.includes(cleaned)) images.push(cleaned);
+      }
+    });
   }
-  return url || "";
+
+  // 2. Get All/Gallery Images (supports semicolon, comma, or newline delimited strings)
+  const allImgsRaw = getValue(
+    productData,
+    "allImages",
+    "all_images",
+    "gallery_images",
+    "images"
+  );
+
+  if (allImgsRaw) {
+    if (typeof allImgsRaw === "string") {
+      const splitUrls = allImgsRaw
+        .split(/[;\n]/)
+        .map((s) => cleanUrl(s))
+        .filter(Boolean);
+      splitUrls.forEach((u) => {
+        if (!images.includes(u)) images.push(u);
+      });
+    } else if (Array.isArray(allImgsRaw)) {
+      allImgsRaw.forEach((img: any) => {
+        if (typeof img === "string") {
+          const cleaned = cleanUrl(img);
+          if (cleaned && !images.includes(cleaned)) images.push(cleaned);
+        }
+      });
+    }
+  }
+
+  // 3. Check individual gallery column headers (product_media_gallery_image_url_1...17)
+  for (let i = 1; i <= 20; i++) {
+    const galImg = getValue(productData, `product_media_gallery_image_url_${i}`);
+    if (galImg && typeof galImg === "string") {
+      const cleaned = cleanUrl(galImg);
+      if (cleaned && !images.includes(cleaned)) images.push(cleaned);
+    }
+  }
+
+  return images;
 }
 
 // Helper to parse description
@@ -59,8 +126,12 @@ function parseDescription(descHtml: any): string {
 // Helper to normalize category slugs from various CSV formats
 function normalizeCategorySlug(val: any): string {
   const text = cleanExcelText(val).toLowerCase().replace(/\s+/g, "-");
-  if (text === "fish") return "aquatic";
-  if (text === "small-pet") return "small-animal";
+  if (text === "fish" || text === "aquatics" || text === "aquatic" || text === "aquatic-pets") return "aquatic";
+  if (text === "small-pet" || text === "small-pets" || text === "small-animal" || text === "small-animals") return "small-animal";
+  if (text === "dogs" || text === "dog") return "dog";
+  if (text === "cats" || text === "cat") return "cat";
+  if (text === "birds" || text === "bird") return "bird";
+  if (text === "reptiles" || text === "reptile") return "reptile";
   return text || "uncategorized";
 }
 
@@ -290,7 +361,7 @@ export async function POST(request: NextRequest) {
         const compareAtPrice = (compareAtPriceRaw != null && !isNaN(parseFloat(compareAtPriceRaw))) ? parseFloat(compareAtPriceRaw) : null;
 
         const cat1Raw = getValue(productData, "category_l1", "product_category_1", "categorySlug", "category", "category_code", "category_id", "class");
-        const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory");
+        const cat2Raw = getValue(productData, "category_l2", "product_category_2", "subcategorySlug", "subcategory", "subCategory", "sub_category", "subcategory_name");
 
         let categorySlugVal = "";
         let subcategorySlugVal = "";
@@ -303,7 +374,10 @@ export async function POST(request: NextRequest) {
           subcategorySlugVal = mapped.subcategorySlug;
         } else {
           categorySlugVal = normalizeCategorySlug(cat1Raw);
-          subcategorySlugVal = cleanExcelText(cat2Raw).toLowerCase().replace(/\s+/g, "-") || "uncategorized";
+          subcategorySlugVal = cleanExcelText(cat2Raw)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "") || "uncategorized";
         }
 
         let categorySlug = categorySlugVal;
@@ -316,27 +390,26 @@ export async function POST(request: NextRequest) {
         const isFeaturedRaw = getValue(productData, "product_is_featured", "isFeatured", "featured");
         const isFeatured = isFeaturedRaw === "TRUE" || isFeaturedRaw === "true" || isFeaturedRaw === true;
 
-        let imageUrl = extractImageUrl(productData);
-        if (imageUrl === "0" || imageUrl === "undefined" || imageUrl === "null") {
-          imageUrl = "";
-        }
-        if (!imageUrl && parsedDesc.extractedImage) {
-          imageUrl = parsedDesc.extractedImage;
+        let extractedImages = extractImages(productData);
+        if (extractedImages.length === 0 && parsedDesc.extractedImage) {
+          extractedImages.push(parsedDesc.extractedImage);
         }
 
-        // Check if the image is a generic placeholder/fallback to treat it as pending
-        const isPlaceholder = imageUrl && (
-          imageUrl === "/images/products/dog1.avif" ||
-          imageUrl === "/images/products/cat1.avif" ||
-          imageUrl === "/images/products/aqua1.avif" ||
-          imageUrl === "/images/products/bird/bird1.avif" ||
-          imageUrl === "/placeholder-product.png" ||
-          imageUrl === "/placeholderimg.png" ||
-          imageUrl.toLowerCase().includes("placeholder") ||
-          imageUrl.toLowerCase().includes("fallback")
+        const firstImage = extractedImages[0] || "";
+
+        // Check if the primary image is a generic placeholder/fallback to treat it as pending
+        const isPlaceholder = firstImage && (
+          firstImage === "/images/products/dog1.avif" ||
+          firstImage === "/images/products/cat1.avif" ||
+          firstImage === "/images/products/aqua1.avif" ||
+          firstImage === "/images/products/bird/bird1.avif" ||
+          firstImage === "/placeholder-product.png" ||
+          firstImage === "/placeholderimg.png" ||
+          firstImage.toLowerCase().includes("placeholder") ||
+          firstImage.toLowerCase().includes("fallback")
         );
 
-        const images = imageUrl ? [imageUrl] : [];
+        const images = extractedImages;
         const imageStatus = (images.length > 0 && !isPlaceholder) ? "completed" : "pending";
         const imageSource = images.length > 0 ? "Import CSV" : "";
         const imageLastChecked = images.length > 0 ? new Date() : null;

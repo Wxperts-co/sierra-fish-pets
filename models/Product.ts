@@ -221,7 +221,7 @@ const productSchema = new mongoose.Schema<IProduct>(
       index: true,
     },
     retailerCsvData: {
-      type: new mongoose.Schema(retailerCsvDataSchemaDefinition, { _id: false }),
+      type: new mongoose.Schema(retailerCsvDataSchemaDefinition, { _id: false, strict: false }),
       default: () => ({}),
     },
   },

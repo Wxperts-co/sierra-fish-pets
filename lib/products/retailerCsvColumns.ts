@@ -114,12 +114,25 @@ export type RetailerCsvColumn = (typeof RETAILER_CSV_COLUMNS)[number];
 export type IRetailerCsvData = Record<RetailerCsvColumn, string>;
 
 export function mapRetailerCsvData(productData: Record<string, unknown>): IRetailerCsvData {
-  return Object.fromEntries(
-    RETAILER_CSV_COLUMNS.map((column) => [
-      column,
-      productData[column] != null ? String(productData[column]) : "",
-    ])
-  ) as IRetailerCsvData;
+  const result: Record<string, string> = {};
+
+  // Map standard retailer columns
+  RETAILER_CSV_COLUMNS.forEach((column) => {
+    result[column] = productData[column] != null ? String(productData[column]) : "";
+  });
+
+  // Preserve any additional custom columns present in the imported data (e.g. primaryImage, allImages, subCategory, upc_no, etc.)
+  if (productData && typeof productData === "object") {
+    Object.keys(productData).forEach((key) => {
+      if (result[key] === undefined || result[key] === "") {
+        if (productData[key] != null) {
+          result[key] = String(productData[key]);
+        }
+      }
+    });
+  }
+
+  return result as IRetailerCsvData;
 }
 
 export type RetailerCsvExportProduct = {

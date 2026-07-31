@@ -133,24 +133,42 @@ console.log("Connecting DB...");
       filter.$text = { $search: q };
     }
 
-    // Normalize category slug discrepancy
-    let queryCategory = category;
-    if (category === "small-pet" || category === "small-pets") {
-      queryCategory = "small-animal";
+    // Normalize category slug aliases (e.g., aquatic/aquatics/fish, small-pet/small-animal)
+    let categorySlugsToMatch: string[] = [];
+    if (category) {
+      const lowerCat = category.toLowerCase().trim();
+      if (lowerCat === "aquatic" || lowerCat === "aquatics" || lowerCat === "fish") {
+        categorySlugsToMatch = ["aquatic", "aquatics", "fish"];
+      } else if (lowerCat === "small-pet" || lowerCat === "small-pets" || lowerCat === "small-animal" || lowerCat === "small-animals") {
+        categorySlugsToMatch = ["small-animal", "small-animals", "small-pet", "small-pets"];
+      } else if (lowerCat === "dog" || lowerCat === "dogs") {
+        categorySlugsToMatch = ["dog", "dogs"];
+      } else if (lowerCat === "cat" || lowerCat === "cats") {
+        categorySlugsToMatch = ["cat", "cats"];
+      } else if (lowerCat === "bird" || lowerCat === "birds") {
+        categorySlugsToMatch = ["bird", "birds"];
+      } else if (lowerCat === "reptile" || lowerCat === "reptiles") {
+        categorySlugsToMatch = ["reptile", "reptiles"];
+      } else {
+        categorySlugsToMatch = [category];
+      }
     }
 
-    if (queryCategory) {
+    if (category) {
       filter.$and = filter.$and || [];
-      if (queryCategory === "other-pet") {
+      if (category === "other-pet") {
         const dbCategories = await CategoryModel.find().lean();
         const activeSlugs = dbCategories
           .map((c) => c.slug)
           .filter((slug) => slug && !slug.includes("other"));
 
         // Map "small-pet" slugs to "small-animal" to properly exclude them from the other-pet category
-        const activeSearchSlugs = activeSlugs.map(slug => 
-          ((slug as string) === "small-pet" || (slug as string) === "small-pets") ? "small-animal" : slug
-        );
+        const activeSearchSlugs = activeSlugs.flatMap(slug => {
+          const s = String(slug);
+          if (s === "small-pet" || s === "small-pets" || s === "small-animal") return ["small-animal", "small-pet", "small-pets"];
+          if (s === "aquatic" || s === "aquatics" || s === "fish") return ["aquatic", "aquatics", "fish"];
+          return [s];
+        });
 
         const escapedSlugs = activeSearchSlugs.map((s) => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"));
         const regexPattern = escapedSlugs.length > 0
@@ -165,10 +183,13 @@ console.log("Connecting DB...");
           ]
         });
       } else {
+        const escapedSlugs = categorySlugsToMatch.map(s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"));
+        const regexPattern = new RegExp(`^(${escapedSlugs.join("|")})($|-\\/\\-)`, "i");
+
         filter.$and.push({
           $or: [
-            { categorySlug: queryCategory },
-            { categorySlug: { $regex: new RegExp(`^${queryCategory}-\\/\\-`, "i") } },
+            { categorySlug: { $in: categorySlugsToMatch } },
+            { categorySlug: { $regex: regexPattern } },
           ]
         });
       }
