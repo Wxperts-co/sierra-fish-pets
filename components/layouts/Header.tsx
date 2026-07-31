@@ -189,6 +189,7 @@ export default function Header() {
   const isSpecialOrderAnimals = pathname === "/special-order-animals";
   const isAquaJetSystem = pathname === "/about-aqua-jet-water-cleaning-system";
   const isCoupons = pathname === "/coupons";
+  const isPolicies = pathname === "/policies" || pathname === "/return-policy" || pathname === "/shipping";
 
   const isTransparentPage =
     isHome ||
@@ -206,7 +207,8 @@ export default function Header() {
     isSierraEdu ||
     isSpecialOrderAnimals ||
     isAquaJetSystem ||
-    isCoupons;
+    isCoupons ||
+    isPolicies;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {

@@ -449,6 +449,15 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        const rawShippingType = getValue(productData, "product_shipping_type", "shipping_type", "shipping_way", "shipping", "fulfillment_type");
+        let shippingType: "standard" | "free_shipping" | "in_store_only" | "drop_ship" = "standard";
+        if (rawShippingType) {
+          const s = String(rawShippingType).toLowerCase().trim();
+          if (s.includes("free") || s === "free_shipping") shippingType = "free_shipping";
+          else if (s.includes("pickup") || s.includes("store") || s === "in_store_only") shippingType = "in_store_only";
+          else if (s.includes("drop") || s === "drop_ship") shippingType = "drop_ship";
+        }
+
         const mappedProduct = {
           _id: existingProduct ? existingProduct._id : new mongoose.Types.ObjectId(),
           id: String(id).slice(0, 100),
@@ -474,6 +483,7 @@ export async function POST(request: NextRequest) {
           isNewArrival: isFeatured,
           isFeatured,
           isBestSeller: false,
+          shippingType,
           createdAt: existingProduct ? existingProduct.createdAt : new Date().toISOString(),
           retailerCsvData: mapRetailerCsvData(productData),
         };
@@ -540,6 +550,7 @@ export async function POST(request: NextRequest) {
               description: p.description,
               features: p.features,
               tags: p.tags,
+              shippingType: p.shippingType,
               retailerCsvData: p.retailerCsvData,
             }
           }

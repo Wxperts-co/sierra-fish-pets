@@ -33,7 +33,18 @@ export default function MegaMenu({
   useEffect(() => {
     fetch("/api/categories")
       .then((res) => res.json())
-      .then((data) => { if (data.success) setCats(data.categories as Category[]); })
+      .then((data) => {
+        if (data.success && Array.isArray(data.categories)) {
+          const sorted = [...data.categories].sort((a: Category, b: Category) => {
+            const aIsOther = String(a.slug || "").includes("other") || String(a.name || "").toLowerCase().includes("other");
+            const bIsOther = String(b.slug || "").includes("other") || String(b.name || "").toLowerCase().includes("other");
+            if (aIsOther && !bIsOther) return 1;
+            if (!aIsOther && bIsOther) return -1;
+            return 0;
+          });
+          setCats(sorted);
+        }
+      })
       .catch(() => {});
   }, []);
 

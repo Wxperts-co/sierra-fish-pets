@@ -36,6 +36,7 @@ const productSchema = z.object({
   tags: z.string().optional().default(""),
   stockStatus: z.enum(["in_stock", "low_stock", "out_of_stock"]),
   stockCount: z.coerce.number().nonnegative(),
+  shippingType: z.enum(["standard", "free_shipping", "in_store_only", "drop_ship"]).optional().default("standard"),
   isNewArrival: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
@@ -61,6 +62,7 @@ const defaultValues: ProductFormValues = {
   tags: "",
   stockStatus: "in_stock",
   stockCount: 0,
+  shippingType: "standard",
   isNewArrival: false,
   isFeatured: false,
   isBestSeller: false,
@@ -144,6 +146,7 @@ export default function AddProductPage() {
         .filter(Boolean),
       stockStatus: values.stockStatus,
       stockCount: values.stockCount,
+      shippingType: values.shippingType,
       isNewArrival: values.isNewArrival,
       isFeatured: values.isFeatured,
       isBestSeller: values.isBestSeller,
@@ -156,65 +159,70 @@ export default function AddProductPage() {
 
       if (response.data?.success) {
         setSuccessMessage("Product created successfully.");
-        setTimeout(() => router.push("/admin/products"), 700);
+        setTimeout(() => {
+          router.push("/admin/products");
+        }, 1000);
       } else {
-        setSubmitError(response.data?.message || "Failed to create product.");
+        setSubmitError(response.data?.message || "Failed to create product");
       }
     } catch (error: any) {
-      console.error("Failed to create product:", error);
-      setSubmitError(
-        error?.response?.data?.message || "Failed to create product."
-      );
-      showErrorToast("Failed to create product.");
+      console.error(error);
+      setSubmitError(error.response?.data?.message || "Failed to create product");
     }
   };
 
   return (
-    <div className="space-y-4 p-4">
-      {/* Top bar */}
-      <div className="flex items-center gap-3">
+    <div className="space-y-6 p-4">
+      <div className="flex items-center gap-4">
         <Link
           href="/admin/products"
-          className="inline-flex items-center rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
+          className="rounded-lg p-2 hover:bg-slate-100 transition"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+          <ArrowLeft className="h-5 w-5 text-slate-600" />
         </Link>
-      </div>
-
-      {/* Card */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="mb-4">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Add New Product
-          </h1>
-          <p className="mt-1 text-xs text-slate-500">
-            Create a product record for the store.
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">Add New Product</h1>
+          <p className="text-xs text-slate-500">
+            Create a new item in your catalog
           </p>
         </div>
+      </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* GRID */}
-          <div className="grid gap-3 sm:grid-cols-3">
+      {submitError && (
+        <div className="rounded-lg bg-red-50 p-3 text-xs text-red-600">
+          {submitError}
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="rounded-lg bg-emerald-50 p-3 text-xs text-emerald-600">
+          {successMessage}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-4 shadow-sm">
+          {/* GRID OF BASIC INPUTS */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              ["Product ID", "id"],
-              ["Name", "name"],
-              ["Slug", "slug"],
-              ["SKU", "sku"],
-              ["Category Slug", "categorySlug"],
-              ["Subcategory Slug", "subcategorySlug"],
-              ["Brand", "brand"],
-              ["Price", "price"],
-              ["Compare At Price", "compareAtPrice"],
-              ["Stock Count", "stockCount"],
-              ["Dimensions", "dimensions"],
-            ].map(([label, field]) => (
+              { label: "Product ID", field: "id" },
+              { label: "Name", field: "name" },
+              { label: "Slug", field: "slug" },
+              { label: "SKU", field: "sku" },
+              { label: "Category Slug", field: "categorySlug" },
+              { label: "Subcategory Slug", field: "subcategorySlug" },
+              { label: "Brand", field: "brand" },
+              { label: "Price ($)", field: "price", type: "number" },
+              { label: "Compare At Price ($)", field: "compareAtPrice", type: "number" },
+              { label: "Stock Count", field: "stockCount", type: "number" },
+              { label: "Dimensions", field: "dimensions" },
+            ].map(({ label, field, type }) => (
               <div key={field} className="space-y-1">
                 <label className="block text-xs font-medium text-slate-700">
                   {label}
                 </label>
                 <Input
-                  type="text"
+                  type={type || "text"}
                   className="h-8 text-sm"
                   {...register(field as any)}
                 />
@@ -238,6 +246,22 @@ export default function AddProductPage() {
                 <option value="in_stock">In stock</option>
                 <option value="low_stock">Low stock</option>
                 <option value="out_of_stock">Out of stock</option>
+              </select>
+            </div>
+
+            {/* Shipping Way / Fulfillment Mode */}
+            <div className="space-y-1">
+              <label className="block text-xs font-medium text-slate-700">
+                Shipping Way / Fulfillment
+              </label>
+              <select
+                className="h-8 w-full rounded-lg border border-slate-200 px-2 text-sm"
+                {...register("shippingType")}
+              >
+                <option value="standard">Standard Shipping (Calculated Freight)</option>
+                <option value="free_shipping">Free Shipping</option>
+                <option value="in_store_only">Store Pickup Only (In-Store)</option>
+                <option value="drop_ship">Drop-Ship Direct (Free Shipping)</option>
               </select>
             </div>
           </div>
@@ -378,8 +402,8 @@ export default function AddProductPage() {
               {isSubmitting ? "Saving..." : "Create"}
             </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }

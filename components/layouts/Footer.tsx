@@ -14,7 +14,7 @@ import {
 
 const CORPORATE = [
   { label: "About Us", href: "/about" },
-  { label: "Careers", href: "/careers" },
+  { label: "Careers", href: "/contact-us" },
   { label: "Gallery", href: "/gallery" },
   { label: "Brands We Carry", href: "/brands" },
   { label: "Affiliate Program", href: "/affiliate" },
@@ -22,7 +22,7 @@ const CORPORATE = [
 
 const CUSTOMER_SERVICE = [
   { label: "Track Order", href: "/account/orders" },
-  { label: "Returns & Refunds", href: "/returns" },
+  { label: "Returns & Refunds", href: "/policies" },
   { label: "Shipping Info", href: "/shipping" },
   { label: "FAQs", href: "/faqs" },
   { label: "Pet Store Locator", href: "/contact-us" },

@@ -78,17 +78,7 @@ export default function AdoptionHero() {
 
             {/* Trust Badges / Dynamic Quick Stats */}
             <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#00aaff]/10 border border-[#00aaff]/20 flex items-center justify-center text-[#00aaff] shrink-0">
-                  <PawPrint className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-base font-bold text-white leading-tight">
-                    {availableDogsCount} Dogs
-                  </div>
-                  <div className="text-[10px] text-slate-400">Available at events</div>
-                </div>
-              </div>
+              
 
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-xl bg-[#00aaff]/10 border border-[#00aaff]/20 flex items-center justify-center text-[#00aaff] shrink-0">

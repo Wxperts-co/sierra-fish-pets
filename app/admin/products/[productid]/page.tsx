@@ -38,6 +38,7 @@ const productSchema = z.object({
   tags: z.string().optional().default(""),
   stockStatus: z.enum(["in_stock", "low_stock", "out_of_stock"]),
   stockCount: z.coerce.number().nonnegative(),
+  shippingType: z.enum(["standard", "free_shipping", "in_store_only", "drop_ship"]).optional().default("standard"),
   isNewArrival: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
@@ -87,6 +88,7 @@ export default function EditProductPage() {
       tags: "",
       stockStatus: "in_stock",
       stockCount: 0,
+      shippingType: "standard",
       isNewArrival: false,
       isFeatured: false,
       isBestSeller: false,
@@ -155,6 +157,7 @@ export default function EditProductPage() {
             tags: normalizeList(item.tags),
             stockStatus: item.stockStatus,
             stockCount: item.stockCount,
+            shippingType: item.shippingType || "standard",
             isNewArrival: item.isNewArrival,
             isFeatured: item.isFeatured,
             isBestSeller: item.isBestSeller,
@@ -204,6 +207,7 @@ export default function EditProductPage() {
         .filter(Boolean),
       stockStatus: values.stockStatus,
       stockCount: values.stockCount,
+      shippingType: values.shippingType,
       isNewArrival: values.isNewArrival,
       isFeatured: values.isFeatured,
       isBestSeller: values.isBestSeller,
@@ -397,6 +401,19 @@ export default function EditProductPage() {
               {errors.stockStatus && (
                 <p className="text-xs text-red-600">{errors.stockStatus.message}</p>
               )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Shipping Way / Fulfillment</label>
+              <select
+                className="h-9 w-full rounded-lg border border-slate-200 bg-transparent px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                {...register("shippingType")}
+              >
+                <option value="standard">Standard Shipping (Calculated Freight)</option>
+                <option value="free_shipping">Free Shipping</option>
+                <option value="in_store_only">Store Pickup Only (In-Store)</option>
+                <option value="drop_ship">Drop-Ship Direct (Free Shipping)</option>
+              </select>
             </div>
 
             <div className="space-y-2">

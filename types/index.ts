@@ -64,6 +64,7 @@ export interface Product {
   isNewArrival: boolean;
   isFeatured: boolean;
   isBestSeller: boolean;
+  shippingType?: "standard" | "free_shipping" | "in_store_only" | "drop_ship";
   weight?: string;
   dimensions?: string;
   createdAt: string;

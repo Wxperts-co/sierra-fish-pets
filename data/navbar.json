@@ -128,7 +128,10 @@
             "label": "Aquarium Consulting & Design",
             "href": "/services/aquarium/aquarium-consulting-design"
           },
-         
+          {
+            "label": "Aquarium Philosophy",
+            "href": "/services/aquarium/aquarium-philosophy"
+          },
           {
             "label": "Aquarium Installation",
             "href": "/services/aquarium/aquarium-installation"
@@ -397,8 +400,17 @@
       },
       {
         "label": "Gallery",
+        "type": "submenu",
         "href": "/gallery",
-        "type": "link"
+        "submenuItems": [
+          { "label": "All Photos", "href": "/gallery" },
+          { "label": "Store", "href": "/gallery?category=store" },
+          { "label": "Dog/Cat", "href": "/gallery?category=dog-cat" },
+          { "label": "Fish", "href": "/gallery?category=fish" },
+          { "label": "Reptiles", "href": "/gallery?category=reptile" },
+          { "label": "Bird", "href": "/gallery?category=bird" },
+          { "label": "Small Pet", "href": "/gallery?category=small-pet" }
+        ]
       },
       {
         "label": "Gift cards",
@@ -413,6 +425,16 @@
       {
         "label": "Flyers",
         "href": "/flyers",
+        "type": "link"
+      },
+      {
+        "label": "Policies",
+        "href": "/policies",
+        "type": "link"
+      },
+      {
+        "label": "Careers",
+        "href": "/contact-us",
         "type": "link"
       }
     ]

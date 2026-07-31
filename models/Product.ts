@@ -58,6 +58,7 @@ export interface IProduct extends Document {
   isNewArrival: boolean;
   isFeatured: boolean;
   isBestSeller: boolean;
+  shippingType?: "standard" | "free_shipping" | "in_store_only" | "drop_ship";
   dimensions?: string;
   createdAt: string;
   retailerCsvData: IRetailerCsvData;
@@ -209,6 +210,12 @@ const productSchema = new mongoose.Schema<IProduct>(
     isBestSeller: {
       type: Boolean,
       default: false,
+      index: true,
+    },
+    shippingType: {
+      type: String,
+      enum: ["standard", "free_shipping", "in_store_only", "drop_ship"],
+      default: "standard",
       index: true,
     },
     dimensions: {

@@ -10,10 +10,13 @@ const NON_CONTINENTAL_FULL_NAMES = new Set([
 ]);
 
 /**
- * Checks if a product is an AquaDREAM tank (drop-shipped directly from manufacturer).
- * AquaDREAM tanks receive FREE SHIPPING, but are NOT eligible for store pickup.
+ * Checks if a product is a Drop-Ship product (e.g. AquaDREAM tanks direct from manufacturer).
+ * Drop-Ship products receive FREE SHIPPING, but are NOT eligible for store pickup.
  */
 export function isAquaDreamProduct(product: Product): boolean {
+  if (product.shippingType === "drop_ship") return true;
+  if (product.shippingType) return false;
+
   const brand = (product.brand || "").toLowerCase();
   const name = (product.name || "").toLowerCase();
   const tags = (product.tags || []).map((t) => t.toLowerCase());
@@ -26,10 +29,12 @@ export function isAquaDreamProduct(product: Product): boolean {
 }
 
 /**
- * Checks if a product is a Fish Tank System or Filter.
- * Fish Tank Systems & Filters receive FREE SHIPPING.
+ * Checks if a product receives FREE SHIPPING (e.g. Filters or explicitly assigned free_shipping).
  */
 export function isFilterProduct(product: Product): boolean {
+  if (product.shippingType === "free_shipping") return true;
+  if (product.shippingType) return false;
+
   const name = (product.name || "").toLowerCase();
   const subcat = (product.subcategorySlug || "").toLowerCase();
   const cat = (product.categorySlug || "").toLowerCase();
@@ -45,10 +50,12 @@ export function isFilterProduct(product: Product): boolean {
 }
 
 /**
- * Checks if a product is a Fish Tank / Aquarium or UNS Tank/Stand/Lid (Category 150-160).
- * These items are PICK UP IN STORE ONLY (cannot be shipped to home), UNLESS it is an AquaDREAM tank.
+ * Checks if a product is STORE PICKUP ONLY (cannot be shipped to home).
  */
 export function isPickupOnlyProduct(product: Product): boolean {
+  if (product.shippingType === "in_store_only") return true;
+  if (product.shippingType) return false;
+
   // AquaDREAM tanks drop-ship direct from manufacturer, so they are NOT pickup only.
   if (isAquaDreamProduct(product)) return false;
 

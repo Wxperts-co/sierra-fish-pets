@@ -27,6 +27,7 @@ const PRODUCT_CARD_FIELDS = {
   isNewArrival: 1,
   isFeatured: 1,
   isBestSeller: 1,
+  shippingType: 1,
   createdAt: 1,
 };
 
@@ -194,7 +195,25 @@ console.log("Connecting DB...");
         });
       }
     }
-    if (subcategory) filter.subcategorySlug = subcategory;
+
+    if (subcategory) {
+      const subList = subcategory.split(",").map((s) => s.trim()).filter(Boolean);
+      if (subList.length > 0) {
+        const subRegexPatterns = subList.map((s) => {
+          const escaped = s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+          return new RegExp(escaped.replace(/\\-/g, "[-_,\\s]+"), "i");
+        });
+
+        filter.$and = filter.$and || [];
+        filter.$and.push({
+          $or: [
+            { subcategorySlug: { $in: subList } },
+            ...subRegexPatterns.map((pattern) => ({ subcategorySlug: { $regex: pattern } })),
+            ...subRegexPatterns.map((pattern) => ({ categorySlug: { $regex: pattern } })),
+          ],
+        });
+      }
+    }
 
     if (brand) {
       const brandSlugs = brand.split(",");

@@ -95,7 +95,19 @@ export default function FilterSidebar({
       .catch(() => {});
   }, []);
 
-  const category = categories.find((item) => item.slug === selectedCategory);
+  const normalizeCat = (s?: string | null) => {
+    if (!s) return "";
+    const lower = s.toLowerCase().trim();
+    if (lower === "fish" || lower === "aquatics" || lower === "aquatic") return "aquatic";
+    if (lower === "small-pet" || lower === "small-pets" || lower === "small-animal" || lower === "small-animals") return "small-animal";
+    if (lower === "dogs" || lower === "dog") return "dog";
+    if (lower === "cats" || lower === "cat") return "cat";
+    if (lower === "birds" || lower === "bird") return "bird";
+    if (lower === "reptiles" || lower === "reptile") return "reptile";
+    return lower;
+  };
+
+  const category = categories.find((item) => normalizeCat(item.slug) === normalizeCat(selectedCategory));
 
   const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
 

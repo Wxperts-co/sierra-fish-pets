@@ -162,7 +162,7 @@ function PromoCard({ block, index }: { block: PromoBlock; index: number }) {
             className="mt-1 inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs sm:px-5 sm:py-2 sm:text-sm font-bold shadow transition-all duration-300 group-hover:gap-3 group-hover:shadow-md"
             style={{ backgroundColor: cfg.btnBg, color: cfg.btnText }}
           >
-            Shop Now
+            Learn More
             <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>
         </div>

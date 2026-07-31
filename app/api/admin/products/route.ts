@@ -27,6 +27,7 @@ const productSchema = z.object({
   isNewArrival: z.boolean().optional().default(false),
   isFeatured: z.boolean().optional().default(false),
   isBestSeller: z.boolean().optional().default(false),
+  shippingType: z.enum(["standard", "free_shipping", "in_store_only", "drop_ship"]).optional().default("standard"),
   dimensions: z.string().optional(),
   createdAt: z.string().min(1, "Created date is required"),
 });

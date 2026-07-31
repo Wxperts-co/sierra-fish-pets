@@ -55,13 +55,18 @@ export default function AdoptionGrid() {
             </p>
           </div>
 
-          <Link
-            href="/services/dog-adoption/dogs"
-            className="inline-flex items-center gap-2 border border-[#005AA9] hover:bg-[#005AA9] text-[#005AA9] hover:text-white px-6 py-3 rounded-full text-xs font-bold tracking-wide transition-all duration-200 hover:scale-[1.02] active:scale-98 shrink-0 w-fit self-start md:self-auto shadow-sm"
-          >
-            <PawPrint className="w-4 h-4" />
-            <span>View All Available Dogs ({availableDogs.length})</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href="https://www.gingerspetrescue.org/adoptable-dogs/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#005AA9] hover:bg-[#003d73] text-white px-6 py-3 rounded-full text-xs font-bold tracking-wide transition-all duration-200 hover:scale-[1.02] active:scale-98 shadow-sm"
+            >
+              <PawPrint className="w-4 h-4" />
+              <span>Ginger&apos;s Pet Rescue Directory</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
 
         {/* Dog Cards Grid */}
