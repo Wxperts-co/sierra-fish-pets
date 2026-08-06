@@ -4,7 +4,22 @@ import path from "path";
 import fs from "fs";
 
 const APP_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
-const LOGO_URL = `${APP_URL.replace(/\/$/, "")}/images/logo/logo.png`;
+const LOGO_URL = "cid:sierra_logo";
+
+/**
+ * Helper to get inline logo attachment
+ */
+function getLogoAttachment() {
+  const logoPath = path.join(process.cwd(), "public", "images", "logo", "logo.png");
+  if (fs.existsSync(logoPath)) {
+    return {
+      filename: "logo.png",
+      path: logoPath,
+      cid: "sierra_logo",
+    };
+  }
+  return null;
+}
 
 /**
  * Format price as USD
@@ -180,9 +195,9 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
 
   // Path to the invoice PDF file on disk
   const filename = `invoice-${order._id.toString()}.pdf`;
-  const filePath = path.join(process.cwd(), "public", "invoices", filename);
+  const { getInvoiceFilePath } = require("./invoiceService");
+  const filePath = getInvoiceFilePath(filename);
 
-  const fs = require("fs");
   if (!fs.existsSync(filePath)) {
     try {
       const { generateInvoicePDF } = require("./invoiceService");
@@ -192,42 +207,40 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
     }
   }
 
-  const attachments: any[] = [];
+  const logoAttachment = getLogoAttachment();
+  const customerAttachments: any[] = [];
+  const adminAttachments: any[] = [];
+
   if (fs.existsSync(filePath)) {
-    attachments.push({
+    customerAttachments.push({
       filename: `invoice-${order.orderNumber}.pdf`,
       path: filePath,
     });
   }
+  if (logoAttachment) {
+    customerAttachments.push(logoAttachment);
+    adminAttachments.push(logoAttachment);
+  }
 
+  const adminEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
 
-  // Send customer confirmation email
-  try {
-    await transporter.sendMail({
+  // Send customer & admin confirmation emails concurrently
+  await Promise.allSettled([
+    transporter.sendMail({
       from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
       to: order.guestEmail,
       subject: `🛒 Order Confirmation #${order.orderNumber} - Sierra Fish & Pets`,
       html: emailHtml,
-      attachments,
-    });
-  } catch (customerMailError) {
-    console.error("Failed to send customer order confirmation email:", customerMailError);
-  }
+      attachments: customerAttachments,
+    }).then(info => {
+      console.log(`[Email Service] Customer confirmation email sent successfully to ${order.guestEmail}. MessageID: ${info.messageId}`);
+    }).catch(customerMailError => {
+      console.error("Failed to send customer order confirmation email:", customerMailError);
+    }),
 
-  // Also notify the admin using the exact same rich template (without PDF invoice attachment to improve deliverability)
-  try {
-    const adminEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
-    if (adminEmail) {
-      await transporter.sendMail({
-        from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
-        to: adminEmail,
-        subject: `🔔 New Order Received #${order.orderNumber} - Sierra Fish & Pets`,
-        html: emailHtml,
-      });
-    }
-  } catch (adminMailError) {
-    console.error("Failed to send admin order confirmation email copy:", adminMailError);
-  }
+    // Send admin notification email using admin template (including Customer Phone & Email)
+    sendAdminNewOrderEmail(order),
+  ]);
 }
 
 /**
@@ -278,6 +291,10 @@ export async function sendAdminNewOrderEmail(order: IOrder) {
                       <td style="padding: 10px 0;"><a href="mailto:${order.guestEmail}" style="color: #005AA9; text-decoration: none;">${order.guestEmail}</a></td>
                     </tr>
                     <tr style="border-bottom: 1px solid #edf2f7;">
+                      <td style="padding: 10px 0; font-weight: bold;">Customer Phone:</td>
+                      <td style="padding: 10px 0;"><a href="tel:${order.shippingAddress?.phone || order.guestPhone || ''}" style="color: #005AA9; text-decoration: none;">${order.shippingAddress?.phone || order.guestPhone || 'N/A'}</a></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #edf2f7;">
                       <td style="padding: 10px 0; font-weight: bold;">Total Amount:</td>
                       <td style="padding: 10px 0; font-weight: bold; color: #10b981;">${formatPrice(order.total)}</td>
                     </tr>
@@ -311,7 +328,9 @@ export async function sendAdminNewOrderEmail(order: IOrder) {
     </div>
   `;
 
+  const logoAttachment = getLogoAttachment();
   const attachments: any[] = [];
+  if (logoAttachment) attachments.push(logoAttachment);
 
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
@@ -429,9 +448,9 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
 
   // Path to the invoice PDF file on disk
   const filename = `invoice-${order._id.toString()}.pdf`;
-  const filePath = path.join(process.cwd(), "public", "invoices", filename);
+  const { getInvoiceFilePath } = require("./invoiceService");
+  const filePath = getInvoiceFilePath(filename);
 
-  const fs = require("fs");
   if (!fs.existsSync(filePath)) {
     try {
       const { generateInvoicePDF } = require("./invoiceService");
@@ -441,6 +460,7 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
     }
   }
 
+  const logoAttachment = getLogoAttachment();
   const attachments: any[] = [];
   if (fs.existsSync(filePath)) {
     attachments.push({
@@ -448,7 +468,7 @@ export async function sendOrderDeliveredEmail(order: IOrder) {
       path: filePath,
     });
   }
-
+  if (logoAttachment) attachments.push(logoAttachment);
 
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
@@ -561,11 +581,16 @@ export async function sendGiftCardEmail(
     </div>
   `;
 
+  const giftCardLogo = getLogoAttachment();
+  const giftCardAttachments: any[] = [];
+  if (giftCardLogo) giftCardAttachments.push(giftCardLogo);
+
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
     to: recipientEmail,
     subject: `🎁 You received a ${formattedAmount} Sierra Fish & Pets Gift Card from ${senderName}!`,
     html: emailHtml,
+    attachments: giftCardAttachments,
   });
 }
 

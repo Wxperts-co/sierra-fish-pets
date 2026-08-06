@@ -171,7 +171,7 @@
     "id": "brand-rep-001",
     "name": "Zoo Med",
     "slug": "zoo-med",
-    "logo": "/images/brands/zoomed.png",
+    "logo": "/images/brands/ZM-Logo.png",
     "description": "World leader in reptile lighting, heating, terrariums, and aquatic supplies.",
     "categories": [
       "reptile",
@@ -184,7 +184,7 @@
     "id": "brand-rep-002",
     "name": "Zilla",
     "slug": "zilla",
-    "logo": "/images/brands/zilla.png",
+    "logo": "/images/brands/zilla-logo.png",
     "description": "Innovative habitats, lighting, and nutrition for reptiles and amphibians.",
     "categories": [
       "reptile"
@@ -196,7 +196,7 @@
     "id": "brand-rep-003",
     "name": "Galapagos",
     "slug": "galapagos",
-    "logo": "/images/brands/galapagos.png",
+    "logo": "/images/brands/Galapagos.png",
     "description": "Natural moss, wood, substrates, and terrarium decor for reptiles.",
     "categories": [
       "reptile"
@@ -208,7 +208,7 @@
     "id": "brand-rep-004",
     "name": "ExoTerra",
     "slug": "exoterra",
-    "logo": "/images/brands/exoterra.png",
+    "logo": "/images/brands/Exo-tera.avif",
     "description": "Market leader for natural terrariums and reptile care supplies.",
     "categories": [
       "reptile"
@@ -220,7 +220,7 @@
     "id": "brand-rep-005",
     "name": "Repashy Super Foods",
     "slug": "repashy-super-foods",
-    "logo": "/images/brands/repashy.png",
+    "logo": "/images/brands/repashy.jpg",
     "description": "Specialized gel diets and meal replacement powder formulas for reptiles and amphibians.",
     "categories": [
       "reptile"
@@ -229,10 +229,10 @@
     "website": "https://www.store.repashy.com"
   },
   {
-    "id": "brand-[#bird-001]",
+    "id": "brand-bird-001",
     "name": "Harrisons",
     "slug": "harrisons",
-    "logo": "/images/brands/harrisons.png",
+    "logo": "/images/brands/horisons.png",
     "description": "Certified organic, premium certified bird diets recommended by avian veterinarians.",
     "categories": [
       "bird"
@@ -244,7 +244,7 @@
     "id": "brand-bird-002",
     "name": "A&E",
     "slug": "a-and-e",
-    "logo": "/images/brands/ae.png",
+    "logo": "/images/brands/AE logo.gif",
     "description": "Quality bird cages, small pet habitats, and play stands.",
     "categories": [
       "bird",
@@ -258,7 +258,7 @@
     "id": "brand-bird-003",
     "name": "ZuPreem",
     "slug": "zupreem",
-    "logo": "/images/brands/zupreem.png",
+    "logo": "/images/brands/Zupreem-Logo.webp",
     "description": "Nutritional pelleted diets and balanced foods for pet birds.",
     "categories": [
       "bird"
@@ -270,7 +270,7 @@
     "id": "brand-bird-004",
     "name": "Volkman",
     "slug": "volkman",
-    "logo": "/images/brands/volkman.png",
+    "logo": "/images/brands/Volkman-logo-1.jpg",
     "description": "Clean seed mixes and specialized nutrition for all pet bird species.",
     "categories": [
       "bird"
@@ -282,7 +282,7 @@
     "id": "brand-bird-005",
     "name": "Lafeber's",
     "slug": "lafebers",
-    "logo": "/images/brands/lafebers.png",
+    "logo": "/images/brands/lafeber.svg",
     "description": "Nutri-Berries and veterinarian-formulated avian nutrition.",
     "categories": [
       "bird"
@@ -294,7 +294,7 @@
     "id": "brand-sm-001",
     "name": "Oxbow",
     "slug": "oxbow",
-    "logo": "/images/brands/oxbow.png",
+    "logo": "/images/brands/Oxbow-Animal-Health-Logo.svg",
     "description": "Premium hay, fortified foods, and care products for small herbivores.",
     "categories": [
       "small-animal",
@@ -307,7 +307,7 @@
     "id": "brand-sm-002",
     "name": "Round Lake Farms",
     "slug": "round-lake-farms",
-    "logo": "/images/brands/roundlake.png",
+    "logo": "/images/brands/RLF_Logo_2020.CMYK.webp",
     "description": "Fresh, high-quality farm hay for small pets.",
     "categories": [
       "small-animal",
@@ -320,7 +320,7 @@
     "id": "brand-sm-003",
     "name": "Kaytee",
     "slug": "kaytee",
-    "logo": "/images/brands/kaytee.png",
+    "logo": "/images/brands/kaytee-logo.png",
     "description": "Trusted small pet bedding, nutrition, and enrichment treats.",
     "categories": [
       "small-animal",
@@ -334,7 +334,7 @@
     "id": "brand-sm-004",
     "name": "Higgins",
     "slug": "higgins",
-    "logo": "/images/brands/higgins.png",
+    "logo": "/images/brands/HigginsLogo.webp",
     "description": "Natural seed blends, treats, and food for small animals and birds.",
     "categories": [
       "small-animal",
@@ -348,7 +348,7 @@
     "id": "brand-aq-001",
     "name": "AquaTop",
     "slug": "aquatop",
-    "logo": "/images/brands/aquatop.png",
+    "logo": "/images/brands/AQUATOP-red-logo-sm.png",
     "description": "Aquarium filtration, pumps, lighting, and aquatic equipment.",
     "categories": [
       "aquatic"
@@ -360,7 +360,7 @@
     "id": "brand-aq-002",
     "name": "Ultum Nature Systems",
     "slug": "ultum-nature-systems",
-    "logo": "/images/brands/uns.png",
+    "logo": "/images/brands/Ultum-Nature-Systems-Logo-Final-200px.png",
     "description": "Premium rimless aquariums, aquascaping tools, and planted tank supplies.",
     "categories": [
       "aquatic"
@@ -372,7 +372,7 @@
     "id": "brand-aq-003",
     "name": "Seachem",
     "slug": "seachem",
-    "logo": "/images/brands/seachem.png",
+    "logo": "/images/brands/Seachem.png",
     "description": "Advanced water conditioners, plant fertilizers, and aquarium chemistry.",
     "categories": [
       "aquatic"
@@ -384,7 +384,7 @@
     "id": "brand-aq-004",
     "name": "Fluval Aquatics",
     "slug": "fluval-aquatics",
-    "logo": "/images/brands/fluval.png",
+    "logo": "/images/brands/Fluval-2.0-Landing.jpg",
     "description": "High-performance canister filters, LED lighting, and aquarium kits.",
     "categories": [
       "aquatic"
@@ -396,7 +396,7 @@
     "id": "brand-aq-005",
     "name": "Aqueon",
     "slug": "aqueon",
-    "logo": "/images/brands/aqueon.png",
+    "logo": "/images/brands/aqueon_logo.png",
     "description": "Aquariums, filters, heaters, water treatments, and fish food.",
     "categories": [
       "aquatic"
@@ -408,7 +408,7 @@
     "id": "brand-aq-006",
     "name": "CaribSea",
     "slug": "caribsea",
-    "logo": "/images/brands/caribsea.png",
+    "logo": "/images/brands/CaribSea-Logo-2020-small.png",
     "description": "Aragonite substrates, eco-complete planted tank substrate, and live sand.",
     "categories": [
       "aquatic"
@@ -420,7 +420,7 @@
     "id": "brand-aq-007",
     "name": "Hikari",
     "slug": "hikari",
-    "logo": "/images/brands/hikari.png",
+    "logo": "/images/brands/hikari_logo.png",
     "description": "Species-specific fish food pellets, wafers, and freeze-dried diets.",
     "categories": [
       "aquatic"
@@ -432,7 +432,7 @@
     "id": "brand-aq-008",
     "name": "Hygger",
     "slug": "hygger",
-    "logo": "/images/brands/hygger.png",
+    "logo": "/images/brands/Hygger.webp",
     "description": "Smart aquarium heaters, wavemakers, LED lights, and pumps.",
     "categories": [
       "aquatic"
@@ -444,7 +444,7 @@
     "id": "brand-aq-009",
     "name": "Sera",
     "slug": "sera",
-    "logo": "/images/brands/sera.png",
+    "logo": "/images/brands/logo-sera-2024-bg.svg",
     "description": "German-made aquarium foods, water conditioners, and treatments.",
     "categories": [
       "aquatic"
@@ -456,7 +456,7 @@
     "id": "brand-aq-010",
     "name": "Tetra",
     "slug": "tetra",
-    "logo": "/images/brands/tetra.png",
+    "logo": "/images/brands/Tetra.png",
     "description": "TetraMin fish food flakes, Whisper filters, and water care.",
     "categories": [
       "aquatic"
@@ -468,7 +468,7 @@
     "id": "brand-aq-011",
     "name": "API (Aquarium Pharm)",
     "slug": "api-aquarium-pharm",
-    "logo": "/images/brands/api.png",
+    "logo": "/images/brands/api-logo_1.png",
     "description": "API Freshwater & Saltwater Master Test Kits, Stress Coat, and Quick Start.",
     "categories": [
       "aquatic"
@@ -480,7 +480,7 @@
     "id": "brand-aq-012",
     "name": "Fritz",
     "slug": "fritz",
-    "logo": "/images/brands/fritz.png",
+    "logo": "/images/brands/Fritz-Aquatics-logo.webp",
     "description": "FritzZyme nitrifying bacteria, water conditioners, and salt mixes.",
     "categories": [
       "aquatic"
@@ -492,7 +492,7 @@
     "id": "brand-aq-013",
     "name": "Red Sea",
     "slug": "red-sea",
-    "logo": "/images/brands/redsea.png",
+    "logo": "/images/brands/red-sea-logo-transpadrent-p-500.png",
     "description": "REEFER reef systems, Coral Pro Salt, and reef care supplements.",
     "categories": [
       "aquatic"
@@ -504,7 +504,7 @@
     "id": "brand-aq-014",
     "name": "AquaWorx",
     "slug": "aquaworx",
-    "logo": "/images/brands/aquaworx.png",
+    "logo": "/images/brands/AquaWorx_Logo-PlayCoretag.webp",
     "description": "Aquascaping LED lighting, tools, and nano aquarium equipment.",
     "categories": [
       "aquatic"

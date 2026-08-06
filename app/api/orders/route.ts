@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
@@ -489,8 +489,7 @@ export async function POST(req: NextRequest) {
 
     // For Cash on Delivery (immediate processing tasks):
     if (paymentMethod === "cash_on_delivery") {
-      // Generate Invoice PDF, process gift cards, and Send Confirmation Email in the background
-      (async () => {
+      after(async () => {
         // 1. Deduct applied gift card balance
         if (newOrder.giftCardCode && newOrder.giftCardAmount && newOrder.giftCardAmount > 0) {
           try {
@@ -535,7 +534,7 @@ export async function POST(req: NextRequest) {
         } catch (mailError) {
           console.error("Failed to send order confirmation email during placement:", mailError);
         }
-      })();
+      });
     }
     return NextResponse.json({
       success: true,

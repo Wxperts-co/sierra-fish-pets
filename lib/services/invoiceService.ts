@@ -1,8 +1,45 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
 import PDFDocument from "pdfkit";
 import axios from "axios";
 import { IOrder } from "@/models/Order";
+
+/**
+ * Helper to resolve writable invoice file path.
+ * Prefers public/invoices for static serving, but falls back to os.tmpdir()/invoices
+ * if the public directory is read-only (e.g., on Vercel/serverless environments).
+ */
+export function getInvoiceFilePath(filename: string): string {
+  // If file already exists in tmpDir, return tmpDir path
+  const tmpPath = path.join(os.tmpdir(), "invoices", filename);
+  if (fs.existsSync(tmpPath)) {
+    return tmpPath;
+  }
+  const publicPath = path.join(process.cwd(), "public", "invoices", filename);
+  if (fs.existsSync(publicPath)) {
+    return publicPath;
+  }
+
+  // Otherwise, determine where we can write
+  const publicDir = path.join(process.cwd(), "public", "invoices");
+  try {
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir, { recursive: true });
+    }
+    // Test write permission
+    const testFile = path.join(publicDir, `.test_${Date.now()}`);
+    fs.writeFileSync(testFile, "test");
+    fs.unlinkSync(testFile);
+    return publicPath;
+  } catch {
+    const tmpDir = path.join(os.tmpdir(), "invoices");
+    if (!fs.existsSync(tmpDir)) {
+      fs.mkdirSync(tmpDir, { recursive: true });
+    }
+    return tmpPath;
+  }
+}
 
 /**
  * Clean branding color constants
@@ -492,15 +529,8 @@ class InvoiceGenerator {
  * Returns the relative URL path to the generated PDF.
  */
 export async function generateInvoicePDF(order: IOrder): Promise<string> {
-  const invoicesDir = path.join(process.cwd(), "public", "invoices");
-
-  // Ensure output directory exists
-  if (!fs.existsSync(invoicesDir)) {
-    fs.mkdirSync(invoicesDir, { recursive: true });
-  }
-
   const filename = `invoice-${order._id.toString()}.pdf`;
-  const filePath = path.join(invoicesDir, filename);
+  const filePath = getInvoiceFilePath(filename);
 
   const doc = new PDFDocument({ size: "A4", margin: 50, bufferPages: true });
   const writeStream = fs.createWriteStream(filePath);

@@ -12,4 +12,7 @@ export const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false, // Bypass SSL certificate checks for hijacked/proxied mail servers
   },
+  connectionTimeout: 5000, // 5 seconds connection timeout
+  greetingTimeout: 5000,   // 5 seconds greeting timeout
+  socketTimeout: 8000,     // 8 seconds socket timeout
 });

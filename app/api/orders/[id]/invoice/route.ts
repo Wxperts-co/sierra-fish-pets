@@ -30,10 +30,10 @@ export async function GET(
     }
 
     const filename = `invoice-${order._id.toString()}.pdf`;
-    const filePath = path.join(process.cwd(), "public", "invoices", filename);
+    const { generateInvoicePDF, getInvoiceFilePath } = await import("@/lib/services/invoiceService");
+    const filePath = getInvoiceFilePath(filename);
 
     // Always generate/overwrite the invoice PDF to ensure layout fixes and current order data are served
-    const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
     try {
       await generateInvoicePDF(order);
     } catch (genErr: any) {
