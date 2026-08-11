@@ -109,7 +109,9 @@ export default function HeroBanner() {
                     alt={banner.title ?? "Banner"}
                     fill
                     priority={index === 0}
-                    sizes="(max-width: 1024px) 1px, 100vw"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    sizes="(max-width: 1024px) 100vw, 100vw"
                     className="object-cover select-none"
                   />
 
@@ -236,7 +238,9 @@ export default function HeroBanner() {
                         alt={banner.title}
                         fill
                         priority={index === 0}
-                        sizes="(max-width: 1024px) 100vw, 1px"
+                        loading={index === 0 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : "auto"}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover select-none"
                       />
 
