@@ -158,7 +158,10 @@
             "label": "Pet Nails and Wing Trim",
             "href": "/services/in-store/pet-nail-wing-trims"
           },
-          { "label": "Store Tour & Loyalty Program", "href": "#" }
+          {
+            "label": "Store Tour & Loyalty Program",
+            "href": "/services/in-store/store-tours"
+          }
         ]
       },
       {
@@ -210,8 +213,8 @@
         "type": "submenu",
         "submenuItems": [
           { "label": "Bird Arrivals", "href": "/arrivals/birds" },
-          { "label": "Freshwater Arrivals", "href": "/arrivals/fish" },
-          { "label": "Saltwater Arrivals", "href": "/arrivals/fish" },
+          { "label": "Freshwater Arrivals", "href": "/arrivals/freshwater" },
+          { "label": "Saltwater Arrivals", "href": "/arrivals/saltwater" },
           { "label": "Reptile Arrivals", "href": "/arrivals/reptiles" },
           {
             "label": "Small Animal Arrivals",
@@ -399,6 +402,11 @@
         ]
       },
       {
+        "label": "Rewards",
+        "href": "/rewards",
+        "type": "link"
+      },
+      {
         "label": "Gallery",
         "type": "submenu",
         "href": "/gallery",
@@ -425,16 +433,6 @@
       {
         "label": "Flyers",
         "href": "/flyers",
-        "type": "link"
-      },
-      {
-        "label": "Policies",
-        "href": "/policies",
-        "type": "link"
-      },
-      {
-        "label": "Careers",
-        "href": "/contact-us",
         "type": "link"
       }
     ]

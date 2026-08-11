@@ -8,6 +8,7 @@ export interface ArrivalPet {
   name: string;
   slug: string;
   category: string;
+  subcategory?: string;
   breed: string;
 
   gender: string;

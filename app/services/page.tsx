@@ -46,6 +46,10 @@ const CATEGORY_MAP: Record<string, { parent: string; icon: React.ReactNode }> = 
     parent: "in-store",
     icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
   },
+  "store-tours": {
+    parent: "in-store",
+    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+  },
   "dog-adoption-events": {
     parent: "dog-adoption",
     icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
@@ -66,9 +70,14 @@ const SERVICE_GROUPS = [
   },
   {
     title: "In-Store Services",
-    description: "Water quality testing, monthly membership programs, and quick grooming trims.",
+    description: "Water quality testing, monthly membership programs, store tours, and quick grooming trims.",
     slug: "in-store",
-    slugs: ["aquarium-water-testing", "fish-of-month-club", "pet-nail-wing-trims"],
+    slugs: [
+      "aquarium-water-testing",
+      "fish-of-month-club",
+      "pet-nail-wing-trims",
+      "store-tours",
+    ],
   },
   {
     title: "Dog Adoption Events",

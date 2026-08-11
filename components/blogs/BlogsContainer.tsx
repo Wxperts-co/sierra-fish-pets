@@ -5,6 +5,7 @@ import blogsData from "@/data/blogs.json";
 import BlogHero from "./BlogHero";
 import BlogGrid from "./BlogGrid";
 import { BlogItem } from "./BlogCard";
+import SoroBlogWidget from "./SoroBlogWidget";
 
 interface BlogsContainerProps {
   initialCategory?: string;
@@ -94,6 +95,11 @@ export default function BlogsContainer({ initialCategory }: BlogsContainerProps)
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
+
+      {/* Auto-published Soro SEO Blog Widget */}
+      <div className="container mx-auto px-4 pb-12">
+        <SoroBlogWidget />
+      </div>
     </main>
   );
 }

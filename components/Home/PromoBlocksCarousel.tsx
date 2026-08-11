@@ -92,6 +92,20 @@ const CARD_CONFIG: Record<
     btnBg: "#3040AA",
     btnText: "#fff",
   },
+  "7": {
+    bg: "#FFF3E0",
+    textColor: "#1f1200",
+    subtitleColor: "#e65100",
+    btnBg: "#ff9800",
+    btnText: "#fff",
+  },
+  "8": {
+    bg: "#F3E5F5",
+    textColor: "#1a0033",
+    subtitleColor: "#7b1fa2",
+    btnBg: "#8e24aa",
+    btnText: "#fff",
+  },
 };
 
 // ─── PromoCard ────────────────────────────────────────────────────────────────
@@ -104,6 +118,8 @@ function PromoCard({ block, index }: { block: PromoBlock; index: number }) {
     btnBg: "#005AA9",
     btnText: "#fff",
   };
+
+  const isExternal = block.link.startsWith("http");
 
   return (
     /*
@@ -127,6 +143,8 @@ function PromoCard({ block, index }: { block: PromoBlock; index: number }) {
     >
       <Link
         href={block.link}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
         className="group relative flex h-[320px] w-full overflow-hidden rounded-3xl shadow-md sm:h-[340px] lg:h-[340px]"
         aria-label={`${block.title} — ${block.subtitle}`}
         style={{ backgroundColor: cfg.bg }}

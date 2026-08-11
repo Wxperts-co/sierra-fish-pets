@@ -443,6 +443,20 @@ export async function POST(req: NextRequest) {
           });
         }
 
+        // Add sales tax if applicable
+        if (tax && tax > 0) {
+          lineItems.push({
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: "Sales Tax",
+              },
+              unit_amount: Math.round(tax * 100),
+            },
+            quantity: 1,
+          });
+        }
+
         const sessionPayload: Stripe.Checkout.SessionCreateParams = {
           line_items: lineItems,
           mode: "payment",

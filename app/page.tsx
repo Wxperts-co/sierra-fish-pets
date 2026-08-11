@@ -1,20 +1,21 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import dynamic from 'next/dynamic'
 import CategoryCards from '@/components/Home/CategoryCard'
-import FeaturedProducts from '@/components/Home/FeaturedProduct'
-import BestSellers from '@/components/Home/BestSellers'
-import NewArrivals from '@/components/Home/NewArrivals'
 import HeroBanner from '@/components/Home/HeroBanner'
-import PromoBlocksCarousel from '@/components/Home/PromoBlocksCarousel'
-import AmazonCTA from '@/components/Home/AmazonCTA'
-import FeaturesSection from '@/components/Home/FeaturesSection'
 import React from 'react'
-import TasteGuarantee from '@/components/Home/TasteGuarantee'
-import PopularBrands from '@/components/Home/PopularBrand'
-import InstagramGallery from '@/components/Home/InstagramGallery'
-import YoutubeSection from '@/components/Home/YoutubeSection'
 import { connectDB } from '@/lib/mongodb'
 import CategoryModel from '@/models/Category'
+
+// Dynamically import below-the-fold sections for code splitting & faster initial page load
+const PromoBlocksCarousel = dynamic(() => import('@/components/Home/PromoBlocksCarousel'))
+const NewArrivals = dynamic(() => import('@/components/Home/NewArrivals'))
+const FeaturesSection = dynamic(() => import('@/components/Home/FeaturesSection'))
+const TasteGuarantee = dynamic(() => import('@/components/Home/TasteGuarantee'))
+const BestSellers = dynamic(() => import('@/components/Home/BestSellers'))
+const PopularBrands = dynamic(() => import('@/components/Home/PopularBrand'))
+const YoutubeSection = dynamic(() => import('@/components/Home/YoutubeSection'))
+const InstagramGallery = dynamic(() => import('@/components/Home/InstagramGallery'))
 
 export const metadata: Metadata = {
   title: "Sierra Fish and Pets| Buy Aquarium Fish Online| Pet Store near me",
@@ -42,9 +43,9 @@ const page = async () => {
     <>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-HRPVY4BRXE"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}

@@ -7,7 +7,7 @@ import LayoutSelector from "@/components/layouts/LayoutSelector";
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  preload: false,
+  display: "swap",
 });
 
 const nunito = Nunito({
@@ -15,7 +15,6 @@ const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
   display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {

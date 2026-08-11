@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth/authHelper";
 import { connectDB } from "@/lib/mongodb";
 import NewArrivalModel from "@/models/NewArrival";
-import { promises as fs } from "fs";
-import path from "path";
 
 export const dynamic = "force-dynamic";
 
@@ -20,19 +18,6 @@ export async function GET(request: NextRequest) {
         { success: false, message: "Access denied. Admin authorization required." },
         { status: 403 }
       );
-    }
-
-    // Auto-seed if the collection is empty, reading file dynamically at runtime
-    const count = await NewArrivalModel.countDocuments();
-    if (count === 0) {
-      try {
-        const filePath = path.join(process.cwd(), "data", "newarrivals.json");
-        const fileContent = await fs.readFile(filePath, "utf-8");
-        const initialData = JSON.parse(fileContent);
-        await NewArrivalModel.insertMany(initialData);
-      } catch (seedErr) {
-        console.error("Seeding failed in GET /api/admin/new-arrivals:", seedErr);
-      }
     }
 
     const { searchParams } = new URL(request.url);
@@ -118,6 +103,7 @@ export async function POST(request: NextRequest) {
       name,
       slug,
       category,
+      subcategory,
       breed,
       gender,
       age,
@@ -158,6 +144,7 @@ export async function POST(request: NextRequest) {
       name,
       slug: slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
       category,
+      subcategory: subcategory || "",
       breed,
       gender: gender || "Unknown",
       age: age || "Unknown",

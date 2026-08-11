@@ -39,6 +39,7 @@ export async function PATCH(
       "name",
       "slug",
       "category",
+      "subcategory",
       "breed",
       "gender",
       "age",

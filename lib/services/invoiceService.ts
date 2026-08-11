@@ -453,9 +453,9 @@ class InvoiceGenerator {
     // Tax
     this.doc
       .fillColor(COLORS.muted)
-      .text("Tax (0%):", rightX + 15, sumY)
+      .text("Sales Tax:", rightX + 15, sumY)
       .fillColor(COLORS.text)
-      .text("$0.00", valAlignX, sumY, { width: valWidth, align: "right" });
+      .text(`$${(this.order.tax || 0).toFixed(2)}`, valAlignX, sumY, { width: valWidth, align: "right" });
 
     sumY += 18;
 

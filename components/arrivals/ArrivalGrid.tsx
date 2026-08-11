@@ -7,6 +7,8 @@ import ArrivalCard, { ArrivalPet } from "./ArrivalCard";
 interface ArrivalGridProps {
   pets: ArrivalPet[];
   activeCategory: string;
+  activeSubcategory: string;
+  activeType?: string;
   onViewDetails?: (pet: ArrivalPet) => void;
 }
 
@@ -15,19 +17,46 @@ const ITEMS_PER_PAGE = 4;
 export default function ArrivalGrid({
   pets,
   activeCategory,
+  activeSubcategory,
+  activeType = "all",
   onViewDetails,
 }: ArrivalGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset pagination to first page when active category filter changes
+  // Reset pagination to first page when active category, subcategory, or type filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, activeSubcategory, activeType]);
 
-  const filteredPets =
-    activeCategory === "all"
-      ? pets
-      : pets.filter((pet) => pet.category === activeCategory);
+  const filteredPets = (() => {
+    let list =
+      activeCategory === "all"
+        ? pets
+        : pets.filter(
+            (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
+          );
+    if (activeSubcategory && activeSubcategory !== "all") {
+      list = list.filter(
+        (p) =>
+          (p.subcategory || "").toLowerCase() ===
+          activeSubcategory.toLowerCase()
+      );
+    }
+    if (activeType && activeType !== "all") {
+      const target = activeType.toLowerCase();
+      list = list.filter((p) => {
+        const breed = (p.breed || "").toLowerCase();
+        const name = (p.name || "").toLowerCase();
+        const subcat = (p.subcategory || "").toLowerCase();
+        return (
+          breed.includes(target) ||
+          name.includes(target) ||
+          subcat.includes(target)
+        );
+      });
+    }
+    return list;
+  })();
 
   if (!filteredPets.length) {
     return (

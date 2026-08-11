@@ -99,7 +99,7 @@ export default function HeroBanner() {
           className="w-full"
         >
           <CarouselContent>
-            {activeBanners.map((banner) => (
+            {activeBanners.map((banner, index) => (
               <CarouselItem key={banner.id}>
                 {/* Full screen viewport height */}
                 <div className="relative w-full h-[100vh]">
@@ -108,7 +108,7 @@ export default function HeroBanner() {
                     src={banner.image}
                     alt={banner.title ?? "Banner"}
                     fill
-                    priority
+                    priority={index === 0}
                     sizes="(max-width: 1024px) 1px, 100vw"
                     className="object-cover select-none"
                   />

@@ -61,9 +61,7 @@ export default function ArrivalHero({
             {title}
           </h1>
 
-          <p className="hidden md:block text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
-            {subtitle}
-          </p>
+         
 
           {/* Breadcrumbs */}
           {breadcrumbs.length > 0 && (

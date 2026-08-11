@@ -158,8 +158,8 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
                       <td style="padding: 6px 0; text-align: right; color: #1a202c;">${order.shippingCost === 0 ? "FREE" : formatPrice(order.shippingCost)}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 6px 0;">Tax (0%):</td>
-                      <td style="padding: 6px 0; text-align: right; color: #1a202c;">$0.00</td>
+                      <td style="padding: 6px 0;">Sales Tax:</td>
+                      <td style="padding: 6px 0; text-align: right; color: #1a202c;">${formatPrice(order.tax || 0)}</td>
                     </tr>
                     <tr style="font-weight: bold; font-size: 16px; color: #003B73;">
                       <td style="padding: 12px 0 0; border-top: 1px solid #e2e8f0;">Grand Total:</td>

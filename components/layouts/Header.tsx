@@ -190,6 +190,7 @@ export default function Header() {
   const isAquaJetSystem = pathname === "/about-aqua-jet-water-cleaning-system";
   const isCoupons = pathname === "/coupons";
   const isPolicies = pathname === "/policies" || pathname === "/return-policy" || pathname === "/shipping";
+  const isRewards = pathname === "/rewards" || (pathname ? pathname.startsWith("/rewards/") : false);
 
   const isTransparentPage =
     isHome ||
@@ -208,7 +209,8 @@ export default function Header() {
     isSpecialOrderAnimals ||
     isAquaJetSystem ||
     isCoupons ||
-    isPolicies;
+    isPolicies ||
+    isRewards;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -232,21 +234,8 @@ export default function Header() {
   // Determine if header should have a solid background or be transparent overlay
   const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
 
-  const isDarkTransparentPage =
-    isAboutUs ||
-    isContactUs ||
-    isEventCalendar ||
-    isServiceDetail ||
-    isGallery ||
-    isGiftCards ||
-    isFlyers ||
-    isBrandsPage ||
-    isArrivals ||
-    isBlogs ||
-    isSierraEdu ||
-    isSpecialOrderAnimals ||
-    isAquaJetSystem;
-  const useWhiteText = showSolidBackground || isDarkTransparentPage;
+  const isDarkTransparentPage = false;
+  const useWhiteText = showSolidBackground;
 
   return (
     <>
@@ -397,11 +386,9 @@ export default function Header() {
             ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d]"
             : cn(
                 "absolute top-0 inset-x-0 bg-transparent border-b",
-                isDarkTransparentPage
-                  ? "border-white/10"
-                  : isHome || isEventCalendar
-                    ? "border-slate-200/60"
-                    : "border-transparent",
+                isHome || isEventCalendar
+                  ? "border-slate-200/60"
+                  : "border-transparent",
               ),
         )}
       >

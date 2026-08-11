@@ -17,6 +17,7 @@ const CORPORATE = [
   { label: "Careers", href: "/contact-us" },
   { label: "Gallery", href: "/gallery" },
   { label: "Brands We Carry", href: "/brands" },
+  { label: "Pet Store Policies", href: "/policies" },
   { label: "Affiliate Program", href: "/affiliate" },
 ];
 
@@ -166,10 +167,10 @@ export default function Footer() {
       </div>
 
       {/* ── Main body ──────────────────────────────────────────── */}
-      <div className="container mx-auto px-4 md:py-10">
+      <div className="container mx-auto px-4 md:py-8">
         <div className="grid grid-cols-2 gap-y-4 gap-x-8 md:gap-x-8 md:gap-y-8 lg:grid-cols-12">
           {/* Brand column */}
-          <div className="col-span-2 lg:col-span-4">
+          <div className="col-span-2 md:col-span-6 lg:col-span-3">
             <Link
               href="/"
               className="inline-flex items-center  hover:opacity-90"
@@ -184,7 +185,7 @@ export default function Footer() {
               />
             </Link>
 
-            <p className=" text-[13px] leading-relaxed text-slate-500">
+            <p className=" text-[15px] leading-relaxed text-slate-500">
               Renton City's premier destination for aquatic life &amp; pets.
               Family-owned, expert care .{" "}
               <a
@@ -237,8 +238,8 @@ export default function Footer() {
             { title: "Customer Service", links: CUSTOMER_SERVICE },
             { title: "Services", links: SERVICES },
           ].map(({ title, links }) => (
-            <div key={title} className="col-span-1 lg:col-span-2 xl:col-span-2">
-              <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-800">
+            <div key={title} className="col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-3">
+              <h3 className="mb-3 text-[15px] font-bold uppercase tracking-widest text-slate-800">
                 {title}
               </h3>
               <ul className="space-y-2">
@@ -246,7 +247,7 @@ export default function Footer() {
                   <li key={l.label}>
                     <Link
                       href={l.href}
-                      className="group flex items-center gap-1.5 text-[13px] text-slate-500 transition-colors hover:text-[#005AA9]"
+                      className="group flex items-center  gap-1.5 text-[16px] text-slate-500 transition-colors hover:text-[#005AA9]"
                     >
                       <span className="h-px w-0 bg-[#005AA9] transition-all duration-200 group-hover:w-3" />
                       {l.label}

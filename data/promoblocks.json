@@ -21,10 +21,24 @@
     "link": "/services/aquarium/aquarium-installation"
   },
   {
+    "id": "7",
+    "title": "Amazon Storefront",
+    "subtitle": "Shop Our Amazon Picks",
+    "image": "/images/promos/promobanner5.png",
+    "link": "https://www.sierraspets.com"
+  },
+  {
     "id": "6",
     "title": "Aquarium Philosophy",
     "subtitle": "Professional Aquarium Husbandry",
     "image": "/images/promos/promobanner3.png",
     "link": "/services/aquarium/aquarium-philosophy"
+  },
+  {
+    "id": "8",
+    "title": "VIP Pet Perks",
+    "subtitle": "Exclusive Member Rewards",
+    "image": "/images/promos/promobanner6.png",
+    "link": "https://www.sierrapetperks.com"
   }
 ]

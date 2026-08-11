@@ -79,6 +79,7 @@ export default function AdminNewArrivalsPage() {
   const [formId, setFormId] = useState("");
   const [formName, setFormName] = useState("");
   const [formCategory, setFormCategory] = useState("dogs");
+  const [formSubcategory, setFormSubcategory] = useState("");
   const [formBreed, setFormBreed] = useState("");
   const [formGender, setFormGender] = useState("Male");
   const [formAge, setFormAge] = useState("");
@@ -155,6 +156,7 @@ export default function AdminNewArrivalsPage() {
     setFormId("");
     setFormName("");
     setFormCategory("dogs");
+    setFormSubcategory("");
     setFormBreed("");
     setFormGender("Male");
     setFormAge("");
@@ -187,6 +189,7 @@ export default function AdminNewArrivalsPage() {
     setFormId(pet.id);
     setFormName(pet.name);
     setFormCategory(pet.category);
+    setFormSubcategory((pet as any).subcategory || "");
     setFormBreed(pet.breed);
     setFormGender(pet.gender);
     setFormAge(pet.age);
@@ -221,6 +224,7 @@ export default function AdminNewArrivalsPage() {
         id: formId,
         name: formName,
         category: formCategory,
+        subcategory: formSubcategory || "",
         breed: formBreed,
         gender: formGender,
         age: formAge,
@@ -678,19 +682,164 @@ export default function AdminNewArrivalsPage() {
                   </select>
                 </div>
 
-                {/* Breed */}
+                {/* Subcategory — only for freshwater / saltwater */}
+                {(formCategory === "freshwater" || formCategory === "saltwater") && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Subcategory
+                    </label>
+                    <select
+                      value={formSubcategory}
+                      onChange={(e) => setFormSubcategory(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#005AA9]/30 cursor-pointer bg-white"
+                    >
+                      <option value="">— None —</option>
+                      <option value="fish">Fish</option>
+                      {formCategory === "freshwater" && <option value="plants">Plants</option>}
+                      <option value="inverts">Inverts</option>
+                      {formCategory === "saltwater" && <option value="corals">Corals</option>}
+                    </select>
+                  </div>
+                )}
+
+                {/* Breed / Species */}
                 <div>
                   <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                     Breed / Species <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
+                    list="species-options"
                     value={formBreed}
                     onChange={(e) => setFormBreed(e.target.value)}
-                    placeholder="e.g. Golden Retriever"
+                    placeholder="e.g. Golden Retriever, Bettas, Clownfish..."
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold outline-none focus:border-[#005AA9]/30"
                     required
                   />
+                  <datalist id="species-options">
+                    {formCategory === "freshwater" && formSubcategory === "fish" && (
+                      <>
+                        <option value="Algae Eaters" />
+                        <option value="Angels" />
+                        <option value="Barbs" />
+                        <option value="Bettas" />
+                        <option value="Catfish" />
+                        <option value="Cichlids-Central American" />
+                        <option value="Cichlids-Dwarf" />
+                        <option value="Cichlids-Malawi" />
+                        <option value="Cichlids-Other" />
+                        <option value="Cichlids-South American" />
+                        <option value="Cichlids-Tanganykin" />
+                        <option value="Corydoras" />
+                        <option value="Danios" />
+                        <option value="Discus" />
+                        <option value="Feeders" />
+                        <option value="Freshwater Eels" />
+                        <option value="GloFish" />
+                        <option value="Gobies" />
+                        <option value="Goldfish Fancy" />
+                        <option value="Mollies" />
+                        <option value="Oddballs/Misc Fish" />
+                        <option value="Platies" />
+                        <option value="Plecos" />
+                        <option value="Rainbows" />
+                        <option value="Rasboras" />
+                        <option value="Rice fish" />
+                        <option value="Sharks" />
+                        <option value="Swordtails" />
+                        <option value="Tetras/Hatchets/Pencils" />
+                      </>
+                    )}
+                    {formCategory === "freshwater" && formSubcategory === "inverts" && (
+                      <>
+                        <option value="Amphibians" />
+                        <option value="Crabs" />
+                        <option value="Shrimps" />
+                        <option value="Shrimps-Cardinia" />
+                        <option value="Shrimps-Neocardinia" />
+                        <option value="Snails" />
+                      </>
+                    )}
+                    {formCategory === "freshwater" && formSubcategory === "plants" && (
+                      <>
+                        <option value="Bunched" />
+                        <option value="Potted" />
+                        <option value="Loose" />
+                        <option value="T/C (Tissue Culture)" />
+                      </>
+                    )}
+                    {formCategory === "saltwater" && formSubcategory === "fish" && (
+                      <>
+                        <option value="Angelfish" />
+                        <option value="Anglers" />
+                        <option value="Anthias" />
+                        <option value="Basslets" />
+                        <option value="Blennies" />
+                        <option value="Boxfish" />
+                        <option value="Butterfly" />
+                        <option value="Captive Bred" />
+                        <option value="Cardinalfish" />
+                        <option value="Clownfish" />
+                        <option value="Damsels" />
+                        <option value="Eels" />
+                        <option value="Filefish" />
+                        <option value="Goatfish" />
+                        <option value="Gobies" />
+                        <option value="Groupers" />
+                        <option value="Hamlets" />
+                        <option value="Hawkfish" />
+                        <option value="Hogfish" />
+                        <option value="Jawfish" />
+                        <option value="Lionfish" />
+                        <option value="Misc Fish" />
+                        <option value="Parrotfish" />
+                        <option value="Pipefish" />
+                        <option value="Pseudochromis" />
+                        <option value="Puffers" />
+                        <option value="Rabbitfish" />
+                        <option value="Scorpion Fish" />
+                        <option value="Seahorses" />
+                        <option value="Sharks" />
+                        <option value="Snappers" />
+                        <option value="Squirrelfish" />
+                        <option value="Sweetlips" />
+                        <option value="Tangs (Surgeonfish)" />
+                        <option value="Tilefish" />
+                        <option value="Triggers" />
+                        <option value="Wrasses" />
+                      </>
+                    )}
+                    {formCategory === "saltwater" && formSubcategory === "corals" && (
+                      <>
+                        <option value="Cultured LPS (Large Polyp Stony)" />
+                        <option value="Cultured SPS (Small Polyp Stony)" />
+                        <option value="Cultured Soft Corals" />
+                        <option value="Brains" />
+                        <option value="Gorgonians/Sea Fans" />
+                        <option value="Polyps/Mushrooms" />
+                        <option value="Leathers" />
+                        <option value="LPS Corals" />
+                        <option value="SPS Corals" />
+                        <option value="Soft Corals" />
+                      </>
+                    )}
+                    {formCategory === "saltwater" && formSubcategory === "inverts" && (
+                      <>
+                        <option value="Anemones" />
+                        <option value="Clams" />
+                        <option value="Crabs" />
+                        <option value="Cucumbers" />
+                        <option value="Nudibranchs" />
+                        <option value="Plants/Algae" />
+                        <option value="Shrimps" />
+                        <option value="Snails" />
+                        <option value="Starfish" />
+                        <option value="Urchins" />
+                        <option value="Worms/Feather Dusters" />
+                        <option value="Misc Inverts" />
+                      </>
+                    )}
+                  </datalist>
                 </div>
 
                 {/* Price */}

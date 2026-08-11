@@ -44,6 +44,8 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
   const [activeCategory, setActiveCategory] = useState<string>(() => {
     return initialCategory ? mapCategoryParam(initialCategory) : "all";
   });
+  const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
+  const [activeType, setActiveType] = useState<string>("all");
   const [selectedPet, setSelectedPet] = useState<ArrivalPet | null>(null);
   const [arrivals, setArrivals] = useState<ArrivalPet[]>(initialArrivals || []);
   const [loading, setLoading] = useState(!initialArrivals);
@@ -51,6 +53,8 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
   // Sync category changes to browser URL path
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+    setActiveSubcategory("all"); // reset sub-filter when top-level changes
+    setActiveType("all");
     const path = category === "all" ? "/arrivals" : `/arrivals/${category}`;
     window.history.pushState(null, "", path);
   };
@@ -147,12 +151,21 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
       <ArrivalCategoryNav
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
+        activeSubcategory={activeSubcategory}
+        onSubcategoryChange={(sub) => {
+          setActiveSubcategory(sub);
+          setActiveType("all");
+        }}
+        activeType={activeType}
+        onTypeChange={setActiveType}
       />
 
       {/* Product/Pet Grid */}
       <ArrivalGrid
         pets={arrivals}
         activeCategory={activeCategory}
+        activeSubcategory={activeSubcategory}
+        activeType={activeType}
         onViewDetails={setSelectedPet}
       />
 

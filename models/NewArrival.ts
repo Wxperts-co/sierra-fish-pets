@@ -5,6 +5,7 @@ export interface INewArrival extends Document {
   name: string;
   slug: string;
   category: string;
+  subcategory?: string;
   breed: string;
   gender: string;
   age: string;
@@ -34,6 +35,7 @@ const newArrivalSchema = new Schema<INewArrival>(
     name: { type: String, required: true },
     slug: { type: String, required: true },
     category: { type: String, required: true, index: true },
+    subcategory: { type: String, default: "" },
     breed: { type: String, required: true },
     gender: { type: String, default: "Unknown" },
     age: { type: String, default: "Unknown" },
