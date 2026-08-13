@@ -276,10 +276,12 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Import] Starting bulk import of ${importedProducts.length} entries.`);
 
-    // 1. Optimize lookup: Fetch all existing product IDs, SKUs, and Slugs in a single light query
-    const existingProducts = await Product.find({}, "id sku slug images imageStatus imageSource imageLastChecked createdAt").lean();
+    // 1. Optimize lookup: Fetch all existing product IDs, SKUs, UPCs, Names, and Slugs in a single light query
+    const existingProducts = await Product.find({}, "id sku name upc slug description images imageStatus imageSource imageLastChecked createdAt").lean();
     const existingIdMap = new Map<string, any>(existingProducts.map(p => [p.id, p]));
-    const existingSkuSet = new Set(existingProducts.map(p => p.sku));
+    const existingSkuMap = new Map<string, any>(existingProducts.map(p => [p.sku, p]));
+    const existingUpcMap = new Map<string, any>(existingProducts.filter(p => p.upc).map(p => [p.upc, p]));
+    const existingNameMap = new Map<string, any>(existingProducts.map(p => [p.name.toLowerCase().trim(), p]));
     const slugSet = new Set(existingProducts.map(p => p.slug));
 
     const productsToInsert: any[] = [];
@@ -343,11 +345,16 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-        // Verify duplicates / updates in-memory
-        // First try matching by internal ID, then fall back to SKU (to support re-importing same catalog)
+        // Verify duplicates / updates in-memory: Try matching by ID -> SKU -> UPC -> Name
         let existingProduct: any = existingIdMap.get(id);
-        if (!existingProduct && existingSkuSet.has(sku)) {
-          existingProduct = existingProducts.find((p: any) => p.sku === sku) || null;
+        if (!existingProduct && sku) {
+          existingProduct = existingSkuMap.get(sku) || null;
+        }
+        if (!existingProduct && upc) {
+          existingProduct = existingUpcMap.get(upc) || null;
+        }
+        if (!existingProduct && name) {
+          existingProduct = existingNameMap.get(name.toLowerCase().trim()) || null;
         }
         const isUpdate = !!existingProduct;
 
@@ -385,7 +392,24 @@ export async function POST(request: NextRequest) {
           categorySlug = `${categorySlugVal}-/-${subcategorySlugVal}`;
         }
 
-        const parsedDesc = parseHtmlDescription(getValue(productData, "product_description", "description"));
+        const rawDescVal = getValue(
+          productData,
+          "product_description",
+          "description",
+          "desc",
+          "details",
+          "short_description",
+          "long_description",
+          "productdescription",
+          "item_description",
+          "item_desc",
+          "body_html",
+          "body"
+        );
+        const rawDescText = cleanExcelText(rawDescVal);
+        const parsedDesc = parseHtmlDescription(rawDescVal);
+        const finalDescription = parsedDesc.description || rawDescText || (isUpdate && existingProduct?.description ? existingProduct.description : String(name));
+        const finalShortDescription = parseDescription(finalDescription) || finalDescription.slice(0, 150) || String(name);
 
         const isFeaturedRaw = getValue(productData, "product_is_featured", "isFeatured", "featured");
         const isFeatured = isFeaturedRaw === "TRUE" || isFeaturedRaw === "true" || isFeaturedRaw === true;
@@ -460,7 +484,7 @@ export async function POST(request: NextRequest) {
 
         const mappedProduct = {
           _id: existingProduct ? existingProduct._id : new mongoose.Types.ObjectId(),
-          id: String(id).slice(0, 100),
+          id: existingProduct ? existingProduct.id : (String(id).slice(0, 100) || String(sku).slice(0, 50)),
           name: String(name).slice(0, 200),
           slug,
           sku: String(sku).slice(0, 50),
@@ -476,8 +500,8 @@ export async function POST(request: NextRequest) {
           imageStatus: finalImageStatus,
           imageSource: finalImageSource,
           imageLastChecked: finalImageLastChecked,
-          shortDescription: parseDescription(parsedDesc.description) || String(name),
-          description: parsedDesc.description || String(name),
+          shortDescription: finalShortDescription,
+          description: finalDescription,
           features: parsedDesc.features || [],
           tags: cat1Raw ? [cleanExcelText(cat1Raw)] : [],
           isNewArrival: isFeatured,
@@ -490,11 +514,14 @@ export async function POST(request: NextRequest) {
 
         if (isUpdate) {
           productsToUpdate.push(mappedProduct);
-          existingIdMap.set(id, mappedProduct);
+          existingIdMap.set(mappedProduct.id, mappedProduct);
+          existingSkuMap.set(mappedProduct.sku, mappedProduct);
+          existingNameMap.set(mappedProduct.name.toLowerCase().trim(), mappedProduct);
         } else {
           productsToInsert.push(mappedProduct);
-          existingSkuSet.add(sku);
-          existingIdMap.set(id, mappedProduct);
+          existingIdMap.set(mappedProduct.id, mappedProduct);
+          existingSkuMap.set(mappedProduct.sku, mappedProduct);
+          existingNameMap.set(mappedProduct.name.toLowerCase().trim(), mappedProduct);
         }
         results.successful++;
       } catch (error: any) {
@@ -529,7 +556,7 @@ export async function POST(request: NextRequest) {
       console.log(`[Import] Updating ${productsToUpdate.length} existing products...`);
       const bulkOps = productsToUpdate.map(p => ({
         updateOne: {
-          filter: { id: p.id },
+          filter: { _id: p._id },
           update: {
             $set: {
               name: p.name,

@@ -18,7 +18,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "d2j6dbq0eux0bg.cloudfront.net",
+        hostname: "*.cloudfront.net",
+      },
+      {
+        protocol: "http",
+        hostname: "*.cloudfront.net",
       },
       {
         protocol: "https",
@@ -27,6 +31,50 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.salsify.com",
+      },
+      {
+        protocol: "http",
+        hostname: "images.salsify.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.volusion.store",
+      },
+      {
+        protocol: "http",
+        hostname: "*.volusion.store",
+      },
+      {
+        protocol: "https",
+        hostname: "outriderreptiles.com",
+      },
+      {
+        protocol: "http",
+        hostname: "outriderreptiles.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.outriderreptiles.com",
+      },
+      {
+        protocol: "http",
+        hostname: "*.outriderreptiles.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static.wixstatic.com",
+      },
+      {
+        protocol: "http",
+        hostname: "static.wixstatic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.wixstatic.com",
+      },
+      {
+        protocol: "http",
+        hostname: "*.wixstatic.com",
       },
     ],
   },
