@@ -34,7 +34,12 @@ const sortOptions = [
 
 const ITEMS_PER_PAGE = 12;
 
-function ShopPageContent() {
+interface ShopPageClientProps {
+  initialCategory?: string;
+  initialSubcategory?: string;
+}
+
+function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
@@ -97,13 +102,11 @@ function ShopPageContent() {
     }
   }, [selectedCategory]);
 
-  // Sync URL query param → Redux on mount / param change
+  // Sync URL query param / props → Redux on mount / prop change
   useEffect(() => {
-    const categoryFromUrl = searchParams?.get(
-      "category",
-    ) as CategorySlug | null;
-    const subcategoryFromUrl = searchParams?.get("subcategory") || null;
-    const brandsFromUrl = searchParams?.get("brand")?.split(",") || [];
+    const categoryFromUrl = (initialCategory || searchParams?.get("category")) as CategorySlug | null;
+    const subcategoryFromUrl = initialSubcategory || searchParams?.get("subcategory") || null;
+    const brandsFromUrl = searchParams?.get("brand")?.split(",").filter(Boolean) || [];
     const ratingFromUrl = searchParams?.get("rating");
     const sortFromUrl = searchParams?.get("sort");
     const searchFromUrl = searchParams?.get("q") || "";
@@ -111,10 +114,16 @@ function ShopPageContent() {
 
     setCurrentPage(pageFromUrl > 0 ? pageFromUrl : 1);
 
-    if (categoryFromUrl) {
+    if (categoryFromUrl && (categoryFromUrl as string) !== "all") {
       dispatch(setCategory(categoryFromUrl));
-    } else {
+    } else if (initialCategory) {
       dispatch(setCategory(null));
+    }
+
+    if (subcategoryFromUrl) {
+      dispatch(setSubcategory(subcategoryFromUrl));
+    } else if (initialSubcategory) {
+      dispatch(setSubcategory(null));
     }
 
     if (sortFromUrl) {
@@ -133,15 +142,11 @@ function ShopPageContent() {
       dispatch(setSortBy("featured"));
     }
 
-    // Clear subcategory when category changes via URL
-    dispatch(setSubcategory(subcategoryFromUrl));
-
     dispatch(setBrands(brandsFromUrl));
-
     dispatch(setMinRating(ratingFromUrl ? Number(ratingFromUrl) : null));
     dispatch(setSearch(searchFromUrl));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [initialCategory, initialSubcategory]);
 
   // Track filters to reset page number and prevent double fetches
   const prevFiltersRef = useRef({
@@ -236,23 +241,45 @@ function ShopPageContent() {
     search,
   ]);
 
+  const buildShopUrl = (
+    cat?: string | null,
+    subcat?: string | null,
+    extraParams?: Record<string, string | null>,
+  ) => {
+    let basePath = "/shop";
+    if (cat && cat !== "all") {
+      basePath += `/${cat}`;
+      if (subcat) {
+        basePath += `/${subcat}`;
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (extraParams) {
+      Object.entries(extraParams).forEach(([k, v]) => {
+        if (v === null || v === "") {
+          params.delete(k);
+        } else {
+          params.set(k, v);
+        }
+      });
+    }
+
+    const queryString = params.toString();
+    return queryString ? `${basePath}?${queryString}` : basePath;
+  };
+
   const handleCategoryChange = (slug: string) => {
-    dispatch(setCategory(slug as CategorySlug));
+    const newCategory = slug === "all" ? null : (slug as CategorySlug);
+    dispatch(setCategory(newCategory));
     dispatch(setSubcategory(null));
     dispatch(setSearch(""));
 
     setCurrentPage(1);
 
-    const params = new URLSearchParams(window.location.search);
-
-    params.set("category", slug);
-    params.delete("subcategory");
-    params.delete("brand");
-    params.delete("q");
-    params.set("page", "1");
-
-    const newUrl = `/shop?${params.toString()}`;
-    window.history.replaceState(null, "", newUrl);
+    const newUrl = buildShopUrl(newCategory, null, { page: "1", q: null });
+    window.history.pushState(null, "", newUrl);
   };
 
   const handleSubcategoryToggle = (slug: string) => {
@@ -262,18 +289,8 @@ function ShopPageContent() {
     dispatch(setSearch(""));
     setCurrentPage(1);
 
-    const params = new URLSearchParams(window.location.search);
-
-    if (newValue) {
-      params.set("subcategory", newValue);
-    } else {
-      params.delete("subcategory");
-    }
-
-    params.delete("q");
-    params.set("page", "1");
-    const newUrl = `/shop?${params.toString()}`;
-    window.history.replaceState(null, "", newUrl);
+    const newUrl = buildShopUrl(selectedCategory, newValue, { page: "1", q: null });
+    window.history.pushState(null, "", newUrl);
   };
 
   const handleBrandToggle = (slug: string) => {
@@ -542,8 +559,8 @@ function ShopPageContent() {
                             setIsDropdownOpen(false);
                           }}
                           className={`w-full text-left px-4 py-2 text-sm transition-colors hover:bg-slate-50 ${sortBy === option.value
-                              ? "text-[#005ca5] font-semibold bg-[#379ae5]/10"
-                              : "text-slate-600"
+                            ? "text-[#005ca5] font-semibold bg-[#379ae5]/10"
+                            : "text-slate-600"
                             }`}
                         >
                           {option.label}
@@ -592,8 +609,8 @@ function ShopPageContent() {
                       key={page}
                       onClick={() => handlePageChange(page as number)}
                       className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold transition-all cursor-pointer ${isActive
-                          ? "bg-[#379ae5] text-white shadow-md shadow-[#379ae5]/30"
-                          : "border border-slate-200 text-slate-600 hover:border-[#005ca5] hover:text-[#005ca5] bg-white"
+                        ? "bg-[#379ae5] text-white shadow-md shadow-[#379ae5]/30"
+                        : "border border-slate-200 text-slate-600 hover:border-[#005ca5] hover:text-[#005ca5] bg-white"
                         }`}
                     >
                       {page}
@@ -617,7 +634,13 @@ function ShopPageContent() {
   );
 }
 
-export default function ShopPageClient() {
+export default function ShopPageClient({
+  initialCategory,
+  initialSubcategory,
+}: {
+  initialCategory?: string;
+  initialSubcategory?: string;
+}) {
   return (
     <Suspense
       fallback={
@@ -626,7 +649,10 @@ export default function ShopPageClient() {
         </div>
       }
     >
-      <ShopPageContent />
+      <ShopPageContent
+        initialCategory={initialCategory}
+        initialSubcategory={initialSubcategory}
+      />
     </Suspense>
   );
 }

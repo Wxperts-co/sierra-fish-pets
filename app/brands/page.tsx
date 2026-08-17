@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import BrandGrid from "@/components/brands/BrandGrid";
 import BrandHero from "@/components/brands/BrandsHero";
 import BrandCTA from "@/components/brands/BrandCTA";
@@ -41,6 +42,9 @@ async function getBrands() {
 
 export default async function BrandsPage({ searchParams }: BrandsPageProps) {
   const { category } = await searchParams;
+  if (category && category !== "all") {
+    redirect(`/brands/category/${category}`);
+  }
   const activeCategory = category ?? "all";
 
   const brands = await getBrands();

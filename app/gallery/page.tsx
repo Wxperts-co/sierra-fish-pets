@@ -37,10 +37,10 @@ const fadeInUp: Variants = {
 
 const galleryImages = galleryData as GalleryItem[];
 
-function GalleryContent() {
+export function GalleryContent({ initialCat }: { initialCat?: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initialCategory = searchParams?.get("category") || "all";
+  const initialCategory = initialCat || searchParams?.get("category") || "all";
 
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -48,16 +48,18 @@ function GalleryContent() {
   useEffect(() => {
     const cat = searchParams?.get("category");
     if (cat && CATEGORIES.some((c) => c.id === cat)) {
-      setActiveCategory(cat);
+      router.replace(`/gallery/category/${cat}`);
+    } else if (initialCat && CATEGORIES.some((c) => c.id === initialCat)) {
+      setActiveCategory(initialCat);
     }
-  }, [searchParams]);
+  }, [searchParams, initialCat, router]);
 
   const handleCategoryChange = (catId: string) => {
     setActiveCategory(catId);
     if (catId === "all") {
       router.push("/gallery", { scroll: false });
     } else {
-      router.push(`/gallery?category=${catId}`, { scroll: false });
+      router.push(`/gallery/category/${catId}`, { scroll: false });
     }
   };
 

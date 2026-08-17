@@ -25,12 +25,12 @@ const CATEGORY_BACKGROUNDS: Record<string, string> = {
 
 // Each card flies in from a unique direction
 const CARD_DIRECTIONS: { x: number; y: number }[] = [
-  { x: 0,   y: 60  },  // 0 — from bottom
-  { x: 0,   y: -60 },  // 1 — from top
-  { x: -60, y: 0   },  // 2 — from left
-  { x: 60,  y: 0   },  // 3 — from right
-  { x: 50,  y: 50  },  // 4 — from bottom-right
-  { x: -50, y: 50  },  // 5 — from bottom-left
+  { x: 0, y: 60 },  // 0 — from bottom
+  { x: 0, y: -60 },  // 1 — from top
+  { x: -60, y: 0 },  // 2 — from left
+  { x: 60, y: 0 },  // 3 — from right
+  { x: 50, y: 50 },  // 4 — from bottom-right
+  { x: -50, y: 50 },  // 5 — from bottom-left
 ];
 
 export default function CategoryCards({ initialCategories = [] }: { initialCategories?: Category[] }) {
@@ -62,7 +62,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
             setCategories(getSortedCategories(data.categories));
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [initialCategories]);
 
@@ -145,7 +145,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
                 className="pl-4 basis-1/3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
               >
                 <Link
-                  href={`/shop/?category=${category.slug}`}
+                  href={`/shop/${category.slug}`}
                   className="group flex flex-col items-center w-full"
                 >
                   {/* Card — remounts on each viewport entry, replaying directional fly-in */}
@@ -163,9 +163,8 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
                       ease: [0.25, 0.46, 0.45, 0.94],
                       delay: index * 0.06,
                     }}
-                    className={`aspect-square w-[90%] mx-auto rounded-[1.2rem] sm:w-full sm:rounded-[2rem] relative overflow-hidden transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-xl ${
-                      CATEGORY_BACKGROUNDS[category.slug] || "bg-slate-100"
-                    }`}
+                    className={`aspect-square w-[90%] mx-auto rounded-[1.2rem] sm:w-full sm:rounded-[2rem] relative overflow-hidden transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-xl ${CATEGORY_BACKGROUNDS[category.slug] || "bg-slate-100"
+                      }`}
                   >
                     <Image
                       src={category.image || "/images/categories/default.png"}
@@ -212,11 +211,10 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
               key={i}
               onClick={() => api?.scrollTo(i)}
               aria-label={`Go to category ${i + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                i === current
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === current
                   ? "w-6 bg-[#005AA9]"
                   : "w-2 bg-slate-300 hover:bg-slate-400"
-              }`}
+                }`}
             />
           ))}
         </div>

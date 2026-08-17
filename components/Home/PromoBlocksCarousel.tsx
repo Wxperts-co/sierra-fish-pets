@@ -331,8 +331,8 @@ export default function PromoBlocksCarousel() {
   }, [api]);
 
   return (
-    <section className="py-0">
-      <div className="container mx-auto px-4">
+    <section className="py-0 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="relative">
           <Carousel
             setApi={setApi}

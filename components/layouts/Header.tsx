@@ -56,14 +56,14 @@ export default function Header() {
           setCategories(sorted);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const [location, setLocation] = useState<string>("Location not set");
 
   const handleAutoDetectLocation = () => {
     setLocation("Detecting...");
-    
+
     const fetchIpLocation = () => {
       fetch("https://ipapi.co/json/")
         .then((res) => res.json())
@@ -173,7 +173,7 @@ export default function Header() {
   const isGallery = pathname === "/gallery";
   const isGiftCards = pathname === "/gift-cards";
   const isFlyers = pathname === "/flyers";
-  const isServiceDetail = pathname ? pathname.startsWith("/services/") : false;
+  const isServiceDetail = pathname ? pathname === "/services" || pathname.startsWith("/services/") : false;
   const isBrandsPage =
     pathname === "/brands" ||
     (pathname ? pathname.startsWith("/brands/") : false);
@@ -185,7 +185,12 @@ export default function Header() {
     (pathname ? pathname.startsWith("/blogs/") : false);
   const isSierraEdu =
     pathname === "/sierra-edu" ||
-    (pathname ? pathname.startsWith("/edu/") : false);
+    pathname === "/education" ||
+    (pathname
+      ? pathname.startsWith("/edu/") ||
+      pathname.startsWith("/education/") ||
+      pathname.startsWith("/sierra-edu/")
+      : false);
   const isSpecialOrderAnimals = pathname === "/special-order-animals";
   const isAquaJetSystem = pathname === "/about-aqua-jet-water-cleaning-system";
   const isCoupons = pathname === "/coupons";
@@ -235,7 +240,7 @@ export default function Header() {
   const showSolidBackground = !isTransparentPage || scrolled || searchOpen;
 
   const isDarkTransparentPage = false;
-  const useWhiteText = showSolidBackground;
+  const useWhiteText = showSolidBackground || isServiceDetail;
 
   return (
     <>
@@ -348,7 +353,7 @@ export default function Header() {
           </Link>
 
           {categories.map((category) => {
-            const href = `/shop?category=${category.slug}`;
+            const href = `/shop/${category.slug}`;
             const isActive = pathname?.startsWith("/shop") && selectedCategory === category.slug;
             return (
               <Link
@@ -385,14 +390,14 @@ export default function Header() {
           showSolidBackground
             ? "fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d]"
             : cn(
-                "absolute top-0 inset-x-0 bg-transparent border-b",
-                isHome || isEventCalendar
-                  ? "border-slate-200/60"
-                  : "border-transparent",
-              ),
+              "absolute top-0 inset-x-0 bg-transparent border-b",
+              isHome || isEventCalendar
+                ? "border-slate-200/60"
+                : "border-transparent",
+            ),
         )}
       >
-        <div className="w-[90%] max-w-[1600px] mx-auto px-4">
+        <div className="w-[95%] max-w-[1600px] mx-auto px-4">
           <div className="flex h-25 items-center justify-between gap-4">
             {/* Left — logo */}
             <Link
@@ -451,7 +456,7 @@ export default function Header() {
                       href={item.href}
                       key={item.label}
                       className={cn(
-                        "relative px-3.5 py-3 text-base font-semibold tracking-wide transition-colors duration-150 after:absolute after:bottom-0 after:left-3.5 after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
+                        "relative px-2.5 xl:px-3.5 py-3 text-sm xl:text-base font-semibold tracking-wide whitespace-nowrap transition-colors duration-150 after:absolute after:bottom-0 after:left-2.5 xl:after:left-3.5 after:right-2.5 xl:after:right-3.5 after:h-[2px] after:scale-x-0 after:rounded-full after:bg-cyan-300 after:transition-transform after:duration-200 hover:after:scale-x-100",
                         useWhiteText
                           ? "text-white hover:text-white/80"
                           : "text-black/70 hover:text-[#003DA5]/80",
@@ -467,7 +472,7 @@ export default function Header() {
                   return (
                     <div
                       key={item.label}
-                      className="relative py-3 px-3.5 nav-dropdown-container"
+                      className="relative py-3 px-2.5 xl:px-3.5 nav-dropdown-container"
                     >
                       <button
                         onClick={() =>
@@ -476,7 +481,7 @@ export default function Header() {
                           )
                         }
                         className={cn(
-                          "flex items-center gap-1 text-base font-semibold tracking-wide transition-colors duration-150 cursor-pointer focus:outline-none",
+                          "flex items-center gap-1 text-sm xl:text-base font-semibold tracking-wide whitespace-nowrap transition-colors duration-150 cursor-pointer focus:outline-none",
                           useWhiteText
                             ? "text-white hover:text-white/80"
                             : "text-black/70 hover:text-[#003DA5]/80",
@@ -517,7 +522,7 @@ export default function Header() {
                                   className={cn(
                                     "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 opacity-0 invisible scale-95 group-hover/submenu:opacity-100 group-hover/submenu:visible group-hover/submenu:scale-100 transition-all duration-150 origin-top-left",
                                     dropKey === "more"
-                                      ? "min-w-[170px]"
+                                      ? "w-[160px] max-w-[170px]"
                                       : "min-w-[240px]",
                                   )}
                                 >
@@ -545,20 +550,20 @@ export default function Header() {
                                                         : subItem.label,
                                                     );
                                                   }}
-                                                  className="w-full text-left flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-pointer select-none focus:outline-none"
+                                                  className="w-full text-left flex items-center justify-between rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-normal break-words leading-snug cursor-pointer select-none focus:outline-none"
                                                 >
                                                   {subItem.label}
                                                   <ChevronRight
                                                     className={cn(
-                                                      "h-3.5 w-3.5 text-slate-400 transition-transform duration-200",
+                                                      "h-3.5 w-3.5 text-slate-400 transition-transform duration-200 shrink-0 ml-1",
                                                       isSubOpen && "rotate-90",
                                                     )}
                                                   />
                                                 </button>
                                               ) : (
-                                                <div className="flex items-center justify-between rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap cursor-default select-none">
+                                                <div className="flex items-center justify-between rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-normal break-words leading-snug cursor-default select-none">
                                                   {subItem.label}
-                                                  <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                                                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 shrink-0 ml-1" />
                                                 </div>
                                               )}
 
@@ -567,7 +572,7 @@ export default function Header() {
                                                 className={cn(
                                                   "absolute left-full top-0 z-50 ml-1 rounded-xl bg-white p-2 shadow-2xl border border-slate-100 transition-all duration-150 origin-top-left",
                                                   dropKey === "more"
-                                                    ? "min-w-[180px]"
+                                                    ? "w-[170px] max-w-[180px]"
                                                     : "min-w-[220px]",
                                                   isSierraEdu
                                                     ? isSubOpen
@@ -588,7 +593,7 @@ export default function Header() {
                                                         setActiveDropdown(null);
                                                         setActiveSubmenu(null);
                                                       }}
-                                                      className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                                      className="block rounded-lg px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-normal break-words leading-snug"
                                                     >
                                                       {nestedItem.label}
                                                     </Link>
@@ -658,7 +663,7 @@ export default function Header() {
                 )}
               </button>
 
-              
+
 
               {/* Wishlist */}
               <Link
@@ -677,7 +682,7 @@ export default function Header() {
                 )}
               </Link>
 
-             
+
 
               <CartDrawer />
 

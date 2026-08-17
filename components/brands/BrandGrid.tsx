@@ -18,6 +18,7 @@ interface Brand {
 
 interface BrandGridProps {
   brands: Brand[];
+  initialCategory?: string;
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -30,12 +31,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   "small-animal": "Small Animal",
 };
 
-export default function BrandGrid({ brands }: BrandGridProps) {
+export default function BrandGrid({ brands, initialCategory }: BrandGridProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Always read the active category from the live URL
-  const activeCategory = searchParams?.get("category") ?? "all";
+  // Always read the active category from initialCategory prop or searchParams
+  const activeCategory = initialCategory ?? searchParams?.get("category") ?? "all";
 
   // Build the list of categories that actually exist in the data
 //   const availableCategories = useMemo(() => {
@@ -118,13 +119,11 @@ export default function BrandGrid({ brands }: BrandGridProps) {
 
   // Update the URL when a category pill is clicked
   function handleCategoryChange(cat: string) {
-    const params = new URLSearchParams(searchParams?.toString() || "");
     if (cat === "all") {
-      params.delete("category");
+      router.push("/brands");
     } else {
-      params.set("category", cat);
+      router.push(`/brands/category/${cat}`);
     }
-    router.push(`/brands?${params.toString()}`);
   }
 
   return (

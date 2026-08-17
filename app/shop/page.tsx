@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import ShopPageClient from "@/components/shop/ShopPageClient";
 import { getCategoryMetadata } from "@/lib/categoryMetadata";
 
@@ -21,6 +22,16 @@ export async function generateMetadata({
   };
 }
 
-export default function ShopPage() {
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+  const sParams = await searchParams;
+  const category = typeof sParams?.category === "string" ? sParams.category : undefined;
+  const subcategory = typeof sParams?.subcategory === "string" ? sParams.subcategory : undefined;
+
+  if (category && subcategory) {
+    redirect(`/shop/${category}/${subcategory}`);
+  } else if (category) {
+    redirect(`/shop/${category}`);
+  }
+
   return <ShopPageClient />;
 }

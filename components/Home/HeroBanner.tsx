@@ -98,9 +98,9 @@ export default function HeroBanner() {
           }}
           className="w-full"
         >
-          <CarouselContent>
+          <CarouselContent className="-ml-0">
             {activeBanners.map((banner, index) => (
-              <CarouselItem key={banner.id}>
+              <CarouselItem key={banner.id} className="pl-0">
                 {/* Full screen viewport height */}
                 <div className="relative w-full h-[100vh]">
                   {/* Banner Image */}
@@ -227,9 +227,9 @@ export default function HeroBanner() {
               }}
               className="w-full"
             >
-              <CarouselContent>
+              <CarouselContent className="-ml-0">
                 {activeBanners.map((banner, index) => (
-                  <CarouselItem key={banner.id}>
+                  <CarouselItem key={banner.id} className="pl-0">
                     <div className="relative w-full h-[260px] overflow-hidden rounded-2xl shadow-sm border border-slate-100">
 
                       {/* Banner Image */}

@@ -85,6 +85,12 @@
 }
 
 
+html,
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

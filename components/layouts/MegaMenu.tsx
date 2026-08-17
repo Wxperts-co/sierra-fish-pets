@@ -45,7 +45,7 @@ export default function MegaMenu({
           setCats(sorted);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   return (
@@ -95,7 +95,7 @@ export default function MegaMenu({
 
                   {/* Category heading */}
                   <Link
-                    href={`/shop/?category=${cat.slug}`}
+                    href={`/shop/${cat.slug}`}
                     className="group/cat mb-3 flex items-center gap-2.5"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#005AA9]/10 to-cyan-500/10 text-xl transition-transform duration-200 group-hover/cat:scale-110">
@@ -116,7 +116,7 @@ export default function MegaMenu({
                     {cat.subcategories.slice(0, 5).map((sub) => (
                       <li key={sub.id}>
                         <Link
-                          href={`/shop/?category=${cat.slug}&subcategory=${sub.slug}`}
+                          href={`/shop/${cat.slug}/${sub.slug}`}
                           className="block truncate rounded-md px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-50 hover:text-[#005AA9]"
                         >
                           {sub.name}
