@@ -341,7 +341,7 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
         </div>
 
         {/* Tab Content Box */}
-        <div className="mt-6 border border-slate-100 rounded-2xl p-6 md:p-8 bg-white shadow-sm">
+        <div className="mt-6 border border-slate-100 rounded-2xl p-3 md:p-8 bg-white shadow-sm">
           {activeTab === "description" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Description & Features */}
@@ -817,10 +817,10 @@ export default function ProductDetailsTabs({ product, relatedProducts }: Product
 
       {/* ─── 3. FREQUENTLY BOUGHT TOGETHER SECTION ─── */}
       {bundleItems.length > 0 && (
-        <div className="w-full border-t border-slate-100 pt-12">
-          <h3 className="text-2xl font-extrabold text-[#002244] mb-8">Frequently Bought Together</h3>
+        <div className="w-full border-t border-slate-100 pt-6 md:pt-12">
+          <h3 className="md:text-2xl text-xl font-extrabold text-[#002244] md:mb-8 mb-4">Frequently Bought Together</h3>
           
-          <div className="bg-white border border-slate-100 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col xl:flex-row gap-8 items-center xl:items-stretch">
+          <div className="bg-white border border-slate-100 rounded-2xl p-4 md:p-8 shadow-sm flex flex-col xl:flex-row gap-8 items-center xl:items-stretch">
             {/* Visual Products Row */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 flex-1">
               {/* Product 1 (Current) */}

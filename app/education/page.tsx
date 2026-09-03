@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import eduData from "@/data/sierraedu.json";
 import navbarData from "@/data/navbar.json";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 
 interface EduItem {
   id: string;
@@ -538,17 +540,15 @@ function EducationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const dispatch = useAppDispatch();
   const categoryParam = searchParams?.get("category");
   const slugParam = searchParams?.get("slug");
 
-  const [fetchedCategories, setFetchedCategories] = useState<any[]>([]);
+  const fetchedCategories = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setFetchedCategories(data.categories); })
-      .catch(() => {});
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const categoryConfig = useMemo(
     () => buildCategoryConfig(fetchedCategories),

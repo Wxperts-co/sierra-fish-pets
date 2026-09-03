@@ -8,6 +8,7 @@ import authReducer from "./slices/authSlice";
 import authModalReducer from "./slices/authModalSlice";
 import ordersReducer from "./slices/ordersSlice";
 import usersReducer from "./slices/usersSlice";
+import categoriesReducer from "./slices/categoriesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     authModal: authModalReducer,
     orders: ordersReducer,
     users: usersReducer,
+    categories: categoriesReducer,
   },
 });
 

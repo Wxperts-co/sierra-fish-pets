@@ -1,74 +1,106 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import ArrivalCard, { ArrivalPet } from "./ArrivalCard";
 
 interface ArrivalGridProps {
   pets: ArrivalPet[];
   activeCategory: string;
-  activeSubcategory: string;
-  activeType?: string;
+  searchQuery?: string;
   onViewDetails?: (pet: ArrivalPet) => void;
 }
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 8;
 
 export default function ArrivalGrid({
   pets,
   activeCategory,
-  activeSubcategory,
-  activeType = "all",
+  searchQuery = "",
   onViewDetails,
 }: ArrivalGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset pagination to first page when active category, subcategory, or type filter changes
+  // Reset pagination to first page when category or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory, activeSubcategory, activeType]);
+  }, [activeCategory, searchQuery]);
 
   const filteredPets = (() => {
-    let list =
-      activeCategory === "all"
-        ? pets
-        : pets.filter(
-            (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
-          );
-    if (activeSubcategory && activeSubcategory !== "all") {
-      list = list.filter(
-        (p) =>
-          (p.subcategory || "").toLowerCase() ===
-          activeSubcategory.toLowerCase()
-      );
-    }
-    if (activeType && activeType !== "all") {
-      const target = activeType.toLowerCase();
+    let list = pets;
+
+    // 1. Category Filter
+    if (activeCategory !== "all") {
       list = list.filter((p) => {
+        const cat = (p.category || "").toLowerCase();
+        const sub = (p.subcategory || "").toLowerCase();
         const breed = (p.breed || "").toLowerCase();
+
+        if (activeCategory === "fish") {
+          return cat === "fish" || cat === "freshwater" || cat === "saltwater" || cat === "aquatic" || sub.includes("fish") || breed.includes("fish");
+        }
+        if (activeCategory === "freshwater") {
+          return cat === "freshwater" || sub.includes("freshwater") || breed.includes("freshwater") || (cat === "fish" && !sub.includes("saltwater"));
+        }
+        if (activeCategory === "saltwater") {
+          return cat === "saltwater" || sub.includes("saltwater") || breed.includes("saltwater") || breed.includes("marine");
+        }
+        if (activeCategory === "small-animals") {
+          return cat === "small animals" || cat === "small-animals" || cat === "small pet" || cat === "small-pet";
+        }
+        if (activeCategory === "reptiles") {
+          return cat === "reptiles" || cat === "reptile";
+        }
+        if (activeCategory === "dogs") {
+          return cat === "dogs" || cat === "dog";
+        }
+        if (activeCategory === "cats") {
+          return cat === "cats" || cat === "cat";
+        }
+        if (activeCategory === "birds") {
+          return cat === "birds" || cat === "bird";
+        }
+        return cat === activeCategory.toLowerCase();
+      });
+    }
+
+    // 2. Search Query Filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      list = list.filter((p) => {
         const name = (p.name || "").toLowerCase();
-        const subcat = (p.subcategory || "").toLowerCase();
+        const breed = (p.breed || "").toLowerCase();
+        const sub = (p.subcategory || "").toLowerCase();
+        const desc = (p.description || "").toLowerCase();
+        const cat = (p.category || "").toLowerCase();
         return (
-          breed.includes(target) ||
-          name.includes(target) ||
-          subcat.includes(target)
+          name.includes(q) ||
+          breed.includes(q) ||
+          sub.includes(q) ||
+          desc.includes(q) ||
+          cat.includes(q)
         );
       });
     }
+
     return list;
   })();
 
   if (!filteredPets.length) {
     return (
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="rounded-3xl border border-dashed border-slate-300 p-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center shadow-xs">
+            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
+              <SearchX className="w-7 h-7" />
+            </div>
             <h3 className="text-2xl font-bold text-slate-800">
-              No Pets Found
+              No Arrivals Found
             </h3>
-
-            <p className="mt-3 text-slate-500">
-              There are currently no arrivals in this category.
+            <p className="mt-2 text-slate-500 max-w-md mx-auto text-sm">
+              {searchQuery
+                ? `No live arrivals matched "${searchQuery}". Try a different keyword or category.`
+                : "There are currently no new arrivals in this category. Please check back soon!"}
             </p>
           </div>
         </div>
@@ -84,16 +116,16 @@ export default function ArrivalGrid({
   );
 
   return (
-    <section className="py-12">
-      <div className="container mx-auto px-4">
+    <section className="py-10">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Result Count */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-slate-900">
             Latest Arrivals
           </h2>
 
-          <span className="text-sm text-slate-500">
-            Showing {paginatedPets.length} of {filteredPets.length} Pets Found
+          <span className="text-xs sm:text-sm font-semibold text-slate-500 bg-white px-3.5 py-1.5 rounded-full border border-slate-200">
+            Showing {paginatedPets.length} of {filteredPets.length} Arrivals
           </span>
         </div>
 

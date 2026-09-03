@@ -15,11 +15,13 @@ import {
   Info,
   Calendar,
   Eye,
+  Sparkles,
 } from "lucide-react";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import DataGrid from "@/components/admin/common/PersistentDataGrid";
 import { showErrorToast } from "@/lib/toast";
 import ActionsDropdown from "@/components/admin/common/ActionsDropdown";
+import AiInvoiceModal from "@/components/admin/arrivals/AiInvoiceModal";
 
 interface ArrivalPet {
   id: string;
@@ -73,6 +75,7 @@ export default function AdminNewArrivalsPage() {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isAiInvoiceModalOpen, setIsAiInvoiceModalOpen] = useState(false);
   const [selectedArrival, setSelectedArrival] = useState<ArrivalPet | null>(null);
 
   // Form Inputs
@@ -475,13 +478,22 @@ export default function AdminNewArrivalsPage() {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#005AA9] hover:bg-[#003DA5] text-white font-bold text-sm shadow-md transition active:scale-95 shrink-0 cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          Add Arrival
-        </button>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => setIsAiInvoiceModalOpen(true)}
+            className="flex items-center gap-2 px-4.5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-md transition active:scale-95 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-100" />
+            AI Invoice Scan
+          </button>
+          <button
+            onClick={handleOpenAddModal}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#005AA9] hover:bg-[#003DA5] text-white font-bold text-sm shadow-md transition active:scale-95 shrink-0 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Add Arrival
+          </button>
+        </div>
       </div>
 
       {/* ── Stats Summary Cards ── */}
@@ -1306,6 +1318,13 @@ export default function AdminNewArrivalsPage() {
           </div>
         </div>
       )}
+
+      {/* ── AI Invoice Scanner Modal ── */}
+      <AiInvoiceModal
+        isOpen={isAiInvoiceModalOpen}
+        onClose={() => setIsAiInvoiceModalOpen(false)}
+        onSuccess={fetchArrivals}
+      />
 
       {/* ── Floating Toasts Notifications ── */}
       <div className="fixed top-5 right-5 z-[500] flex flex-col gap-2 max-w-sm w-full">

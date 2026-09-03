@@ -25,6 +25,7 @@ import {
   X,
   User,
   Newspaper,
+  Images,
   Ticket,
 } from "lucide-react";
 import axios from "axios";
@@ -46,6 +47,7 @@ const menuItems = [
   { name: "Flyers", href: "/admin/flyers", icon: Newspaper },
   { name: "Reviews",      href: "/admin/reviews",      icon: MessageSquare },
   { name: "Blog Posts", href: "/admin/blogs", icon: FileText },
+  { name: "Gallery",      href: "/admin/gallery",      icon: Images },
   { name: "Hero Slider",  href: "/admin/hero-slider",  icon: Layers },
   { name: "Users",        href: "/admin/users",        icon: Users },
   { name: "Profile",      href: "/admin/profile",      icon: User },

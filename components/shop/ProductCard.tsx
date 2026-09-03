@@ -122,7 +122,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             className="absolute inset-0 rounded-t-2xl overflow-hidden bg-[#f8f9fb]"
             style={{ backfaceVisibility: "hidden" }}
           >
-            <Link href={`/product/${product.id}`} className="relative block w-full h-full">
+            <Link href={`/product/${product.id}`} prefetch={false} className="relative block w-full h-full">
               <img
                 src={
                   imgError || !product.images?.[0] || product.images[0] === "/placeholder-product.png" || product.images[0] === "placeholder-product.png"
@@ -179,6 +179,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
               {/* Quick View */}
               <Link
                 href={`/product/${product.id}`}
+                prefetch={false}
                 className="flex flex-col items-center gap-1 group/btn"
                 title="View Product"
               >
@@ -201,7 +202,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         </span>
 
         {/* Name */}
-        <Link href={`/product/${product.id}`}>
+        <Link href={`/product/${product.id}`} prefetch={false}>
           <h3 className="text-sm font-semibold text-gray-800 leading-snug line-clamp-2 min-h-[40px] hover:text-[#005AA9] transition-colors duration-200">
             {product.name}
           </h3>

@@ -17,6 +17,7 @@ import {
 import PriceFilter from "./PriceFilter";
 import RatingFilter from "./RatingFilter";
 import StockStatusFilter from "./StockStatusFilter";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 
 interface FilterSidebarProps {
   selectedCategory: string | null;
@@ -86,14 +87,12 @@ export default function FilterSidebar({
   onRatingChange,
   onPriceChange,
 }: FilterSidebarProps) {
-  const [categories, setCategories] = useState<Array<Partial<Category>>>([]);
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
-      .catch(() => {});
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const normalizeCat = (s?: string | null) => {
     if (!s) return "";
@@ -130,7 +129,6 @@ export default function FilterSidebar({
   const [dynamicMax, setDynamicMax] = useState(400);
 
   const { minPrice, maxPrice } = useAppSelector((state) => state.filters);
-  const dispatch = useAppDispatch();
 
   const filterStateRef = useRef({ minPrice, maxPrice, dynamicMax });
   useEffect(() => {

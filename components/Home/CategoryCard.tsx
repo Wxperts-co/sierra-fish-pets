@@ -6,6 +6,8 @@ import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { Category } from "@/types";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 
 import {
   Carousel,
@@ -33,13 +35,20 @@ const CARD_DIRECTIONS: { x: number; y: number }[] = [
   { x: -50, y: 50 },  // 5 — from bottom-left
 ];
 
-export default function CategoryCards({ initialCategories = [] }: { initialCategories?: Category[] }) {
+interface CategoryCardProps {
+  initialCategories?: Category[];
+}
+
+export default function CategoryCards({ initialCategories }: CategoryCardProps) {
+  const dispatch = useAppDispatch();
+  const reduxCategories = useAppSelector((state) => state.categories.categories);
   const [api, setApi] = useState<CarouselApi>();
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const [current, setCurrent] = useState(0);
 
   const getSortedCategories = (cats: Category[]) => {
+    if (!Array.isArray(cats)) return [];
     return [...cats].sort((a: Category, b: Category) => {
       const aIsOther = a.slug.includes("other");
       const bIsOther = b.slug.includes("other");
@@ -49,22 +58,23 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
     });
   };
 
-  const [categories, setCategories] = useState<Category[]>(() => getSortedCategories(initialCategories));
+  const [categories, setCategories] = useState<Category[]>(() =>
+    getSortedCategories(initialCategories && initialCategories.length > 0 ? initialCategories : reduxCategories)
+  );
 
   useEffect(() => {
     if (initialCategories && initialCategories.length > 0) {
       setCategories(getSortedCategories(initialCategories));
     } else {
-      fetch("/api/categories")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && Array.isArray(data.categories)) {
-            setCategories(getSortedCategories(data.categories));
-          }
-        })
-        .catch(() => { });
+      dispatch(fetchCategories());
     }
-  }, [initialCategories]);
+  }, [initialCategories, dispatch]);
+
+  useEffect(() => {
+    if ((!initialCategories || initialCategories.length === 0) && reduxCategories.length > 0) {
+      setCategories(getSortedCategories(reduxCategories));
+    }
+  }, [reduxCategories, initialCategories]);
 
   // Trigger card animations when the carousel scrolls into view
   const sectionRef = useRef<HTMLElement>(null);
@@ -146,6 +156,7 @@ export default function CategoryCards({ initialCategories = [] }: { initialCateg
               >
                 <Link
                   href={`/shop/${category.slug}`}
+                  prefetch={false}
                   className="group flex flex-col items-center w-full"
                 >
                   {/* Card — remounts on each viewport entry, replaying directional fly-in */}

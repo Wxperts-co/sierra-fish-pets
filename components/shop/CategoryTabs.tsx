@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCategory } from "@/store/slices/filtersSlice";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 import type { CategorySlug } from "@/types";
 
 export default function CategoryTabs() {
@@ -10,14 +11,11 @@ export default function CategoryTabs() {
   const activeCategory = useAppSelector(
     (state) => state.filters.category ?? "all"
   );
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const categories = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
-      .catch(() => {});
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   return (
     <div className="flex flex-wrap justify-center gap-4">

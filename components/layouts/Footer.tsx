@@ -247,6 +247,7 @@ export default function Footer() {
                   <li key={l.label}>
                     <Link
                       href={l.href}
+                      prefetch={false}
                       className="group flex items-center  gap-1.5 text-[16px] text-slate-500 transition-colors hover:text-[#005AA9]"
                     >
                       <span className="h-px w-0 bg-[#005AA9] transition-all duration-200 group-hover:w-3" />

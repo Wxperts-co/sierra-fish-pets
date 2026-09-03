@@ -20,6 +20,7 @@ import MegaMenu from "./MegaMenu";
 import { cn } from "@/lib/utils";
 import navbarData from "@/data/navbar.json";
 import { openLoginModal } from "@/store/slices/authModalSlice";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 import { CartDrawer } from "../cart/cart-drawer";
 import SearchBar from "./SearchBar";
 
@@ -34,30 +35,16 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const categories = useAppSelector((state) => state.categories.categories);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.categories)) {
-          const sorted = [...data.categories].sort((a: any, b: any) => {
-            const aIsOther = a.slug.includes("other");
-            const bIsOther = b.slug.includes("other");
-            if (aIsOther && !bIsOther) return 1;
-            if (!aIsOther && bIsOther) return -1;
-            return 0;
-          });
-          setCategories(sorted);
-        }
-      })
-      .catch(() => { });
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const [location, setLocation] = useState<string>("Location not set");
 

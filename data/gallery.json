@@ -1,12 +1,82 @@
 [
-  { "id": "gal-001", "image": "/images/gallery/store-front.jpg", "caption": "Sierra Fish & Pets — Renton Store Front", "categorySlug": "store" },
-  { "id": "gal-002", "image": "/images/gallery/aquatic-display-1.jpg", "caption": "Freshwater display tank — 200 gallon planted community", "categorySlug": "store" },
-  { "id": "gal-003", "image": "/images/gallery/aquatic-display-2.jpg", "caption": "Saltwater reef display tank with live corals", "categorySlug": "store" },
-  { "id": "gal-004", "image": "/images/gallery/reptile-section.jpg", "caption": "Reptile habitat & terrarium displays", "categorySlug": "bird" },
-  { "id": "gal-005", "image": "/images/gallery/bird-section.jpg", "caption": "Bird section — hand-tame parrots and aviary supplies", "categorySlug": "store" },
-  { "id": "gal-006", "image": "/images/gallery/dog-adoption-event.jpg", "caption": "Dog adoption event hosted in store", "categorySlug": "reptile" },
-  { "id": "gal-007", "image": "/images/gallery/small-animal-section.jpg", "caption": "Small animal section — guinea pigs, rabbits & hamsters", "categorySlug": "bird" },
-  { "id": "gal-008", "image": "/images/gallery/custom-aquarium-install.jpg", "caption": "Custom 300 gallon installation — residential client", "categorySlug": "dog" },
-  { "id": "gal-009", "image": "/images/gallery/aquascape-display.jpg", "caption": "Award-winning aquascape display in store", "categorySlug": "store" },
-  { "id": "gal-010", "image": "/images/gallery/cat-section.jpg", "caption": "Cat supplies & premium nutrition aisle", "categorySlug": "dog-cat" }
+  {
+    "id": "gal-001",
+    "image": "/images/gallery/store-front.jpg",
+    "caption": "Sierra Fish & Pets — Renton Store Front",
+    "categorySlug": "store",
+    "order": 1,
+    "status": "active"
+  },
+  {
+    "id": "gal-002",
+    "image": "/images/gallery/aquatic-display-1.jpg",
+    "caption": "Freshwater display tank — 200 gallon planted community",
+    "categorySlug": "store",
+    "order": 2,
+    "status": "active"
+  },
+  {
+    "id": "gal-003",
+    "image": "/images/gallery/aquatic-display-2.jpg",
+    "caption": "Saltwater reef display tank with live corals",
+    "categorySlug": "store",
+    "order": 3,
+    "status": "active"
+  },
+  {
+    "id": "gal-004",
+    "image": "/images/gallery/reptile-section.jpg",
+    "caption": "Reptile habitat & terrarium displays",
+    "categorySlug": "bird",
+    "order": 4,
+    "status": "active"
+  },
+  {
+    "id": "gal-005",
+    "image": "/images/gallery/bird-section.jpg",
+    "caption": "Bird section — hand-tame parrots and aviary supplies",
+    "categorySlug": "store",
+    "order": 5,
+    "status": "active"
+  },
+  {
+    "id": "gal-006",
+    "image": "/images/gallery/dog-adoption-event.jpg",
+    "caption": "Dog adoption event hosted in store",
+    "categorySlug": "reptile",
+    "order": 6,
+    "status": "active"
+  },
+  {
+    "id": "gal-007",
+    "image": "/images/gallery/small-animal-section.jpg",
+    "caption": "Small animal section — guinea pigs, rabbits & hamsters",
+    "categorySlug": "bird",
+    "order": 7,
+    "status": "active"
+  },
+  {
+    "id": "gal-008",
+    "image": "/images/gallery/custom-aquarium-install.jpg",
+    "caption": "Custom 300 gallon installation — residential client",
+    "categorySlug": "dog",
+    "order": 8,
+    "status": "active"
+  },
+  {
+    "id": "gal-009",
+    "image": "/images/gallery/aquascape-display.jpg",
+    "caption": "Award-winning aquascape display in store",
+    "categorySlug": "store",
+    "order": 9,
+    "status": "active"
+  },
+  {
+    "id": "gal-010",
+    "image": "/images/gallery/cat-section.jpg",
+    "caption": "Cat supplies & premium nutrition aisle",
+    "categorySlug": "dog-cat",
+    "order": 10,
+    "status": "active"
+  }
 ]

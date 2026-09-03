@@ -2,7 +2,15 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { DEFAULT_MAX_PRICE } from "@/store/slices/filtersSlice";
 
 import ShopHero from "@/components/shop/ShopHero";
 import FilterSidebar from "@/components/shop/FilterSidebar";
@@ -22,6 +30,7 @@ import {
 } from "@/store/slices/filtersSlice";
 import type { CategorySlug } from "@/types";
 import { getCategoryMetadata } from "@/lib/categoryMetadata";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 
 const sortOptions = [
   { label: "Default Sorting", value: "featured" as const },
@@ -40,24 +49,22 @@ interface ShopPageClientProps {
 }
 
 function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClientProps) {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const dispatch = useAppDispatch();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<Product[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string; subcategories?: { id: string; name: string; slug: string }[] }[]>([]);
+  const categories = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
-      .catch(() => { });
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   // Read category, subcategory & brands from Redux
   const selectedCategory = useAppSelector((state) => state.filters.category);
@@ -270,8 +277,8 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
     return queryString ? `${basePath}?${queryString}` : basePath;
   };
 
-  const handleCategoryChange = (slug: string) => {
-    const newCategory = slug === "all" ? null : (slug as CategorySlug);
+  const handleCategoryChange = (slug: string | null) => {
+    const newCategory = !slug || slug === "all" ? null : (slug as CategorySlug);
     dispatch(setCategory(newCategory));
     dispatch(setSubcategory(null));
     dispatch(setSearch(""));
@@ -452,9 +459,53 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
       />
 
       {/* MOBILE FILTER ROW — hidden on desktop */}
-      <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 flex flex-wrap gap-2 sticky top-[96px] z-20 shadow-sm">
-        {/* Category */}
-        <div className="relative flex-1 min-w-[130px]">
+      <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 flex items-center gap-2 sticky top-[96px] z-20 shadow-sm overflow-x-auto">
+        {/* Full Filters Drawer Trigger Button */}
+        <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
+          <SheetTrigger
+            render={
+              <button
+                className="flex items-center gap-1.5 rounded-full border border-slate-900 bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 focus:outline-none cursor-pointer shrink-0"
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+                <span>All Filters</span>
+                {(() => {
+                  const isPriceModified = minPrice !== 0 || maxPrice !== DEFAULT_MAX_PRICE;
+                  const count =
+                    (selectedSubcategory ? 1 : 0) +
+                    selectedBrands.length +
+                    (isPriceModified ? 1 : 0) +
+                    (minRating ? 1 : 0) +
+                    (stockStatus ? 1 : 0);
+                  return count > 0 ? (
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#379ae5] text-[10px] font-bold text-white">
+                      {count}
+                    </span>
+                  ) : null;
+                })()}
+              </button>
+            }
+          />
+          <SheetContent side="left" className="w-[310px] sm:w-[360px] overflow-y-auto p-4 bg-white">
+            <SheetHeader className="pb-3 border-b border-slate-100 mb-4">
+              <SheetTitle className="text-base font-bold text-slate-800 flex items-center justify-between">
+                <span>All Shop Filters</span>
+              </SheetTitle>
+            </SheetHeader>
+            <FilterSidebar
+              selectedCategory={selectedCategory}
+              selectedSubcategory={selectedSubcategory}
+              onSubcategoryToggle={handleSubcategoryToggle}
+              onClearFilters={handleClearFilters}
+              onBrandToggle={handleBrandToggle}
+              onRatingChange={handleRatingChange}
+              onPriceChange={handlePriceChange}
+            />
+          </SheetContent>
+        </Sheet>
+
+        {/* Category Dropdown */}
+        <div className="relative flex-1 min-w-[120px]">
           <select
             value={selectedCategory ?? ""}
             onChange={(e) => {
@@ -487,14 +538,14 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
           (() => {
             const cat = categories.find((c) => c.slug === selectedCategory);
             return cat?.subcategories?.length ? (
-              <div className="relative flex-1 min-w-[130px]">
+              <div className="relative flex-1 min-w-[120px]">
                 <select
                   value={selectedSubcategory ?? ""}
                   onChange={(e) => handleSubcategoryToggle(e.target.value)}
                   className="w-full appearance-none rounded-full border border-slate-200 bg-white pl-3 pr-8 py-2 text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#005AA9]/20 cursor-pointer"
                 >
                   <option value="">All Sub-types</option>
-                  {cat.subcategories.map((sub) => (
+                  {cat.subcategories.map((sub: any) => (
                     <option key={sub.slug} value={sub.slug}>
                       {sub.name}
                     </option>

@@ -83,7 +83,7 @@ export default async function ProductPage({
 
   return (
     <div className="container mx-auto px-4 md:py-32 py-8">
-      <div className="grid gap-12 lg:grid-cols-2">
+      <div className="grid md:gap-12 gap-6 lg:grid-cols-2">
 
         {/* Product Image Viewer */}
         <ProductImageViewer product={product} />
@@ -211,8 +211,8 @@ export default async function ProductPage({
       <ProductDetailsTabs product={product} relatedProducts={relatedProducts} />
 
       {relatedProducts.length > 0 && (
-        <div className="md:mt-20 border-t border-slate-100 pt-16">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] mb-8">
+        <div className="md:mt-20 border-t border-slate-100 md:pt-16 pt-6">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] md:mb-8 mb-4">
             Related <span className="text-[#005AA9]">Products</span>
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

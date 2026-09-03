@@ -6,6 +6,9 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Category } from "@/types";
 
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
+
 type ShopCategory = {
   id: string;
   name: string;
@@ -30,42 +33,26 @@ const displayOrder = ["dog", "cat", "aquatic", "bird", "reptile", "small-animal"
 const VISIBLE_COUNT = 6;
 
 interface ShopHeroProps {
-  selectedCategory: string | null;
-  setSelectedCategory: (slug: string) => void;
-  breadcrumb?: { label: string; href?: string }[];
+  title?: string;
+  subtitle?: string;
+  selectedCategory?: string | null;
+  setSelectedCategory?: (slug: string | null) => void;
+  breadcrumb?: Array<{ label: string; href?: string }>;
 }
 
 export default function ShopHero({
-  selectedCategory,
+  title = "Shop Products",
+  subtitle = "Everything your pet needs, delivered to your door.",
+  selectedCategory = null,
   setSelectedCategory,
   breadcrumb,
 }: ShopHeroProps) {
-  const [allCategories, setAllCategories] = useState<ShopCategory[]>([]);
+  const dispatch = useAppDispatch();
+  const allCategories: ShopCategory[] = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          const sorted = [...data.categories].sort((a: ShopCategory, b: ShopCategory) => {
-            // "Other" category always goes last
-            const aIsOther = a.slug.includes("other");
-            const bIsOther = b.slug.includes("other");
-            if (aIsOther && !bIsOther) return 1;
-            if (!aIsOther && bIsOther) return -1;
-
-            const ai = displayOrder.indexOf(a.slug);
-            const bi = displayOrder.indexOf(b.slug);
-            if (ai === -1 && bi === -1) return 0;
-            if (ai === -1) return 1;
-            if (bi === -1) return -1;
-            return ai - bi;
-          });
-          setAllCategories(sorted);
-        }
-      })
-      .catch(() => {});
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const orderedCategories = allCategories;
   const activeCategory = allCategories.find((c) => c.slug === selectedCategory);
@@ -225,7 +212,7 @@ export default function ShopHero({
                     className="flex flex-col items-center gap-3 shrink-0 select-none"
                   >
                     <button
-                      onClick={() => setSelectedCategory(cat.slug)}
+                      onClick={() => setSelectedCategory?.(cat.slug)}
                       aria-pressed={isActive}
                       className="group flex cursor-pointer flex-col items-center border-none bg-transparent p-0 transition-transform duration-[250ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:scale-105"
                     >

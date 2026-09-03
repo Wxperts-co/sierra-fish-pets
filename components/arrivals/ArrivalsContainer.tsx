@@ -30,7 +30,10 @@ const mapCategoryParam = (param: string): string => {
   if (normalized === "bird" || normalized === "birds") {
     return "birds";
   }
-  if (normalized === "freshwater" || normalized === "freshwater-fish" || normalized === "fish" || normalized === "fishes") {
+  if (normalized === "fish" || normalized === "fishes" || normalized === "aquatic") {
+    return "fish";
+  }
+  if (normalized === "freshwater" || normalized === "freshwater-fish") {
     return "freshwater";
   }
   if (normalized === "saltwater" || normalized === "saltwater-fish") {
@@ -44,8 +47,7 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
   const [activeCategory, setActiveCategory] = useState<string>(() => {
     return initialCategory ? mapCategoryParam(initialCategory) : "all";
   });
-  const [activeSubcategory, setActiveSubcategory] = useState<string>("all");
-  const [activeType, setActiveType] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPet, setSelectedPet] = useState<ArrivalPet | null>(null);
   const [arrivals, setArrivals] = useState<ArrivalPet[]>(initialArrivals || []);
   const [loading, setLoading] = useState(!initialArrivals);
@@ -53,8 +55,6 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
   // Sync category changes to browser URL path
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
-    setActiveSubcategory("all"); // reset sub-filter when top-level changes
-    setActiveType("all");
     const path = category === "all" ? "/arrivals" : `/arrivals/${category}`;
     window.history.pushState(null, "", path);
   };
@@ -108,6 +108,7 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
   // Get active breadcrumb label based on active category
   const getCategoryLabel = (catId: string) => {
     switch (catId) {
+      case "fish": return "Fish";
       case "dogs": return "Dog";
       case "cats": return "Cat";
       case "birds": return "Bird";
@@ -147,25 +148,19 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
         ]}
       />
 
-      {/* Category Selection Filter */}
+      {/* Category Selection Filter & Search */}
       <ArrivalCategoryNav
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
-        activeSubcategory={activeSubcategory}
-        onSubcategoryChange={(sub) => {
-          setActiveSubcategory(sub);
-          setActiveType("all");
-        }}
-        activeType={activeType}
-        onTypeChange={setActiveType}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {/* Product/Pet Grid */}
       <ArrivalGrid
         pets={arrivals}
         activeCategory={activeCategory}
-        activeSubcategory={activeSubcategory}
-        activeType={activeType}
+        searchQuery={searchQuery}
         onViewDetails={setSelectedPet}
       />
 

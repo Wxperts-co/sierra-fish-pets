@@ -5,6 +5,9 @@ import Link from "next/link";
 import { ChevronDown, Grid3x3 } from "lucide-react";
 import type { Category } from "@/types";
 
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
+
 // Category emoji/icon map since icon images may not exist yet
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -28,25 +31,12 @@ export default function MegaMenu({
   onToggle,
   onClose,
 }: MegaMenuProps) {
-  const [cats, setCats] = useState<Category[]>([]);
+  const dispatch = useAppDispatch();
+  const cats: Category[] = useAppSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.categories)) {
-          const sorted = [...data.categories].sort((a: Category, b: Category) => {
-            const aIsOther = String(a.slug || "").includes("other") || String(a.name || "").toLowerCase().includes("other");
-            const bIsOther = String(b.slug || "").includes("other") || String(b.name || "").toLowerCase().includes("other");
-            if (aIsOther && !bIsOther) return 1;
-            if (!aIsOther && bIsOther) return -1;
-            return 0;
-          });
-          setCats(sorted);
-        }
-      })
-      .catch(() => { });
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   return (
     <div className="relative nav-dropdown-container">
@@ -96,6 +86,7 @@ export default function MegaMenu({
                   {/* Category heading */}
                   <Link
                     href={`/shop/${cat.slug}`}
+                    prefetch={false}
                     className="group/cat mb-3 flex items-center gap-2.5"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#005AA9]/10 to-cyan-500/10 text-xl transition-transform duration-200 group-hover/cat:scale-110">
@@ -117,6 +108,7 @@ export default function MegaMenu({
                       <li key={sub.id}>
                         <Link
                           href={`/shop/${cat.slug}/${sub.slug}`}
+                          prefetch={false}
                           className="block truncate rounded-md px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-50 hover:text-[#005AA9]"
                         >
                           {sub.name}

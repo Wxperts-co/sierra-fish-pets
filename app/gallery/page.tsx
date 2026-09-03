@@ -42,8 +42,27 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
   const router = useRouter();
   const initialCategory = initialCat || searchParams?.get("category") || "all";
 
+  const [items, setItems] = useState<GalleryItem[]>(galleryImages);
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLiveGallery = async () => {
+      try {
+        const res = await fetch("/api/gallery");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          const activeOnly = data.items.filter((i: any) => i.status === "active" || !i.status);
+          if (activeOnly.length > 0) {
+            setItems(activeOnly);
+          }
+        }
+      } catch (err) {
+        console.error("Could not fetch live gallery:", err);
+      }
+    };
+    fetchLiveGallery();
+  }, []);
 
   useEffect(() => {
     const cat = searchParams?.get("category");
@@ -64,8 +83,8 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
   };
 
   const filteredImages = activeCategory === "all"
-    ? galleryImages
-    : galleryImages.filter((item) => {
+    ? items
+    : items.filter((item) => {
         if (!item.categorySlug) return false;
         if (activeCategory === "dog-cat") {
           return item.categorySlug === "dog-cat" || item.categorySlug === "dog" || item.categorySlug === "cat";

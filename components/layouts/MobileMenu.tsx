@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
 import navbarData from "@/data/navbar.json";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
 
 const CATEGORY_EMOJI: Record<string, string> = {
   dog: "🐕",
@@ -38,17 +39,15 @@ type MobileCategory = {
 };
 
 export default function MobileMenu() {
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState<MobileCategory[]>([]);
+  const categories: MobileCategory[] = useAppSelector((state) => state.categories.categories);
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => { if (data.success) setCategories(data.categories); })
-      .catch(() => {});
-  }, []);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -271,13 +270,14 @@ export default function MobileMenu() {
 
                 <AccordionContent className="pb-2 pl-2">
                   <div className="flex flex-col gap-0.5 pr-2">
-                    {category.subcategories.map((sub) => {
+                    {(category.subcategories || []).map((sub) => {
                       const href = `/shop?category=${category.slug}&subcategory=${sub.slug}`;
                       const isActive = pathname?.startsWith("/shop") && pathname?.includes(sub.slug);
                       return (
                         <Link
                           key={sub.id}
                           href={href}
+                          prefetch={false}
                           onClick={() => setOpen(false)}
                           className={`rounded-md px-3 py-2 text-[12px] font-medium transition-all duration-200 ${
                             isActive
