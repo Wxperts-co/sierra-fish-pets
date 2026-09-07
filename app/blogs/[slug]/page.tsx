@@ -234,7 +234,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <BlogHero
-        title={post.title}
+        title="Blog Details"
         subtitle={`Expert pet care advice | By: ${post.author} | ${post.readingTime} min read`}
         image="/images/banner/shophero3.png"
         breadcrumbs={[
