@@ -1,223 +1,112 @@
 [
   {
-    "id": "blog-236",
-    "title": "Test Blog Post Updated",
-    "slug": "test-blog-posttest-btest-blog-postlog-post",
-    "excerpt": "A short test blog post description.",
-    "content": "This is a test blog post content. Let us test the database saving and filesystem sync functionality.",
-    "coverImage": "/uploads/blogs/1783002993038-11178-luna.jpg",
-    "thumbnailAlt": "Test Blog Image",
-    "author": "Sierra TeamSierra Team",
-    "authorRole": "Pet SpecialisPet Specialistt",
-    "authorImage": "/uploads/authors/1782326366876-19461-rest-inn-logo.svg",
+    "id": "blog-001",
+    "title": "Dog Care Guide: Feeding, Training, Grooming & Best Products Every Dog Needs",
+    "slug": "dog-care-guide-feeding-training-grooming-best-products-every-dog-needs",
+    "excerpt": "Bringing a dog home is the easy part. Figuring out what they need, how much they should eat, which products are actually useful and how to keep up with their grooming and training is where responsible dog ownership really begins.",
+    "content": "# Dog Care Guide: Feeding, Training, Grooming & Best Products Every Dog Needs\n\nBringing a dog home is the easy part. Figuring out what they need, how much they should eat, which products are actually useful and how to keep up with their grooming and training is where responsible dog ownership really begins.\n\nEvery dog is different. A young puppy will have very different needs from a senior dog, and a highly active breed may need more exercise and stimulation than a dog that prefers spending most of the afternoon on the sofa. Good dog care is therefore less about following a rigid routine and more about understanding your dog's individual needs.\n\nHere is a practical dog care guide to help you get the basics right.\n\n## Feeding Your Dog the Right Way\n\nA healthy diet is one of the biggest contributors to your dog's overall well-being. The right food depends on factors such as age, size, breed, activity level and existing health concerns.\n\nPuppies need food formulated for growth, while adult and senior dogs have different nutritional requirements. Treats can certainly be part of training and everyday life, but they should not make up a large part of your dog's diet.\n\nTry to keep meals consistent and measure portions rather than relying entirely on guesswork. Overfeeding is surprisingly easy, particularly when those pleading eyes appear at the dinner table.\n\nFresh drinking water should always be available. If you are thinking about changing your dog's food, introduce the new food gradually. A sudden change can sometimes upset their stomach. Whenever you are unsure about nutrition, you must get in touch with a vet or a knowledgable professional pet-caretaker so that they can help you choose an option that suits your pet's needs.\n\n## Training is Not Only About Commands\n\nTraining is not simply telling your dog to sit or stay. It is whta makes your dog understand what is expected of them and this in turn will make life easier for both of you.\n\nYou should always start with basic commands and build from there. Positive reinforcement works well for many dogs like rewarding behaviour you want to see repeated helps them make the connection between their actions and the reward.\n\nKeep training sessions short, especially with puppies. Five focused minutes can be more productive than a long session during which your dog loses interest.\n\nConsistency matters too. If jumping on the sofa is allowed one day and discouraged the next, your dog is going to struggle to understand the rule.\n\nTraining should also include socialisation by introducing the dog gradually to different people, environemnts, sounds and when appropriate, other animals.\n\n## Make Sure Grooming is Part of Routine\n\nGrooming should not only be about making your dog look good. Brushing, bathing, dental hygiene and nail care, all contribute greatly to healthcare. To know how often it is needed depends on the coat of your pet. Dogs with longer or thicker coats need frequent brushing to detangle while short-haired dogs usually require less maintenance.\n\nAlso, do not forget the less obvious areas. Check their ears regularly, keep an eye on their nails (or explore our [pet nail trimming services](/services/in-store/pet-nail-wing-trims)) and make dental care part of their routine where possible.\n\nBathing too frequently can sometimes irritate the skin, so use products specifically made for dogs and follow appropriate grooming guidance.\n\nIf you're unsure which brush, shampoo, nail-care product or dental product to choose, getting advice before buying can save you from ending up with a cupboard full of products your dog refuses to tolerate.\n\n## The Dog Products Worth Having\n\nYou don't need to buy every dog product on the market. A few well-chosen essentials from our [dog supplies collection](/shop/dog) will cover most everyday needs.\n\n- A comfortable collar or harness and a sturdy leash are obvious starting points.\n- Your dog should also have a suitable bed, food and water bowls, waste bags and identification.\n- Toys are useful for more than keeping your dog occupied. Chew toys can satisfy natural chewing behaviour, while puzzle toys can provide mental stimulation.\n- Grooming supplies should match your dog's coat and needs. Depending on your dog, this could include a brush, dog-safe shampoo, nail clippers and dental-care products.\n- For puppies and dogs that spend time outdoors, cleaning supplies and appropriate parasite-prevention products are also worth considering.\n\nThe best products aren't necessarily the most expensive ones. They are the ones that are safe, appropriate for your dog and actually useful in your daily routine.\n\n## Exercise and Mental Stimulation Matter\n\nA walk is not only about physical exercise. Dogs experience the world through their senses, particularly their sense of smell. Allowing your dog time to sniff and explore can make an ordinary walk much more interesting for them.\n\nThe amount of exercise required will vary considerably. Puppies, older dogs and dogs with certain health conditions may have different limitations, while working and highly energetic breeds may need considerably more activity.\n\nMental stimulation is equally important. Training games, puzzle feeders, interactive toys and simple activities around the house can help prevent boredom.\n\nPay attention to your dog's behaviour. Excessive chewing, restlessness or destructive behaviour can sometimes be a sign that they need more appropriate outlets for their energy.\n\n## Do Not Skip Preventive Healthcare\n\nRegular veterinary visits should be part of your dog's routine, even when they seem completely healthy. Vaccinations, parasite prevention, dental care and routine examinations can help identify potential problems early.\n\nAt home, you are in the best position to notice changes. Keep an eye on appetite, weight, energy, skin, coat, behaviour and bathroom habits. If something seems unusual or persists, speak to your veterinarian rather than trying to diagnose the problem yourself.\n\n## Give Your Dog a Life They Enjoy\n\nGood dog care is not about following the latest pet trends or having the biggest collection of toys for your pet. It boils down to meeting your pet's basic needs everyday and paying attention to the little animal in front of you. This is what we emphasize at Sierra Fish and Pets and thus our store is a one-stop shop for dog care, grooming, nutrition and other essentials. [Get in touch with us](/contact-us) now to learn more about the same.",
+    "coverImage": "/images/blogs/dog-care-guide.jpg",
+    "thumbnailAlt": "Dog Care Guide: Feeding, Training, Grooming & Best Products Every Dog Needs",
+    "author": "Mr. JONAS STERNBERG",
+    "authorRole": "Sierra Fish and Pets",
+    "authorImage": "/images/team/sierra-team.jpg",
     "category": "Dogs",
     "categorySlug": "dog",
     "tags": [
-      "test",
-      "blog",
-      "post"
-    ],
-    "featured": false,
-    "isArrival": false,
-    "status": "published",
-    "publishedAt": "2026-06-19T18:56:45.236Z",
-    "updatedAt": "Thu Jul 02 2026 20:06:38 GMT+0530 (India Standard Time)",
-    "readingTime": 35,
-    "relatedIds": [],
-    "seo": {
-      "title": "Test Blog Post Meta Title",
-      "description": "SEO description for testing.",
-      "keywords": [
-        "test",
-        "blog",
-        "keywords"
-      ]
-    },
-    "specialistQuote": {
-      "quote": "This is a test quote.",
-      "author": "SIERRA TESIERRA NUTRITION TEAMAM"
-    },
-    "galleryImages": [
-      "/images/blo/images/blogs/blog-test.jpggs/dog1.jpeg"
-    ]
-  },
-  {
-    "id": "blog-002",
-    "title": "New Saltwater Fish Arrivals — January 2025",
-    "slug": "new-saltwater-fish-arrivals-january-2025",
-    "excerpt": "Fresh saltwater arrivals this week include Flame Angels, Mandarin Dragonets, Clownfish pairs, and a gorgeous Regal Tang.",
-    "content": "# New Saltwater Fish Arrivals\n\nOur saltwater section has just received an exciting new shipment featuring a wide variety of colorful and highly sought-after marine fish. Whether you're an experienced reef keeper or just starting your saltwater aquarium journey, these new arrivals offer something special for every hobbyist.\n\nAmong the highlights are beautiful Clownfish pairs, vibrant Flame Angelfish, elegant Regal Tangs, and fascinating Mandarin Dragonets. These species are known for their striking colors, unique personalities, and ability to become the centerpiece of any marine aquarium. Each fish has been carefully sourced from trusted suppliers and handled with the utmost care during transportation.\n\nUpon arrival, all specimens undergo a comprehensive acclimation and observation process to ensure they are healthy, active, and feeding well before being offered for sale. Our aquatics team closely monitors water quality, behavior, and overall condition to maintain the highest standards of fish health.\n\nIn addition to these new fish, we have restocked a variety of marine aquarium essentials, making it easier than ever to maintain a thriving reef or fish-only setup. Visit our store to explore the latest arrivals in person and receive expert guidance from our team. Many of these premium marine species are available in limited numbers and are expected to sell quickly.",
-    "coverImage": "/images/blogs/aquatic2.jpeg",
-    "thumbnailAlt": "New saltwater fish arrivals including clownfish and regal tang",
-    "author": "Sierra Team",
-    "authorRole": "Aquatics Specialist",
-    "authorImage": "/images/team/sierra-team.jpg",
-    "category": "Aquatic",
-    "categorySlug": "aquatic",
-    "tags": [
-      "saltwater",
-      "arrivals",
-      "angelfish",
-      "clownfish"
-    ],
-    "featured": true,
-    "isArrival": true,
-    "status": "published",
-    "publishedAt": "2025-01-20T09:30:00Z",
-    "updatedAt": "2025-01-20T09:30:00Z",
-    "readingTime": 3,
-    "relatedIds": [
-      "blog-001"
-    ],
-    "seo": {
-      "title": "New Saltwater Fish Arrivals January 2025 | Sierra Fish Pets",
-      "description": "Latest saltwater fish arrivals including clownfish, tangs and angelfish.",
-      "keywords": [
-        "saltwater fish",
-        "clownfish",
-        "marine fish"
-      ]
-    },
-    "specialistQuote": {
-      "quote": "Acclimation is the critical bridge between transit stress and home reef stability. Always take your time drip-acclimating sensitive marine specimens like flame angels and wrasses.",
-      "author": "SIERRA REEF SPECIALISTS"
-    },
-    "galleryImages": [
-      "/images/blogs/aquatic2.jpeg",
-      "/images/blogs/aquatic1.jpeg"
-    ]
-  },
-  {
-    "id": "blog-003",
-    "title": "Bird Arrivals — January 2025",
-    "slug": "bird-arrivals-january-2025",
-    "excerpt": "New bird arrivals include Hand-fed baby Cockatiels, Green Cheek Conures, and Lineolated Parakeets.",
-    "content": "# Bird Arrivals\n\nWe are delighted to announce the latest additions to our bird section, featuring a wonderful selection of healthy, hand-raised, and carefully cared-for companion birds. Whether you're a first-time bird owner or an experienced enthusiast looking to expand your aviary, our newest arrivals offer a variety of personalities, colors, and species to suit every preference.\n\nThis shipment includes adorable hand-fed Cockatiels, playful Green Cheek Conures, charming Lineolated Parakeets, and several other popular pet bird species. Each bird has been selected for its health, temperament, and overall quality, ensuring that customers have access to happy and well-socialized companions.\n\nBefore becoming available for their new homes, all birds undergo a thorough health assessment and acclimation process. Our team carefully monitors feeding habits, activity levels, and general well-being to ensure that every bird is thriving. We also focus on proper socialization, helping young birds become comfortable with human interaction and daily handling.\n\nBirds are intelligent, affectionate pets that can provide years of companionship when given the proper care and attention. Whether you're interested in a bird that enjoys learning tricks, mimicking sounds, or simply providing cheerful company, our latest arrivals include options for a wide range of lifestyles and experience levels.\n\nOur knowledgeable staff is always available to help you choose the right bird, recommend suitable housing and nutrition, and answer any questions about long-term care. Visit our store today to meet these beautiful new arrivals in person. Many of these birds are available in limited quantities, so don't miss the opportunity to find your perfect feathered companion.",
-    "coverImage": "/images/blogs/bird1.jpeg",
-    "thumbnailAlt": "New bird arrivals including cockatiels and conures",
-    "author": "Sierra Team",
-    "authorRole": "Bird Care Specialist",
-    "authorImage": "/uploads/authors/1782326430936-55674-rest-inn-logo.svg",
-    "category": "Birds",
-    "categorySlug": "bird",
-    "tags": [
-      "bird",
-      "arrivals",
-      "cockatiel",
-      "conure"
-    ],
-    "featured": false,
-    "isArrival": true,
-    "status": "published",
-    "publishedAt": "2025-01-19T10:00:00Z",
-    "updatedAt": "Thu Jun 25 2026 00:10:37 GMT+0530 (India Standard Time)",
-    "readingTime": 2,
-    "relatedIds": [],
-    "seo": {
-      "title": "Bird Arrivals January 2025 | Sierra Fish Pets",
-      "description": "Latest bird arrivals including cockatiels, conures and parakeets.",
-      "keywords": [
-        "bird arrivals",
-        "cockatiel",
-        "conure"
-      ]
-    },
-    "specialistQuote": {
-      "quote": "Socialization in early development forms the foundation of a bird's lifelong temperament. Hand-fed baby cockatiels thrive on daily, gentle positive reinforcement.",
-      "author": "SIERRA AVIAN CARE TEAM"
-    },
-    "galleryImages": [
-      "/images/blogs/bird1.jpeg",
-      "/images/blogs/bird2.jpeg"
-    ]
-  },
-  {
-    "id": "blog-006",
-    "title": "Reptile Arrivals — January 2025",
-    "slug": "reptile-arrivals-january-2025",
-    "excerpt": "New reptile arrivals this week: Veiled Chameleons, Crested Geckos, Panther Chameleons, and Blue-Tongued Skinks.",
-    "content": "# Reptile Arrivals\n\nWe are excited to introduce the latest additions to our reptile collection, featuring a variety of healthy, captive-bred reptiles that are perfect for both experienced keepers and those new to the fascinating world of reptile care. This new shipment includes some of the most sought-after species, each selected for its excellent health, temperament, and overall quality.\n\nAmong the highlights are beautiful Crested Geckos, vibrant Panther Chameleons, impressive Blue-Tongued Skinks, and charming Veiled Chameleons. These species are known for their unique appearances, interesting behaviors, and ability to become engaging long-term companions when provided with proper care and habitat conditions.\n\nEvery reptile that arrives at our facility undergoes a careful acclimation and health assessment process before being made available. Our team monitors feeding responses, activity levels, hydration, and overall condition to ensure that each animal is thriving. We also work to minimize stress during the transition period, helping our reptiles settle comfortably into their new environment.\n\nWhether you're looking to start your first reptile enclosure or expand an existing collection, our latest arrivals offer a wide range of options to suit different experience levels and housing setups. Our knowledgeable staff can assist with habitat recommendations, lighting requirements, temperature management, nutrition, and ongoing care.\n\nWe invite you to visit our store and explore these incredible new arrivals in person. Many of these reptiles are available in limited quantities, and popular species are expected to find new homes quickly. Don't miss the opportunity to add one of these remarkable reptiles to your collection.",
-    "coverImage": "/images/blogs/reptile1.jpeg",
-    "thumbnailAlt": "New reptile arrivals including geckos and chameleons",
-    "author": "Sierra Team",
-    "authorRole": "Exotic Pet Specialist",
-    "authorImage": "/images/team/sierra-team.jpg",
-    "category": "Reptile",
-    "categorySlug": "reptile",
-    "tags": [
-      "reptile",
-      "arrivals",
-      "chameleon",
-      "gecko"
-    ],
-    "featured": false,
-    "isArrival": true,
-    "status": "published",
-    "publishedAt": "2025-01-18T11:00:00Z",
-    "updatedAt": "2025-01-18T11:00:00Z",
-    "readingTime": 2,
-    "relatedIds": [],
-    "seo": {
-      "title": "Reptile Arrivals January 2025",
-      "description": "Latest reptile arrivals including geckos, skinks and chameleons.",
-      "keywords": [
-        "reptile arrivals",
-        "gecko",
-        "chameleon"
-      ]
-    },
-    "specialistQuote": {
-      "quote": "Proper temperature gradients and precise UVB placement are non-negotiable for reptiles. A veiled chameleon's health is directly tied to its thermal cycles.",
-      "author": "SIERRA HERPETOLOGY TEAM"
-    },
-    "galleryImages": [
-      "/images/blogs/reptile1.jpeg",
-      "/images/blogs/reptile2.jpeg"
-    ]
-  },
-  {
-    "id": "blog-007",
-    "title": "Cat Care 101 — Everything New Cat Owners Need to Know",
-    "slug": "cat-care-101-new-cat-owners-guide",
-    "excerpt": "Bringing a new cat or kitten home? This comprehensive guide covers feeding, litter training, veterinary care, and enrichment.",
-    "content": "# Cat Care Guide\n\nWelcoming a new cat into your home is an exciting and rewarding experience. Whether you've adopted a playful kitten or an adult cat, providing the right environment and care from the beginning will help your feline companion feel safe, comfortable, and happy in their new home.\n\nOne of the first things to prepare is a dedicated space where your cat can adjust at their own pace. This area should include a comfortable bed, fresh water, food bowls, a litter box, and a few toys. Cats can be sensitive to new surroundings, so giving them a quiet place to explore and relax can reduce stress during the transition period.\n\nNutrition plays a vital role in your cat's overall health. Choose a high-quality cat food appropriate for your cat's age, size, and activity level. Fresh water should always be available, and treats should be offered in moderation. Regular veterinary checkups are equally important for vaccinations, parasite prevention, and early detection of potential health issues.\n\nMental and physical stimulation are essential for a happy cat. Interactive toys, scratching posts, climbing trees, and regular play sessions help prevent boredom and encourage healthy exercise. Cats also benefit from consistent routines and positive interactions with their owners.\n\nMaintaining a clean litter box, grooming your cat regularly, and monitoring changes in behavior or appetite can help ensure their well-being. Every cat has a unique personality, so patience and understanding are key as you build trust and strengthen your bond.\n\nWith proper care, attention, and affection, your cat can become a loving companion and cherished member of your family for many years to come.",
-    "coverImage": "/images/blogs/cat1.jpeg",
-    "thumbnailAlt": "Complete cat care guide for beginners",
-    "author": "Sierra Team",
-    "authorRole": "Feline Care Specialist",
-    "authorImage": "/images/team/sierra-team.jpg",
-    "category": "Cat",
-    "categorySlug": "cat",
-    "tags": [
-      "cat care",
-      "beginner",
-      "kitten",
-      "guide",
-      "new owner"
+      "Responsible dog ownership",
+      "Life-stage nutrition",
+      "Positive reinforcement training",
+      "Canine socialization",
+      "Preventative healthcare",
+      "Behavioral stimulation",
+      "Coat grooming maintenance"
     ],
     "featured": true,
     "isArrival": false,
     "status": "published",
-    "publishedAt": "2024-11-20T08:00:00Z",
-    "updatedAt": "2024-11-20T08:00:00Z",
-    "readingTime": 7,
+    "publishedAt": "2026-09-01T00:00:00.000Z",
+    "updatedAt": "2026-09-01T00:00:00.000Z",
+    "readingTime": 5,
     "relatedIds": [],
     "seo": {
-      "title": "Cat Care 101 Guide for New Cat Owners",
-      "description": "Everything new cat owners need to know about feeding, litter training and care.",
+      "title": "Dog Care Guide: Feeding, Training, Grooming & Best Products Every Dog Needs",
+      "description": "Bringing a dog home is the easy part. Figuring out what they need, how much they should eat, which products are actually useful and how to keep up with their grooming and training is where responsible dog ownership really begins.",
       "keywords": [
-        "cat care",
-        "kitten care",
-        "new cat owner"
+        "complete dog care guide for beginners",
+        "sierra fish and pets dog supplies and advice",
+        "how much to feed a puppy vs adult dog",
+        "positive reinforcement dog training tips",
+        "essential grooming products for long haired dogs",
+        "interactive puzzle toys for dog mental stimulation",
+        "preventative dog healthcare and routine checkups"
       ]
     },
     "specialistQuote": {
-      "quote": "Kittens learn through play. Providing scratching posts and interactive toys in their first months prevents unwanted behaviors and builds high confidence.",
-      "author": "SIERRA FELINE EXPERTS"
+      "quote": "",
+      "author": ""
     },
     "galleryImages": [
-      "/images/blogs/cat1.jpeg",
-      "/images/blogs/cat1.jpeg"
-    ]
+      "/images/blogs/dog-care-guide.jpg"
+    ],
+    "semanticKeynotes": [
+      {
+        "title": "Tailoring Life-Stage and Breed Care",
+        "description": "Focuses on customizing canine care based on specific variables-such as age (puppy vs. senior), energy levels, breed traits, and health considerations-rather than applying a rigid, one-size-fits-all routine."
+      },
+      {
+        "title": "Nutritional Discipline and Dietary Transitions",
+        "description": "Emphasizes portion measurement over guessing, age-appropriate food formulations, treat moderation, and the necessity of gradual dietary transitions to protect gastrointestinal health."
+      },
+      {
+        "title": "Positive Reinforcement and Socialization Principles",
+        "description": "Outlines effective training techniques using short, focused sessions, consistent house rules, and gradual environmental exposure (socialization) to foster good behavior and reduce anxiety."
+      },
+      {
+        "title": "Hygienic Grooming as Preventive Health",
+        "description": "Highlights the healthcare benefits of routine brushing, ear cleaning, nail trimming, and dental care, cautioning against over-bathing with non-dog-specific products that irritate skin."
+      },
+      {
+        "title": "Essential Gear Selection and Mental Enrichment",
+        "description": "Details the practical selection of dog gear-including proper harnesses, species-appropriate chew/puzzle toys, and coat-specific grooming supplies-over unnecessary trends."
+      },
+      {
+        "title": "Preventative Veterinary Care and Early Detection",
+        "description": "Stresses the critical role of routine veterinary visits, parasite control, and daily home monitoring (tracking appetite, weight, and energy levels) to identify health problems early."
+      },
+      {
+        "title": "Integrated Retail and Community Support",
+        "description": "Positions Sierra Fish and Pets as a dedicated one-stop hub offering reliable supplies, nutrition, grooming essentials, and expert guidance for dog parents."
+      }
+    ],
+    "nerTags": {
+      "organization": [
+        "Sierra Fish and Pets",
+        "Sierra Fish & Pets"
+      ],
+      "productOrService": [
+        "Dog food",
+        "Growth-formula puppy food",
+        "Canine treats",
+        "Dog collars",
+        "Dog harnesses",
+        "Sturdy leashes",
+        "Dog beds",
+        "Puzzle toys",
+        "Chew toys",
+        "Dog-safe shampoo",
+        "Nail clippers",
+        "Dental-care products",
+        "Parasite prevention"
+      ],
+      "conceptOrTheme": [
+        "Responsible dog ownership",
+        "Life-stage nutrition",
+        "Positive reinforcement training",
+        "Canine socialization",
+        "Preventative healthcare",
+        "Behavioral stimulation",
+        "Coat grooming maintenance"
+      ]
+    }
   }
 ]

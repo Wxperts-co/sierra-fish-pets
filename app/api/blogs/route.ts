@@ -17,6 +17,17 @@ const specialistQuoteSchema = z.object({
   author: z.string().optional().default(""),
 });
 
+const semanticKeynoteSchema = z.object({
+  title: z.string().optional().default(""),
+  description: z.string().optional().default(""),
+});
+
+const nerTagsSchema = z.object({
+  organization: z.array(z.string()).optional().default([]),
+  productOrService: z.array(z.string()).optional().default([]),
+  conceptOrTheme: z.array(z.string()).optional().default([]),
+});
+
 const blogSchema = z.object({
   id: z.string().min(1, "Blog ID is required"),
   title: z.string().min(1, "Title is required"),
@@ -41,11 +52,18 @@ const blogSchema = z.object({
   seo: seoSchema.optional().default(() => ({ title: "", description: "", keywords: [] })),
   specialistQuote: specialistQuoteSchema.optional().default(() => ({ quote: "", author: "" })),
   galleryImages: z.array(z.string()).optional().default([]),
+  semanticKeynotes: z.array(semanticKeynoteSchema).optional().default([]),
+  nerTags: nerTagsSchema.optional().default(() => ({
+    organization: [],
+    productOrService: [],
+    conceptOrTheme: [],
+  })),
 });
 
 async function syncBlogsJson() {
   const filePath = join(process.cwd(), "data", "blogs.json");
   const blogs = await BlogModel.find().sort({ publishedAt: -1 }).lean();
+  if (!blogs || blogs.length === 0) return;
   
   const formatted = blogs.map((b: any) => ({
     id: b.id,
@@ -78,6 +96,12 @@ async function syncBlogsJson() {
       author: b.specialistQuote?.author || "",
     },
     galleryImages: b.galleryImages || [],
+    semanticKeynotes: b.semanticKeynotes || [],
+    nerTags: {
+      organization: b.nerTags?.organization || [],
+      productOrService: b.nerTags?.productOrService || [],
+      conceptOrTheme: b.nerTags?.conceptOrTheme || [],
+    },
   }));
 
   await writeFile(filePath, JSON.stringify(formatted, null, 2), "utf8");

@@ -35,6 +35,15 @@ export interface BlogItem {
     author: string;
   };
   galleryImages?: string[];
+  semanticKeynotes?: {
+    title: string;
+    description: string;
+  }[];
+  nerTags?: {
+    organization: string[];
+    productOrService: string[];
+    conceptOrTheme: string[];
+  };
 }
 
 interface BlogCardProps {
@@ -42,10 +51,14 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
-  // Get date pieces
+  // Get date pieces (Month and Year only)
   const dateObj = new Date(post.publishedAt);
-  const day = dateObj.getDate();
-  const month = dateObj.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+  const month = isNaN(dateObj.getTime())
+    ? "SEPT"
+    : dateObj.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+  const year = isNaN(dateObj.getTime())
+    ? "2026"
+    : dateObj.getFullYear();
 
   // Combine category and tags for the category category line
   const categoryLine = [post.category, ...post.tags.slice(0, 2)].join(", ").toUpperCase();
@@ -54,11 +67,11 @@ export default function BlogCard({ post }: BlogCardProps) {
     <article className="flex flex-col-reverse md:flex-row gap-6 bg-white border-b border-slate-200/80 p-4 last:border-b-0 last:pb-0">
       {/* Content Columns: Date box on left, details on right */}
       <div className="flex-1 flex gap-5">
-        {/* Date Box: Border box with day over month */}
-        <div className="flex flex-col items-center justify-center shrink-0 border border-slate-800 w-[55px] h-[65px] bg-white self-start mt-1 shadow-sm">
-          <span className="text-xl font-bold text-slate-800 leading-none tracking-tight">{day}</span>
-          <span className="w-8 border-t border-slate-300 my-1"></span>
-          <span className="text-[9px] font-bold tracking-widest leading-none text-slate-600 uppercase">{month}</span>
+        {/* Date Box: Border box with month over year */}
+        <div className="flex flex-col items-center justify-center shrink-0 border border-slate-800 w-[58px] h-[65px] bg-white self-start mt-1 shadow-sm px-1">
+          <span className="text-xs font-black text-slate-800 leading-none tracking-wider uppercase">{month}</span>
+          <span className="w-8 border-t border-slate-300 my-1.5"></span>
+          <span className="text-[10px] font-bold tracking-wider leading-none text-slate-600">{year}</span>
         </div>
 
         {/* Text Details */}

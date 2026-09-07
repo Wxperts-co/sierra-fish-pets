@@ -11,6 +11,17 @@ export interface ISpecialistQuote {
   author: string;
 }
 
+export interface ISemanticKeynote {
+  title: string;
+  description: string;
+}
+
+export interface INERTags {
+  organization: string[];
+  productOrService: string[];
+  conceptOrTheme: string[];
+}
+
 export interface IBlog extends Document {
   id: string;
   title: string;
@@ -35,6 +46,8 @@ export interface IBlog extends Document {
   seo: ISEO;
   specialistQuote: ISpecialistQuote;
   galleryImages: string[];
+  semanticKeynotes?: ISemanticKeynote[];
+  nerTags?: INERTags;
 }
 
 const seoSchema = new mongoose.Schema<ISEO>(
@@ -50,6 +63,23 @@ const specialistQuoteSchema = new mongoose.Schema<ISpecialistQuote>(
   {
     quote: { type: String, default: "" },
     author: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
+const semanticKeynoteSchema = new mongoose.Schema<ISemanticKeynote>(
+  {
+    title: { type: String, default: "" },
+    description: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
+const nerTagsSchema = new mongoose.Schema<INERTags>(
+  {
+    organization: { type: [String], default: [] },
+    productOrService: { type: [String], default: [] },
+    conceptOrTheme: { type: [String], default: [] },
   },
   { _id: false }
 );
@@ -98,6 +128,15 @@ const blogSchema = new mongoose.Schema<IBlog>(
       default: () => ({ quote: "", author: "" }),
     },
     galleryImages: { type: [String], default: [] },
+    semanticKeynotes: { type: [semanticKeynoteSchema], default: [] },
+    nerTags: {
+      type: nerTagsSchema,
+      default: () => ({
+        organization: [],
+        productOrService: [],
+        conceptOrTheme: [],
+      }),
+    },
   },
   {
     versionKey: false,
