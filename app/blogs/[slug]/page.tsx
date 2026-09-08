@@ -29,29 +29,46 @@ export async function generateMetadata({
     };
   }
 
-  const title = post.seo?.title || `${post.title} | Sierra Fish & Pets`;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const canonicalUrl = `${baseUrl}/blogs/${post.slug}`;
+  const rawTitle = post.seo?.title || post.title;
+  const title = rawTitle.includes("Sierra Fish") ? rawTitle : `${rawTitle} | Sierra Fish & Pets`;
   const description = post.seo?.description || post.excerpt;
   const keywords = post.seo?.keywords && post.seo.keywords.length > 0 ? post.seo.keywords : post.tags;
+  const fullImageUrl = post.coverImage
+    ? (post.coverImage.startsWith("http") ? post.coverImage : `${baseUrl}${post.coverImage}`)
+    : undefined;
 
   return {
     title,
     description,
     keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
       type: "article",
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt || post.publishedAt,
       authors: [post.author],
       tags: post.tags,
-      images: post.coverImage ? [{ url: post.coverImage }] : [],
+      images: fullImageUrl
+        ? [
+            {
+              url: fullImageUrl,
+              alt: post.thumbnailAlt || post.title,
+            },
+          ]
+        : [],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: post.coverImage ? [post.coverImage] : [],
+      images: fullImageUrl ? [fullImageUrl] : [],
     },
   };
 }
@@ -185,28 +202,39 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
   // Format category name for tag layout
   const categoryHeader = [post.category, ...post.tags.slice(0, 2)].join(", ").toUpperCase();
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const canonicalUrl = `${baseUrl}/blogs/${post.slug}`;
+  const fullImageUrl = post.coverImage
+    ? (post.coverImage.startsWith("http") ? post.coverImage : `${baseUrl}${post.coverImage}`)
+    : `${baseUrl}/images/blogs/responsible-pet-parent-guide.jpg`;
+
   // Schema.org BlogPosting Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
     "headline": post.title,
     "description": post.seo?.description || post.excerpt,
-    "image": post.coverImage ? [post.coverImage] : [],
+    "image": [fullImageUrl],
     "datePublished": post.publishedAt,
     "dateModified": post.updatedAt || post.publishedAt,
     "author": {
       "@type": "Person",
       "name": post.author,
-      "jobTitle": post.authorRole || "Author"
+      "jobTitle": post.authorRole || "Author",
+      "url": `${baseUrl}/about`,
     },
     "publisher": {
       "@type": "Organization",
       "name": "Sierra Fish & Pets",
-      "url": "https://sierrafishandpets.com"
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://sierrafishandpets.com/blogs/${post.slug}`
+      "url": baseUrl,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/images/logo/sierra-logo.png`,
+      },
     },
     "articleSection": post.category,
     "keywords": post.seo?.keywords && post.seo.keywords.length > 0 ? post.seo.keywords.join(", ") : post.tags.join(", "),
@@ -216,15 +244,15 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
       "about": post.semanticKeynotes.map((kn) => ({
         "@type": "Thing",
         "name": kn.title,
-        "description": kn.description
-      }))
+        "description": kn.description,
+      })),
     }),
     ...(post.nerTags?.productOrService && post.nerTags.productOrService.length > 0 && {
       "mentions": post.nerTags.productOrService.map((item) => ({
         "@type": "Thing",
-        "name": item
-      }))
-    })
+        "name": item,
+      })),
+    }),
   };
 
   return (

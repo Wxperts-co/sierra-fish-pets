@@ -142,22 +142,38 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Blog Posts Dynamic Routes
-  const blogRoutes: MetadataRoute.Sitemap = blogsData.map((post) => {
-    const lastMod = post.updatedAt || post.publishedAt || new Date().toISOString();
-    return {
-      url: `${baseUrl}/blogs/${post.slug}`,
-      lastModified: new Date(lastMod),
-      changeFrequency: "weekly",
-      priority: 0.85,
-    };
-  });
+  const blogRoutes: MetadataRoute.Sitemap = blogsData
+    .filter((post) => post.status !== "draft")
+    .map((post) => {
+      let lastModDate: Date;
+      try {
+        lastModDate = new Date(post.updatedAt || post.publishedAt || Date.now());
+        if (isNaN(lastModDate.getTime())) {
+          lastModDate = new Date();
+        }
+      } catch {
+        lastModDate = new Date();
+      }
+
+      return {
+        url: `${baseUrl}/blogs/${post.slug}`,
+        lastModified: lastModDate,
+        changeFrequency: "weekly" as const,
+        priority: 0.85,
+      };
+    });
 
   // Blog Category Routes
-  const blogCategorySlugs = ["dog", "cat", "bird", "aquatic", "small-animal", "reptile"];
+  const staticBlogCategories = ["dog", "cat", "bird", "aquatic", "small-animal", "reptile"];
+  const dynamicBlogCategories = blogsData
+    .map((p) => p.categorySlug)
+    .filter((slug): slug is string => Boolean(slug) && slug !== "all");
+  const blogCategorySlugs = Array.from(new Set([...staticBlogCategories, ...dynamicBlogCategories]));
+
   const blogCategoryRoutes: MetadataRoute.Sitemap = blogCategorySlugs.map((category) => ({
     url: `${baseUrl}/blogs/category/${category}`,
     lastModified: new Date(),
-    changeFrequency: "weekly",
+    changeFrequency: "weekly" as const,
     priority: 0.75,
   }));
 
