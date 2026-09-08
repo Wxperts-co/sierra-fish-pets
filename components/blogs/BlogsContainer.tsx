@@ -9,6 +9,7 @@ import SoroBlogWidget from "./SoroBlogWidget";
 
 interface BlogsContainerProps {
   initialCategory?: string;
+  posts?: BlogItem[];
 }
 
 const mapCategoryParam = (param: string): string => {
@@ -31,22 +32,25 @@ const mapCategoryParam = (param: string): string => {
   if (normalized === "aquatic" || normalized === "aquatics" || normalized === "fish" || normalized === "fishes") {
     return "aquatic";
   }
+  if (normalized === "pet-care" || normalized === "pet-cares" || normalized === "pet" || normalized === "pets") {
+    return "pet-care";
+  }
   return "all";
 };
 
-export default function BlogsContainer({ initialCategory }: BlogsContainerProps) {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+export default function BlogsContainer({ initialCategory, posts: propPosts }: BlogsContainerProps) {
+  const [activeCategory, setActiveCategory] = useState<string>(() =>
+    initialCategory ? mapCategoryParam(initialCategory) : "all"
+  );
 
   // Sync state with dynamic route initial prop
   useEffect(() => {
     if (initialCategory) {
       setActiveCategory(mapCategoryParam(initialCategory));
-    } else {
-      setActiveCategory("all");
     }
   }, [initialCategory]);
 
-  const posts = blogsData as BlogItem[];
+  const posts = propPosts || (blogsData as BlogItem[]);
 
   // Map active category to label string for breadcrumbs
   const getCategoryLabel = (catId: string) => {

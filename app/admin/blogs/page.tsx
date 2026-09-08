@@ -98,6 +98,7 @@ export default function AdminBlogPostsPage() {
   const [authorRole, setAuthorRole] = useState("Pet Specialist");
   const [authorImage, setAuthorImage] = useState("/images/team/sierra-team.jpg");
   const [category, setCategory] = useState("dog");
+  const [publishedAt, setPublishedAt] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [featured, setFeatured] = useState(false);
   const [isArrival, setIsArrival] = useState(false);
@@ -179,6 +180,7 @@ export default function AdminBlogPostsPage() {
     setAuthorRole("Pet Specialist");
     setAuthorImage("/images/team/sierra-team.jpg");
     setCategory("dog");
+    setPublishedAt(new Date().toISOString().slice(0, 7));
     setTagsInput("");
     setFeatured(false);
     setIsArrival(false);
@@ -209,6 +211,7 @@ export default function AdminBlogPostsPage() {
     setAuthorRole(post.authorRole || "Pet Specialist");
     setAuthorImage(post.authorImage || "/images/team/sierra-team.jpg");
     setCategory(post.categorySlug || post.category?.toLowerCase() || "dog");
+    setPublishedAt(post.publishedAt ? post.publishedAt.slice(0, 7) : "");
     setTagsInput((post.tags || []).join(", "));
     setFeatured(post.featured || false);
     setIsArrival(post.isArrival || false);
@@ -258,6 +261,7 @@ export default function AdminBlogPostsPage() {
           (c) => c.id === data.categorySlug || c.label.toLowerCase() === (data.category || "").toLowerCase()
         );
         setCategory(matchedCat ? matchedCat.id : (data.categorySlug || "dog"));
+        setPublishedAt(data.publishedAt ? data.publishedAt.slice(0, 7) : new Date().toISOString().slice(0, 7));
 
         setTagsInput(Array.isArray(data.tags) ? data.tags.join(", ") : (data.tags || ""));
         setFeatured(Boolean(data.featured));
@@ -372,7 +376,9 @@ export default function AdminBlogPostsPage() {
       featured,
       isArrival,
       status,
-      publishedAt: status === "published" ? (editingPost?.publishedAt || new Date().toISOString()) : "",
+      publishedAt: publishedAt
+        ? (publishedAt.length === 7 ? `${publishedAt}-01T00:00:00.000Z` : (publishedAt.includes("T") ? publishedAt : `${publishedAt}T00:00:00.000Z`))
+        : (status === "published" ? (editingPost?.publishedAt || new Date().toISOString()) : ""),
       updatedAt: new Date().toISOString(),
       readingTime: Number(readingTime),
       relatedIds: editingPost?.relatedIds || [],
@@ -526,7 +532,6 @@ export default function AdminBlogPostsPage() {
             <span className="font-semibold text-slate-900">
               {row.publishedAt ? new Date(row.publishedAt).toLocaleDateString([], {
                 month: "short",
-                day: "numeric",
                 year: "numeric",
               }) : "Not Published"}
             </span>
@@ -845,8 +850,8 @@ export default function AdminBlogPostsPage() {
                 </div>
               </div>
 
-              {/* Category, Cover Image & Reading Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Category, Cover Image, Reading Time & Publish Date */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">
                     Category
@@ -862,6 +867,32 @@ export default function AdminBlogPostsPage() {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    Publish Date
+                  </label>
+                  <input
+                    type="month"
+                    value={publishedAt}
+                    onChange={(e) => setPublishedAt(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    Reading Time (min)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    required
+                    value={readingTime}
+                    onChange={(e) => setReadingTime(Number(e.target.value))}
+                    className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800"
+                  />
                 </div>
 
                 <div>
@@ -916,20 +947,6 @@ export default function AdminBlogPostsPage() {
                       </div>
                     )}
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">
-                    Reading Time (min)
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    required
-                    value={readingTime}
-                    onChange={(e) => setReadingTime(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 text-sm outline-none focus:border-[#005AA9]/30 focus:ring-4 focus:ring-[#005AA9]/5 font-semibold text-slate-800"
-                  />
                 </div>
               </div>
 
@@ -1350,7 +1367,7 @@ export default function AdminBlogPostsPage() {
                     <>
                       <span className="block text-[10px] font-black uppercase tracking-widest leading-none">Published</span>
                       <span className="block text-slate-600 mt-0.5">
-                        {new Date(viewingPost.publishedAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
+                        {new Date(viewingPost.publishedAt).toLocaleDateString([], { month: "short", year: "numeric" })}
                       </span>
                     </>
                   ) : (

@@ -190,7 +190,6 @@ export default function BlogSidebar({
           {recentPosts.map((rp) => {
             const rpDate = new Date(rp.publishedAt).toLocaleDateString("en-US", {
               month: "long",
-              day: "numeric",
               year: "numeric",
             }).toUpperCase();
 
@@ -255,31 +254,7 @@ export default function BlogSidebar({
         </div>
       </div>
 
-      {/* Tags Widget */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100">
-          Tags
-        </h3>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {allTags.map((tag) => {
-            const isActive = activeTag === tag;
-
-            return (
-              <button
-                key={tag}
-                onClick={() => handleTagClick(tag)}
-                className={`px-3 py-1.5 text-[10px] font-extrabold tracking-wider uppercase rounded-xl border transition-all duration-200 cursor-pointer active:scale-95 ${
-                  isActive
-                    ? "bg-[#005AA9] border-[#005AA9] text-white shadow-sm"
-                    : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
-                }`}
-              >
-                {tag}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+   
     </>
   )}
     </aside>
