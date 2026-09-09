@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { X, ZoomIn, Grid, Store, Dog, Fish, Bug, Bird, Rabbit } from "lucide-react";
+import { X, ZoomIn, Grid, Store, Dog, Fish, Bug, Bird, Rabbit, ChevronDown, Check } from "lucide-react";
 import galleryData from "@/data/gallery.json";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
@@ -45,6 +45,19 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
   const [items, setItems] = useState<GalleryItem[]>(galleryImages);
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const fetchLiveGallery = async () => {
@@ -81,6 +94,9 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
       router.push(`/gallery/category/${catId}`, { scroll: false });
     }
   };
+
+  const currentCategory = CATEGORIES.find((c) => c.id === activeCategory) || CATEGORIES[0];
+  const CurrentCategoryIcon = currentCategory.icon;
 
   const filteredImages = activeCategory === "all"
     ? items
@@ -133,7 +149,7 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center justify-center"
           >
-            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
+            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
               Our Photo Gallery
             </h1>
 
@@ -159,10 +175,85 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
         </div>
       </section>
 
-      {/* ─── CATEGORY FILTER TABS ─── */}
-      <section className="py-12">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-white p-3 rounded-full border border-slate-200 shadow-sm max-w-4xl mx-auto">
+      {/* ─── CATEGORY FILTER TABS / MOBILE DROPDOWN ─── */}
+      <section className="py-6 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+          {/* Custom Styled Mobile Dropdown Filter */}
+          <div ref={dropdownRef} className="block md:hidden relative max-w-xs mx-auto z-30">
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              className="w-full flex items-center justify-between gap-3 bg-white border border-blue-200/90 hover:border-blue-400 text-slate-800 font-bold text-sm rounded-full py-2.5 px-4 shadow-sm active:scale-[0.99] transition-all cursor-pointer"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="listbox"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="p-1.5 rounded-full bg-blue-50 text-[#005AA9] shrink-0">
+                  <CurrentCategoryIcon className="w-4 h-4" />
+                </div>
+                <span className="truncate text-slate-900 font-bold text-sm">
+                  {currentCategory.label}
+                </span>
+              </div>
+              <ChevronDown
+                className={`w-4 h-4 text-slate-500 transition-transform duration-200 shrink-0 ${
+                  isDropdownOpen ? "rotate-180 text-[#005AA9]" : ""
+                }`}
+              />
+            </button>
+
+            {/* Custom Animated Dropdown Popover */}
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden py-1.5 z-50 divide-y divide-slate-50"
+                  role="listbox"
+                >
+                  {CATEGORIES.map((cat) => {
+                    const Icon = cat.icon;
+                    const isSelected = activeCategory === cat.id;
+
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          handleCategoryChange(cat.id);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs sm:text-sm transition-colors cursor-pointer ${
+                          isSelected
+                            ? "bg-blue-50/80 text-[#005AA9] font-bold"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-slate-900 font-medium"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon
+                            className={`w-4 h-4 ${
+                              isSelected ? "text-[#005AA9]" : "text-slate-400"
+                            }`}
+                          />
+                          <span>{cat.label}</span>
+                        </div>
+                        {isSelected && (
+                          <Check className="w-4 h-4 text-[#005AA9] shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Desktop Pills Filter */}
+          <div className="hidden md:flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-white p-3 rounded-full border border-slate-200 shadow-sm max-w-4xl mx-auto">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon;
               const isActive = activeCategory === cat.id;
@@ -187,8 +278,8 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
       </section>
 
       {/* ─── GALLERY GRID SECTION ─── */}
-      <section className="container mx-auto px-6 max-w-6xl mt-12">
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <section className="container mx-auto px-4 sm:px-6 max-w-6xl mt-4 sm:mt-12">
+        <motion.div layout className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {filteredImages.map((item) => (
               <motion.div
@@ -199,23 +290,23 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
                 animate="visible"
                 exit={{ opacity: 0, scale: 0.9 }}
                 whileHover={{ y: -6 }}
-                className="relative aspect-square rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer border border-slate-100 bg-white"
+                className="relative aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer border border-slate-100 bg-white"
                 onClick={() => setSelectedImage(item.image)}
               >
                 <Image
                   src={item.image}
                   alt={item.caption}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white p-4">
-                  <div className="p-3 bg-white/20 backdrop-blur-md rounded-full mb-2 scale-75 group-hover:scale-100 transition-transform duration-300">
-                    <ZoomIn className="w-6 h-6" />
+                {/* Hover / Active overlay */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white p-2 sm:p-4 text-center">
+                  <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-md rounded-full mb-1 sm:mb-2 scale-75 group-hover:scale-100 transition-transform duration-300">
+                    <ZoomIn className="w-4 h-4 sm:w-6 sm:h-6" />
                   </div>
-                  <p className="text-sm font-bold tracking-wide text-center">
+                  <p className="text-xs sm:text-sm font-bold tracking-wide line-clamp-2">
                     {item.caption}
                   </p>
                 </div>

@@ -1,9 +1,9 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Heart, PawPrint, Award } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function AdoptionHero() {
   const [availableDogsCount, setAvailableDogsCount] = useState(0);
@@ -29,87 +29,79 @@ export default function AdoptionHero() {
   };
 
   return (
-    <section className="relative h-[55vh] min-h-[480px] flex items-center overflow-hidden [clip-path:inset(0)]">
-      {/* Background Image with Ken Burns effect and fixed position */}
-      <motion.div
-        initial={{ scale: 1.08 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 8 }}
-        className="fixed inset-0 -z-20"
-      >
+    <section className="relative overflow-hidden w-full h-[220px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+      {/* Background Image with Premium Overlay (Fixed Parallax) */}
+      <div className="absolute md:fixed inset-x-0 top-0 w-full h-[220px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+        {/* Mobile image */}
+        <Image
+          src="/images/banner/shophero5.png"
+          alt="Dog Adoption"
+          fill
+          priority
+          className="object-cover object-[center_60%] block md:hidden filter brightness-[0.9]"
+          sizes="100vw"
+        />
+        {/* Desktop image */}
         <Image
           src="/images/banner/dog-adoption.png"
           alt="Dog Adoption"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center hidden md:block filter brightness-[0.9]"
           sizes="100vw"
         />
-      </motion.div>
-
-      {/* Gradient Overlay matching Sierra brand theme - also fixed to match background */}
-      <div className="fixed inset-0 bg-gradient-to-r from-[#002244]/95 via-[#002244]/80 to-[#003d73]/30 -z-10" />
-
-      {/* Content */}
-      <div className="relative z-20 w-full pt-28 pb-12">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-           
-
-            {/* Sub-label */}
-            <span className="block mb-2 text-[#00aaff] uppercase tracking-[0.3em] text-xs font-bold">
-              Sierra Adoption Event Host
-            </span>
-
-            {/* Main Title */}
-            <h1 className="text-white font-extrabold leading-[1.05] text-3xl md:text-5xl mb-4 tracking-tight">
-              Giving Rescued Dogs <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#00aaff] drop-shadow-sm">
-                A Second Chance
-              </span>
-            </h1>
-
-          
-
-            {/* Trust Badges / Dynamic Quick Stats */}
-            <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl">
-              
-
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#00aaff]/10 border border-[#00aaff]/20 flex items-center justify-center text-[#00aaff] shrink-0">
-                  <Heart className="w-4 h-4 fill-[#00aaff]" />
-                </div>
-                <div>
-                  <div className="text-base font-bold text-white leading-tight">
-                    Foster Hosted
-                  </div>
-                  <div className="text-[10px] text-slate-400">Saved from kill shelters</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5 col-span-2 md:col-span-1">
-                <div className="w-9 h-9 rounded-xl bg-[#00aaff]/10 border border-[#00aaff]/20 flex items-center justify-center text-[#00aaff] shrink-0">
-                  <Award className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-base font-bold text-white leading-tight">
-                    Event Host
-                  </div>
-                  <div className="text-[10px] text-slate-400">In-store rescue events</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
       </div>
 
-      {/* Bottom Fade */}
-      {/* <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" /> */}
+      {/* Mobile overlay — darkens image so text is readable */}
+      <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.65)_0%,rgba(0,30,70,0.40)_60%,rgba(0,30,70,0.15)_100%)]" />
+
+      {/* Centered text block */}
+      <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
+        <div className="flex flex-col items-center justify-center max-w-4xl">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none tracking-tight leading-tight mb-2 sm:mb-3">
+            Dog Adoption &amp; Rescue Events
+          </h1>
+          {/* Breadcrumb */}
+          <nav
+            aria-label="breadcrumb"
+            className="flex flex-wrap items-center justify-center gap-0.5 text-xs sm:text-sm font-medium text-white drop-shadow-md md:text-slate-300 md:drop-shadow-none mb-3 sm:mb-4"
+          >
+            <span className="flex items-center gap-0.5">
+              <Link
+                href="/"
+                className="text-white hover:text-cyan-300 md:text-slate-300 transition-colors duration-150 hover:underline"
+              >
+                Home
+              </Link>
+              <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
+            </span>
+            <span className="flex items-center gap-0.5">
+              <Link
+                href="/services"
+                className="text-white hover:text-cyan-300 md:text-slate-300 transition-colors duration-150 hover:underline"
+              >
+                Services
+              </Link>
+              <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
+            </span>
+            <span className="flex items-center gap-0.5">
+              <span className="font-bold text-white">Dog Adoption</span>
+            </span>
+          </nav>
+
+          <div>
+            <button
+              onClick={() => scrollToSection("dogs")}
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-[#005AA9] hover:bg-[#004b8d] text-white px-5 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-base font-bold shadow-lg shadow-blue-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            >
+              <span>
+                View Available Dogs{availableDogsCount > 0 ? ` (${availableDogsCount})` : ""}
+              </span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
   );
-}
+}

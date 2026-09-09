@@ -455,7 +455,7 @@ export default function EventCalendarPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white md:text-[#0d1b2a] tracking-tight flex items-center justify-center gap-3 drop-shadow-sm">
               <span className="animate-bounce">🐟</span>
-              <span className="bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent">Event Calendar</span>
+              <span className="text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">Event Calendar</span>
               
               <span className="animate-bounce" style={{ animationDelay: "0.2s" }}>🐟</span>
             </h1>

@@ -57,7 +57,7 @@ export default function ArrivalHero({
           transition={{ duration: 0.7 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-black bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent leading-[1.05] tracking-[-0.03em] mb-4 drop-shadow-sm">
+          <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-black text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none leading-[1.05] tracking-[-0.03em] mb-4">
             {title}
           </h1>
 

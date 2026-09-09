@@ -57,8 +57,8 @@ export default function PoliciesPage() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center justify-center"
           >
-            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
-              Store &amp; Return Policies
+            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
+              Store Policies &amp; Guarantees
             </h1>
 
             {/* Breadcrumb */}

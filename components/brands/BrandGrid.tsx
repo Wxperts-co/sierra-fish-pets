@@ -60,7 +60,7 @@ export default function BrandGrid({ brands, initialCategory }: BrandGridProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsPerPage(window.innerWidth < 768 ? 2 : 10);
+      setItemsPerPage(window.innerWidth < 768 ? 6 : 10);
     };
     handleResize();
     window.addEventListener("resize", handleResize);

@@ -239,7 +239,7 @@ export default function Header() {
           MOBILE HEADER  (hidden on lg+)
           Layout: [hamburger] [centered logo] [cart]
       ════════════════════════════════════════════════════ */}
-      <header className="z-50 sticky top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d] lg:hidden font-lato w-full">
+      <header className="z-50 fixed top-0 inset-x-0 bg-[#005AA9] shadow-md border-b border-[#004b8d] lg:hidden font-lato w-full">
         {/* Row 1: Logo and Search Input, plus Menu and Cart */}
         <div className="flex items-center justify-between px-3 py-2 gap-3">
           {/* Left: Hamburger menu + Logo */}
@@ -317,59 +317,62 @@ export default function Header() {
             <ChevronDown className="h-3 w-3" />
           </button>
         </div>
-
-        {/* Row 3: Horizontal Scrollable Categories */}
-        <div
-          className="bg-white py-2.5 overflow-x-auto scrollbar-none flex items-center gap-6 px-4 border-t border-[#004b8d]/20 border-b border-slate-200"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {/* For You Tab */}
-          <Link
-            href="/"
-            className="flex flex-col items-center shrink-0 relative pb-1 group"
-          >
-            <span
-              className={cn(
-                "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
-                pathname === "/"
-                  ? "text-[#005AA9]"
-                  : "text-slate-600 group-hover:text-[#005AA9]",
-              )}
-            >
-              For You
-            </span>
-            {pathname === "/" && (
-              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
-            )}
-          </Link>
-
-          {categories.map((category) => {
-            const href = `/shop/${category.slug}`;
-            const isActive = pathname?.startsWith("/shop") && selectedCategory === category.slug;
-            return (
-              <Link
-                key={category.id}
-                href={href}
-                className="flex flex-col items-center shrink-0 relative pb-1 group"
-              >
-                <span
-                  className={cn(
-                    "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
-                    isActive
-                      ? "text-[#005AA9]"
-                      : "text-slate-600 group-hover:text-[#005AA9]",
-                  )}
-                >
-                  {category.name}
-                </span>
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
-                )}
-              </Link>
-            );
-          })}
-        </div>
       </header>
+
+      {/* Mobile Fixed Header Spacer (for Rows 1 & 2) */}
+      <div className="lg:hidden h-[80px] w-full shrink-0" aria-hidden="true" />
+
+      {/* Row 3: Horizontal Scrollable Categories (Scrolls naturally with page content on mobile) */}
+      <div
+        className="lg:hidden bg-white py-2.5 overflow-x-auto scrollbar-none flex items-center gap-6 px-4 border-b border-slate-200 w-full shrink-0 relative z-10"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {/* For You Tab */}
+        <Link
+          href="/"
+          className="flex flex-col items-center shrink-0 relative pb-1 group"
+        >
+          <span
+            className={cn(
+              "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
+              pathname === "/"
+                ? "text-[#005AA9]"
+                : "text-slate-600 group-hover:text-[#005AA9]",
+            )}
+          >
+            For You
+          </span>
+          {pathname === "/" && (
+            <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
+          )}
+        </Link>
+
+        {categories.map((category) => {
+          const href = `/shop/${category.slug}`;
+          const isActive = pathname?.startsWith("/shop") && selectedCategory === category.slug;
+          return (
+            <Link
+              key={category.id}
+              href={href}
+              className="flex flex-col items-center shrink-0 relative pb-1 group"
+            >
+              <span
+                className={cn(
+                  "text-sm font-bold tracking-wide transition-colors whitespace-nowrap",
+                  isActive
+                    ? "text-[#005AA9]"
+                    : "text-slate-600 group-hover:text-[#005AA9]",
+                )}
+              >
+                {category.name}
+              </span>
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#005AA9] rounded-full" />
+              )}
+            </Link>
+          );
+        })}
+      </div>
 
       {/* ════════════════════════════════════════════════════
           DESKTOP HEADER  (hidden below lg)

@@ -142,28 +142,28 @@ export default function ShopHero({
 
         {/* ── Heading + Breadcrumb ── */}
         <div className="absolute inset-x-0 top-0 z-[3] mt-6 flex h-[calc(100%-50px)] flex-col items-center justify-center px-4 text-center">
-          <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] bg-clip-text text-transparent drop-shadow-sm">
+          <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
             {headingPrefix} Products
           </h1>
 
           <nav
             aria-label="breadcrumb"
-            className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-slate-500 "
+            className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none"
           >
             {crumbs.map((crumb, i) => (
               <span key={i} className="flex items-center gap-0.5">
                 {crumb.href ? (
                   <Link
                     href={crumb.href}
-                    className="text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                    className="text-white md:text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
                   >
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className="font-bold text-[#0d1b2a]">{crumb.label}</span>
+                  <span className="font-bold text-white md:text-[#0d1b2a]">{crumb.label}</span>
                 )}
                 {i < crumbs.length - 1 && (
-                  <span className="px-0.5 text-slate-400"> › </span>
+                  <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
                 )}
               </span>
             ))}
