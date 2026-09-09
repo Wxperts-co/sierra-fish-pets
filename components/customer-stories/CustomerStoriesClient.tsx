@@ -229,7 +229,7 @@ export default function CustomerStoriesClient() {
       </section>
 
       {/* ─── MAIN EDITORIAL STORYTELLING CONTENT ─── */}
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 relative z-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 relative z-10">
 
         {/* ─── Page Intro Header ─── */}
         <div className="text-center max-w-3xl mx-auto mb-8 space-y-4">
@@ -1020,17 +1020,169 @@ export default function CustomerStoriesClient() {
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-blue-100 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <StoryAvatar name="Shawnee Knight" avatar="/images/reviews/shawnee.png" size="sm" />
-                  <div>
-                    <span className="font-bold text-slate-900 text-xs block">Shawnee Knight</span>
-                    <span className="text-[10px] text-slate-500">Fish Supplies Specialist</span>
-                  </div>
+              <div className="mt-6 pt-4 border-t border-blue-100 flex items-center gap-2.5">
+                <StoryAvatar name="Shawnee Knight" avatar="/images/reviews/shawnee.png" size="sm" />
+                <div>
+                  <span className="font-bold text-slate-900 text-xs block">Shawnee Knight</span>
+                  <span className="text-[10px] text-slate-500">Fish Supplies Specialist</span>
                 </div>
               </div>
             </motion.section>
           </div>
+        </div>
+
+        {/* ─── SEMANTIC KEYNOTES & NER TAGS ACCORDION ─── */}
+        <div className="mt-12 sm:mt-16">
+          <details className="group rounded-3xl bg-white border border-blue-100/90 p-5 sm:p-7 shadow-sm transition-all duration-200 hover:border-blue-200 text-slate-800">
+            <summary className="cursor-pointer font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between select-none list-none [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center gap-2.5">
+                <span className="text-xs sm:text-sm font-black text-[#005AA9] transition-transform duration-200 group-open:rotate-90">
+                  ▶
+                </span>
+                <span>Semantic Keynotes &amp; Named Entity Recognition (NER) Tags</span>
+              </span>
+            </summary>
+
+            <div className="mt-6 space-y-6 text-sm sm:text-base leading-relaxed pt-4 border-t border-slate-100">
+              {/* Semantic Keynotes Section */}
+              <div className="space-y-3">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                  Semantic Keynotes
+                </h3>
+                <ul className="space-y-3.5 pl-1 sm:pl-2">
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Beginner Aquarium Mentorship &amp; Holiday Wishes:
+                      </strong>{" "}
+                      <span>
+                        Highlights how first-time fish owners receive step-by-step guidance on tank sizing, substrate, filtration, and species care, turning holiday surprise nervousness into thriving family aquariums.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Comprehensive Multi-Store Regional Comparison:
+                      </strong>{" "}
+                      <span>
+                        Explores how dedicated hobbyists compared six independent and retail pet stores across the I-405 corridor in King County, discovering unmatched livestock health, cleanliness, and authentic passion at Sierra Fish &amp; Pets.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Overcoming Nitrogen Cycle &amp; Water Chemistry Anxiety:
+                      </strong>{" "}
+                      <span>
+                        Details expert aquatic consultations that guide beginners through tank cycling, water parameters, live plant selection, and compatibility to establish thriving planted freshwater ecosystems.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        First-Time Small Animal &amp; Rabbit Parenting Care:
+                      </strong>{" "}
+                      <span>
+                        Emphasizes specialized, patient staff guidance for new pet owners covering baby rabbit nutrition, safe habitat setups, and gentle handling practices.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Integrated All-in-One Multi-Pet Sanctuary Supply:
+                      </strong>{" "}
+                      <span>
+                        Focuses on the convenience of a deeply stocked, organized store catering simultaneously to custom aquariums, exotic birds, and small mammals under one roof.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Specialty Saltwater Corals, Rare Macroalgae &amp; Exotic Livestock:
+                      </strong>{" "}
+                      <span>
+                        Showcases specialized livestock curation, from rare macroalgae varieties and coral frags to uncommon freshwater and marine fish not typically found in standard big-box stores.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">
+                        Authentic Community Trust &amp; Verified Social Proof:
+                      </strong>{" "}
+                      <span>
+                        Demonstrates genuine 5-star Google review ratings and verified photographic evidence from real local pet parents in Renton, Washington.
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* NER Tags Section */}
+              <div className="space-y-3 pt-2">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                  NER Tags
+                </h3>
+                <ul className="space-y-3.5 pl-1 sm:pl-2">
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">ORGANIZATION (ORG):</strong>{" "}
+                      <span>Sierra Fish &amp; Pets, Google, Google Maps</span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">PERSON (PER):</strong>{" "}
+                      <span>
+                        Alyssa (Aquatics Specialist), Sarah Proctor (Customer), Derek Marks (Customer), Joe Tobin (Customer), Q Z (Customer), Nathan Drysdale (Customer), Schuyler Summers (Customer), Shawnee Knight (Customer)
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">LOCATION (LOC):</strong>{" "}
+                      <span>
+                        Renton, Washington, King County, Pacific Northwest (PNW), I-405 Corridor, 305 Burnett Ave S
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">PRODUCT / SERVICE (PRODUCT):</strong>{" "}
+                      <span>
+                        Freshwater aquariums &amp; livestock, Saltwater fish &amp; corals, Rare macroalgae, Live planted tanks, Cory catfish, Substrate &amp; sand, Filtration systems &amp; pumps, Water chemistry testing &amp; cycling, Small mammal supplies, Baby rabbit care habitats, Bird nutrition &amp; accessories, Custom aquarium consulting
+                      </span>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                    <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                    <div>
+                      <strong className="font-bold text-slate-900">CONCEPT / THEME (MISC):</strong>{" "}
+                      <span>
+                        Aquarium nitrogen cycle, Beginner pet mentorship, Water chemistry management, Small animal husbandry, Biofiltration, Habitat enrichment, Independent pet retail vs. big-box chains, Customer testimonials, Community pet education
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </details>
         </div>
 
         {/* ─── CTA: SHARE YOUR STORY BANNER ─── */}
