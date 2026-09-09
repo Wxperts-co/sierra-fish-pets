@@ -183,6 +183,9 @@ export default function Header() {
   const isCoupons = pathname === "/coupons";
   const isPolicies = pathname === "/policies" || pathname === "/return-policy" || pathname === "/shipping";
   const isRewards = pathname === "/rewards" || (pathname ? pathname.startsWith("/rewards/") : false);
+  const isCustomerStories =
+    pathname === "/customer-stories" ||
+    (pathname ? pathname.startsWith("/customer-stories/") : false);
 
   const isTransparentPage =
     isHome ||
@@ -202,7 +205,8 @@ export default function Header() {
     isAquaJetSystem ||
     isCoupons ||
     isPolicies ||
-    isRewards;
+    isRewards ||
+    isCustomerStories;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {
@@ -595,7 +599,7 @@ export default function Header() {
                                                 setActiveDropdown(null);
                                                 setActiveSubmenu(null);
                                               }}
-                                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                                             >
                                               {subItem.label}
                                             </Link>
@@ -615,7 +619,7 @@ export default function Header() {
                               key={idx}
                               href={menuItem.href}
                               onClick={() => setActiveDropdown(null)}
-                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors"
+                              className="block rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#005AA9] transition-colors whitespace-nowrap"
                             >
                               {menuItem.label}
                             </Link>
