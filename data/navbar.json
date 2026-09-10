@@ -439,6 +439,11 @@
         "label": "Customer Stories",
         "href": "/customer-stories",
         "type": "link"
+      },
+      {
+        "label": "FAQ's",
+        "href": "/faq",
+        "type": "link"
       }
     ]
   }
