@@ -1,6 +1,8 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
+import { SERVICE_AREAS } from "@/data/serviceAreas";
 import {
   FaXTwitter,
   FaInstagram,
@@ -36,6 +38,7 @@ const SERVICES = [
   { label: "Special Order Animals", href: "/special-order-animals" },
   { label: "Pet Adoption Events", href: "/services/dog-adoption" },
   { label: "In-Store Events", href: "/event-calendar" },
+  { label: "Service Areas", href: "/service-areas" },
 ];
 
 const SOCIAL = [
@@ -258,6 +261,37 @@ export default function Footer() {
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* ── Service Areas Quick Links ────────────────────────── */}
+        <div className="mt-8 pt-6 border-t border-slate-100 pb-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-xs">
+            <span className="font-bold text-slate-700 whitespace-nowrap uppercase tracking-wider text-[11px]">
+              Areas We Serve:
+            </span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-slate-500">
+              {SERVICE_AREAS.map((area, idx) => (
+                <React.Fragment key={area.id}>
+                  <Link
+                    href={`/service-areas/${area.slug}`}
+                    className="hover:text-[#005AA9] hover:underline transition-colors"
+                  >
+                    {area.name}, WA
+                  </Link>
+                  {idx < SERVICE_AREAS.length - 1 && (
+                    <span className="text-slate-300">•</span>
+                  )}
+                </React.Fragment>
+              ))}
+              <span className="text-slate-300">•</span>
+              <Link
+                href="/service-areas"
+                className="font-medium text-[#005AA9] hover:underline"
+              >
+                All Locations &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   ChevronRight,
   MessageSquare,
+  ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
@@ -43,6 +45,23 @@ export default function ContactUsPageClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  // Captcha State
+  const [captcha, setCaptcha] = useState({ num1: 4, num2: 3 });
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+
+  const generateNewCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 9) + 1;
+    const n2 = Math.floor(Math.random() * 9) + 1;
+    setCaptcha({ num1: n1, num2: n2 });
+    setCaptchaInput("");
+    setCaptchaError("");
+  };
+
+  useEffect(() => {
+    generateNewCaptcha();
+  }, []);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -52,27 +71,44 @@ export default function ContactUsPageClient() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    if (isSubmitting) return;
 
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to send message");
+    // Verify Captcha
+    const expectedSum = captcha.num1 + captcha.num2;
+    if (parseInt(captchaInput.trim(), 10) !== expectedSum) {
+      setCaptchaError("Incorrect answer. Please solve the security question.");
+      generateNewCaptcha();
+      return;
     }
 
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
+    setCaptchaError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      setSubmitSuccess(true);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+      generateNewCaptcha();
+    } catch (error) {
+      console.error("Contact form error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -140,28 +176,28 @@ export default function ContactUsPageClient() {
       </section>
 
       {/* ─── CONTACT FORM & INFO CARDS SECTION ─── */}
-      <section className="container mx-auto px-6 max-w-6xl py-10 relative ">
+      <section className="container mx-auto px-6 max-w-6xl py-8 md:py-16 relative ">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Info Cards */}
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="lg:col-span-5 space-y-6"
+            className="lg:col-span-5 space-y-3"
           >
             {/* Location Card */}
             <motion.div
               variants={fadeInUp}
-              className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-100/50 flex gap-4"
+              className="rounded-2xl border-2 border-[#b9def8] bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] p-3 sm:p-4 shadow-sm hover:shadow-md hover:border-[#005AA9] transition-all flex gap-4"
             >
-              <div className="p-3 bg-[#EBF7FF] text-[#005AA9] rounded-2xl shrink-0 h-fit">
+              <div className="p-3 bg-white text-[#005AA9] border border-[#b9def8] rounded-2xl shrink-0 h-fit shadow-xs">
                 <MapPin className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-[#002244] mb-1">
                   Our Store Address
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-3">
+                <p className="text-slate-700 text-sm leading-relaxed mb-3">
                   601 S Grady Way Suite M, <br />
                   Renton, WA 98057
                 </p>
@@ -179,17 +215,17 @@ export default function ContactUsPageClient() {
             {/* Direct Contact Card */}
             <motion.div
               variants={fadeInUp}
-              className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-100/50 flex gap-4"
+              className="rounded-2xl border-2 border-[#b9def8] bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] p-3 sm:p-4 shadow-sm hover:shadow-md hover:border-[#005AA9] transition-all flex gap-4"
             >
-              <div className="p-3 bg-orange-50 text-[#FF6B35] rounded-2xl shrink-0 h-fit">
+              <div className="p-3 bg-white text-[#005AA9] border border-[#b9def8] rounded-2xl shrink-0 h-fit shadow-xs">
                 <Phone className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-[#002244] mb-1">
                   Direct Contact
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-1 flex items-center gap-2">
-                  <span className="font-semibold text-slate-700">Phone:</span>
+                <p className="text-slate-700 text-sm leading-relaxed mb-1 flex items-center gap-2">
+                  <span className="font-semibold text-slate-800">Phone:</span>
                   <a
                     href="tel:4252263215"
                     className="hover:text-[#005AA9] transition-colors"
@@ -197,8 +233,8 @@ export default function ContactUsPageClient() {
                     425-226-3215
                   </a>
                 </p>
-                <p className="text-slate-600 text-sm leading-relaxed flex items-center gap-2">
-                  <span className="font-semibold text-slate-700">Email:</span>
+                <p className="text-slate-700 text-sm leading-relaxed flex items-center gap-2">
+                  <span className="font-semibold text-slate-800">Email:</span>
                   <a
                     href="mailto:info@sierrafishandpets.com"
                     className="hover:text-[#005AA9] transition-colors"
@@ -212,23 +248,23 @@ export default function ContactUsPageClient() {
             {/* Store Hours Card */}
             <motion.div
               variants={fadeInUp}
-              className="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-100/50 flex gap-4"
+              className="rounded-2xl border-2 border-[#b9def8] bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] p-3 sm:p-4 shadow-sm hover:shadow-md hover:border-[#005AA9] transition-all flex gap-4"
             >
-              <div className="p-3 bg-purple-50 text-purple-600 rounded-2xl shrink-0 h-fit">
+              <div className="p-3 bg-white text-[#005AA9] border border-[#b9def8] rounded-2xl shrink-0 h-fit shadow-xs">
                 <Clock className="w-6 h-6" />
               </div>
               <div className="w-full">
                 <h3 className="text-lg font-bold text-[#002244] mb-1">
                   Operating Hours
                 </h3>
-                <div className="space-y-1.5 text-slate-600 text-sm">
-                  <div className="flex justify-between border-b border-slate-50 pb-1">
+                <div className="space-y-1.5 text-slate-700 text-sm">
+                  <div className="flex justify-between border-b border-[#b9def8]/70 pb-1">
                     <span>Monday – Friday</span>
                     <span className="font-semibold text-[#002244]">
                       11:00 AM – 7:00 PM
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-slate-50 pb-1">
+                  <div className="flex justify-between border-b border-[#b9def8]/70 pb-1">
                     <span>Saturday</span>
                     <span className="font-semibold text-[#002244]">
                       11:00 AM – 7:00 PM
@@ -252,22 +288,22 @@ export default function ContactUsPageClient() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-2xl relative overflow-hidden">
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] mb-2 flex items-center gap-2">
-                <MessageSquare className="w-6 h-6 text-[#005AA9]" />
+            <div className="rounded-[24px] p-5 sm:p-6 border-2 border-[#b9def8] bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] shadow-md hover:shadow-lg transition-all relative overflow-hidden">
+              <h2 className="text-lg sm:text-xl font-extrabold text-[#002244] mb-1 flex items-center gap-2">
+                <MessageSquare className="w-4.5 h-4.5 text-[#005AA9]" />
                 Send Us a Message
               </h2>
-              <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+              <p className="text-slate-600 text-xs sm:text-sm mb-3.5 leading-relaxed">
                 Got a question or feedback? Complete this form and our support
                 coordinators will get back to you shortly.
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 {/* Form fields grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex flex-col">
-                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                      Full Name
+                    <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Full Name *
                     </label>
                     <input
                       type="text"
@@ -276,13 +312,13 @@ export default function ContactUsPageClient() {
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="e.g. John Doe"
-                      className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium"
+                      className="w-full border border-blue-200 rounded-xl px-3 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium text-slate-800 shadow-2xs"
                     />
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                      Email Address
+                    <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Email Address *
                     </label>
                     <input
                       type="email"
@@ -291,39 +327,81 @@ export default function ContactUsPageClient() {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="e.g. john@example.com"
-                      className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium"
+                      className="w-full border border-blue-200 rounded-xl px-3 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium text-slate-800 shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                    Your Message
+                  <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    Your Message *
                   </label>
                   <textarea
                     name="message"
                     required
-                    rows={6}
+                    rows={3}
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Write details about your question..."
-                    className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium resize-none"
+                    className="w-full border border-blue-200 rounded-xl px-3 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-[#005AA9]/20 transition-all font-medium resize-none text-slate-800 shadow-2xs"
                   />
+                </div>
+
+                {/* ── Captcha Security Verification (Theme Styled) ── */}
+                <div className="rounded-xl border-2 border-blue-300 bg-white/80 p-2.5 space-y-1.5 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800 uppercase tracking-wide">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#005AA9]" />
+                      <span>Security Verification *</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={generateNewCaptcha}
+                      title="Generate new question"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#005AA9] hover:underline cursor-pointer"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      <span>New Question</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="bg-white border-2 border-[#b9def8] rounded-lg px-2.5 py-1 text-xs font-mono font-bold text-[#003B73] shadow-2xs select-none tracking-wider">
+                      {captcha.num1} + {captcha.num2} = ?
+                    </div>
+                    <input
+                      type="number"
+                      required
+                      placeholder="Answer"
+                      value={captchaInput}
+                      onChange={(e) => {
+                        setCaptchaInput(e.target.value);
+                        if (captchaError) setCaptchaError("");
+                      }}
+                      className="w-20 bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-bold text-center text-slate-900 focus:outline-none focus:border-[#005AA9] shadow-2xs font-mono"
+                    />
+                  </div>
+
+                  {captchaError && (
+                    <p className="text-[11px] font-bold text-red-600">
+                      {captchaError}
+                    </p>
+                  )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2 bg-[#005AA9] hover:bg-[#004b8d] text-white py-4 rounded-xl font-bold transition-all duration-300 hover:scale-[1.01] active:scale-95 shadow-md shadow-blue-500/10 disabled:opacity-75 disabled:hover:scale-100 disabled:pointer-events-none cursor-pointer text-sm uppercase tracking-wider"
+                  className="w-full flex items-center justify-center gap-2 bg-[#005AA9] hover:bg-[#004b8d] text-white py-2.5 rounded-xl font-bold transition-all duration-300 hover:scale-[1.01] active:scale-95 shadow-md shadow-blue-500/10 disabled:opacity-75 disabled:hover:scale-100 disabled:pointer-events-none cursor-pointer text-xs uppercase tracking-wider"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       Sending Message...
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
+                      <Send className="w-3.5 h-3.5" />
                       Send Message
                     </>
                   )}
@@ -377,7 +455,7 @@ export default function ContactUsPageClient() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-xl p-4"
+          className="bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] rounded-[28px] overflow-hidden border-2 border-[#b9def8] shadow-md p-3 sm:p-4"
         >
           <div className="h-[450px] w-full rounded-2xl overflow-hidden relative shadow-inner">
             <iframe

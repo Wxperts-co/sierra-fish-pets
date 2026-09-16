@@ -1,8 +1,30 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ShieldCheck, Paintbrush, LifeBuoy } from "lucide-react";
+import type { Metadata } from "next";
+import {
+  ArrowRight,
+  CheckCircle2,
+  ShieldCheck,
+  Paintbrush,
+  Droplets,
+  Sparkles,
+  Fish,
+  Scissors,
+  Store,
+  HeartHandshake,
+  Wrench,
+} from "lucide-react";
 import servicesData from "@/data/services.json";
+
+export const metadata: Metadata = {
+  title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
+  description:
+    "Explore Sierra Fish & Pets professional services including custom aquarium design, installation, water testing, pet nail & wing trims, and adoption events in Renton, WA.",
+  alternates: {
+    canonical: "https://www.sierrafishandpets.com/services",
+  },
+};
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface ServiceItem {
@@ -20,39 +42,39 @@ interface ServiceItem {
 const CATEGORY_MAP: Record<string, { parent: string; icon: React.ReactNode }> = {
   "about-aqua-jet-water-cleaning-system": {
     parent: "aquarium",
-    icon: <ShieldCheck className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Droplets className="w-5 h-5 text-[#005AA9]" />,
   },
   "aquarium-consulting-design": {
     parent: "aquarium",
-    icon: <ShieldCheck className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Sparkles className="w-5 h-5 text-[#005AA9]" />,
   },
   "custom-aquariums": {
     parent: "aquarium",
-    icon: <Paintbrush className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Paintbrush className="w-5 h-5 text-[#005AA9]" />,
   },
   "aquarium-installation": {
     parent: "aquarium",
-    icon: <Paintbrush className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Wrench className="w-5 h-5 text-[#005AA9]" />,
   },
   "aquarium-water-testing": {
     parent: "in-store",
-    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Droplets className="w-5 h-5 text-[#005AA9]" />,
   },
   "fish-of-month-club": {
     parent: "in-store",
-    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Fish className="w-5 h-5 text-[#005AA9]" />,
   },
   "pet-nail-wing-trims": {
     parent: "in-store",
-    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Scissors className="w-5 h-5 text-[#005AA9]" />,
   },
   "store-tours": {
     parent: "in-store",
-    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+    icon: <Store className="w-5 h-5 text-[#005AA9]" />,
   },
   "dog-adoption-events": {
     parent: "dog-adoption",
-    icon: <LifeBuoy className="w-6 h-6 text-[#00aaff]" />,
+    icon: <HeartHandshake className="w-5 h-5 text-[#005AA9]" />,
   },
 };
 
@@ -91,122 +113,164 @@ export default function ServicesPage() {
   const services = servicesData as ServiceItem[];
 
   return (
-    <>
-      <main className="min-h-screen bg-slate-950 text-white">
-        {/* Hero Banner Section */}
-        <section className="relative h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/banner/service.png"
-              alt="Sierra Services Banner"
-              fill
-              priority
-              className="object-cover object-center filter brightness-[0.7]"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#002244]/95 via-[#003d73]/90 to-[#005AA9]/75 z-10" />
-          </div>
+    <main className="relative text-slate-800 min-h-screen overflow-x-hidden bg-white">
+      {/* ─── HERO HEADER SECTION ─── */}
+      <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
+        {/* Image — clipped to banner bounds */}
+        <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
+          {/* Mobile image */}
+          <Image
+            src="/images/banner/shophero5.png"
+            alt="Services banner"
+            fill
+            priority
+            className="object-cover object-[center_60%] block md:hidden"
+            sizes="100vw"
+          />
+          {/* Desktop image */}
+          <Image
+            src="/images/banner/shophero3.png"
+            alt="Services banner"
+            fill
+            priority
+            className="object-cover object-[center_40%] hidden md:block"
+            sizes="100vw"
+          />
+        </div>
 
-          <div className="container mx-auto px-6 max-w-6xl relative z-20 text-center pt-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.25em] text-[#00aaff] bg-[#00aaff]/10 px-4 py-1.5 rounded-full select-none mb-6">
-              🐠 OUR SERVICES
-            </span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-none mb-6">
-              Professional Pet & Aquarium Services
+        {/* Mobile overlay */}
+        <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
+
+        {/* Centered text block */}
+        <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
+          <div className="flex flex-col items-center justify-center max-w-3xl">
+            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
+              Our Services
             </h1>
-            <p className="text-base md:text-lg text-blue-100/90 font-light leading-relaxed max-w-2xl mx-auto">
-              From bespoke tank setups and professional water diagnostics to pet nail trimming and adoption events—we are dedicated to supporting all your pet care needs.
-            </p>
+
+            {/* Breadcrumb */}
+            <nav
+              aria-label="breadcrumb"
+              className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none"
+            >
+              <span className="flex items-center gap-0.5">
+                <Link
+                  href="/"
+                  className="text-white md:text-slate-500 transition-colors duration-150 hover:text-teal-600 hover:underline"
+                >
+                  Home
+                </Link>
+                <span className="px-0.5 text-white/90 md:text-slate-400"> › </span>
+              </span>
+              <span className="flex items-center gap-0.5">
+                <span className="font-bold text-[#0d1b2a] md:text-[#0d1b2a] text-white">Services</span>
+              </span>
+            </nav>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Services Grouping Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-          <div className="container mx-auto px-6 max-w-6xl">
-            {SERVICE_GROUPS.map((group, groupIdx) => {
-              // Get services belonging to this group
-              const groupServices = services.filter((s) => group.slugs.includes(s.slug));
+      {/* ── Intro Section ── */}
+      <section className="container mx-auto px-6 max-w-5xl pt-10 pb-4 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-[#edf6fc] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] mb-4 shadow-2xs">
+          <span>Expert Pet &amp; Aquatic Care</span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">
+          Professional Services Tailored to Your Pets
+        </h2>
+        <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          From custom aquarium design and water chemistry diagnostics to pet nail trimming and adoption events—we bring decades of trusted Pacific Northwest expertise to every service.
+        </p>
+      </section>
 
-              return (
-                <div key={group.slug} className={`mb-16 md:mb-24 ${groupIdx > 0 ? "pt-12 border-t border-slate-800/60" : ""}`}>
-                  <div className="max-w-2xl mb-10">
-                    <h2 className="text-2xl md:text-3xl font-black tracking-tight mb-3 text-white">
-                      {group.title}
-                    </h2>
-                    <p className="text-sm md:text-base text-slate-400 font-light">
-                      {group.description}
-                    </p>
-                  </div>
+      {/* ── Services Grouping Section (Light Theme + Rich Bluish Cards) ── */}
+      <section className="py-8 md:pt-12">
+        <div className="container mx-auto px-6 max-w-6xl">
+          {SERVICE_GROUPS.map((group, groupIdx) => {
+            const groupServices = services.filter((s) => group.slugs.includes(s.slug));
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {groupServices.map((service) => {
-                      const mapping = CATEGORY_MAP[service.slug];
-                      const detailUrl =
-                        service.slug === "about-aqua-jet-water-cleaning-system"
-                          ? "/about-aqua-jet-water-cleaning-system"
-                          : `/services/${mapping?.parent || "consulting"}/${service.slug}`;
-
-                      return (
-                        <div
-                          key={service.id}
-                          className="flex flex-col justify-between backdrop-blur-md bg-white/[0.03] border border-white/10 hover:border-[#00aaff]/40 rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 shadow-xl hover:shadow-[#00aaff]/5 group"
-                        >
-                          <div>
-                            {/* Service Header Info */}
-                            <div className="flex items-center justify-between mb-5">
-                              <div className="p-3 bg-white/[0.05] rounded-2xl group-hover:bg-[#00aaff]/10 transition-colors">
-                                {mapping?.icon || <ShieldCheck className="w-6 h-6 text-[#00aaff]" />}
-                              </div>
-                              <span className="text-[10px] font-bold text-blue-300 uppercase tracking-widest bg-blue-500/10 px-2.5 py-1 rounded-full">
-                                {service.price}
-                              </span>
-                            </div>
-
-                            <h3 className="font-extrabold text-xl text-white mb-3 tracking-tight">
-                              {service.name}
-                            </h3>
-
-                            <p className="text-sm text-slate-300/95 font-light leading-relaxed mb-6">
-                              {service.shortDescription}
-                            </p>
-
-                            {/* Features list snapshot */}
-                            <ul className="flex flex-col gap-2.5 mb-8">
-                              {service.features.slice(0, 3).map((feat, idx) => (
-                                <li key={idx} className="flex items-start gap-2.5">
-                                  <CheckCircle2 className="w-4.5 h-4.5 text-[#00aaff] shrink-0 mt-0.5" />
-                                  <span className="text-xs font-medium text-slate-200 leading-normal line-clamp-1">
-                                    {feat}
-                                  </span>
-                                </li>
-                              ))}
-                              {service.features.length > 3 && (
-                                <li className="text-[11px] font-bold text-[#00aaff] pl-7">
-                                  + {service.features.length - 3} more key features
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-
-                          <div>
-                            <Link
-                              href={detailUrl}
-                              className="w-full inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-[#005AA9] text-white px-5 py-3 rounded-2xl text-sm font-bold border border-white/10 hover:border-transparent transition-all duration-250 active:scale-98"
-                            >
-                              Learn Details
-                              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+            return (
+              <div
+                key={group.slug}
+                className={`mb-14 md:mb-20 ${groupIdx > 0 ? "pt-12 border-t border-blue-100" : ""}`}
+              >
+                <div className="max-w-2xl mb-8">
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-2 text-[#002244]">
+                    {group.title}
+                  </h3>
+                  <p className="text-sm md:text-base text-slate-600 font-normal">
+                    {group.description}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-      </main>
-    </>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                  {groupServices.map((service) => {
+                    const mapping = CATEGORY_MAP[service.slug];
+                    const detailUrl =
+                      service.slug === "about-aqua-jet-water-cleaning-system"
+                        ? "/about-aqua-jet-water-cleaning-system"
+                        : `/services/${mapping?.parent || "consulting"}/${service.slug}`;
+
+                    return (
+                      <div
+                        key={service.id}
+                        className="flex flex-col justify-between rounded-2xl border-2 border-[#b9def8] bg-gradient-to-br from-[#ebf5fc] via-[#f4f9fd] to-[#e4f2fb] p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-[#005AA9] transition-all duration-300 hover:-translate-y-1 group"
+                      >
+                        <div>
+                          {/* Service Header Info */}
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-[#b9def8] shadow-xs group-hover:scale-105 transition-transform">
+                              {mapping?.icon || <ShieldCheck className="w-4.5 h-4.5 text-[#005AA9]" />}
+                            </div>
+                            <span className="text-[10.5px] font-bold text-[#005AA9] bg-white border border-[#b9def8] px-2.5 py-0.5 rounded-full shadow-2xs">
+                              {service.price}
+                            </span>
+                          </div>
+
+                          <h4 className="font-extrabold text-base sm:text-lg text-[#002244] mb-1.5 tracking-tight group-hover:text-[#005AA9] transition-colors">
+                            {service.name}
+                          </h4>
+
+                          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3.5">
+                            {service.shortDescription}
+                          </p>
+
+                          {/* Features list snapshot */}
+                          <ul className="flex flex-col gap-1.5 mb-4">
+                            {service.features.slice(0, 3).map((feat, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#005AA9] shrink-0 mt-0.5" />
+                                <span className="text-xs font-medium text-slate-700 leading-normal line-clamp-1">
+                                  {feat}
+                                </span>
+                              </li>
+                            ))}
+                            {service.features.length > 3 && (
+                              <li className="text-[11px] font-bold text-[#005AA9] pl-5">
+                                + {service.features.length - 3} more key features
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <Link
+                            href={detailUrl}
+                            className="w-full inline-flex items-center justify-center gap-1.5 bg-[#005AA9] hover:bg-[#004785] text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-blue-900/10 transition-all duration-200 group-hover:shadow-lg active:scale-98 cursor-pointer"
+                          >
+                            <span>Learn Details</span>
+                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </main>
   );
 }

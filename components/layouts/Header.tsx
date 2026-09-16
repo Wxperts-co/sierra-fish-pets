@@ -187,6 +187,9 @@ export default function Header() {
     pathname === "/customer-stories" ||
     (pathname ? pathname.startsWith("/customer-stories/") : false);
   const isFaq = pathname === "/faq" || (pathname ? pathname.startsWith("/faq") : false);
+  const isServiceAreas =
+    pathname === "/service-areas" ||
+    (pathname ? pathname.startsWith("/service-areas/") : false);
 
   const isTransparentPage =
     isHome ||
@@ -208,7 +211,8 @@ export default function Header() {
     isPolicies ||
     isRewards ||
     isCustomerStories ||
-    isFaq;
+    isFaq ||
+    isServiceAreas;
 
   // Check scroll position to handle floating-to-sticky transitions
   useEffect(() => {

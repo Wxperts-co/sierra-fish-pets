@@ -46,6 +46,20 @@ export default function SpecialOrderAnimalsPage() {
     notes: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Captcha state
+  const [captcha, setCaptcha] = useState({ num1: 4, num2: 5 });
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+
+  const generateNewCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 9) + 1;
+    const n2 = Math.floor(Math.random() * 9) + 1;
+    setCaptcha({ num1: n1, num2: n2 });
+    setCaptchaInput("");
+    setCaptchaError("");
+  };
 
   useEffect(() => {
     fetch("/api/special-order-pets")
@@ -64,6 +78,8 @@ export default function SpecialOrderAnimalsPage() {
   );
 
   const handleOpenModal = (pet: SpecialOrderPet | null) => {
+    generateNewCaptcha();
+    setIsSubmitting(false);
     if (pet) {
       setSelectedPet(pet);
       setIsCustomRequest(false);
@@ -82,30 +98,52 @@ export default function SpecialOrderAnimalsPage() {
     setTimeout(() => {
       setSelectedPet(null);
       setIsCustomRequest(false);
+      setIsSubmitting(false);
+      setCaptchaError("");
+      setCaptchaInput("");
     }, 300);
   };
 
-  const handleSubmitInquiry = (e: React.FormEvent) => {
+  const handleSubmitInquiry = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
 
-    // Dispatch email notification to customer & admin in background
-    fetch("/api/special-order-inquiry", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        customSpecies: formData.customSpecies || selectedPet?.name || "Special Order Request",
-        notes: formData.notes,
-      }),
-    }).catch((err) => console.error("Inquiry email API error:", err));
+    // Single-Click Lock guard
+    if (isSubmitting) return;
 
-    setTimeout(() => {
-      setSubmitted(false);
-      handleCloseModal();
-    }, 4000);
+    // Verify Captcha
+    const expectedSum = captcha.num1 + captcha.num2;
+    if (parseInt(captchaInput.trim(), 10) !== expectedSum) {
+      setCaptchaError(`Incorrect answer. Please solve the security question.`);
+      generateNewCaptcha();
+      return;
+    }
+
+    setCaptchaError("");
+    setIsSubmitting(true);
+
+    try {
+      await fetch("/api/special-order-inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          customSpecies: formData.customSpecies || selectedPet?.name || "Special Order Request",
+          notes: formData.notes,
+        }),
+      });
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Inquiry email API error:", err);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setSubmitted(false);
+        handleCloseModal();
+      }, 4000);
+    }
   };
 
   return (
@@ -391,12 +429,64 @@ export default function SpecialOrderAnimalsPage() {
                     />
                   </div>
 
+                  {/* ── Captcha Security Verification (Theme Styled) ── */}
+                  <div className="rounded-2xl border-2 border-blue-200 bg-[#edf6fc] p-3.5 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 uppercase tracking-wide">
+                        <ShieldCheck className="w-4 h-4 text-[#005AA9]" />
+                        <span>Security Verification *</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={generateNewCaptcha}
+                        title="Generate new question"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#005AA9] hover:underline cursor-pointer"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        <span>New Question</span>
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-2.5">
+                      <div className="bg-white border-2 border-[#b9def8] rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-[#003B73] shadow-2xs select-none tracking-wider">
+                        {captcha.num1} + {captcha.num2} = ?
+                      </div>
+                      <input
+                        type="number"
+                        required
+                        placeholder="Answer"
+                        value={captchaInput}
+                        onChange={(e) => {
+                          setCaptchaInput(e.target.value);
+                          if (captchaError) setCaptchaError("");
+                        }}
+                        className="w-24 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-center text-slate-900 focus:outline-none focus:border-[#005AA9] shadow-2xs"
+                      />
+                    </div>
+
+                    {captchaError && (
+                      <p className="text-[11px] font-bold text-red-600">
+                        {captchaError}
+                      </p>
+                    )}
+                  </div>
+
                   <button
                     type="submit"
-                    className="w-full bg-[#005AA9] hover:bg-[#00407a] text-white py-3.5 rounded-2xl text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-6"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#005AA9] hover:bg-[#00407a] disabled:opacity-60 disabled:cursor-not-allowed text-white py-3.5 rounded-2xl text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-5"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Submit Special Order Request</span>
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Submitting Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Submit Special Order Request</span>
+                      </>
+                    )}
                   </button>
                 </form>
               ) : (

@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import blogsData from "@/data/blogs.json";
 import servicesData from "@/data/services.json";
+import { SERVICE_AREAS } from "@/data/serviceAreas";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
@@ -208,11 +209,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     }));
 
+  // Service Areas Local Landing Pages
+  const serviceAreaRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/service-areas`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    ...SERVICE_AREAS.map((area) => ({
+      url: `${baseUrl}/service-areas/${area.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    })),
+  ];
+
   return [
     ...staticPages,
     ...blogRoutes,
     ...blogCategoryRoutes,
     ...shopCategoryRoutes,
     ...serviceRoutes,
+    ...serviceAreaRoutes,
   ];
 }
