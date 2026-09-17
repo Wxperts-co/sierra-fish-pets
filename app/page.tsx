@@ -15,12 +15,13 @@ const TasteGuarantee = dynamic(() => import('@/components/Home/TasteGuarantee'))
 const BestSellers = dynamic(() => import('@/components/Home/BestSellers'))
 const PopularBrands = dynamic(() => import('@/components/Home/PopularBrand'))
 const YoutubeSection = dynamic(() => import('@/components/Home/YoutubeSection'))
+const HomeStorySection = dynamic(() => import('@/components/Home/HomeStorySection'))
 const InstagramGallery = dynamic(() => import('@/components/Home/InstagramGallery'))
 
 export const metadata: Metadata = {
   title: "Sierra Fish and Pets| Buy Aquarium Fish Online| Pet Store near me",
-  description: "Sierra Fish and Pets are a leading online pet store in Renton, WA 98057 with a full line of pet food and supplies for dogs, cats, birds, fish,Reptile, and more. Our home aquarium services can help you get everything you need for all of your pets.",
-  keywords: "online pet store,online pet shop,online pet supplies,pet supplies,fish aquarium,dog food,pet shop,tropical fish,pet fish,pet food,tropical fish tanks,dog supplies,aquarium for sale,cheap fish tanks,freshwater fish,cat beds,aquarium supplies,fish for sale,aquarium online,saltwater aquarium, fish tank online,cat supplies,puppy supplies,tropical fish for sale,dog accessories,aquarium accessories,pet beds,freshwater aquarium fish,pet accessories,saltwater fish,pet store near me,fish tank price,freshwater fish for sale,aquarium filter,saltwater fish tank,pet products,dog carriers, buy fish online, freshwater fish tank,discount pet supplies,fish supplies,fish aquarium online,pets at home fish tanks,live fish for sale,aquarium fish tank,online fish store,dog store,cheap pet supplies,aquarium fish for sale,pet carriers,fish aquarium for sale,cat accessories,exotic fish for sale,cheap fish tanks for sale,buy aquarium online, saltwater fish for sale,marine aquarium,marine fish tanks,buy aquarium,buy fish tank,small aquarium fish,live fish,fish store,aquarium tanks for sale,fish tank supplies,buy aquarium fish online,saltwater tank,exotic freshwater fish for sale,aquarium fish price,online aquarium store,pet supply stores,fish aquarium shop,fish for sale online,aquarium store,reef aquarium,saltwater fish tanks for sale,buy fish tank online,puppy accessories,pet food suppliers,pet food store,fish aquarium store,pet collars,tropical freshwater fish,tropical fish store,online fish,aquarium shop online,buy fish,saltwater aquarium fish,fish tank for sale online,tropical fish online,tropical fish aquarium,dog shop,fish aquarium store near me,aquarium tank online,discount dog supplies,freshwater aquarium,tank fish,pet shops near me,fish aquarium accessoriesmarine tank,aquarium supplies online,fish stores near me,local pet stores, dog products,fish tanks for sale near me,fish aquarium near me,buy tropical fish online,tropical fish tanks for sale,aquarium accessories online,live aquarium,fish tank store,aquarium supplies near me,pet fish for sale,fish aquarium home,fish aquarium supplies,aquarium store near me,pet fish shop,puppy store, live freshwater fish,live aquarium fish,buy saltwater fish,exotic fish tanks,buy freshwater fish online,cheap aquariums for sale,home fish tanks,fish tank shop,fish tank online store,fish pet store,buy freshwater fish,freshwater fish pets,online fish shopping,fish tank cabinets,best fish pet store,cat supplies store,cheapest pet fish to buy,pet shop aquarium fish,reef aquarium fish,buy pet store,pet food pet supplies,best site for dog supplies,cat accessories for home,stores for dogs,all pet supplies,marine fish suppliers,natural pet supplies,aquarium pet fish,online aquatic store,aquatic fish store near me,buy fish supplies, order pet supplies,pretty fish for sale,cheap fish aquarium supplies,cheapest pet products,pet warehouse,colorful fish for sale,pet fish for sale near me,order pet fish online,dog food shop,shop fish aquarium,fish aquarium home online,best online fish store,fish tank supplies near me,fish aquarium online purchase\nonline shopping aquarium,",
+  description: "Sierra Fish and Pets are a leading online pet store in Renton, WA 98057 with a full line of pet food and supplies for dogs, cats, birds, fish, Reptile, and more. Our home aquarium services can help you get everything you need for all of your pets.",
+  keywords: "sierra fish and pets renton wa, custom aquarium installation and maintenance renton, local pet store near uwajimaya renton, exotic freshwater and saltwater fish shop renton wa, cichlids and rare fish store northern wa, full line dog cat reptile supplies renton, aquarium relocation and tank design services renton, online pet store, online pet shop, pet supplies, fish aquarium, dog food, pet shop, tropical fish, pet fish, pet food, freshwater fish, saltwater fish, aquarium supplies",
   verification: {
     google: "U957d8dOOMO1NW4G3BK4Ldw89GLbpaHpTxW94QDoDPY",
     other: {
@@ -39,6 +40,87 @@ const page = async () => {
     console.error("Failed to pre-fetch categories on server:", error);
   }
 
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["WebSite"],
+        "@id": "https://sierrafishandpets.com/#website",
+        "url": "https://sierrafishandpets.com",
+        "name": "Sierra Fish & Pets",
+        "description": "Renton's Premier Local Pet Store & Custom Aquarium Specialists Since 1972",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://sierrafishandpets.com/shop?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": ["PetStore", "LocalBusiness", "Store"],
+        "@id": "https://sierrafishandpets.com/#store",
+        "name": "Sierra Fish & Pets",
+        "alternateName": "Sierra Fish and Pets",
+        "url": "https://sierrafishandpets.com",
+        "logo": "https://sierrafishandpets.com/images/logo/sierra-logo.png",
+        "image": [
+          "https://sierrafishandpets.com/images/banner/shophero3.png",
+          "https://sierrafishandpets.com/images/banner/about2.png"
+        ],
+        "telephone": "+1-425-226-3215",
+        "priceRange": "$$",
+        "founder": {
+          "@type": "Person",
+          "name": "Mr. JONAS STERNBERG"
+        },
+        "foundingDate": "1972",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "601 S Grady Way",
+          "addressLocality": "Renton",
+          "addressRegion": "WA",
+          "postalCode": "98057",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 47.4727,
+          "longitude": -122.2135
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "11:00",
+            "closes": "19:00"
+          }
+        ],
+        "hasMap": "https://maps.app.goo.gl/48Q7dQBbespuFhX27",
+        "about": [
+          {
+            "@type": "Thing",
+            "name": "Custom Aquarium Design, Installation & Maintenance",
+            "description": "Professional residential and commercial custom aquariums, live fish, and maintenance services in Renton, WA."
+          },
+          {
+            "@type": "Thing",
+            "name": "Full-Line Pet Supplies",
+            "description": "Premium foods and care supplies for dogs, cats, birds, reptiles, and small animals."
+          }
+        ]
+      }
+    ]
+  };
+
   return (
     <>
       <Script
@@ -54,6 +136,10 @@ const page = async () => {
           gtag('config', 'G-HRPVY4BRXE');
         `}
       </Script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
+      />
       <HeroBanner/>
       <CategoryCards initialCategories={categories}/>
       <PromoBlocksCarousel/>
@@ -63,6 +149,7 @@ const page = async () => {
       <BestSellers/>
       <PopularBrands/>
       <YoutubeSection/>
+      <HomeStorySection/>
       <InstagramGallery/>
     </>
   )

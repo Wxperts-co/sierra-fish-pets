@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
@@ -15,16 +15,94 @@ import {
   Clock,
   Compass,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import InstagramGallery from "@/components/Home/InstagramGallery";
+import SemanticAccordion, {
+  SemanticKeynoteItem,
+  NerTagsData,
+} from "@/components/about/SemanticAccordion";
+
+const semanticKeynotesData: SemanticKeynoteItem[] = [
+  {
+    title: "Decades-Long Family Heritage & Community Trust",
+    description:
+      "Highlights Sierra Fish & Pets' 50+ year legacy as a family-owned Renton institution since 1972, emphasizing deep local roots and generational relationships built across multi-generational families.",
+  },
+  {
+    title: "Authentic Passion over Sales Tactics",
+    description:
+      "Focuses on the core business philosophy of prioritizing animal welfare, deep water chemistry expertise, and honest care advice over quick sales or franchise-style scripts.",
+  },
+  {
+    title: "Expert Staff with Practical Animal Experience",
+    description:
+      "Outlines the qualification of the staff—seasoned aquarists, knowledgeable dog owners, and experienced pet keepers—who provide practical, real-world guidance tailored to individual pet needs.",
+  },
+  {
+    title: "Responsible Pet Ownership & Animal Welfare",
+    description:
+      "Emphasizes ethical retail practices, such as quarantining livestock, educating first-time pet owners on proper habitat sizes, and steering customers away from unsuitable pets.",
+  },
+  {
+    title: "Proven Longevity Built on Core Fundamentals",
+    description:
+      "Contrasts short-lived pet industry trends with over half a century of consistent, evidence-based care standards, healthy aquatic systems, and reliable product recommendations.",
+  },
+  {
+    title: "Hyper-Local Renton Community Presence",
+    description:
+      "Establishes the store's deep connection to Renton, WA, positioning the business as a neighborhood anchor actively connected to local pet owners and community life.",
+  },
+];
+
+const nerTagsData: NerTagsData = {
+  organization: ["Sierra Fish & Pets"],
+  person: ["Mr. JONAS STERNBERG"],
+  location: [
+    "Renton (Renton, WA)",
+    "Renton pet store",
+    "Cedar River Trail",
+    "Washington",
+  ],
+  productOrService: [
+    "Local pet care services",
+    "Pet consultation",
+    "Aquarium supplies",
+    "Saltwater reef tank gear",
+    "Freshwater fish",
+    "Betta fish",
+    "Goldfish habitats",
+    "Dog food",
+    "Bird care supplies",
+  ],
+  conceptOrTheme: [
+    "Family-owned business",
+    "Ethical pet retail",
+    "Water chemistry expertise",
+    "Multi-generational local business",
+    "Animal welfare education",
+    "Responsible pet ownership",
+  ],
+};
+
+const seoKeywordsData: string[] = [
+  "sierra fish and pets renton wa",
+  "family owned pet store renton",
+  "local aquarium and pet care experts renton",
+  "trusted pet store since 1972 renton wa",
+  "honest pet supply store near cedar river trail",
+  "ethical fish and pet supply shop renton",
+  "local dog and aquatic specialists renton wa",
+];
 
 const testimonials = [
   {
@@ -108,15 +186,29 @@ const staggerContainerVariants: Variants = {
 
 export default function AboutPageClient() {
   const [scrolled, setScrolled] = useState(false);
-  const autoplayPlugin = useMemo(
-    () =>
-      Autoplay({
-        delay: 5000,
-        stopOnInteraction: false,
-        stopOnMouseEnter: true,
-      }),
-    [],
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  const autoplay = useRef(
+    Autoplay({
+      delay: 3500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    })
   );
+
+  const scrollPrev = useCallback(() => {
+    if (carouselApi) {
+      carouselApi.scrollPrev();
+      autoplay.current.reset();
+    }
+  }, [carouselApi]);
+
+  const scrollNext = useCallback(() => {
+    if (carouselApi) {
+      carouselApi.scrollNext();
+      autoplay.current.reset();
+    }
+  }, [carouselApi]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -223,31 +315,24 @@ export default function AboutPageClient() {
               variants={fadeInUpVariants}
               className="lg:col-span-7"
             >
-              <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-2 block">
                 Who We Are
               </span>
-              <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244] leading-tight mb-8">
-                A Legacy of Pet-First Care & Family Ownership
+              <h2 className="text-2xl md:text-3xl lg:text-3xl font-extrabold text-[#002244] leading-tight mb-5">
+                About Sierra Fish &amp; Pets | Renton&apos;s Trusted Family-Owned Pet Store Since 1972
               </h2>
-              <div className="space-y-6 text-slate-600 leading-relaxed md:text-lg text-[12px]">
+              <div className="space-y-2 text-justify text-slate-600 leading-relaxed md:text-[15px] text-xs">
                 <p>
-                  At Sierra Fish & Pets, we believe that pets are core members
-                  of the family. Since our founding, we have committed ourselves
-                  to raising the standard of local pet retail by prioritizing
-                  health, high-quality nutrition, and professional expertise.
+                  Every pet store can tell you what&apos;s in stock – but not every pet store can tell you what happened here in 1972, when a single storefront in Renton, Washington, opened its doors with a few <Link href="/shop" className="text-[#005AA9] font-semibold hover:underline">aquariums</Link>, a lot of nerve, and no real idea it would still be standing more than fifty years later. But it is. And it&apos;s still family-owned, still local, and still run by people who&apos;d rather talk your ear off about water chemistry than rush you to the register. Sierra Fish &amp; Pets started small – the way most things worth keeping do. A handful of tanks, a shelf of dog food, and a founder who believed Renton deserved a pet store that actually knew its animals, not merely sold them. And that belief turned out to be the whole business plan.
                 </p>
                 <p>
-                  Located in the heart of Renton, Washington, our store is more
-                  than just a retail shop—it is a community hub for pet lovers.
-                  Whether you are setting up your very first coral reef
-                  aquarium, transitioning your puppy to a premium diet, or
-                  seeking specialized toys for your bird, our dedicated staff is
-                  here to help you guide them to a happier life.
+                  Word got around. Neighbors became regulars, and regulars became friends. Somewhere along the way, &ldquo;the fish store on the corner&rdquo; became a Renton institution – the place three generations of local families have brought their kids to press their noses against the glass and pick out their first betta. We&apos;ve watched Renton grow up around us. New neighborhoods, new faces, a whole new generation of pet owners – and through all of it, we&apos;ve stayed exactly what we started out as: a family business that treats your pets like they matter, because to us, they really do.
                 </p>
-                <p className="font-semibold text-[#005AA9]">
-                  We stand by the philosophy that a healthy pet leads to a happy
-                  home. We invite you to experience the difference that expert,
-                  localized care makes.
+                <p>
+                  That&apos;s not a slogan we flaunt. It&apos;s just how we were built. The people behind our counter aren&apos;t seasonal hires reading off a script. They&apos;re aquarists who&apos;ve kept saltwater reef tanks alive for decades. They&apos;re dog people who&apos;ve raised their own dogs on the food they recommend. They&apos;re the ones who&apos;ll crouch down and talk to your kid about why goldfish need bigger tanks than the bowl on TV, because someone did the same for them once. Fifty-plus years in one place teaches you things a franchise never learns – which fish actually get along, which food stops the itching, which bird species will genuinely bond with a first-time owner. 
+                </p>
+                <p>
+                  <span className="font-semibold text-[#005AA9]">We&apos;ve made the mistakes, asked the hard questions, and stuck around long enough to get it right. That&apos;s what you&apos;re walking into when you come to Sierra Fish &amp; Pets. We&apos;re not the newest name in Renton <Link href="/services" className="text-[#005AA9] font-semibold hover:underline">pet care</Link>. We&apos;re just the one that never left.</span>
                 </p>
               </div>
             </motion.div>
@@ -258,14 +343,14 @@ export default function AboutPageClient() {
       {/* ─── CORE VALUES SECTION ─── */}
       <section className="relative bg-slate-50 md:py-16 py-8 z-10">
         <div className="container mx-auto px-6 max-w-6xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
               Our Values
             </span>
-            <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244]">
+            <h2 className="text-2xl md:text-4xl font-extrabold text-[#002244]">
               What Guides Our Service
             </h2>
-            <p className="mt-4 text-slate-500 max-w-2xl mx-auto text-lg">
+            <p className="mt-4 text-slate-500 max-w-5xl mx-auto text-lg">
               We operate under core principles to ensure you and your pet
               receive the safest, most reliable care solutions.
             </p>
@@ -276,60 +361,54 @@ export default function AboutPageClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
           >
             {/* Value Card 1 */}
             <motion.div
               variants={fadeInUpVariants}
-              whileHover="hover"
-              custom={0}
-              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="group bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-xl hover:shadow-[#005AA9]/10 hover:border-[#005AA9]/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-start cursor-default"
             >
-              <div className="p-4 bg-[#EBF7FF] rounded-2xl mb-6 text-[#005AA9]">
-                <Heart className="w-8 h-8" />
+              <div className="w-12 h-12 rounded-xl bg-[#EBF7FF] text-[#005AA9] flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-[#005AA9] group-hover:text-white group-hover:scale-110 shadow-xs">
+                <Heart className="w-6 h-6" />
               </div>
-              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-[#005AA9] transition-colors mb-2">
                 Pet-First Philosophy
               </h3>
-              <p className="text-slate-600 leading-relaxed text-sm">
+              <p className="text-slate-600 leading-relaxed text-xs sm:text-[13px]">
                 Every single brand, ingredient, and toy is heavily screened. We
-                never sell items we wouldn't trust for our own animals.
+                never sell items we wouldn&apos;t trust for our own animals.
               </p>
             </motion.div>
 
             {/* Value Card 2 */}
             <motion.div
               variants={fadeInUpVariants}
-              whileHover="hover"
-              custom={1}
-              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="group bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-300 hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-start cursor-default"
             >
-              <div className="p-4 bg-orange-50 rounded-2xl mb-6 text-[#FF6B35]">
-                <Shield className="w-8 h-8" />
+              <div className="w-12 h-12 rounded-xl bg-orange-50 text-[#FF6B35] flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-[#FF6B35] group-hover:text-white group-hover:scale-110 shadow-xs">
+                <Shield className="w-6 h-6" />
               </div>
-              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-[#FF6B35] transition-colors mb-2">
                 Premium Quality
               </h3>
-              <p className="text-slate-600 leading-relaxed text-sm">
+              <p className="text-slate-600 leading-relaxed text-xs sm:text-[13px]">
                 We supply highly-rated diets, raw foods, durable accessories,
-                and medical-grade care kits suited to your pet's needs.
+                and medical-grade care kits suited to your pet&apos;s needs.
               </p>
             </motion.div>
 
             {/* Value Card 3 */}
             <motion.div
               variants={fadeInUpVariants}
-              whileHover="hover"
-              custom={2}
-              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="group bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-xl hover:shadow-purple-500/10 hover:border-purple-300 hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-start cursor-default"
             >
-              <div className="p-4 bg-purple-50 rounded-2xl mb-6 text-purple-600">
-                <Compass className="w-8 h-8" />
+              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-purple-600 group-hover:text-white group-hover:scale-110 shadow-xs">
+                <Compass className="w-6 h-6" />
               </div>
-              <h3 className="text-[14px] md:text-xlfont-bold text-slate-900 mb-3">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-purple-600 transition-colors mb-2">
                 Expert Care Team
               </h3>
-              <p className="text-slate-600 leading-relaxed text-sm">
+              <p className="text-slate-600 leading-relaxed text-xs sm:text-[13px]">
                 Our team undergoes continuous animal husbandry training to
                 answer your questions on dietary needs, habitats, and behavior.
               </p>
@@ -338,22 +417,60 @@ export default function AboutPageClient() {
             {/* Value Card 4 */}
             <motion.div
               variants={fadeInUpVariants}
-              whileHover="hover"
-              custom={3}
-              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col items-start"
+              className="group bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-300 hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-start cursor-default"
             >
-              <div className="p-4 bg-emerald-50 rounded-2xl mb-6 text-emerald-600">
-                <Sparkles className="w-8 h-8" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 transition-all duration-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:scale-110 shadow-xs">
+                <Sparkles className="w-6 h-6" />
               </div>
-              <h3 className="text-[14px] md:text-xl font-bold text-slate-900 mb-3">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-2">
                 Community Hub
               </h3>
-              <p className="text-slate-600 leading-relaxed text-sm">
+              <p className="text-slate-600 leading-relaxed text-xs sm:text-[13px]">
                 We collaborate with shelters for regular adoption weekends and
                 design custom commercial or home aquarium setups locally.
               </p>
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ─── 50+ YEARS PASSION & EXPERTISE SECTION ─── */}
+      <section className="relative bg-white md:py-16 py-8 z-10 border-t border-slate-100">
+        <div className="container mx-auto px-6 max-w-5xl text-left">
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
+              Half a Century in Renton
+            </span>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-[#002244] leading-tight">
+              Over 50+ Years of Passion, Expertise &amp; Local Pet Care in Renton, WA
+            </h2>
+          </div>
+
+          <div className="space-y-5 text-slate-600 leading-relaxed md:text-base text-xs bg-slate-50/80 p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm">
+            <p className="font-semibold text-slate-800 text-sm md:text-lg">
+              Pet stores open every year. Few make it past five.
+            </p>
+            <p>
+              We&apos;ve made it past fifty – not by chasing trends, but by getting the fundamentals right, over and over, for half a century.
+            </p>
+            <p>
+              That kind of longevity isn&apos;t luck. It&apos;s built through honest recommendations, healthy tanks, and Renton families who keep coming back because the advice we gave them actually worked. We&apos;ve quarantined sick fish before it was standard practice. We&apos;ve turned people away from animals that weren&apos;t right for their home, even when the sale would&apos;ve been easy.
+            </p>
+            <p>
+              Local pet care isn&apos;t a category to us – it&apos;s the whole point. We live here, and our kids went to school here. The dogs we&apos;ve helped raise are the same dogs we see at the Cedar River Trail on weekends.
+            </p>
+            <p>
+              Fifty years in, Sierra Fish &amp; Pets is still Renton&apos;s, through and through – and we intend to keep it that way for fifty more.
+            </p>
+            <div className="pt-4 border-t border-slate-200 space-y-1">
+              <p className="font-semibold text-slate-800">
+                Come see what five decades of doing it right looks like.
+              </p>
+              <p className="font-bold text-[#005AA9] text-sm md:text-lg">
+                Visit Sierra Fish &amp; Pets in Renton, WA today – your pets (and your questions) are always welcome.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -432,70 +549,74 @@ export default function AboutPageClient() {
       </section>
 
       {/* ─── TESTIMONIALS (EMBLA-BASED CAROUSEL) ─── */}
-      <section className="relative bg-white md:py-16 py-8 z-10 border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-4xl text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-3 block">
+      <section className="relative bg-[#f8fbff]/60 py-8 md:py-12 z-10 border-b border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-1.5 block">
             Client Testimonials
           </span>
-          <h2 className="text-2xl md:text-5xl font-extrabold text-[#002244] mb-4">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] mb-1.5 tracking-tight">
             What Pet Parents Say
           </h2>
+          <p className="text-slate-500 text-xs sm:text-sm max-w-lg mx-auto mb-6">
+            Real feedback from local pet owners and aquarium hobbyists in Renton.
+          </p>
 
-          <div className="relative px-8 md:px-16">
+          <div className="relative max-w-6xl mx-auto px-2 sm:px-8">
             <Carousel
-              plugins={[autoplayPlugin]}
+              setApi={setCarouselApi}
+              plugins={[autoplay.current]}
               opts={{
                 align: "start",
                 loop: true,
               }}
               className="w-full"
             >
-              <CarouselContent>
-                {testimonials.map((item) => (
-                  <CarouselItem key={item.id} className="basis-full">
-                    <div className="flex flex-col items-center">
-                      {/* Quote Icon */}
-                      <Quote className="text-slate-200 w-16 h-16 mb-6 transform rotate-180" />
+              <CarouselContent className="-ml-3">
+                {testimonials.map((item, idx) => (
+                  <CarouselItem key={`${item.id}-${idx}`} className="pl-3 basis-full md:basis-1/2">
+                    <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-[#005AA9]/30 transition-all duration-300 flex flex-col justify-between h-full text-left">
+                      <div>
+                        {/* Top: Avatar, Name, Rating */}
+                        <div className="flex items-center justify-between gap-3 mb-3.5 pb-3 border-b border-slate-100">
+                          <div className="flex items-center gap-3">
+                            <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-[#EBF7FF] shadow-xs shrink-0">
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                width={44}
+                                height={44}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                                {item.name}
+                              </h4>
+                              <span className="text-[11px] font-semibold text-[#005AA9]">
+                                {item.designation}
+                              </span>
+                            </div>
+                          </div>
 
-                      {/* Stars Rating */}
-                      <div className="flex justify-center gap-1 mb-6">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-5 h-5 ${
-                              i < item.rating
-                                ? "text-yellow-400 fill-yellow-400"
-                                : "text-slate-200"
-                            }`}
-                          />
-                        ))}
-                      </div>
-
-                      {/* Review Paragraph */}
-                      <p className="text-[12px] md:text-2xl font-medium text-slate-700 leading-relaxed italic max-w-2xl mx-auto mb-4 font-nunito">
-                        "{item.review}"
-                      </p>
-
-                      <div className="w-10 h-[2px] bg-slate-200 mb-8" />
-
-                      {/* Reviewer Bio */}
-                      <div className="flex items-center gap-4">
-                        {/* Initials Avatar */}
-                        <div className="w-14 h-14 rounded-full overflow-hidden bg-slate-200 shadow-md">
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={56}
-                            height={56}
-                            className="w-full h-full object-cover"
-                          />
+                          {/* Stars */}
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-3.5 h-3.5 ${
+                                  i < item.rating
+                                    ? "text-amber-400 fill-amber-400"
+                                    : "text-slate-200"
+                                }`}
+                              />
+                            ))}
+                          </div>
                         </div>
 
-                        <div className="text-left">
-                          <h4 className="text-lg font-bold text-slate-900 leading-none mb-1">
-                            {item.name}
-                          </h4>
-                        </div>
+                        {/* Review text */}
+                        <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed italic line-clamp-4">
+                          &ldquo;{item.review}&rdquo;
+                        </p>
                       </div>
                     </div>
                   </CarouselItem>
@@ -503,12 +624,29 @@ export default function AboutPageClient() {
               </CarouselContent>
 
               {/* Next/Prev Navigation Buttons */}
-              <CarouselPrevious className="hidden md:flex -left-6 bg-slate-50 hover:bg-slate-100 hover:text-[#005AA9] border-slate-200" />
-              <CarouselNext className="hidden md:flex -right-6 bg-slate-50 hover:bg-slate-100 hover:text-[#005AA9] border-slate-200" />
+              <button
+                type="button"
+                onClick={scrollPrev}
+                aria-label="Previous testimonial"
+                className="absolute -left-3 sm:-left-6 top-1/2 -translate-y-1/2 z-20 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-[#005AA9] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={scrollNext}
+                aria-label="Next testimonial"
+                className="absolute -right-3 sm:-right-6 top-1/2 -translate-y-1/2 z-20 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-[#005AA9] hover:text-white flex items-center justify-center transition-all cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </Carousel>
           </div>
         </div>
       </section>
+
+  
 
       {/* ─── INSTAGRAM GALLERY ─── */}
       <div className="relative z-10">
