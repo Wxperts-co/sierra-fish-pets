@@ -25,6 +25,8 @@ import {
   X,
 } from "lucide-react";
 
+import rawFaqData from "@/data/faq.json";
+
 interface FaqItem {
   id: string;
   question: string;
@@ -33,161 +35,7 @@ interface FaqItem {
   badge?: string;
 }
 
-const FAQ_DATA: FaqItem[] = [
-  // ── General & Store ──
-  {
-    id: "gen-1",
-    category: "general",
-    badge: "Store Info",
-    question: "Where is Sierra Fish & Pets located and what are your hours?",
-    answer:
-      "Sierra Fish & Pets is located at 601 S 3rd St, Renton, WA 98057 (conveniently accessible from I-405). We are open Monday through Saturday from 10:00 AM – 7:00 PM, and Sunday from 11:00 AM – 6:00 PM. Ample free parking is available right in front of the store.",
-  },
-  {
-    id: "gen-2",
-    category: "general",
-    badge: "Policies",
-    question: "What is your return and exchange policy?",
-    answer:
-      "Dry goods, hardware, equipment, unopened food, and unused supplies in original packaging can be returned or exchanged within 30 days of purchase with a valid receipt. Livestock and live plants are covered under our dedicated 48-hour livestock guarantee.",
-  },
-  {
-    id: "gen-3",
-    category: "general",
-    badge: "Delivery & Pickup",
-    question: "Do you offer in-store pickup or local delivery?",
-    answer:
-      "Yes! You can order online through our website and select In-Store Pickup at checkout for fast, curbside or counter collection. We also offer local delivery options for select regional zip codes in Renton, Tukwila, Kent, and the greater Seattle area.",
-  },
-  {
-    id: "gen-4",
-    category: "general",
-    badge: "Gift Cards",
-    question: "Can I purchase physical and digital gift cards?",
-    answer:
-      "Yes! We offer both physical gift cards in-store and instant digital e-gift cards through our website. Gift cards never expire and can be used on all products, livestock, and pet grooming services.",
-  },
-
-  // ── Aquariums & Fish ──
-  {
-    id: "aq-1",
-    category: "aquarium",
-    badge: "Free Service",
-    question: "Do you offer free aquarium water testing?",
-    answer:
-      "Yes, completely free! Bring at least 1 cup (8 oz) of your aquarium or pond water in a clean container. Our aquatics specialists test for Ammonia, Nitrite, Nitrate, pH, GH, KH, and salinity (for reef tanks). We will analyze the results with you and suggest exact balancing steps.",
-  },
-  {
-    id: "aq-2",
-    category: "aquarium",
-    badge: "Guarantee",
-    question: "What is your live fish guarantee?",
-    answer:
-      "We offer a 48-Hour Livestock Guarantee on our freshwater and saltwater fish. If a fish passes away within 48 hours of purchase, please bring the deceased fish in a bag along with a separate 1-cup sample of your tank water and your receipt for a store credit or replacement.",
-  },
-  {
-    id: "aq-3",
-    category: "aquarium",
-    badge: "Custom Tanks",
-    question: "Do you offer custom aquarium design, setup, and maintenance?",
-    answer:
-      "Yes! Our professional aquatic team handles custom tank consulting, plumbing design, aquascaping, delivery, professional installation, and ongoing residential and commercial maintenance. Contact us or visit our Aquarium Services page to schedule a consultation.",
-  },
-  {
-    id: "aq-4",
-    category: "aquarium",
-    badge: "Filtration",
-    question: "What is the Aqua Jet Water Cleaning System you use?",
-    answer:
-      "Our facility utilizes a state-of-the-art Aqua Jet centralized automated water-exchange and filtration system. It continuously purifies and cycles water through multi-stage UV sterilization and biological beds, ensuring pristine, pathogen-free environments for all holding tanks.",
-  },
-  {
-    id: "aq-5",
-    category: "aquarium",
-    badge: "Special Orders",
-    question: "Can I special order rare fish, corals, or aquatic plants?",
-    answer:
-      "Yes! If a particular cichlid, discus, schooling fish, marine angel, coral frag, or rare plant is not currently in stock, our buyers can source it from our trusted network of sustainable and certified breeders. Submit a request through our Special Order page.",
-  },
-
-  // ── Small Animals, Reptiles & Birds ──
-  {
-    id: "anim-1",
-    category: "animals",
-    badge: "Livestock",
-    question: "What types of small animals, birds, and reptiles do you carry?",
-    answer:
-      "We regularly feature hand-fed birds (parakeets, cockatiels, conures, canaries, finches), small animals (bunnies, guinea pigs, hamsters, gerbils, chinchillas, fancy rats), and captive-bred reptiles (bearded dragons, geckos, tortoises, docile snakes, and live feeders like crickets, dubia roaches, and mealworms).",
-  },
-  {
-    id: "anim-2",
-    category: "animals",
-    badge: "Care Guidance",
-    question: "Do you provide setup guides for new pet parents?",
-    answer:
-      "Absolutely. Our experienced staff takes time to walk every customer through cage sizing, thermal gradients, UVB lighting, dietary requirements, and socialization techniques. You can also explore our Sierra Edu knowledge base anytime online for free care sheets.",
-  },
-  {
-    id: "anim-3",
-    category: "animals",
-    badge: "Adoptions",
-    question: "Can I hold or interact with an animal before taking it home?",
-    answer:
-      "Yes! We encourage gentle, supervised interaction in our store so you can bond with your prospective companion and verify temperament before completing your adoption.",
-  },
-
-  // ── In-Store Services ──
-  {
-    id: "serv-1",
-    category: "services",
-    badge: "Grooming",
-    question: "Do you offer walk-in pet nail trims and wing clipping?",
-    answer:
-      "Yes! We perform gentle, stress-free nail trims for dogs, cats, rabbits, guinea pigs, as well as wing and beak care for companion birds. No appointment is usually required, but we recommend a quick phone call before visiting to confirm our service technician is on duty.",
-  },
-  {
-    id: "serv-2",
-    category: "services",
-    badge: "Club",
-    question: "What is the Fish of the Month Club?",
-    answer:
-      "Our Fish of the Month Club highlights unique, hand-picked aquatic species each month at exclusive member savings, complete with detailed care guides and compatibility tips for both novice and advanced aquarists.",
-  },
-  {
-    id: "serv-3",
-    category: "services",
-    badge: "Community",
-    question: "Do you host dog adoption events and community workshops?",
-    answer:
-      "Yes! We regularly partner with local rescue organizations and shelters to host weekend dog adoption events in Renton. Check our Event Calendar page for upcoming dates, adoption fairs, and educational seminars.",
-  },
-
-  // ── Rewards & Loyalty ──
-  {
-    id: "rew-1",
-    category: "rewards",
-    badge: "Loyalty Points",
-    question: "How does the In-Store Loyalty Rewards Program work?",
-    answer:
-      "Every time you shop at Sierra Fish & Pets, give your phone number to the cashier. You earn 1 point per $1 spent on all merchandise and livestock. Points turn into instant cash discounts applied directly at checkout.",
-  },
-  {
-    id: "rew-2",
-    category: "rewards",
-    badge: "Astro Program",
-    question: "What is the Astro Frequent Buyer Program?",
-    answer:
-      "Astro is a digital pet food loyalty program supported by top premium brands (Fromm, Orijen, Acana, Stella & Chewy's, Oxbow, and more). Buy 10 to 12 qualifying bags (or cans/treats) and receive 1 bag completely FREE! It tracks automatically with your phone number—no coupons to cut.",
-  },
-  {
-    id: "rew-3",
-    category: "rewards",
-    badge: "Stack Savings",
-    question: "Can I stack both loyalty programs together?",
-    answer:
-      "Yes! You will earn in-store points on every dollar spent while simultaneously collecting frequent-buyer punches on your Astro pet food card. You can also combine these with our monthly store coupons!",
-  },
-];
+const FAQ_DATA: FaqItem[] = rawFaqData as FaqItem[];
 
 const CATEGORIES = [
   { key: "all", label: "All Questions", icon: HelpCircle },
@@ -202,8 +50,8 @@ export default function FaqClient() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({
-    "gen-1": true,
-    "aq-1": true,
+    "faq-1": true,
+    "faq-2": true,
   });
 
   const toggleAccordion = (id: string) => {

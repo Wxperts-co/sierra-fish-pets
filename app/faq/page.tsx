@@ -1,20 +1,24 @@
 import React from "react";
 import type { Metadata } from "next";
 import FaqClient from "@/components/faq/FaqClient";
+import faqData from "@/data/faq.json";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
   description:
-    "Find answers to common questions about Sierra Fish & Pets in Renton, WA. Learn about our store hours, live fish guarantee, free water testing, pet nail trims, aquarium installations, and loyalty rewards.",
+    "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, freshwater & saltwater fish arrivals, custom aquarium design, free water testing, pet grooming & nail trims, dog adoptions, and store hours.",
   keywords: [
     "sierra fish and pets faq",
     "frequently asked questions pet store renton",
+    "pet store faq renton wa",
     "free aquarium water testing renton",
-    "pet nail trim renton wa",
     "custom aquarium installation seattle",
-    "live fish guarantee renton",
-    "astro loyalty program sierra pets",
-    "special order pets renton wa",
+    "freshwater and saltwater fish renton",
+    "pet nail trimming renton wa",
+    "dog adoption events renton wa",
+    "fish of the month club sierra pets",
+    "sierra fish and pets store hours",
+    "pet supplies renton wa",
   ],
   alternates: {
     canonical: "https://sierrafishandpets.com/faq",
@@ -29,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
     description:
-      "Have questions about our fish, pets, aquarium services, or store policies? Browse our comprehensive FAQ or contact our passionate team in Renton, WA.",
+      "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, aquatic livestock, custom aquariums, water testing, grooming, and store hours.",
     url: "https://sierrafishandpets.com/faq",
     siteName: "Sierra Fish & Pets",
     images: [
@@ -37,7 +41,7 @@ export const metadata: Metadata = {
         url: "https://sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
-        alt: "Sierra Fish & Pets FAQ",
+        alt: "Frequently Asked Questions - Sierra Fish & Pets Renton, WA",
       },
     ],
     locale: "en_US",
@@ -45,65 +49,103 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets",
+    title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
     description:
-      "Find answers to all your pet care, aquarium, and shopping questions at Sierra Fish & Pets.",
+      "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Pet supplies, fish, custom aquariums, grooming, and store hours.",
     images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 
 export default function FaqPage() {
-  const faqStructuredData = {
+  const structuredData = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
+    "@graph": [
       {
-        "@type": "Question",
-        name: "Where is Sierra Fish & Pets located and what are your store hours?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Sierra Fish & Pets is conveniently located at 601 S 3rd St, Renton, WA 98057. We are open Monday through Saturday from 10:00 AM to 7:00 PM, and Sunday from 11:00 AM to 6:00 PM.",
+        "@type": ["FAQPage", "WebPage"],
+        "@id": "https://sierrafishandpets.com/faq#webpage",
+        url: "https://sierrafishandpets.com/faq",
+        name: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
+        description:
+          "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, freshwater & saltwater fish arrivals, custom aquarium design, free water testing, pet grooming & nail trims, dog adoptions, and store hours.",
+        isPartOf: {
+          "@type": "WebSite",
+          "@id": "https://sierrafishandpets.com/#website",
+          url: "https://sierrafishandpets.com",
+          name: "Sierra Fish & Pets",
         },
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://sierrafishandpets.com",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "FAQs",
+              item: "https://sierrafishandpets.com/faq",
+            },
+          ],
+        },
+        mainEntity: faqData.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
       },
       {
-        "@type": "Question",
-        name: "Do you offer free aquarium water testing?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes! Bring a clean, uncontaminated sample of your aquarium or pond water (at least 1 cup) to our store, and our aquatic specialists will test it for pH, ammonia, nitrite, nitrate, salinity, and alkalinity for free while providing actionable advice.",
+        "@type": ["PetStore", "LocalBusiness", "Store"],
+        "@id": "https://sierrafishandpets.com/#store",
+        name: "Sierra Fish & Pets",
+        alternateName: "Sierra Fish and Pets",
+        url: "https://sierrafishandpets.com",
+        logo: "https://sierrafishandpets.com/images/logo/sierra-logo.png",
+        image: [
+          "https://sierrafishandpets.com/images/banner/shophero3.png",
+          "https://sierrafishandpets.com/images/banner/shophero5.png",
+        ],
+        telephone: "+1-425-226-3215",
+        priceRange: "$$",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "601 S 3rd St",
+          addressLocality: "Renton",
+          addressRegion: "WA",
+          postalCode: "98057",
+          addressCountry: "US",
         },
-      },
-      {
-        "@type": "Question",
-        name: "What is your live fish and animal guarantee policy?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "We take immense pride in our livestock health. We provide a 48-hour livestock guarantee on most freshwater and saltwater fish when accompanied by a separate water sample from your tank and original register receipt.",
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 47.4727,
+          longitude: -122.2135,
         },
-      },
-      {
-        "@type": "Question",
-        name: "Do you offer pet nail trimming and wing clipping services?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes! We provide walk-in nail trims for dogs, cats, rabbits, guinea pigs, and gentle wing and beak trims for birds. Please call ahead or visit during service hours to ensure staff availability.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Can I special order specific animals, fish, or aquarium supplies?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Absolutely. If you're looking for a specific fish species, rare coral, exotic reptile, or specialized piece of equipment, talk to our team or submit a request via our Special Order Animals page and we will source it through our verified ethical distributors.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How do your customer loyalty and rewards programs work?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "We offer two great rewards programs: our In-Store Loyalty Program (earn 1 point per $1 spent, redeemable for instant store discounts) and the Astro Frequent Buyer Program (buy 10-12 bags of participating pet food brands and get 1 bag free). You can stack both programs simultaneously!",
-        },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ],
+            opens: "11:00",
+            closes: "19:00",
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Sunday"],
+            opens: "11:00",
+            closes: "17:00",
+          },
+        ],
       },
     ],
   };
@@ -112,9 +154,10 @@ export default function FaqPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <FaqClient />
     </>
   );
 }
+

@@ -1,22 +1,72 @@
 [
   {
-    "question": "Is this product safe for young pets?",
-    "answer": "Yes, our products are veterinarian-approved and safe for pets when used as directed. For feeding guidelines, please refer to the recommended instructions on the back package."
+    "id": "faq-1",
+    "category": "general",
+    "badge": "Pet Supplies",
+    "question": "What types of pets, products and supplies can customers find at Sierra Fish & Pets?",
+    "answer": "We are a full-service pet store offering food, toys, accessories, habitats and care supplies for dogs, cats, fish, birds, reptiles, small pets and more in Renton, WA. The store also carries freshwater and saltwater fish, aquatic supplies and specialized products for different pet-care needs."
   },
   {
-    "question": "What is the storage or shelf life?",
-    "answer": "Store in a dry, cool location. For pet food products, seal the airtight zip bag after opening to maintain optimal flavor and freshness."
+    "id": "faq-2",
+    "category": "aquarium",
+    "badge": "Livestock",
+    "question": "Do you offer fresh fish and aquatic livestock for different types of aquariums?",
+    "answer": "Yes. We receive freshwater and saltwater fish every week giving aquarium hobbyists access to regularly changing livestock selections. The store also supports both freshwater and saltwater aquarium setups with fish, aquatic plants, food, filtration, lighting, aquascaping products and other aquarium supplies."
   },
   {
-    "question": "Does this come with a satisfaction guarantee?",
-    "answer": "Absolutely! This item is covered under our 100% Taste and Quality Guarantee. If your pet does not enjoy it, you can return it within 30 days for a swap or refund."
+    "id": "faq-3",
+    "category": "aquarium",
+    "badge": "Aquarium Services",
+    "question": "What aquarium services do you provide for new and existing tank owners?",
+    "answer": "Sierra Fish & Pets in Renton, WA provides end-to-end aquarium services including custom aquarium consulting and design, installation, aquascaping, water testing, maintenance guidance and aquarium systems. Whether you need a freshwater aquarium, saltwater reef setup or help improving an existing tank, experienced aquarists can provide tailored recommendations."
   },
   {
-    "question": "Are the ingredients organic?",
-    "answer": "We select the highest quality ingredients. While not all ingredients are certified organic, we focus on natural nutrition and strictly test all products for safety and quality."
+    "id": "faq-4",
+    "category": "aquarium",
+    "badge": "Custom Tanks",
+    "question": "Can you design a custom aquarium based on my space, budget and aquatic needs?",
+    "answer": "Yes. At Sierra Fish & Pets, we create customized aquarium plans around your available space, budget, vision and aquatic requirements. The process includes consultation, space assessment, design planning, livestock selection, implementation and ongoing support. Our specialists can help develop a healthy, sustainable aquarium suited to your home or business."
   },
   {
-    "question": "How long will standard shipping take?",
-    "answer": "Standard shipping typically takes 3-5 business days. You will receive a tracking link via email as soon as your order has been dispatched."
+    "id": "faq-5",
+    "category": "aquarium",
+    "badge": "Water Testing",
+    "question": "What does Sierra Fish & Pets check during an aquarium water test?",
+    "answer": "We check important aquarium water parameters including ammonia, nitrite, nitrate, pH, GH, KH, salinity and specific gravity. Customers can bring a water sample from their aquarium to the store where the aquatics team tests it and provides guidance for maintaining healthy water conditions."
+  },
+  {
+    "id": "faq-6",
+    "category": "services",
+    "badge": "Adoptions",
+    "question": "How do dog adoption events at Sierra Fish & Pets, Renton, WA work?",
+    "answer": "We host dog adoption events with partner rescue organizations including Ginger's Pet Rescue. Customers can browse available rescued dogs, submit an adoption application, meet foster parents and dogs during an in-store event and complete the adoption through the rescue agency. These events help connect rescued dogs with permanent homes."
+  },
+  {
+    "id": "faq-7",
+    "category": "services",
+    "badge": "Grooming & Trims",
+    "question": "Do you offer grooming or basic care services for pets?",
+    "answer": "Yes. We offer professional nail trimming for dogs, cats, birds and small animals along with gentle bird wing trims. These services are generally scheduled on Mondays and Tuesdays while requests on other days may depend on technician availability. Pricing varies according to the animal and service required."
+  },
+  {
+    "id": "faq-8",
+    "category": "services",
+    "badge": "Youth Program",
+    "question": "What is the O'Fishal Fish of the Month Club at Sierra Fish & Pets?",
+    "answer": "The O'Fishal Fish of the Month Club is a free program for young hobbyists aged 10 and under. Children can pick up an official punchcard and receive one free selected featured fish each month by bringing it to the store. The program encourages responsible pet care and introduces children to aquarium keeping."
+  },
+  {
+    "id": "faq-9",
+    "category": "services",
+    "badge": "Community & Tours",
+    "question": "What educational and community programs are available at Sierra Fish & Pets, Renton, WA?",
+    "answer": "We offer guided store tours and animal-care workshops for schools, birthday parties, scout groups, youth organizations, homeschool groups and community gatherings. Participants can interact with mammals, reptiles, birds and aquatic animals while learning about responsible pet ownership, habitats, diets, handling and daily care through interactive discussions with staff."
+  },
+  {
+    "id": "faq-10",
+    "category": "general",
+    "badge": "Store Hours",
+    "question": "What are your store hours throughout the week?",
+    "answer": "Sierra Fish & Pets is open Monday through Saturday from 11 AM to 7 PM. On Sundays, the store is open from 11 AM to 5 PM giving customers convenient weekday and weekend hours to shop for pets, food, supplies, aquarium products and other pet-care essentials."
   }
 ]
