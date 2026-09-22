@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import AdoptionHero from "@/components/dog-adoption/AdoptionHero";
 import AdoptionProcess from "@/components/dog-adoption/AdoptionProcess";
 import AdoptionGrid from "@/components/dog-adoption/AdoptionGrid";
 import RescuePartnerSection from "@/components/dog-adoption/RescuePartnerSection";
+
+export const metadata: Metadata = {
+  title: "Dog Adoption & Rescue Events Renton, WA | Sierra Fish & Pets",
+  description:
+    "Sierra Fish and Pets in Renton, WA hosts community dog adoption and rescue events to help local shelter animals find loving homes.",
+  keywords:
+    "Dog Adoption & Rescue Events Renton, WA, Best Dog Adoption Services Renton, WA",
+  alternates: {
+    canonical: "https://www.sierrafishandpets.com/services/dog-adoption",
+  },
+};
 
 export default function DogAdoptionPage() {
   return (

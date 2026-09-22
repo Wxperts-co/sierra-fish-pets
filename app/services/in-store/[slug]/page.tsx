@@ -55,6 +55,9 @@ export async function generateMetadata({
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
+    alternates: {
+      canonical: `https://www.sierrafishandpets.com/services/in-store/${slug}`,
+    },
   };
 }
 

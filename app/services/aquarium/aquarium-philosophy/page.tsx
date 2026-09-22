@@ -12,9 +12,14 @@ import {
   Calendar,
 } from "lucide-react";
 
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "Aquarium Philosophy | Sierra Fish & Pets",
   description: "Learn about our aquatic philosophy and mission at Sierra Fish & Pets.",
+  alternates: {
+    canonical: "https://www.sierrafishandpets.com/services/aquarium/aquarium-philosophy",
+  },
 };
 
 export default function AquariumPhilosophyPage() {

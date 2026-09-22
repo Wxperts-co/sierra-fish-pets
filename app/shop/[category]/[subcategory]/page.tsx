@@ -9,13 +9,16 @@ interface ShopSubcategoryPageProps {
 export async function generateMetadata({
   params,
 }: ShopSubcategoryPageProps): Promise<Metadata> {
-  const { category } = await params;
+  const { category, subcategory } = await params;
   const meta = getCategoryMetadata(category);
 
   return {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
+    alternates: {
+      canonical: `https://www.sierrafishandpets.com/shop/${category}/${subcategory}`,
+    },
   };
 }
 
