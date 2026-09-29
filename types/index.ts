@@ -91,7 +91,7 @@ export interface Cart {
   tax: number;
   total: number;
   couponCode?: string;
-  fulfillmentMethod?: "shipping" | "pickup";
+  fulfillmentMethod?: "shipping" | "pickup" | "digital";
 }
 
 // ─── ORDER ──────────────────────────────────────────────────────────────────
@@ -144,7 +144,7 @@ export interface Order {
   shippingCost: number;
   tax?: number;
   total: number;
-  fulfillmentMethod?: "shipping" | "pickup";
+  fulfillmentMethod?: "shipping" | "pickup" | "digital";
   couponCode?: string;
   notes?: string;
   placedAt: string;

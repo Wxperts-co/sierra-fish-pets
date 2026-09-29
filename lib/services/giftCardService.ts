@@ -2,6 +2,13 @@ import GiftCardInstanceModel from "@/models/GiftCardInstance";
 import { IOrder } from "@/models/Order";
 
 export async function generateGiftCardsForOrder(order: IOrder) {
+  // Prevent duplicate generation if gift cards for this order were already created
+  const existingGC = await GiftCardInstanceModel.find({ orderId: order._id });
+  if (existingGC && existingGC.length > 0) {
+    console.log(`[GiftCardService] Gift cards for order ${order.orderNumber} already generated.`);
+    return;
+  }
+
   for (const item of order.items) {
     if (item.productId && (item.productId.startsWith("giftcard-") || (item.giftCardDetails && item.giftCardDetails.recipientEmail))) {
       const amount = item.unitPrice;
@@ -27,18 +34,20 @@ export async function generateGiftCardsForOrder(order: IOrder) {
         await newGiftCard.save();
         console.log(`[GiftCardService] Generated Gift Card ${code} for order ${order.orderNumber}`);
 
-        try {
-          const { sendGiftCardEmail } = await import("./emailService");
-          await sendGiftCardEmail(
-            code,
-            amount,
-            newGiftCard.senderName,
-            newGiftCard.recipientName,
-            newGiftCard.recipientEmail,
-            newGiftCard.message
-          );
-        } catch (mailError) {
-          console.error(`[GiftCardService] Failed to send email for Gift Card ${code}:`, mailError);
+        if (details?.recipientEmail) {
+          try {
+            const { sendGiftCardEmail } = await import("./emailService");
+            await sendGiftCardEmail(
+              code,
+              amount,
+              newGiftCard.senderName,
+              newGiftCard.recipientName,
+              newGiftCard.recipientEmail,
+              newGiftCard.message
+            );
+          } catch (mailError) {
+            console.error(`[GiftCardService] Failed to send email for Gift Card ${code}:`, mailError);
+          }
         }
       }
     }

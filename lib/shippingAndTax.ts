@@ -141,6 +141,57 @@ export function validateContinentalUSAddress(address?: {
   return { isValid: true };
 }
 
+/**
+ * Checks if a product is a Digital item (e.g. e-Gift Card) that does not require physical shipping.
+ */
+export function isDigitalProduct(product: Product): boolean {
+  if (!product) return false;
+  const name = (product.name || "").toLowerCase();
+  const cat = (product.categorySlug || "").toLowerCase();
+  const subcat = (product.subcategorySlug || "").toLowerCase();
+  const sku = (product.sku || "").toUpperCase();
+  const tags = (product.tags || []).map((t) => t.toLowerCase());
+  const giftCardType = ((product as any).giftCardDetails?.type || "").toLowerCase();
+
+  // If explicitly traditional or physical, it requires postal mail shipping
+  if (
+    giftCardType === "traditional" ||
+    giftCardType === "physical" ||
+    name.includes("traditional") ||
+    name.includes("physical") ||
+    sku.includes("TRADITIONAL") ||
+    sku.includes("PHYSICAL") ||
+    tags.includes("traditional") ||
+    tags.includes("physical")
+  ) {
+    return false;
+  }
+
+  // Check gift-card category / tags / SKU for digital e-gift cards
+  if (
+    cat === "gift-card" ||
+    subcat === "gift-card" ||
+    sku.startsWith("GC-") ||
+    tags.includes("gift-card") ||
+    tags.includes("giftcard") ||
+    tags.includes("digital") ||
+    tags.includes("egift") ||
+    tags.includes("e-gift")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Checks if the entire cart consists solely of digital items (e.g. e-Gift Cards).
+ */
+export function isCartOnlyDigital(items: CartItem[]): boolean {
+  if (!items || items.length === 0) return false;
+  return items.every((item) => isDigitalProduct(item.product));
+}
+
 export interface ShippingAndTaxResult {
   shippingCost: number;
   taxAmount: number;
@@ -148,6 +199,8 @@ export interface ShippingAndTaxResult {
   hasLivePlants: boolean;
   hasPickupOnlyItems: boolean;
   hasDropShipOnlyItems: boolean;
+  hasDigitalItems: boolean;
+  isDigitalOnly: boolean;
   canFulfillViaShipping: boolean;
   canFulfillViaPickup: boolean;
   shippingTierLabel: string;
@@ -162,6 +215,7 @@ export interface ShippingAndTaxResult {
  * - $125.00+: FREE SHIPPING
  *
  * Free shipping overrides:
+ * - All Digital items & e-Gift cards (Free instant digital delivery, $0 tax on purchase)
  * - All AquaDREAM tanks (Drop-ship direct)
  * - All Fish Tank Systems & Filters
  *
@@ -169,39 +223,49 @@ export interface ShippingAndTaxResult {
  */
 export function calculateCartShippingAndTax(
   items: CartItem[],
-  fulfillmentMethod: "shipping" | "pickup" = "shipping",
+  fulfillmentMethod: "shipping" | "pickup" | "digital" = "shipping",
   address?: { state?: string; city?: string; zipCode?: string; country?: string }
 ): ShippingAndTaxResult {
   let hasLivePlants = false;
   let hasPickupOnlyItems = false;
   let hasDropShipOnlyItems = false;
+  let hasDigitalItems = false;
 
   let totalSubtotal = 0;
+  let physicalSubtotal = 0;
   let shippableSubtotalNeedingFreight = 0;
 
   items.forEach((item) => {
     const itemTotal = item.product.price * item.quantity;
     totalSubtotal += itemTotal;
 
-    if (isLivePlantProduct(item.product)) {
-      hasLivePlants = true;
-    }
+    const isDigital = isDigitalProduct(item.product);
+    if (isDigital) {
+      hasDigitalItems = true;
+    } else {
+      physicalSubtotal += itemTotal;
 
-    if (isAquaDreamProduct(item.product)) {
-      hasDropShipOnlyItems = true;
-    }
+      if (isLivePlantProduct(item.product)) {
+        hasLivePlants = true;
+      }
 
-    if (isPickupOnlyProduct(item.product)) {
-      hasPickupOnlyItems = true;
-    }
+      if (isAquaDreamProduct(item.product)) {
+        hasDropShipOnlyItems = true;
+      }
 
-    // Determine if this product needs standard freight charge
-    const isFreeShippingItem = isAquaDreamProduct(item.product) || isFilterProduct(item.product);
-    if (!isFreeShippingItem && !isPickupOnlyProduct(item.product)) {
-      shippableSubtotalNeedingFreight += itemTotal;
+      if (isPickupOnlyProduct(item.product)) {
+        hasPickupOnlyItems = true;
+      }
+
+      // Determine if this product needs standard freight charge
+      const isFreeShippingItem = isAquaDreamProduct(item.product) || isFilterProduct(item.product);
+      if (!isFreeShippingItem && !isPickupOnlyProduct(item.product)) {
+        shippableSubtotalNeedingFreight += itemTotal;
+      }
     }
   });
 
+  const isDigitalOnly = items.length > 0 && items.every((item) => isDigitalProduct(item.product));
   const canFulfillViaShipping = !hasPickupOnlyItems;
   const canFulfillViaPickup = !hasDropShipOnlyItems;
 
@@ -209,7 +273,10 @@ export function calculateCartShippingAndTax(
   let shippingCost = 0;
   let shippingTierLabel = "Free Shipping";
 
-  if (fulfillmentMethod === "pickup") {
+  if (isDigitalOnly || fulfillmentMethod === "digital") {
+    shippingCost = 0;
+    shippingTierLabel = "Digital Delivery (Instant & Free)";
+  } else if (fulfillmentMethod === "pickup") {
     shippingCost = 0;
     shippingTierLabel = "Store Pickup (Free)";
   } else {
@@ -217,10 +284,10 @@ export function calculateCartShippingAndTax(
     if (shippableSubtotalNeedingFreight <= 0) {
       shippingCost = 0;
       shippingTierLabel = "FREE SHIPPING";
-    } else if (totalSubtotal >= 125) {
+    } else if (physicalSubtotal >= 125) {
       shippingCost = 0;
       shippingTierLabel = "FREE SHIPPING ($125+ Order)";
-    } else if (totalSubtotal >= 75) {
+    } else if (physicalSubtotal >= 75) {
       shippingCost = 14.99;
       shippingTierLabel = "$14.99 Tiered Shipping ($75-$124.99)";
     } else {
@@ -248,7 +315,9 @@ export function calculateCartShippingAndTax(
     taxRate = 0.105; // Standard default rate
   }
 
-  const taxAmount = Number((totalSubtotal * taxRate).toFixed(2));
+  // Tax is only assessed on taxable physical merchandise (gift cards are untaxed cash value upon initial purchase)
+  const taxableAmount = isDigitalOnly ? 0 : physicalSubtotal;
+  const taxAmount = Number((taxableAmount * taxRate).toFixed(2));
 
   return {
     shippingCost,
@@ -257,6 +326,8 @@ export function calculateCartShippingAndTax(
     hasLivePlants,
     hasPickupOnlyItems,
     hasDropShipOnlyItems,
+    hasDigitalItems,
+    isDigitalOnly,
     canFulfillViaShipping,
     canFulfillViaPickup,
     shippingTierLabel,

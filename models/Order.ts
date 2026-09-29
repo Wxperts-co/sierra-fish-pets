@@ -22,11 +22,11 @@ export interface IOrderItem {
 export interface IShippingAddress {
   fullName: string;
   phone: string;
-  addressLine1: string;
+  addressLine1?: string;
   addressLine2?: string;
-  city: string;
-  state: string;
-  zipCode: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
   country: string;
 }
 
@@ -44,7 +44,7 @@ export interface IOrder extends Document {
   discount: number;
   shippingCost: number;
   tax?: number;
-  fulfillmentMethod?: "shipping" | "pickup";
+  fulfillmentMethod?: "shipping" | "pickup" | "digital";
   total: number;
   couponCode?: string;
   giftCardCode?: string;
@@ -56,6 +56,7 @@ export interface IOrder extends Document {
   trackingNumber?: string;
   invoiceUrl?: string;
   invoiceGeneratedAt?: Date;
+  stripeSessionId?: string;
 }
 
 const orderItemSchema = new mongoose.Schema<IOrderItem>(
@@ -80,12 +81,12 @@ const orderItemSchema = new mongoose.Schema<IOrderItem>(
 const shippingAddressSchema = new mongoose.Schema<IShippingAddress>(
   {
     fullName: { type: String, required: true },
-    phone: { type: String, required: true },
-    addressLine1: { type: String, required: true },
+    phone: { type: String, default: "" },
+    addressLine1: { type: String, default: "" },
     addressLine2: { type: String, default: "" },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    zipCode: { type: String, required: true },
+    city: { type: String, default: "" },
+    state: { type: String, default: "" },
+    zipCode: { type: String, default: "" },
     country: { type: String, required: true, default: "United States" },
   },
   { _id: false }
@@ -120,7 +121,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
     discount: { type: Number, required: true, default: 0, min: 0 },
     shippingCost: { type: Number, required: true, default: 0, min: 0 },
     tax: { type: Number, default: 0, min: 0 },
-    fulfillmentMethod: { type: String, enum: ["shipping", "pickup"], default: "shipping" },
+    fulfillmentMethod: { type: String, default: "shipping" },
     total: { type: Number, required: true, min: 0 },
     couponCode: { type: String },
     giftCardCode: { type: String },
@@ -132,12 +133,17 @@ const orderSchema = new mongoose.Schema<IOrder>(
     trackingNumber: { type: String },
     invoiceUrl: { type: String },
     invoiceGeneratedAt: { type: Date },
+    stripeSessionId: { type: String },
   },
   {
     timestamps: { createdAt: "placedAt", updatedAt: "updatedAt" },
     versionKey: false,
   }
 );
+
+if (process.env.NODE_ENV !== "production" && mongoose.models && mongoose.models.Order) {
+  delete (mongoose.models as any).Order;
+}
 
 const OrderModel: Model<IOrder> =
   mongoose.models.Order || mongoose.model<IOrder>("Order", orderSchema);

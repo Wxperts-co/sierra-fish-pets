@@ -194,31 +194,45 @@ class InvoiceGenerator {
       .roundedRect(rightCardX, cardY, cardWidth, cardHeight, 8)
       .fillAndStroke(COLORS.background, COLORS.border);
 
+    const isDigital = this.order.fulfillmentMethod === "digital" || this.order.items.every((item) => item.productId?.startsWith("giftcard-") || item.sku?.startsWith("GC-"));
+
     this.doc
       .fillColor(COLORS.primary)
       .font("Helvetica-Bold")
       .fontSize(11)
-      .text("Ship To", rightCardX + 15, cardY + 15)
+      .text(isDigital ? "Delivery Info" : "Ship To", rightCardX + 15, cardY + 15)
       .font("Helvetica")
       .fillColor(COLORS.text)
       .fontSize(9)
-      .text(this.order.shippingAddress.fullName, rightCardX + 15, cardY + 35)
-      .text(this.order.shippingAddress.addressLine1, rightCardX + 15, cardY + 50);
+      .text(this.order.shippingAddress.fullName || "Valued Customer", rightCardX + 15, cardY + 35);
 
-    let custY = cardY + 65;
-    if (this.order.shippingAddress.addressLine2) {
-      this.doc.text(this.order.shippingAddress.addressLine2, rightCardX + 15, custY);
+    if (isDigital) {
+      this.doc.text("⚡ Digital E-Gift Card (Email Delivery)", rightCardX + 15, cardY + 50);
+      let custY = cardY + 65;
+      this.doc.text(`Email: ${this.order.guestEmail}`, rightCardX + 15, custY);
       custY += 15;
+      if (this.order.shippingAddress.phone && this.order.shippingAddress.phone !== "N/A") {
+        this.doc.text(`Phone: ${this.order.shippingAddress.phone}`, rightCardX + 15, custY);
+      }
+    } else {
+      this.doc.text(this.order.shippingAddress.addressLine1 || "", rightCardX + 15, cardY + 50);
+      let custY = cardY + 65;
+      if (this.order.shippingAddress.addressLine2) {
+        this.doc.text(this.order.shippingAddress.addressLine2, rightCardX + 15, custY);
+        custY += 15;
+      }
+      this.doc.text(
+        `${this.order.shippingAddress.city || ""}, ${this.order.shippingAddress.state || ""} ${this.order.shippingAddress.zipCode || ""}`.trim(),
+        rightCardX + 15,
+        custY
+      );
+      custY += 15;
+      this.doc.text(this.order.shippingAddress.country || "United States", rightCardX + 15, custY);
+      custY += 15;
+      if (this.order.shippingAddress.phone) {
+        this.doc.text(`Phone: ${this.order.shippingAddress.phone}`, rightCardX + 15, custY);
+      }
     }
-    this.doc.text(
-      `${this.order.shippingAddress.city}, ${this.order.shippingAddress.state} ${this.order.shippingAddress.zipCode}`,
-      rightCardX + 15,
-      custY
-    );
-    custY += 15;
-    this.doc.text(this.order.shippingAddress.country, rightCardX + 15, custY);
-    custY += 15;
-    this.doc.text(`Phone: ${this.order.shippingAddress.phone}`, rightCardX + 15, custY);
 
     this.currentY = cardY + cardHeight + 20;
   }
@@ -433,6 +447,15 @@ class InvoiceGenerator {
         .fillColor(COLORS.success)
         .text(`Discount (${this.order.couponCode || "Promo"}):`, rightX + 15, sumY)
         .text(`-$${this.order.discount.toFixed(2)}`, valAlignX, sumY, { width: valWidth, align: "right" });
+      sumY += 18;
+    }
+
+    // Gift Card if applied
+    if (this.order.giftCardAmount && this.order.giftCardAmount > 0) {
+      this.doc
+        .fillColor(COLORS.primary)
+        .text(`Gift Card (${this.order.giftCardCode || "Applied"}):`, rightX + 15, sumY)
+        .text(`-$${this.order.giftCardAmount.toFixed(2)}`, valAlignX, sumY, { width: valWidth, align: "right" });
       sumY += 18;
     }
 

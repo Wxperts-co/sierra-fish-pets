@@ -132,11 +132,14 @@ export default function GiftCardsPage() {
 
     const uniqueId = `${buyCard.id}-${parsedAmount}-${Date.now()}`;
 
+    const isEgift = buyCard.type === "egift";
+    const cardTypeUpper = isEgift ? "EGIFT" : "TRADITIONAL";
+
     const giftCardProduct: any = {
       id: uniqueId,
       name: `${buyCard.name} ($${parsedAmount})`,
       slug: uniqueId,
-      sku: `GC-${buyCard.id.toUpperCase()}-${parsedAmount}`,
+      sku: `GC-${cardTypeUpper}-${parsedAmount}`,
       categorySlug: "gift-card" as any,
       subcategorySlug: "gift-card",
       brand: "Sierra Fish & Pets",
@@ -145,7 +148,7 @@ export default function GiftCardsPage() {
       description: buyCard.description,
       shortDescription: buyCard.shortDescription,
       features: buyCard.features,
-      tags: ["giftcard", "gift-card"],
+      tags: ["giftcard", "gift-card", isEgift ? "egift" : "traditional"],
       rating: 5,
       reviewCount: 0,
       reviews: [],
@@ -156,8 +159,9 @@ export default function GiftCardsPage() {
       isBestSeller: false,
       createdAt: new Date().toISOString(),
       giftCardDetails: {
+        type: buyCard.type,
         recipientName: form.recipientName.trim(),
-        recipientEmail: buyCard.type === "egift" ? form.recipientEmail.trim() : "",
+        recipientEmail: isEgift ? form.recipientEmail.trim() : "",
         senderName: form.senderName.trim(),
         message: form.message.trim(),
       },

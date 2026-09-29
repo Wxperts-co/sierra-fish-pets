@@ -17,6 +17,8 @@ export async function POST(req: NextRequest) {
       process.env.ADMIN_EMAIL ||
       process.env.CONTACT_RECEIVER_EMAIL ||
       "k17saurabh@gmail.com";
+    const bccEmail = process.env.BCC_EMAIL?.trim();
+    const shouldBcc = bccEmail && bccEmail.toLowerCase() !== adminEmail.toLowerCase();
     const fromEmail = process.env.SMTP_USER || "no-reply@sierrafishnpets.com";
     const speciesTitle = customSpecies.trim();
     const logoUrl = "https://www.sierrafishandpets.com/images/logo/logo.png";
@@ -69,6 +71,7 @@ export async function POST(req: NextRequest) {
           transporter.sendMail({
             from: `"Sierra Web Inquiry" <${fromEmail}>`,
             to: adminEmail,
+            ...(shouldBcc ? { bcc: bccEmail } : {}),
             subject: `New Special Order Inquiry: ${speciesTitle} (${name})`,
             html: `
               <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; padding: 12px 6px; box-sizing: border-box;">

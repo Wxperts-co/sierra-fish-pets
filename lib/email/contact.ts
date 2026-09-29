@@ -7,11 +7,16 @@ message: string;
 }
 
 export async function sendContactEmail(data: ContactEmailData) {
-await transporter.sendMail({
-from: process.env.SMTP_USER,
-to: process.env.CONTACT_RECEIVER_EMAIL,
-replyTo: data.email,
-subject: `📩 New Contact Inquiry from ${data.name}`,
+  const toEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER || "";
+  const bccEmail = process.env.BCC_EMAIL?.trim();
+  const shouldBcc = bccEmail && bccEmail.toLowerCase() !== toEmail.toLowerCase();
+
+  await transporter.sendMail({
+    from: process.env.SMTP_USER,
+    to: toEmail,
+    ...(shouldBcc ? { bcc: bccEmail } : {}),
+    replyTo: data.email,
+    subject: `📩 New Contact Inquiry from ${data.name}`,
 html: ` <div style="margin:0;padding:40px 0;background:#f4f8fc;font-family:Arial,Helvetica,sans-serif;"> <table width="100%" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="650" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e5edf5;">
 
 

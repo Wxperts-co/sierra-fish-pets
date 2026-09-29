@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { removeFromCart, updateQuantity, setFulfillmentMethod, applyCoupon, removeCoupon } from "@/store/slices/cartSlice";
-import { calculateCartShippingAndTax } from "@/lib/shippingAndTax";
+import { calculateCartShippingAndTax, isCartOnlyDigital } from "@/lib/shippingAndTax";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 import {
@@ -21,6 +21,7 @@ import {
   Truck,
   Store,
   Sparkles,
+  Gift,
 } from "lucide-react";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,6 +33,8 @@ export default function CartPage() {
   const { items, subtotal, discount, shipping, tax, total, fulfillmentMethod } = useAppSelector(
     (state) => state.cart
   );
+
+  const isDigitalOnly = useMemo(() => isCartOnlyDigital(items), [items]);
 
   const [couponCode, setCouponCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
@@ -265,58 +268,75 @@ export default function CartPage() {
                     Order Summary
                   </h2>
 
-                  {/* FREE SHIPPING GOAL PROGRESS BAR */}
-                  <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4 space-y-2">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-                      <span>
-                        {subtotal >= 125
-                          ? "🎉 FREE SHIPPING Unlocked!"
-                          : subtotal >= 75
-                          ? `Add $${(125 - subtotal).toFixed(2)} more for FREE SHIPPING`
-                          : `Add $${(75 - subtotal).toFixed(2)} to lower rate to $14.99`}
-                      </span>
-                      <span className="font-mono text-[10px] text-[#005AA9] font-black">
-                        {Math.min(100, Math.round((subtotal / 125) * 100))}%
-                      </span>
+                  {/* FREE SHIPPING GOAL PROGRESS BAR (Hidden for digital goods) */}
+                  {!isDigitalOnly && (
+                    <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                        <span>
+                          {subtotal >= 125
+                            ? "🎉 FREE SHIPPING Unlocked!"
+                            : subtotal >= 75
+                            ? `Add $${(125 - subtotal).toFixed(2)} more for FREE SHIPPING`
+                            : `Add $${(75 - subtotal).toFixed(2)} to lower rate to $14.99`}
+                        </span>
+                        <span className="font-mono text-[10px] text-[#005AA9] font-black">
+                          {Math.min(100, Math.round((subtotal / 125) * 100))}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#005AA9] rounded-full transition-all duration-300"
+                          style={{ width: `${Math.min(100, Math.round((subtotal / 125) * 100))}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#005AA9] rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min(100, Math.round((subtotal / 125) * 100))}%` }}
-                      />
-                    </div>
-                  </div>
+                  )}
 
-                  {/* FULFILLMENT TOGGLE */}
+                  {/* FULFILLMENT TOGGLE OR DIGITAL BADGE */}
                   <div className="space-y-2">
                     <label className="text-xs font-black text-slate-500 uppercase">Fulfillment Method</label>
-                    <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
-                      <button
-                        type="button"
-                        onClick={() => dispatch(setFulfillmentMethod("shipping"))}
-                        className={`py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
-                          fulfillmentMethod !== "pickup"
-                            ? "bg-white text-[#005AA9] shadow-sm"
-                            : "text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        <Truck className="w-3.5 h-3.5" />
-                        <span>Delivery</span>
-                      </button>
+                    {isDigitalOnly ? (
+                      <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold">
+                            <Gift className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-extrabold text-slate-800 block">⚡ Instant Digital Delivery</span>
+                            <span className="text-[11px] text-slate-500">Delivered directly via email</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">FREE</span>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+                        <button
+                          type="button"
+                          onClick={() => dispatch(setFulfillmentMethod("shipping"))}
+                          className={`py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+                            fulfillmentMethod !== "pickup"
+                              ? "bg-white text-[#005AA9] shadow-sm"
+                              : "text-slate-500 hover:text-slate-800"
+                          }`}
+                        >
+                          <Truck className="w-3.5 h-3.5" />
+                          <span>Delivery</span>
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => dispatch(setFulfillmentMethod("pickup"))}
-                        className={`py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
-                          fulfillmentMethod === "pickup"
-                            ? "bg-white text-emerald-700 shadow-sm"
-                            : "text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        <Store className="w-3.5 h-3.5" />
-                        <span>Store Pickup</span>
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={() => dispatch(setFulfillmentMethod("pickup"))}
+                          className={`py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+                            fulfillmentMethod === "pickup"
+                              ? "bg-white text-emerald-700 shadow-sm"
+                              : "text-slate-500 hover:text-slate-800"
+                          }`}
+                        >
+                          <Store className="w-3.5 h-3.5" />
+                          <span>Store Pickup</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* COST BREAKDOWN */}
@@ -335,14 +355,14 @@ export default function CartPage() {
                     )}
 
                     <div className="flex justify-between text-slate-600">
-                      <span>Shipping {fulfillmentMethod === "pickup" ? "(Pickup)" : ""}</span>
+                      <span>Shipping {isDigitalOnly ? "(Digital)" : fulfillmentMethod === "pickup" ? "(Pickup)" : ""}</span>
                       <span className="font-bold font-mono">
-                        {shipping === 0 ? "FREE" : formatPrice(shipping)}
+                        {isDigitalOnly || shipping === 0 ? "FREE" : formatPrice(shipping)}
                       </span>
                     </div>
 
                     <div className="flex justify-between text-slate-600">
-                      <span>Sales Tax (10.5%)</span>
+                      <span>Sales Tax {isDigitalOnly ? "(0%)" : "(10.5%)"}</span>
                       <span className="font-bold font-mono">{formatPrice(tax || 0)}</span>
                     </div>
 

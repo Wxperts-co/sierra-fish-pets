@@ -23,6 +23,7 @@ function SuccessPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const orderId = searchParams ? searchParams.get("id") : null;
+  const sessionId = searchParams ? searchParams.get("session_id") : null;
 
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<any>(null);
@@ -37,7 +38,10 @@ function SuccessPageContent() {
 
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get(`/api/orders?id=${orderId}`);
+        const queryUrl = sessionId
+          ? `/api/orders?id=${orderId}&session_id=${sessionId}`
+          : `/api/orders?id=${orderId}`;
+        const response = await axios.get(queryUrl);
         if (response.data.success) {
           setOrder(response.data.order);
         } else {
@@ -52,7 +56,7 @@ function SuccessPageContent() {
     };
 
     fetchOrderDetails();
-  }, [orderId]);
+  }, [orderId, sessionId]);
 
   const formatPrice = (amount: number) =>
     new Intl.NumberFormat("en-US", {
@@ -308,6 +312,12 @@ function SuccessPageContent() {
       <td class="text-right" style="color: #2f855a;">-${formatPrice(order.discount)}</td>
     </tr>
     ` : ""}
+    ${order.giftCardAmount > 0 ? `
+    <tr>
+      <td style="color: #005AA9;">Gift Card (${order.giftCardCode || "Applied"}):</td>
+      <td class="text-right" style="color: #005AA9;">-${formatPrice(order.giftCardAmount)}</td>
+    </tr>
+    ` : ""}
     <tr>
       <td>Shipping:</td>
       <td class="text-right">${order.shippingCost === 0 ? "FREE" : formatPrice(order.shippingCost)}</td>
@@ -479,6 +489,12 @@ function SuccessPageContent() {
                 <div className="flex justify-between text-emerald-600 font-bold">
                   <span>Discount {order.couponCode ? `(${order.couponCode})` : ""}</span>
                   <span className="font-mono">-{formatPrice(order.discount)}</span>
+                </div>
+              )}
+              {order.giftCardAmount > 0 && (
+                <div className="flex justify-between text-blue-600 font-bold">
+                  <span>Gift Card {order.giftCardCode ? `(${order.giftCardCode})` : ""}</span>
+                  <span className="font-mono">-{formatPrice(order.giftCardAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between">

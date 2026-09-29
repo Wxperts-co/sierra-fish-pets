@@ -23,6 +23,7 @@ import {
   Sparkles,
   Info,
   Check,
+  Gift,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { clearCart, setFulfillmentMethod, applyCoupon as applyReduxCoupon, removeCoupon as removeReduxCoupon } from "@/store/slices/cartSlice";
@@ -35,6 +36,8 @@ import {
   isLivePlantProduct,
   isPickupOnlyProduct,
   isAquaDreamProduct,
+  isDigitalProduct,
+  isCartOnlyDigital,
 } from "@/lib/shippingAndTax";
 
 export default function CheckoutPage() {
@@ -130,19 +133,21 @@ export default function CheckoutPage() {
       }
     } else {
       // Guest user
-      setShippingDetails({
-        email: "",
-        fullName: "",
-        phone: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        country: "United States",
-      });
+      const giftCardSender = items.find((it) => (it.product as any)?.giftCardDetails?.senderName)?.product as any;
+      const autoSenderName = giftCardSender?.giftCardDetails?.senderName || "";
+      setShippingDetails((prev) => ({
+        email: prev.email || "",
+        fullName: prev.fullName || autoSenderName,
+        phone: prev.phone || "",
+        address: prev.address || "",
+        city: prev.city || "",
+        state: prev.state || "",
+        zipCode: prev.zipCode || "",
+        country: prev.country || "United States",
+      }));
       setUseCustomAddress(true);
     }
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, items]);
 
   // Handle Saved Address Selection
   const handleSelectSavedAddress = (id: string) => {
@@ -177,7 +182,13 @@ export default function CheckoutPage() {
   const validateShippingForm = () => {
     const { email, fullName, phone, address, city, state, zipCode, country } = shippingDetails;
     if (!email || !email.trim() || !/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
-    if (!fullName.trim()) return "Please enter full name.";
+    if (!fullName.trim()) return "Please enter your full name.";
+
+    // If cart only contains digital goods (e-Gift Cards), physical address is not required
+    if (shippingAndTaxResult.isDigitalOnly) {
+      return null;
+    }
+
     if (!phone.trim()) return "Please enter phone number.";
 
     // If shipping, validate street address and continental US restriction
@@ -292,30 +303,32 @@ export default function CheckoutPage() {
 
     setLoading(true);
     try {
+      const isDigitalOnly = shippingAndTaxResult.isDigitalOnly;
+
       const orderPayload = {
         items,
         shippingAddress: {
-          fullName: shippingDetails.fullName,
-          phone: shippingDetails.phone,
-          addressLine1: shippingDetails.address,
+          fullName: shippingDetails.fullName.trim(),
+          phone: (shippingDetails.phone || "N/A").trim(),
+          addressLine1: isDigitalOnly ? "Digital Delivery" : (shippingDetails.address || "").trim(),
           addressLine2: "",
-          city: shippingDetails.city,
-          state: shippingDetails.state,
-          zipCode: shippingDetails.zipCode,
-          country: shippingDetails.country,
+          city: isDigitalOnly ? "Digital" : (shippingDetails.city || "").trim(),
+          state: isDigitalOnly ? "WA" : (shippingDetails.state || "").trim(),
+          zipCode: isDigitalOnly ? "98057" : (shippingDetails.zipCode || "").trim(),
+          country: (shippingDetails.country || "United States").trim(),
         },
         paymentMethod: paymentMethod === "credit_card" ? "credit_card" : paymentMethod === "paypal" ? "paypal" : "cash_on_delivery",
-        fulfillmentMethod: cartFulfillmentMethod,
+        fulfillmentMethod: isDigitalOnly ? "digital" : cartFulfillmentMethod,
         subtotal,
-        discount: initialDiscount + couponDiscount + giftCardDiscount,
+        discount: initialDiscount + couponDiscount,
         shippingCost: calculatedShippingCost,
         tax: calculatedTaxAmount,
         total: finalTotal,
         couponCode: appliedCoupon || undefined,
         giftCardCode: appliedGiftCard || undefined,
         notes: orderNotes || undefined,
-        guestEmail: shippingDetails.email,
-        guestPhone: shippingDetails.phone,
+        guestEmail: shippingDetails.email.trim(),
+        guestPhone: shippingDetails.phone?.trim() || undefined,
       };
 
       const response = await axios.post("/api/orders", orderPayload);
@@ -407,7 +420,7 @@ export default function CheckoutPage() {
               <div>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Step 1</p>
                 <p className={`text-sm font-black ${step === "shipping" ? "text-[#005AA9]" : "text-slate-800"}`}>
-                  Address
+                  {shippingAndTaxResult.isDigitalOnly ? "Contact Info" : "Address"}
                 </p>
               </div>
             </div>
@@ -463,7 +476,7 @@ export default function CheckoutPage() {
           <div className="lg:col-span-8 space-y-6">
             <AnimatePresence mode="wait">
 
-              {/* STEP 1: SHIPPING DETAILS */}
+              {/* STEP 1: SHIPPING DETAILS / CONTACT DETAILS */}
               {step === "shipping" && (
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -474,92 +487,126 @@ export default function CheckoutPage() {
                 >
                   <div className="border-b border-slate-50 pb-4">
                     <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
-                      <Truck className="w-5 h-5 text-[#005AA9]" />
-                      Order Fulfillment Method
+                      {shippingAndTaxResult.isDigitalOnly ? (
+                        <>
+                          <Gift className="w-5 h-5 text-[#005AA9]" />
+                          Customer &amp; Contact Information
+                        </>
+                      ) : (
+                        <>
+                          <Truck className="w-5 h-5 text-[#005AA9]" />
+                          Order Fulfillment Method
+                        </>
+                      )}
                     </h2>
-                    <p className="text-xs text-slate-500 mt-1">Choose how you would like to receive your order.</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {shippingAndTaxResult.isDigitalOnly
+                        ? "Your digital e-gift card will be delivered directly via email. Please provide your contact details for the order receipt."
+                        : "Choose how you would like to receive your order."}
+                    </p>
                   </div>
 
-                  {/* FULFILLMENT SELECTOR */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Home Delivery */}
-                    <div
-                      onClick={() => {
-                        if (shippingAndTaxResult.hasPickupOnlyItems) {
-                          showErrorToast("Your cart contains Pickup Only items (Fish Tanks / UNS Aquariums). Store Pickup is required.");
-                          return;
-                        }
-                        dispatch(setFulfillmentMethod("shipping"));
-                      }}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
-                        cartFulfillmentMethod === "shipping"
-                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                          : shippingAndTaxResult.hasPickupOnlyItems
-                          ? "border-slate-200 bg-slate-100 opacity-60 cursor-not-allowed"
-                          : "border-slate-200 bg-white hover:border-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-[#005AA9]/10 text-[#005AA9] uppercase">
-                          🚚 Standard Freight Delivery
-                        </span>
-                        {cartFulfillmentMethod === "shipping" && (
-                          <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
-                            <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                  {/* FULFILLMENT SELECTOR (Or Digital Badge) */}
+                  {shippingAndTaxResult.isDigitalOnly ? (
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4.5 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-sm">
+                          <Gift className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white uppercase tracking-wider">
+                              ⚡ Instant Digital Delivery
+                            </span>
                           </div>
+                          <p className="font-extrabold text-slate-800 text-sm mt-0.5">E-Gift Card Delivery via Email</p>
+                          <p className="text-xs text-slate-500 mt-0.5 font-medium">No physical shipping required • Delivery Fee: FREE ($0.00)</p>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center">
+                        <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Home Delivery */}
+                      <div
+                        onClick={() => {
+                          if (shippingAndTaxResult.hasPickupOnlyItems) {
+                            showErrorToast("Your cart contains Pickup Only items (Fish Tanks / UNS Aquariums). Store Pickup is required.");
+                            return;
+                          }
+                          dispatch(setFulfillmentMethod("shipping"));
+                        }}
+                        className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
+                          cartFulfillmentMethod === "shipping"
+                            ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                            : shippingAndTaxResult.hasPickupOnlyItems
+                            ? "border-slate-200 bg-slate-100 opacity-60 cursor-not-allowed"
+                            : "border-slate-200 bg-white hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-[#005AA9]/10 text-[#005AA9] uppercase">
+                            🚚 Standard Freight Delivery
+                          </span>
+                          {cartFulfillmentMethod === "shipping" && (
+                            <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
+                              <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="font-extrabold text-slate-800 text-sm">Ship to Continental US</p>
+                        <p className="text-xs text-slate-500 mt-1 font-medium">
+                          {shippingAndTaxResult.shippingTierLabel}
+                        </p>
+                        {shippingAndTaxResult.hasPickupOnlyItems && (
+                          <p className="text-[11px] text-amber-600 font-bold mt-2">
+                            ⚠️ Contains items for Store Pickup Only
+                          </p>
                         )}
                       </div>
-                      <p className="font-extrabold text-slate-800 text-sm">Ship to Continental US</p>
-                      <p className="text-xs text-slate-500 mt-1 font-medium">
-                        {shippingAndTaxResult.shippingTierLabel}
-                      </p>
-                      {shippingAndTaxResult.hasPickupOnlyItems && (
-                        <p className="text-[11px] text-amber-600 font-bold mt-2">
-                          ⚠️ Contains items for Store Pickup Only
-                        </p>
-                      )}
-                    </div>
 
-                    {/* Store Pickup */}
-                    <div
-                      onClick={() => {
-                        if (shippingAndTaxResult.hasDropShipOnlyItems) {
-                          showErrorToast("AquaDREAM tanks are drop-shipped direct from manufacturer and will be shipped to your address.");
-                        }
-                        dispatch(setFulfillmentMethod("pickup"));
-                      }}
-                      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
-                        cartFulfillmentMethod === "pickup"
-                          ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
-                          : "border-slate-200 bg-white hover:border-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-700 uppercase">
-                          🏪 Pick Up In Store (FREE)
-                        </span>
-                        {cartFulfillmentMethod === "pickup" && (
-                          <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
-                            <Check className="w-3.5 h-3.5 stroke-[3px]" />
-                          </div>
+                      {/* Store Pickup */}
+                      <div
+                        onClick={() => {
+                          if (shippingAndTaxResult.hasDropShipOnlyItems) {
+                            showErrorToast("AquaDREAM tanks are drop-shipped direct from manufacturer and will be shipped to your address.");
+                          }
+                          dispatch(setFulfillmentMethod("pickup"));
+                        }}
+                        className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 relative ${
+                          cartFulfillmentMethod === "pickup"
+                            ? "border-[#005AA9] bg-blue-50/20 ring-2 ring-blue-500/10"
+                            : "border-slate-200 bg-white hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-700 uppercase">
+                            🏪 Pick Up In Store (FREE)
+                          </span>
+                          {cartFulfillmentMethod === "pickup" && (
+                            <div className="w-5 h-5 bg-[#005AA9] text-white rounded-full flex items-center justify-center">
+                              <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="font-extrabold text-slate-800 text-sm">Sierra Fish & Pets Store</p>
+                        <p className="text-xs text-slate-500 mt-1 font-medium">
+                          Renton, WA • 10.5% Tax Calculated
+                        </p>
+                        {shippingAndTaxResult.hasDropShipOnlyItems && (
+                          <p className="text-[11px] text-blue-600 font-bold mt-2">
+                            ℹ️ AquaDREAM tanks drop-ship direct from manufacturer
+                          </p>
                         )}
                       </div>
-                      <p className="font-extrabold text-slate-800 text-sm">Sierra Fish & Pets Store</p>
-                      <p className="text-xs text-slate-500 mt-1 font-medium">
-                        Renton, WA • 10.5% Tax Calculated
-                      </p>
-                      {shippingAndTaxResult.hasDropShipOnlyItems && (
-                        <p className="text-[11px] text-blue-600 font-bold mt-2">
-                          ℹ️ AquaDREAM tanks drop-ship direct from manufacturer
-                        </p>
-                      )}
                     </div>
-                  </div>
+                  )}
 
                   {/* LIVE PLANTS NOTICE */}
-                  {shippingAndTaxResult.hasLivePlants && (
+                  {!shippingAndTaxResult.isDigitalOnly && shippingAndTaxResult.hasLivePlants && (
                     <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs font-semibold text-amber-900">
-                     
                       <div>
                         <p className="font-extrabold text-amber-900">🌱 Live Plants Shipping Requirement</p>
                         <p className="text-amber-800 text-[12px] mt-0.5 leading-relaxed">
@@ -570,7 +617,7 @@ export default function CheckoutPage() {
                   )}
 
                   {/* SAVED ADDRESS SELECTOR */}
-                  {isAuthenticated && user && user.addresses && user.addresses.length > 0 && (
+                  {!shippingAndTaxResult.isDigitalOnly && isAuthenticated && user && user.addresses && user.addresses.length > 0 && (
                     <div className="space-y-4">
                       <p className="text-sm font-bold text-slate-700">Choose from Saved Addresses</p>
 
@@ -664,15 +711,19 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
-                  {/* FORM FIELDS (only editable when useCustomAddress is true, or if guest checkout) */}
+                  {/* FORM FIELDS */}
                   {useCustomAddress && (
                     <div className="space-y-4 pt-2">
-                      <p className="text-sm font-bold text-slate-700">Enter Shipping Address Details</p>
+                      <p className="text-sm font-bold text-slate-700">
+                        {shippingAndTaxResult.isDigitalOnly ? "Enter Contact Information" : "Enter Shipping Address Details"}
+                      </p>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Email Address */}
                         <div className="space-y-1 md:col-span-2">
-                          <label className="text-xs font-extrabold text-slate-500 uppercase">Email Address</label>
+                          <label className="text-xs font-extrabold text-slate-500 uppercase">
+                            Email Address {shippingAndTaxResult.isDigitalOnly && <span className="text-[#005AA9] font-semibold">(For Order Receipt)</span>}
+                          </label>
                           <input
                             type="email"
                             value={shippingDetails.email}
@@ -685,8 +736,10 @@ export default function CheckoutPage() {
                         </div>
 
                         {/* Name */}
-                        <div className="space-y-1">
-                          <label className="text-xs font-extrabold text-slate-500 uppercase">Recipient Name</label>
+                        <div className={`space-y-1 ${shippingAndTaxResult.isDigitalOnly ? "md:col-span-2" : ""}`}>
+                          <label className="text-xs font-extrabold text-slate-500 uppercase">
+                            {shippingAndTaxResult.isDigitalOnly ? "Your Full Name" : "Recipient Name"}
+                          </label>
                           <div className="relative">
                             <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input
@@ -699,9 +752,11 @@ export default function CheckoutPage() {
                           </div>
                         </div>
 
-                        {/* Phone */}
-                        <div className="space-y-1">
-                          <label className="text-xs font-extrabold text-slate-500 uppercase">Phone Number</label>
+                        {/* Phone (Optional for digital orders) */}
+                        <div className={`space-y-1 ${shippingAndTaxResult.isDigitalOnly ? "md:col-span-2" : ""}`}>
+                          <label className="text-xs font-extrabold text-slate-500 uppercase">
+                            Phone Number {shippingAndTaxResult.isDigitalOnly && <span className="text-slate-400 font-normal lowercase">(optional)</span>}
+                          </label>
                           <div className="relative">
                             <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input
@@ -714,56 +769,61 @@ export default function CheckoutPage() {
                           </div>
                         </div>
 
-                        {/* Address */}
-                        <div className="space-y-1 md:col-span-2">
-                          <label className="text-xs font-extrabold text-slate-500 uppercase">Street Address</label>
-                          <div className="relative">
-                            <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                            <input
-                              type="text"
-                              value={shippingDetails.address}
-                              onChange={(e) => setShippingDetails({ ...shippingDetails, address: e.target.value })}
-                              placeholder="e.g. 123 Main Street, Apt 4B"
-                              className="w-full border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
-                            />
-                          </div>
-                        </div>
+                        {/* Physical Address Fields - Hidden for digital e-gift cards */}
+                        {!shippingAndTaxResult.isDigitalOnly && (
+                          <>
+                            {/* Address */}
+                            <div className="space-y-1 md:col-span-2">
+                              <label className="text-xs font-extrabold text-slate-500 uppercase">Street Address</label>
+                              <div className="relative">
+                                <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                <input
+                                  type="text"
+                                  value={shippingDetails.address}
+                                  onChange={(e) => setShippingDetails({ ...shippingDetails, address: e.target.value })}
+                                  placeholder="e.g. 123 Main Street, Apt 4B"
+                                  className="w-full border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
+                                />
+                              </div>
+                            </div>
 
-                        {/* City */}
-                        <div className="space-y-1">
-                          <label className="text-xs font-extrabold text-slate-500 uppercase">City</label>
-                          <input
-                            type="text"
-                            value={shippingDetails.city}
-                            onChange={(e) => setShippingDetails({ ...shippingDetails, city: e.target.value })}
-                            placeholder="e.g. Renton"
-                            className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
-                          />
-                        </div>
+                            {/* City */}
+                            <div className="space-y-1">
+                              <label className="text-xs font-extrabold text-slate-500 uppercase">City</label>
+                              <input
+                                type="text"
+                                value={shippingDetails.city}
+                                onChange={(e) => setShippingDetails({ ...shippingDetails, city: e.target.value })}
+                                placeholder="e.g. Renton"
+                                className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
+                              />
+                            </div>
 
-                        {/* State & Pincode Grid */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <label className="text-xs font-extrabold text-slate-500 uppercase">State</label>
-                            <input
-                              type="text"
-                              value={shippingDetails.state}
-                              onChange={(e) => setShippingDetails({ ...shippingDetails, state: e.target.value })}
-                              placeholder="e.g. WA"
-                              className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-xs font-extrabold text-slate-500 uppercase">Pincode</label>
-                            <input
-                              type="text"
-                              value={shippingDetails.zipCode}
-                              onChange={(e) => setShippingDetails({ ...shippingDetails, zipCode: e.target.value })}
-                              placeholder="e.g. 98057"
-                              className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
-                            />
-                          </div>
-                        </div>
+                            {/* State & Pincode Grid */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                <label className="text-xs font-extrabold text-slate-500 uppercase">State</label>
+                                <input
+                                  type="text"
+                                  value={shippingDetails.state}
+                                  onChange={(e) => setShippingDetails({ ...shippingDetails, state: e.target.value })}
+                                  placeholder="e.g. WA"
+                                  className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-xs font-extrabold text-slate-500 uppercase">Pincode</label>
+                                <input
+                                  type="text"
+                                  value={shippingDetails.zipCode}
+                                  onChange={(e) => setShippingDetails({ ...shippingDetails, zipCode: e.target.value })}
+                                  placeholder="e.g. 98057"
+                                  className="w-full border border-slate-200 px-4 py-3 rounded-xl outline-none focus:border-[#005AA9] focus:ring-1 focus:ring-blue-100 transition-all font-semibold text-slate-800 text-sm placeholder:text-slate-400"
+                                />
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   )}
@@ -936,15 +996,34 @@ export default function CheckoutPage() {
                     {/* Delivery summary */}
                     <div className="space-y-3 bg-slate-50/50 p-5 rounded-2xl border border-slate-100">
                       <h4 className="font-extrabold text-sm text-slate-700 flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-slate-400" />
-                        <span>Shipping Destination</span>
+                        {shippingAndTaxResult.isDigitalOnly ? (
+                          <>
+                            <Gift className="w-4 h-4 text-[#005AA9]" />
+                            <span>Digital Delivery Details</span>
+                          </>
+                        ) : (
+                          <>
+                            <MapPin className="w-4 h-4 text-slate-400" />
+                            <span>Shipping Destination</span>
+                          </>
+                        )}
                       </h4>
                       <div className="text-xs text-slate-600 font-semibold space-y-1">
                         <p className="font-extrabold text-slate-800">{shippingDetails.fullName}</p>
-                        <p>{shippingDetails.address}</p>
-                        <p>{shippingDetails.city}, {shippingDetails.state} {shippingDetails.zipCode}</p>
-                        <p className="text-slate-400">{shippingDetails.country}</p>
-                        <p className="pt-2 font-bold text-slate-700">Phone: {shippingDetails.phone}</p>
+                        {shippingAndTaxResult.isDigitalOnly ? (
+                          <>
+                            <p className="text-[#005AA9]">Order Receipt: {shippingDetails.email}</p>
+                            {shippingDetails.phone && <p className="text-slate-500">Phone: {shippingDetails.phone}</p>}
+                            <p className="pt-2 text-emerald-700 font-bold">⚡ Delivery: Instant Digital E-Gift Card via Email (FREE)</p>
+                          </>
+                        ) : (
+                          <>
+                            <p>{shippingDetails.address}</p>
+                            <p>{shippingDetails.city}, {shippingDetails.state} {shippingDetails.zipCode}</p>
+                            <p className="text-slate-400">{shippingDetails.country}</p>
+                            <p className="pt-2 font-bold text-slate-700">Phone: {shippingDetails.phone}</p>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

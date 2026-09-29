@@ -26,9 +26,10 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
+    const sessionId = searchParams.get("session_id");
 
     if (id) {
-      const order = await OrderModel.findById(id).lean();
+      let order: any = await OrderModel.findById(id);
       if (!order) {
         return NextResponse.json(
           { success: false, message: "Order not found." },
@@ -36,28 +37,27 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      // Security check: if order belongs to a user, enforce verification
-      if (order.userId) {
-        const token = req.cookies.get("token")?.value;
-        if (!token) {
-          return NextResponse.json(
-            { success: false, message: "Authentication required." },
-            { status: 401 }
-          );
-        }
+      // If order payment is pending on Stripe, verify with Stripe and fulfill if paid
+      if (order.paymentStatus === "pending" && order.paymentMethod !== "cash_on_delivery") {
         try {
-          const decoded: any = jwt.verify(token, JWT_SECRET);
-          if (order.userId !== decoded.id) {
-            return NextResponse.json(
-              { success: false, message: "Access denied." },
-              { status: 403 }
-            );
+          const targetSessionId = sessionId || order.stripeSessionId;
+          let isPaid = false;
+          if (targetSessionId) {
+            const session = await stripe.checkout.sessions.retrieve(targetSessionId);
+            if (session.payment_status === "paid" || session.status === "complete") {
+              isPaid = true;
+            }
           }
-        } catch (err) {
-          return NextResponse.json(
-            { success: false, message: "Invalid session." },
-            { status: 401 }
-          );
+
+          if (isPaid) {
+            const { fulfillOrder } = await import("@/lib/services/orderFulfillmentService");
+            const fulfilled: any = await fulfillOrder(order);
+            if (fulfilled) {
+              order = fulfilled;
+            }
+          }
+        } catch (verifyErr) {
+          console.error("Error auto-verifying Stripe payment on GET /api/orders:", verifyErr);
         }
       }
 
@@ -214,12 +214,19 @@ export async function POST(req: NextRequest) {
           );
         });
 
-        if (!addressExists) {
+        const hasRealStreetAddress = Boolean(
+          shippingAddress.addressLine1 &&
+          shippingAddress.addressLine1 !== "Digital Delivery" &&
+          shippingAddress.city &&
+          shippingAddress.city !== "Digital"
+        );
+
+        if (!addressExists && hasRealStreetAddress) {
           const isDefault = userObj.addresses.length === 0;
           const newAddr = {
             id: new mongoose.Types.ObjectId().toString(),
             fullName: shippingAddress.fullName.trim(),
-            phone: shippingAddress.phone.trim(),
+            phone: (shippingAddress.phone || userObj.phone || "").trim(),
             address: (shippingAddress.addressLine1 || shippingAddress.address).trim(),
             city: shippingAddress.city.trim(),
             state: shippingAddress.state.trim(),
@@ -275,14 +282,14 @@ export async function POST(req: NextRequest) {
 
     // Map cart items format to OrderItem schema format
     const orderItems = items.map((item: any) => ({
-      productId: item.product.id || item.product._id,
-      productName: item.product.name,
-      productImage: item.product.images?.[0] || "/images/placeholder.png",
-      sku: item.product.sku || "N/A",
+      productId: item.product?.id || item.product?._id || item.productId || item._id,
+      productName: item.product?.name || item.productName || item.name || "Product",
+      productImage: item.product?.images?.[0] || item.productImage || item.image || "/images/placeholder.png",
+      sku: item.product?.sku || item.sku || "N/A",
       quantity: item.quantity,
-      unitPrice: item.product.price,
-      totalPrice: item.product.price * item.quantity,
-      giftCardDetails: item.product.giftCardDetails || undefined,
+      unitPrice: item.product?.price ?? item.unitPrice ?? item.price ?? 0,
+      totalPrice: (item.product?.price ?? item.unitPrice ?? item.price ?? 0) * item.quantity,
+      giftCardDetails: item.product?.giftCardDetails || item.giftCardDetails || undefined,
     }));
 
     const paymentStatus = paymentMethod === "cash_on_delivery" ? "pending" : "pending";
@@ -301,11 +308,13 @@ export async function POST(req: NextRequest) {
       if (giftCardInst && giftCardInst.isActive && giftCardInst.currentBalance > 0) {
         if (!giftCardInst.expiryDate || new Date(giftCardInst.expiryDate) >= new Date()) {
           appliedGiftCardCode = cleanCode;
-          const remainingAmountToPay = Math.max(0, subtotal - discount + shippingCost);
+          const remainingAmountToPay = Math.max(0, subtotal - discount + shippingCost + (tax || 0));
           appliedGiftCardAmount = Math.min(giftCardInst.currentBalance, remainingAmountToPay);
         }
       }
     }
+
+    const calculatedTotal = Math.max(0, subtotal - (discount || 0) - appliedGiftCardAmount + shippingCost + (tax || 0));
 
     const orderData = {
       userId,
@@ -327,11 +336,11 @@ export async function POST(req: NextRequest) {
       paymentStatus: paymentStatus as "pending" | "paid" | "failed" | "refunded",
       paymentMethod: paymentMethod as "credit_card" | "debit_card" | "paypal" | "cash_on_delivery",
       subtotal,
-      discount: discount + appliedGiftCardAmount,
+      discount: discount || 0,
       shippingCost,
       tax: tax || 0,
       fulfillmentMethod: fulfillmentMethod || "shipping",
-      total: Math.max(0, subtotal - (discount + appliedGiftCardAmount) + shippingCost + (tax || 0)),
+      total: calculatedTotal,
       couponCode: couponCode || undefined,
       giftCardCode: appliedGiftCardCode,
       giftCardAmount: appliedGiftCardAmount,
@@ -342,7 +351,8 @@ export async function POST(req: NextRequest) {
     // Verify and deduct stock
     const productsToUpdate = [];
     for (const item of items) {
-      const productId = item.product._id || item.product.id;
+      const productId = item.product?._id || item.product?.id || item.productId || item._id;
+      if (!productId) continue;
       let cleanId = productId;
       if (productId.startsWith("giftcard-")) {
         const parts = productId.split("-");
@@ -370,6 +380,16 @@ export async function POST(req: NextRequest) {
       }
 
       if (!product) {
+        // If it's a gift card, skip stock checks/deductions
+        if (
+          cleanId.startsWith("giftcard-") ||
+          cleanId.startsWith("gift-card") ||
+          item.giftCardDetails ||
+          item.product?.giftCardDetails
+        ) {
+          continue;
+        }
+
         // Check if it exists in GiftCardModel (as gift cards do not use physical stock)
         let giftCard = null;
         if (mongoose.Types.ObjectId.isValid(cleanId)) {
@@ -385,7 +405,7 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json(
-          { success: false, message: `Product "${item.product.name}" not found.` },
+          { success: false, message: `Product "${item.product?.name || item.productName || item.name || "Unknown"}" not found.` },
           { status: 404 }
         );
       }
@@ -461,7 +481,7 @@ export async function POST(req: NextRequest) {
           line_items: lineItems,
           mode: "payment",
           customer_email: finalGuestEmail.toLowerCase().trim(),
-          success_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/order-success?id=${newOrder._id.toString()}`,
+          success_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/order-success?id=${newOrder._id.toString()}&session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${process.env.NEXTAUTH_URL?.replace(/\/$/, "")}/api/orders/cancel?orderId=${newOrder._id.toString()}&session_id={CHECKOUT_SESSION_ID}`,
           expires_at: Math.floor(Date.now() / 1000) + 31 * 60, // Expire in 31 minutes
           metadata: {
@@ -470,10 +490,11 @@ export async function POST(req: NextRequest) {
           },
         }
 
-        // Apply Coupon dynamic discount if exists
-        if (discount > 0) {
+        // Apply Coupon + Gift Card combined discount if exists
+        const totalDiscountForStripe = (discount || 0) + (appliedGiftCardAmount || 0);
+        if (totalDiscountForStripe > 0) {
           const coupon = await stripe.coupons.create({
-            amount_off: Math.round(discount * 100),
+            amount_off: Math.round(totalDiscountForStripe * 100),
             currency: "usd",
             duration: "once",
           });
@@ -481,6 +502,10 @@ export async function POST(req: NextRequest) {
         }
 
         const session = await stripe.checkout.sessions.create(sessionPayload);
+
+        // Save Stripe session ID to order for verification upon redirect
+        newOrder.stripeSessionId = session.id;
+        await newOrder.save();
 
         return NextResponse.json({
           success: true,
@@ -504,49 +529,11 @@ export async function POST(req: NextRequest) {
     // For Cash on Delivery (immediate processing tasks):
     if (paymentMethod === "cash_on_delivery") {
       after(async () => {
-        // 1. Deduct applied gift card balance
-        if (newOrder.giftCardCode && newOrder.giftCardAmount && newOrder.giftCardAmount > 0) {
-          try {
-            const giftCardInst = await GiftCardInstanceModel.findOne({ code: newOrder.giftCardCode });
-            if (giftCardInst) {
-              giftCardInst.currentBalance = Math.max(0, giftCardInst.currentBalance - newOrder.giftCardAmount);
-              if (giftCardInst.currentBalance === 0) {
-                giftCardInst.isActive = false;
-              }
-              await giftCardInst.save();
-              console.log(`[COD Order] Deducted $${newOrder.giftCardAmount} from Gift Card ${newOrder.giftCardCode}`);
-            }
-          } catch (err) {
-            console.error("Failed to deduct gift card balance during COD placement:", err);
-          }
-        }
-
-        // 2. Generate newly purchased gift cards if any
         try {
-          const { generateGiftCardsForOrder } = await import("@/lib/services/giftCardService");
-          await generateGiftCardsForOrder(newOrder);
-        } catch (gcGenErr) {
-          console.error("Failed to generate gift cards for COD order:", gcGenErr);
-        }
-
-        // 3. Generate Invoice
-        try {
-          const { generateInvoicePDF } = await import("@/lib/services/invoiceService");
-          const relativeInvoiceUrl = await generateInvoicePDF(newOrder);
-
-          newOrder.invoiceUrl = relativeInvoiceUrl;
-          newOrder.invoiceGeneratedAt = new Date();
-          await newOrder.save();
-        } catch (pdfError) {
-          console.error("Failed to generate invoice during order placement:", pdfError);
-        }
-
-        // 4. Send confirmation email
-        try {
-          const { sendOrderConfirmationEmail } = await import("@/lib/services/emailService");
-          await sendOrderConfirmationEmail(newOrder);
-        } catch (mailError) {
-          console.error("Failed to send order confirmation email during placement:", mailError);
+          const { fulfillOrder } = await import("@/lib/services/orderFulfillmentService");
+          await fulfillOrder(newOrder);
+        } catch (fulfillErr) {
+          console.error("Failed to fulfill COD order:", fulfillErr);
         }
       });
     }

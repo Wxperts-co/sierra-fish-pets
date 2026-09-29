@@ -153,6 +153,15 @@ export async function sendOrderConfirmationEmail(order: IOrder) {
                     `
       : ""
     }
+                    ${order.giftCardAmount && order.giftCardAmount > 0
+      ? `
+                    <tr>
+                      <td style="padding: 6px 0; color: #005AA9;">Gift Card (${order.giftCardCode || "Applied"}):</td>
+                      <td style="padding: 6px 0; text-align: right; color: #005AA9;">-${formatPrice(order.giftCardAmount)}</td>
+                    </tr>
+                    `
+      : ""
+    }
                     <tr>
                       <td style="padding: 6px 0;">Shipping Charges:</td>
                       <td style="padding: 6px 0; text-align: right; color: #1a202c;">${order.shippingCost === 0 ? "FREE" : formatPrice(order.shippingCost)}</td>
@@ -332,12 +341,16 @@ export async function sendAdminNewOrderEmail(order: IOrder) {
   const attachments: any[] = [];
   if (logoAttachment) attachments.push(logoAttachment);
 
+  const bccEmail = process.env.BCC_EMAIL?.trim();
+  const shouldBcc = bccEmail && bccEmail.toLowerCase() !== adminEmail.toLowerCase();
+
   await transporter.sendMail({
     from: `"Sierra Fish & Pets" <${process.env.SMTP_USER}>`,
     to: adminEmail,
+    ...(shouldBcc ? { bcc: bccEmail } : {}),
     subject: `🔔 New Order Received #${order.orderNumber} - Sierra Fish & Pets`,
     html: emailHtml,
-     headers: {
+    headers: {
       "X-Entity-Ref-ID": order.orderNumber,
       "X-Priority": "1", // High priority
     },
