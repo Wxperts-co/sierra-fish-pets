@@ -264,7 +264,7 @@ export default function Footer() {
         </div>
 
         {/* ── Service Areas Quick Links ────────────────────────── */}
-        <div className="mt-8 pt-6 border-t border-slate-100 pb-4">
+        <div className="mt-4 pt-6 border-t border-slate-100">
           <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-xs">
             <span className="font-bold text-slate-700 whitespace-nowrap uppercase tracking-wider text-[11px]">
               Areas We Serve:
@@ -296,12 +296,32 @@ export default function Footer() {
       </div>
 
       {/* ── Bottom bar ─────────────────────────────────────────── */}
-      <div className="bg-slate-900">
-        <div className="container mx-auto flex flex-col items-center  justify-center gap-4 px-4 py-4 sm:flex-row">
-          <p className="text-[13px] text-slate-400">
-            © {new Date().getFullYear()} Sierra Fish &amp; Pets. All rights
+      <div className="bg-slate-900 border-t border-slate-800/60">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row">
+          <p className="text-[12px] sm:text-[15px] text-white text-center sm:text-left">
+            © {new Date().getFullYear()}&nbsp;Sierra Fish &amp; Pets. All rights
             reserved.
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-center sm:text-right">
+            <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-wider text-slate-200">
+              WEBSITE DEVELOPMENT | HOSTING | SEO | DIGITAL MARKETING
+            </span>
+            <a
+              href="https://wxperts.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
+              title="WXperts"
+            >
+              <Image
+                src="/images/logo/wxperts_powerdby.jpg"
+                alt="Powered by WXperts"
+                width={80}
+                height={28}
+                className="h-6 sm:h-7 w-auto object-contain"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
