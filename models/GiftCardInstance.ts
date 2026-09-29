@@ -37,7 +37,7 @@ const giftCardInstanceSchema = new mongoose.Schema<IGiftCardInstance>(
     },
     recipientEmail: {
       type: String,
-      required: [true, "Recipient email is required"],
+      default: "",
       lowercase: true,
       trim: true,
     },
@@ -75,6 +75,10 @@ const giftCardInstanceSchema = new mongoose.Schema<IGiftCardInstance>(
     versionKey: false,
   }
 );
+
+if (process.env.NODE_ENV !== "production" && mongoose.models && mongoose.models.GiftCardInstance) {
+  delete (mongoose.models as any).GiftCardInstance;
+}
 
 const GiftCardInstanceModel: Model<IGiftCardInstance> =
   mongoose.models.GiftCardInstance ||

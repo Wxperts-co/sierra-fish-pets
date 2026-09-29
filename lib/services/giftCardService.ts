@@ -9,8 +9,17 @@ export async function generateGiftCardsForOrder(order: IOrder) {
     return;
   }
 
+  const generatedList: any[] = [];
+
   for (const item of order.items) {
-    if (item.productId && (item.productId.startsWith("giftcard-") || (item.giftCardDetails && item.giftCardDetails.recipientEmail))) {
+    const isGiftCardItem = Boolean(
+      (item.productId && item.productId.startsWith("giftcard-")) ||
+      (item.sku && item.sku.startsWith("GC-")) ||
+      (item.productName && item.productName.toLowerCase().includes("gift card")) ||
+      item.giftCardDetails
+    );
+
+    if (isGiftCardItem) {
       const amount = item.unitPrice;
       const details = item.giftCardDetails;
 
@@ -23,7 +32,7 @@ export async function generateGiftCardsForOrder(order: IOrder) {
           code,
           initialBalance: amount,
           currentBalance: amount,
-          recipientEmail: details?.recipientEmail || order.guestEmail,
+          recipientEmail: details?.recipientEmail || "",
           recipientName: details?.recipientName || "Valued Customer",
           senderName: details?.senderName || "Friend",
           message: details?.message || "",
@@ -32,6 +41,17 @@ export async function generateGiftCardsForOrder(order: IOrder) {
         });
 
         await newGiftCard.save();
+        generatedList.push({
+          code: newGiftCard.code,
+          initialBalance: newGiftCard.initialBalance,
+          currentBalance: newGiftCard.currentBalance,
+          recipientName: newGiftCard.recipientName,
+          senderName: newGiftCard.senderName,
+          recipientEmail: newGiftCard.recipientEmail,
+          message: newGiftCard.message,
+          isActive: newGiftCard.isActive,
+        });
+
         console.log(`[GiftCardService] Generated Gift Card ${code} for order ${order.orderNumber}`);
 
         if (details?.recipientEmail) {
@@ -50,6 +70,15 @@ export async function generateGiftCardsForOrder(order: IOrder) {
           }
         }
       }
+    }
+  }
+
+  if (generatedList.length > 0) {
+    try {
+      order.generatedGiftCards = generatedList;
+      await order.save();
+    } catch (saveErr) {
+      console.error("[GiftCardService] Failed to attach generatedGiftCards to order:", saveErr);
     }
   }
 }

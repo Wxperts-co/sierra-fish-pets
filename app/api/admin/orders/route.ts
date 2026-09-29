@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import Stripe from "stripe";
 import { connectDB } from "@/lib/mongodb";
 import OrderModel from "@/models/Order";
@@ -92,6 +93,32 @@ export async function GET(request: NextRequest) {
       })
     );
 
+    // Fetch any generated gift cards for these orders (e.g. for traditional/physical or egift orders)
+    const orderIdStrings = orders.map((o) => o._id.toString());
+    const objectIds = orderIdStrings
+      .filter((id) => mongoose.Types.ObjectId.isValid(id))
+      .map((id) => new mongoose.Types.ObjectId(id));
+    const allQueryIds = Array.from(new Set([...orderIdStrings, ...objectIds]));
+
+    const { default: GiftCardInstanceModel } = await import("@/models/GiftCardInstance");
+    const giftCards = await GiftCardInstanceModel.find({
+      $or: [{ orderId: { $in: allQueryIds } }, { orderId: { $in: orderIdStrings } }],
+    }).lean();
+
+    const ordersWithGiftCards = orders.map((order) => {
+      const currentOrderIdStr = order._id.toString();
+      const matchingGCs = giftCards.filter(
+        (gc: any) => gc.orderId && gc.orderId.toString() === currentOrderIdStr
+      );
+      
+      const combinedGCs = (matchingGCs.length > 0 ? matchingGCs : (order.generatedGiftCards || []));
+
+      return {
+        ...order,
+        generatedGiftCards: combinedGCs,
+      };
+    });
+
     // Calculate status statistics for stats cards
     const [total, pending, processing, shipped, delivered, cancelled, totalUsers] = await Promise.all([
       OrderModel.countDocuments({}),
@@ -105,8 +132,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      count: orders.length,
-      orders,
+      count: ordersWithGiftCards.length,
+      orders: ordersWithGiftCards,
       stats: {
         total,
         pending,

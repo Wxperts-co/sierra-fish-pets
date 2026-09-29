@@ -57,6 +57,7 @@ export interface IOrder extends Document {
   invoiceUrl?: string;
   invoiceGeneratedAt?: Date;
   stripeSessionId?: string;
+  generatedGiftCards?: any[];
 }
 
 const orderItemSchema = new mongoose.Schema<IOrderItem>(
@@ -134,6 +135,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
     invoiceUrl: { type: String },
     invoiceGeneratedAt: { type: Date },
     stripeSessionId: { type: String },
+    generatedGiftCards: { type: Array, default: [] },
   },
   {
     timestamps: { createdAt: "placedAt", updatedAt: "updatedAt" },
