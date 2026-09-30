@@ -15,10 +15,17 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Aquarium Philosophy | Sierra Fish & Pets",
-  description: "Learn about our aquatic philosophy and mission at Sierra Fish & Pets.",
+  title: "Our Aquarium Philosophy | Sierra Fish & Pets Renton",
+  description:
+    "Discover Sierra Fish & Pets' natural ecological philosophy for healthy, thriving freshwater and saltwater aquariums in Renton, WA since 1972.",
+  keywords: [
+    "Aquarium Philosophy Renton",
+    "natural aquatic balance",
+    "ecological fish keeping",
+    "sustainable aquarium renton",
+  ],
   alternates: {
-    canonical: "https://www.sierrafishandpets.com/services/aquarium/aquarium-philosophy",
+    canonical: "https://sierrafishandpets.com/services/aquarium/aquarium-philosophy",
   },
 };
 

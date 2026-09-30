@@ -156,12 +156,12 @@ function renderContent(raw: string) {
       );
     } else if (t.startsWith("# ")) {
       elements.push(
-        <h1
+        <h2
           key={key++}
           className="text-3xl sm:text-4xl font-black text-[#002244] mt-4 mb-6 leading-tight"
         >
           {t.slice(2)}
-        </h1>,
+        </h2>,
       );
     } else {
       const parts = t.split(/(\*\*[^*]+\*\*)/g);

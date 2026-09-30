@@ -116,7 +116,7 @@ export default function HomeStorySection() {
               <span>Renton&apos;s Local Pet Institution</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-[28px] font-black text-[#002244] tracking-tight leading-tight mb-2">
-              Sierra Fish &amp; Pets: Renton&apos;s Premier Local Pet Store &amp; Custom Aquarium Specialists
+              Everything your pets deserves
             </h2>
             <p className="text-sm sm:text-base font-bold text-[#005AA9]">
               Aquariums Since the 1960s. A Store Since 1972.

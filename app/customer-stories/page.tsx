@@ -4,9 +4,9 @@ import CustomerStoriesClient from "@/components/customer-stories/CustomerStories
 import reviewsData from "@/data/reviews.json";
 
 export const metadata: Metadata = {
-  title: "Customer Stories & Community Reviews | Sierra Fish & Pets Renton, WA",
+  title: "Customer Stories & Reviews | Sierra Fish & Pets Renton",
   description:
-    "Explore heartfelt customer stories, real aquarium setups, and verified Google reviews from our Sierra Fish & Pets family in Renton, WA.",
+    "Explore heartfelt customer stories, aquarium setups, and verified Google reviews from our Sierra Fish & Pets community in Renton, WA.",
   keywords: [
     "sierra fish and pets customer stories",
     "pet store reviews renton wa",
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     "max-video-preview": -1,
   },
   openGraph: {
-    title: "Customer Stories & Community Reviews | Sierra Fish & Pets Renton, WA",
+    title: "Customer Stories & Reviews | Sierra Fish & Pets Renton",
     description:
-      "Explore heartfelt customer stories, real aquarium setups, and verified Google reviews from our Sierra Fish & Pets family in Renton, WA.",
+      "Explore heartfelt customer stories, aquarium setups, and verified Google reviews from our Sierra Fish & Pets community in Renton, WA.",
     url: "https://sierrafishandpets.com/customer-stories",
     siteName: "Sierra Fish & Pets",
     images: [
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Customer Stories & Community Reviews | Sierra Fish & Pets Renton, WA",
+    title: "Customer Stories & Reviews | Sierra Fish & Pets Renton",
     description:
-      "Explore heartfelt customer stories, real aquarium setups, and verified Google reviews from our Sierra Fish & Pets family in Renton, WA.",
+      "Explore heartfelt customer stories, aquarium setups, and verified Google reviews from our Sierra Fish & Pets community in Renton, WA.",
     images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };

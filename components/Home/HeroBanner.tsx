@@ -122,18 +122,22 @@ export default function HeroBanner() {
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#007CFF]/30 bg-[#E8F3FF] text-[#007CFF] text-sm font-bold mb-6 select-none">
                           <Bot className="w-4 h-4 text-[#007CFF]" />
-                          <span>Everything Your Pet Deserves</span>
+                          {index === 0 ? (
+                            <h1>Sierra Fish &amp; Pets: Renton&apos;s Premier Local Pet Store &amp; Custom Aquarium Specialists</h1>
+                          ) : (
+                            <span>Sierra Fish &amp; Pets: Renton&apos;s Premier Local Pet Store &amp; Custom Aquarium Specialists</span>
+                          )}
                           <Heart className="w-3.5 h-3.5 text-[#007CFF]" />
                         </div>
 
                         {/* Main Heading */}
-                        <h1 className="mb-6 text-5xl sm:text-6xl md:text-[68px] lg:text-[76px] font-extrabold tracking-tight text-[#032B53] leading-[1.05]">
+                        <p className="mb-6 text-5xl sm:text-6xl md:text-[68px] lg:text-[76px] font-extrabold tracking-tight text-[#032B53] leading-[1.05]">
                           Happy Pets, <br />
                           <span className="inline-flex items-center gap-2">
                             Happy Life
                             <PawPrint className="w-10 h-10 md:w-14 md:h-14 text-[#007CFF] fill-[#007CFF] shrink-0" />
                           </span>
-                        </h1>
+                        </p>
 
                         {/* Subheading */}
                         <p className="mb-8 text-base sm:text-lg font-medium text-slate-500 max-w-lg leading-relaxed">

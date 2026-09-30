@@ -19,9 +19,9 @@ const HomeStorySection = dynamic(() => import('@/components/Home/HomeStorySectio
 const InstagramGallery = dynamic(() => import('@/components/Home/InstagramGallery'))
 
 export const metadata: Metadata = {
-  title: "Sierra Fish and Pets| Buy Aquarium Fish Online| Pet Store near me",
-  description: "Sierra Fish and Pets are a leading online pet store in Renton, WA 98057 with a full line of pet food and supplies for dogs, cats, birds, fish, Reptile, and more. Our home aquarium services can help you get everything you need for all of your pets.",
-  keywords: "sierra fish and pets renton wa, custom aquarium installation and maintenance renton, local pet store near uwajimaya renton, exotic freshwater and saltwater fish shop renton wa, cichlids and rare fish store northern wa, full line dog cat reptile supplies renton, aquarium relocation and tank design services renton, online pet store, online pet shop, pet supplies, fish aquarium, dog food, pet shop, tropical fish, pet fish, pet food, freshwater fish, saltwater fish, aquarium supplies",
+  title: "Sierra Fish & Pets | Renton Pet Store & Aquariums WA",
+  description: "Shop premium pet supplies, tropical fish, dog & cat food, reptiles, and custom aquarium design & maintenance at Sierra Fish & Pets in Renton, WA.",
+  keywords: "sierra fish and pets, pet store renton wa, aquariums renton wa, tropical fish, pet supplies, dog food, cat food, aquarium maintenance, custom aquariums renton, freshwater fish, saltwater fish, reptile supplies, online pet store",
   verification: {
     google: "U957d8dOOMO1NW4G3BK4Ldw89GLbpaHpTxW94QDoDPY",
     other: {

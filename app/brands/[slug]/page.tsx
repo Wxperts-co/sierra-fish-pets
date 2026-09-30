@@ -34,9 +34,35 @@ export async function generateMetadata({
     return { title: "Brand Not Found | Sierra Fish & Pets" };
   }
 
+  const title = `${brand.name} Pet Supplies | Sierra Fish & Pets`.length <= 60
+    ? `${brand.name} Pet Supplies | Sierra Fish & Pets`
+    : `${brand.name} | Sierra Fish & Pets`;
+
+  const description = brand.description && brand.description.length <= 155
+    ? brand.description
+    : `Shop authentic ${brand.name} pet nutrition and supplies in Renton, WA with fast delivery and expert advice at Sierra Fish & Pets.`;
+
   return {
-    title: `${brand.name} | Brands | Sierra Fish & Pets`,
-    description: brand.description,
+    title,
+    description,
+    keywords: [
+      brand.name,
+      `${brand.name} pet supplies`,
+      `${brand.name} renton wa`,
+      "sierra fish and pets brands",
+    ],
+    alternates: {
+      canonical: `https://sierrafishandpets.com/brands/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://sierrafishandpets.com/brands/${slug}`,
+      siteName: "Sierra Fish & Pets",
+      images: [
+        brand.logo || "https://sierrafishandpets.com/images/banner/shophero3.png",
+      ],
+    },
   };
 }
 

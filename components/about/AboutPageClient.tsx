@@ -255,9 +255,9 @@ export default function AboutPageClient() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center justify-center"
           >
-            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
+            <span className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
               About Us
-            </h1>
+            </span>
 
             {/* Breadcrumb */}
             <nav
@@ -318,9 +318,9 @@ export default function AboutPageClient() {
               <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-2 block">
                 Who We Are
               </span>
-              <h2 className="text-2xl md:text-3xl lg:text-3xl font-extrabold text-[#002244] leading-tight mb-5">
+              <h1 className="text-2xl md:text-3xl lg:text-3xl font-extrabold text-[#002244] leading-tight mb-5">
                 About Sierra Fish &amp; Pets | Renton&apos;s Trusted Family-Owned Pet Store Since 1972
-              </h2>
+              </h1>
               <div className="space-y-2 text-justify text-slate-600 leading-relaxed md:text-[15px] text-xs">
                 <p>
                   Every pet store can tell you what&apos;s in stock – but not every pet store can tell you what happened here in 1972, when a single storefront in Renton, Washington, opened its doors with a few <Link href="/shop" className="text-[#005AA9] font-semibold hover:underline">aquariums</Link>, a lot of nerve, and no real idea it would still be standing more than fifty years later. But it is. And it&apos;s still family-owned, still local, and still run by people who&apos;d rather talk your ear off about water chemistry than rush you to the register. Sierra Fish &amp; Pets started small – the way most things worth keeping do. A handful of tanks, a shelf of dog food, and a founder who believed Renton deserved a pet store that actually knew its animals, not merely sold them. And that belief turned out to be the whole business plan.

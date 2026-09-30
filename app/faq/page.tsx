@@ -4,9 +4,9 @@ import FaqClient from "@/components/faq/FaqClient";
 import faqData from "@/data/faq.json";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
+  title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
   description:
-    "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, freshwater & saltwater fish arrivals, custom aquarium design, free water testing, pet grooming & nail trims, dog adoptions, and store hours.",
+    "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
   keywords: [
     "sierra fish and pets faq",
     "frequently asked questions pet store renton",
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     "max-video-preview": -1,
   },
   openGraph: {
-    title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
+    title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
     description:
-      "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, aquatic livestock, custom aquariums, water testing, grooming, and store hours.",
+      "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
     url: "https://sierrafishandpets.com/faq",
     siteName: "Sierra Fish & Pets",
     images: [
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
+    title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
     description:
-      "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Pet supplies, fish, custom aquariums, grooming, and store hours.",
+      "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
     images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
@@ -64,9 +64,9 @@ export default function FaqPage() {
         "@type": ["FAQPage", "WebPage"],
         "@id": "https://sierrafishandpets.com/faq#webpage",
         url: "https://sierrafishandpets.com/faq",
-        name: "Frequently Asked Questions (FAQ) | Sierra Fish & Pets Renton, WA",
+        name: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
         description:
-          "Find answers to frequently asked questions about Sierra Fish & Pets in Renton, WA. Learn about our pet supplies, freshwater & saltwater fish arrivals, custom aquarium design, free water testing, pet grooming & nail trims, dog adoptions, and store hours.",
+          "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
         isPartOf: {
           "@type": "WebSite",
           "@id": "https://sierrafishandpets.com/#website",

@@ -1,9 +1,7 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import type { Metadata } from "next";
 import {
   Droplets,
   ShieldCheck,
@@ -15,7 +13,104 @@ import {
   Info,
 } from "lucide-react";
 
+export const metadata: Metadata = {
+  title: "Aqua Jet Water Cleaning System | Sierra Fish & Pets",
+  description:
+    "The Sierra Aqua Jet faucet-connected water changer and gravel cleaner eliminates heavy bucket lifting for effortless aquarium maintenance in Renton, WA.",
+  keywords: [
+    "aqua jet water cleaning system",
+    "aquarium water changer",
+    "faucet gravel vacuum",
+    "effortless fish tank water changes",
+    "aquarium maintenance renton wa",
+  ],
+  alternates: {
+    canonical: "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+  },
+  openGraph: {
+    title: "Aqua Jet Water Cleaning System | Sierra Fish & Pets",
+    description:
+      "The Sierra Aqua Jet faucet-connected water changer and gravel cleaner eliminates heavy bucket lifting for effortless aquarium maintenance in Renton, WA.",
+    url: "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+    siteName: "Sierra Fish & Pets",
+    images: [
+      {
+        url: "https://sierrafishandpets.com/images/services/s1.png",
+        width: 1200,
+        height: 630,
+        alt: "Aqua Jet Water Cleaning System - Sierra Fish & Pets",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aqua Jet Water Cleaning System | Sierra Fish & Pets",
+    description:
+      "The Sierra Aqua Jet faucet-connected water changer and gravel cleaner eliminates heavy bucket lifting for effortless aquarium maintenance in Renton, WA.",
+    images: ["https://sierrafishandpets.com/images/services/s1.png"],
+  },
+};
+
 export default function AquaJetSystemPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://sierrafishandpets.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": "https://sierrafishandpets.com/services"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Aqua Jet Water Cleaning System",
+            "item": "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "name": "Sierra Aqua Jet Water Cleaning System",
+        "image": "https://sierrafishandpets.com/images/services/s1.png",
+        "description": "Effortless faucet-connected aquarium water changing and gravel cleaning system eliminating heavy bucket lifting.",
+        "brand": {
+          "@type": "Brand",
+          "name": "Sierra Fish & Pets"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "PetStore",
+            "name": "Sierra Fish & Pets",
+            "telephone": "+1-425-226-3215",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "601 S Grady Way",
+              "addressLocality": "Renton",
+              "addressRegion": "WA",
+              "postalCode": "98057",
+              "addressCountry": "US"
+            }
+          }
+        }
+      }
+    ]
+  };
+
   const features = [
     {
       title: "Effortless Water Changes",
@@ -37,6 +132,10 @@ export default function AquaJetSystemPage() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* Hero Banner Section */}
       <section className="relative min-h-[480px] md:min-h-[450px] flex items-center  justify-center overflow-hidden pt-28 pb-16">
         <div className="absolute inset-0 z-0">

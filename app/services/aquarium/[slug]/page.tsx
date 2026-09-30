@@ -35,6 +35,7 @@ interface ServiceItem {
 const ALLOWED_SLUGS = [
   "aquarium-consulting-design",
   "aquarium-installation",
+  "custom-aquariums",
 ];
 
 export async function generateMetadata({
@@ -50,7 +51,7 @@ export async function generateMetadata({
     description: meta.description,
     keywords: meta.keywords,
     alternates: {
-      canonical: `https://www.sierrafishandpets.com/services/aquarium/${slug}`,
+      canonical: `https://sierrafishandpets.com/services/aquarium/${slug}`,
     },
   };
 }

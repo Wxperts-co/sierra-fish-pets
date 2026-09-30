@@ -7,10 +7,47 @@ import { connectDB } from "@/lib/mongodb";
 import BrandModel from "@/models/Brand";
 import defaultBrands from "@/data/brands.json";
 
-export const metadata = {
-  title: "Brands | Sierra Fish & Pets",
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Premium Pet & Aquarium Brands | Sierra Fish & Pets WA",
   description:
-    "Explore trusted pet food, aquatic, and pet care brands available at Sierra Fish & Pets.",
+    "Discover top-tier pet food, aquatic nutrition, and trusted care brands for dogs, cats, fish, and reptiles at Sierra Fish & Pets in Renton, WA.",
+  keywords: [
+    "pet food brands renton wa",
+    "aquarium brands renton",
+    "premium dog food brands",
+    "cat nutrition brands",
+    "trusted pet supplies brands",
+    "sierra fish and pets brands",
+  ],
+  alternates: {
+    canonical: "https://sierrafishandpets.com/brands",
+  },
+  openGraph: {
+    title: "Premium Pet & Aquarium Brands | Sierra Fish & Pets WA",
+    description:
+      "Discover top-tier pet food, aquatic nutrition, and trusted care brands for dogs, cats, fish, and reptiles at Sierra Fish & Pets in Renton, WA.",
+    url: "https://sierrafishandpets.com/brands",
+    siteName: "Sierra Fish & Pets",
+    images: [
+      {
+        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        width: 1200,
+        height: 630,
+        alt: "Brands We Trust - Sierra Fish & Pets",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Premium Pet & Aquarium Brands | Sierra Fish & Pets WA",
+    description:
+      "Discover top-tier pet food, aquatic nutrition, and trusted care brands for dogs, cats, fish, and reptiles at Sierra Fish & Pets in Renton, WA.",
+    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+  },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {

@@ -10,42 +10,76 @@ import type { Metadata } from "next";
 
 const CATEGORY_METADATA: Record<
   string,
-  { title: string; description: string; keywords?: string }
+  { title: string; description: string; keywords?: string[] }
 > = {
   dog: {
-    title: "Dog Brands Services Renton, WA | Sierra Fish & Pets",
+    title: "Top Dog Food & Supplies Brands | Sierra Fish & Pets",
     description:
-      "Sierra Fish and Pets in Renton, WA offers expert services and top dog brands like Acana, Blue Buffalo, and Nulo.",
-    keywords:
-      "Dog Brands Services Renton, WA , Acana, AvoDerm, ,Blue Buffalo, Canine Caviar, Earthborn, Evanger's, KOHA,Natural Balance,Northwest Naturals,Nulo, KOHA",
+      "Explore premium dog food, treats, and healthcare brands including Acana, Nulo, and Blue Buffalo in Renton, WA at Sierra Fish & Pets.",
+    keywords: [
+      "dog food brands renton wa",
+      "premium dog food brands",
+      "Acana dog food",
+      "Nulo pet food",
+      "healthy dog treats renton",
+    ],
   },
   cat: {
-    title: "Cat Brands Services Renton, WA | Sierra Fish & Pets",
+    title: "Premium Cat Food & Care Brands | Sierra Fish & Pets",
     description:
-      "Sierra Fish and Pets in Renton, WA carries top cat food brands like Acana, Blue Buffalo, and Nulo alongside expert services",
-    keywords:
-      "Dog Brands Services Renton, WA , Acana, AvoDerm, ,Blue Buffalo, Canine Caviar, Earthborn, Evanger's, KOHA,Natural Balance,Northwest Naturals,Nulo, KOHA",
+      "Shop trusted cat food, nutrition, and wellness brands including Acana, Nulo, and Earthborn in Renton, WA at Sierra Fish & Pets.",
+    keywords: [
+      "cat food brands renton wa",
+      "premium cat nutrition",
+      "Acana cat food",
+      "Nulo cat food",
+      "feline care supplies",
+    ],
   },
   aquatic: {
-    title: "Aquatic Brands Service Renton, WA | Sierra Fish & Pets",
+    title: "Top Aquarium & Fish Care Brands | Sierra Fish & Pets",
     description:
-      "Sierra Fish and Pets in Renton, WA provides expert aquarium services alongside top aquatic brands like Fluval, Aqueon, and Red Sea",
-    keywords:
-      "Aquatic Brands Services Renton, WA . API Freshwater & Saltwater Master Test Kits ,AquaTop, Aqueon,CaribSea, Fluval Aquatics, Fritz, Hikari, Hygger, Red Sea",
+      "Discover industry-leading aquatic brands like Seachem, Fluval, API, and Red Sea for thriving aquariums in Renton, WA at Sierra Fish & Pets.",
+    keywords: [
+      "aquarium brands renton wa",
+      "Seachem supplies",
+      "Fluval aquatics",
+      "API test kits",
+      "Red Sea reef care",
+    ],
   },
   reptile: {
-    title: "Reptile Brands Service Renton, WA | Sierra Fish & Pets",
+    title: "Reptile Habitats & Food Brands | Sierra Fish & Pets",
     description:
-      "Sierra Fish and Pets in Renton, WA provides top reptile brands like ExoTerra, Zoo Med, and Repashy alongside expert setup services.",
-    keywords:
-      "Aquatic Brands Services Renton, WA , ExoTerra ,Galapagos, Komodo Reptile , OutRider Reptile,Repashy Super Foods,Zilla,Zoo Med",
+      "Browse trusted reptile brands including Zoo Med, Exo Terra, and Repashy for healthy habitats and nutrition in Renton, WA at Sierra Fish & Pets.",
+    keywords: [
+      "reptile supplies brands renton",
+      "Zoo Med habitats",
+      "Exo Terra terrariums",
+      "Repashy superfoods",
+    ],
   },
   "small-animal": {
-    title: "Small-animal Brands Service Renton, WA | Sierra Fish & Pets",
+    title: "Small Animal Food & Bedding Brands | Sierra Fish & Pets",
     description:
-      "Sierra Fish and Pets in Renton, WA offers top small-animal brands like Oxbow, Kaytee, and Higgins alongside expert pet care services.",
-    keywords:
-      "Small-animal Brands Services Renton, WA . A&E, Higgins, Kaytee, Oxbow, Round Lake Farms",
+      "Find top small animal brands including Oxbow, Kaytee, and Higgins for rabbits, guinea pigs, and birds in Renton, WA at Sierra Fish & Pets.",
+    keywords: [
+      "small animal brands renton",
+      "Oxbow timothy hay",
+      "Kaytee pet supplies",
+      "Higgins small pet food",
+    ],
+  },
+  bird: {
+    title: "Bird Food & Cage Accessory Brands | Sierra Fish & Pets",
+    description:
+      "Explore trusted bird food, seed blends, and cage accessories for parakeets, parrots, and canaries at Sierra Fish & Pets in Renton, WA.",
+    keywords: [
+      "bird food brands renton wa",
+      "pet bird supplies",
+      "Higgins bird food",
+      "avian care renton",
+    ],
   },
 };
 
@@ -55,7 +89,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalUrl = `https://www.sierrafishandpets.com/brands/category/${slug}`;
+  const canonicalUrl = `https://sierrafishandpets.com/brands/category/${slug}`;
 
   const customMeta = CATEGORY_METADATA[slug];
   if (customMeta) {
@@ -65,6 +99,13 @@ export async function generateMetadata({
       keywords: customMeta.keywords,
       alternates: {
         canonical: canonicalUrl,
+      },
+      openGraph: {
+        title: customMeta.title,
+        description: customMeta.description,
+        url: canonicalUrl,
+        siteName: "Sierra Fish & Pets",
+        images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
       },
     };
   }

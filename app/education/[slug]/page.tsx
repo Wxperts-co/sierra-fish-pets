@@ -146,12 +146,12 @@ function renderContent(raw: string) {
       );
     } else if (t.startsWith("# ")) {
       elements.push(
-        <h1
+        <h2
           key={key++}
           className="text-3xl sm:text-4xl font-black text-[#002244] mt-4 mb-6 leading-tight"
         >
           {t.slice(2)}
-        </h1>,
+        </h2>,
       );
     } else {
       const parts = t.split(/(\*\*[^*]+\*\*)/g);
@@ -218,9 +218,9 @@ function Hero({
             <Sparkles className="w-3.5 h-3.5" />
             <span>Pet Knowledge Hub</span>
           </div>
-          <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
+          <span className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
             Sierra Edu
-          </h1>
+          </span>
        
           <nav
             aria-label="breadcrumb"
@@ -325,9 +325,9 @@ function ArticleDetailContent({ slug }: { slug: string }) {
           </button>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-black text-[#002244] leading-tight mb-6">
+        <h1 className="text-2xl sm:text-3xl font-black text-[#002244] leading-tight mb-6">
           {item.title}
-        </h2>
+        </h1>
 
         {item.coverImage && (
           <div className="relative w-full aspect-[16/7] rounded-3xl overflow-hidden mb-8 shadow-2xl shadow-slate-200/60 bg-slate-100">

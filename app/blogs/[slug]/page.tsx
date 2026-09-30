@@ -32,8 +32,13 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
   const canonicalUrl = `${baseUrl}/blogs/${post.slug}`;
   const rawTitle = post.seo?.title || post.title;
-  const title = rawTitle.includes("Sierra Fish") ? rawTitle : `${rawTitle} | Sierra Fish & Pets`;
-  const description = post.seo?.description || post.excerpt;
+  const brandSuffix = " | Sierra Fish & Pets";
+  let title = rawTitle.includes("Sierra Fish") ? rawTitle : `${rawTitle}${brandSuffix}`;
+  if (title.length > 60) {
+    title = rawTitle.length <= 60 ? rawTitle : `${rawTitle.slice(0, 57)}...`;
+  }
+  const rawDesc = post.seo?.description || post.excerpt || "";
+  const description = rawDesc.length <= 155 ? rawDesc : `${rawDesc.slice(0, 152)}...`;
   const keywords = post.seo?.keywords && post.seo.keywords.length > 0 ? post.seo.keywords : post.tags;
   const fullImageUrl = post.coverImage
     ? (post.coverImage.startsWith("http") ? post.coverImage : `${baseUrl}${post.coverImage}`)

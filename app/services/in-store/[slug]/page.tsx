@@ -56,7 +56,7 @@ export async function generateMetadata({
     description: meta.description,
     keywords: meta.keywords,
     alternates: {
-      canonical: `https://www.sierrafishandpets.com/services/in-store/${slug}`,
+      canonical: `https://sierrafishandpets.com/services/in-store/${slug}`,
     },
   };
 }
@@ -116,9 +116,9 @@ export default async function ServiceDetailPage({
           {/* Centered text block */}
           <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
             <div className="flex flex-col items-center justify-center max-w-4xl">
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none tracking-tight leading-tight mb-2 sm:mb-3">
+              <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none tracking-tight leading-tight mb-2 sm:mb-3">
                 {service.name}
-              </h1>
+              </span>
               {/* Breadcrumb */}
               <nav
                 aria-label="breadcrumb"
@@ -182,9 +182,9 @@ export default async function ServiceDetailPage({
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] bg-blue-50 border border-blue-100 px-3.5 py-1.5 rounded-full select-none">
                         Professional In-Store Care
                       </span>
-                      <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
+                      <h1 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
                         Expert Aquarium Water Testing & Analysis Services
-                      </h2>
+                      </h1>
                       <p className="text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                         Maintaining crystal-clear, balanced water is the foundation of a healthy aquatic environment. Whether you are cycling a brand-new setup, troubleshooting cloudy water, or keeping a mature reef or planted tank in peak condition, Sierra Fish & Pets provides fast, precise, and professional water testing to ensure your aquatic pets stay vibrant and healthy.
                       </p>
@@ -333,9 +333,9 @@ export default async function ServiceDetailPage({
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] bg-blue-50 border border-blue-100 px-3.5 py-1.5 rounded-full select-none">
                         Kids & Young Hobbyists Club
                       </span>
-                      <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
+                      <h1 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
                         Discover the O&apos;Fishal Fish of the Month Club!
-                      </h2>
+                      </h1>
                       <p className="text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                         At Sierra Fish & Pets, we love inspiring the next generation of aquatic hobbyists! Our O&apos;Fishal Fish of the Month Club is designed to encourage young fish keepers to learn, grow, and enjoy the wonderful world of aquarium keeping.
                       </p>
@@ -464,9 +464,9 @@ export default async function ServiceDetailPage({
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] bg-blue-50 border border-blue-100 px-3.5 py-1.5 rounded-full select-none">
                         Gentle Pet Care Services
                       </span>
-                      <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
+                      <h1 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
                         Pet Nail & Wing Trimming Services at Sierra Fish & Pets
-                      </h2>
+                      </h1>
                       <p className="text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                         Keep your feathered and four-legged companions comfortable, healthy, and safe with professional nail and wing trims at Sierra Fish & Pets.
                       </p>
@@ -575,9 +575,9 @@ export default async function ServiceDetailPage({
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] bg-blue-50 border border-blue-100 px-3.5 py-1.5 rounded-full select-none">
                         Hands-On Learning & Workshops
                       </span>
-                      <h2 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
+                      <h1 className="text-2xl md:text-3xl font-extrabold text-[#002244] tracking-tight">
                         Behind-the-Scenes Store Tours & Animal Care Workshops
-                      </h2>
+                      </h1>
                       <p className="text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                         Bring your class, party, or community group to Sierra Fish & Pets for an engaging, hands-on learning experience! Our guided store tours give children and adults an up-close look at a wide variety of animals while discovering what it truly takes to care for them.
                       </p>

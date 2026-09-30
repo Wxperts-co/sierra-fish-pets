@@ -1,12 +1,14 @@
 import { MetadataRoute } from "next";
 import blogsData from "@/data/blogs.json";
 import servicesData from "@/data/services.json";
+import brandsData from "@/data/brands.json";
+import sierraEduData from "@/data/sierraedu.json";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
 
-  // Core Static Pages
+  // 1. Core Static Pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
@@ -15,16 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/blogs`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/shop`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/services`,
@@ -33,15 +29,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/shop`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/arrivals`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.85,
     },
     {
-      url: `${baseUrl}/about`,
+      url: `${baseUrl}/brands`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blogs`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/education`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/sierra-edu`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
       priority: 0.75,
     },
     {
@@ -51,13 +71,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     },
     {
-      url: `${baseUrl}/education`,
+      url: `${baseUrl}/customer-stories`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/event-calendar`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/sierra-edu`,
+      url: `${baseUrl}/flyers`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/coupons`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/gift-cards`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/rewards`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${baseUrl}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${baseUrl}/special-order-animals`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
@@ -81,58 +143,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     },
     {
-      url: `${baseUrl}/special-order-animals`,
+      url: `${baseUrl}/service-areas`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/event-calendar`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.65,
-    },
-    {
-      url: `${baseUrl}/flyers`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.65,
-    },
-    {
-      url: `${baseUrl}/coupons`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.65,
-    },
-    {
-      url: `${baseUrl}/gallery`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/gift-cards`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/rewards`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/customer-stories`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.75,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/return-policy`,
@@ -154,9 +168,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Blog Posts Dynamic Routes
+  // 2. Blog Posts Dynamic Routes
   const blogRoutes: MetadataRoute.Sitemap = blogsData
-    .filter((post) => post.status !== "draft")
+    .filter((post) => post.status !== "draft" && post.slug)
     .map((post) => {
       let lastModDate: Date;
       try {
@@ -176,7 +190,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       };
     });
 
-  // Blog Category Routes
+  // 3. Blog Category Routes
   const staticBlogCategories = ["dog", "cat", "bird", "aquatic", "small-animal", "reptile"];
   const dynamicBlogCategories = blogsData
     .map((p) => p.categorySlug)
@@ -190,33 +204,98 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  // Shop Category Routes
+  // 4. Shop Category Routes
   const shopCategorySlugs = ["dog", "cat", "bird", "aquatic", "small-animal", "reptile"];
   const shopCategoryRoutes: MetadataRoute.Sitemap = shopCategorySlugs.map((cat) => ({
     url: `${baseUrl}/shop/${cat}`,
     lastModified: new Date(),
-    changeFrequency: "daily",
+    changeFrequency: "daily" as const,
     priority: 0.8,
   }));
 
-  // In-store Services Routes
-  const serviceRoutes: MetadataRoute.Sitemap = servicesData
-    .filter((s) => s.slug)
+  // 5. Brands Detail & Category Routes
+  const brandRoutes: MetadataRoute.Sitemap = brandsData
+    .filter((b) => b.slug)
+    .map((brand) => ({
+      url: `${baseUrl}/brands/${brand.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    }));
+
+  const brandCategories = ["dog", "cat", "bird", "fish", "aquatic", "small-animal", "reptile"];
+  const brandCategoryRoutes: MetadataRoute.Sitemap = brandCategories.map((cat) => ({
+    url: `${baseUrl}/brands/category/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.75,
+  }));
+
+  // 6. Arrivals Category Routes
+  const arrivalCategories = [
+    "all",
+    "freshwater",
+    "saltwater",
+    "corals",
+    "plants",
+    "reptiles",
+    "birds",
+    "small-animals",
+    "dogs",
+    "cats",
+  ];
+  const arrivalCategoryRoutes: MetadataRoute.Sitemap = arrivalCategories.map((cat) => ({
+    url: `${baseUrl}/arrivals/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
+
+  // 7. Education / Sierra Edu Guide Routes
+  const educationRoutes: MetadataRoute.Sitemap = sierraEduData
+    .filter((item) => item.slug)
+    .map((item) => ({
+      url: `${baseUrl}/education/${item.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
+
+  // 8. Gallery Category Routes
+  const galleryCategories = ["store", "aquarium", "bird", "reptile", "dog", "cat"];
+  const galleryCategoryRoutes: MetadataRoute.Sitemap = galleryCategories.map((cat) => ({
+    url: `${baseUrl}/gallery/category/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.65,
+  }));
+
+  // 9. In-store & Aquarium Services Routes
+  const inStoreServices = servicesData
+    .filter((s) => s.slug && s.category === "in-store")
     .map((s) => ({
       url: `${baseUrl}/services/in-store/${s.slug}`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
     }));
 
-  // Service Areas Local Landing Pages
-  const serviceAreaRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/service-areas`,
+  const aquariumServices = servicesData
+    .filter(
+      (s) =>
+        s.slug &&
+        s.category === "aquarium" &&
+        s.slug !== "about-aqua-jet-water-cleaning-system"
+    )
+    .map((s) => ({
+      url: `${baseUrl}/services/aquarium/${s.slug}`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    }));
+
+  // 10. Service Areas Local Landing Pages
+  const serviceAreaRoutes: MetadataRoute.Sitemap = [
     ...SERVICE_AREAS.map((area) => ({
       url: `${baseUrl}/service-areas/${area.slug}`,
       lastModified: new Date(),
@@ -230,7 +309,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogRoutes,
     ...blogCategoryRoutes,
     ...shopCategoryRoutes,
-    ...serviceRoutes,
+    ...brandRoutes,
+    ...brandCategoryRoutes,
+    ...arrivalCategoryRoutes,
+    ...educationRoutes,
+    ...galleryCategoryRoutes,
+    ...inStoreServices,
+    ...aquariumServices,
     ...serviceAreaRoutes,
   ];
 }

@@ -20,9 +20,42 @@ import servicesData from "@/data/services.json";
 export const metadata: Metadata = {
   title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
   description:
-    "Explore Sierra Fish & Pets professional services including custom aquarium design, installation, water testing, pet nail & wing trims, and adoption events in Renton, WA.",
+    "Expert pet & aquarium services in Renton, WA: custom aquarium design, setup, water testing, pet nail trims & adoption events at Sierra Fish & Pets.",
+  keywords: [
+    "aquarium services renton wa",
+    "custom aquarium design and installation renton",
+    "aquarium water testing renton",
+    "pet nail trim renton wa",
+    "pet adoption events renton",
+    "sierra fish and pets services",
+    "aquarium maintenance services renton",
+  ],
   alternates: {
-    canonical: "https://www.sierrafishandpets.com/services",
+    canonical: "https://sierrafishandpets.com/services",
+  },
+  openGraph: {
+    title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
+    description:
+      "Expert pet & aquarium services in Renton, WA: custom aquarium design, setup, water testing, pet nail trims & adoption events at Sierra Fish & Pets.",
+    url: "https://sierrafishandpets.com/services",
+    siteName: "Sierra Fish & Pets",
+    images: [
+      {
+        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        width: 1200,
+        height: 630,
+        alt: "Professional Pet & Aquarium Services - Sierra Fish & Pets",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
+    description:
+      "Expert pet & aquarium services in Renton, WA: custom aquarium design, setup, water testing, pet nail trims & adoption events at Sierra Fish & Pets.",
+    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 
@@ -112,8 +145,70 @@ const SERVICE_GROUPS = [
 export default function ServicesPage() {
   const services = servicesData as ServiceItem[];
 
+  const servicesStructuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://sierrafishandpets.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": "https://sierrafishandpets.com/services"
+          }
+        ]
+      },
+      {
+        "@type": "Service",
+        "serviceType": "Pet & Aquarium Services",
+        "provider": {
+          "@type": "PetStore",
+          "name": "Sierra Fish & Pets",
+          "url": "https://sierrafishandpets.com",
+          "telephone": "+1-425-226-3215",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "601 S Grady Way",
+            "addressLocality": "Renton",
+            "addressRegion": "WA",
+            "postalCode": "98057",
+            "addressCountry": "US"
+          }
+        },
+        "areaServed": {
+          "@type": "City",
+          "name": "Renton"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Pet & Aquarium Services",
+          "itemListElement": services.map((s) => ({
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": s.name,
+              "description": s.shortDescription || s.description,
+              "url": `https://sierrafishandpets.com/services/${s.slug}`
+            }
+          }))
+        }
+      }
+    ]
+  };
+
   return (
     <main className="relative text-slate-800 min-h-screen overflow-x-hidden bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesStructuredData) }}
+      />
       {/* ─── HERO HEADER SECTION ─── */}
       <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
         {/* Image — clipped to banner bounds */}
@@ -144,9 +239,9 @@ export default function ServicesPage() {
         {/* Centered text block */}
         <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
           <div className="flex flex-col items-center justify-center max-w-3xl">
-            <h1 className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
+            <span className="mb-4 text-[clamp(2rem,4.5vw,3rem)] font-black leading-[1.05] tracking-[-0.03em] text-white drop-shadow-md md:bg-[linear-gradient(135deg,#003B73_0%,#005EA8_40%,#0077C8_75%,#1E8FD2_100%)] md:bg-clip-text md:text-transparent md:drop-shadow-none">
               Our Services
-            </h1>
+            </span>
 
             {/* Breadcrumb */}
             <nav
@@ -175,9 +270,9 @@ export default function ServicesPage() {
         <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-[#edf6fc] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] mb-4 shadow-2xs">
           <span>Expert Pet &amp; Aquatic Care</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">
           Professional Services Tailored to Your Pets
-        </h2>
+        </h1>
         <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
           From custom aquarium design and water chemistry diagnostics to pet nail trimming and adoption events—we bring decades of trusted Pacific Northwest expertise to every service.
         </p>
@@ -195,9 +290,9 @@ export default function ServicesPage() {
                 className={`mb-14 md:mb-20 ${groupIdx > 0 ? "pt-12 border-t border-blue-100" : ""}`}
               >
                 <div className="max-w-2xl mb-8">
-                  <h3 className="text-2xl md:text-3xl font-black tracking-tight mb-2 text-[#002244]">
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight mb-2 text-[#002244]">
                     {group.title}
-                  </h3>
+                  </h2>
                   <p className="text-sm md:text-base text-slate-600 font-normal">
                     {group.description}
                   </p>
@@ -227,9 +322,9 @@ export default function ServicesPage() {
                             </span>
                           </div>
 
-                          <h4 className="font-extrabold text-base sm:text-lg text-[#002244] mb-1.5 tracking-tight group-hover:text-[#005AA9] transition-colors">
+                          <h3 className="font-extrabold text-base sm:text-lg text-[#002244] mb-1.5 tracking-tight group-hover:text-[#005AA9] transition-colors">
                             {service.name}
-                          </h4>
+                          </h3>
 
                           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3.5">
                             {service.shortDescription}
