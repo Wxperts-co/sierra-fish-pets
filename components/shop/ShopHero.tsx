@@ -1,5 +1,7 @@
 "use client";
 
+import categoriesData from "@/data/categories.json";
+
 import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,7 +57,19 @@ export default function ShopHero({
   }, [dispatch]);
 
   const orderedCategories = allCategories;
-  const activeCategory = allCategories.find((c) => c.slug === selectedCategory);
+  const fallbackCategory = (categoriesData as any[]).find(
+    (c) => c.slug === selectedCategory
+  );
+  const activeCategory =
+    allCategories.find((c) => c.slug === selectedCategory) || fallbackCategory;
+
+  const fallbackFormattedName = selectedCategory
+    ? selectedCategory.charAt(0).toUpperCase() +
+      selectedCategory.slice(1).replace(/-/g, " ")
+    : "Shop";
+
+  const categoryDisplayName =
+    activeCategory?.name || (selectedCategory ? fallbackFormattedName : null);
 
   // Index of the first visible item
   const [startIndex, setStartIndex] = useState(0);
@@ -103,11 +117,11 @@ export default function ShopHero({
     activeCategory
       ? { label: "Shop", href: `/shop` }
       : { label: "Shop", href: "/shop" },
-    activeCategory ? { label: activeCategory.name } : { label: "All Products" },
+    categoryDisplayName ? { label: categoryDisplayName } : { label: "All Products" },
   ];
 
   const crumbs = breadcrumb ?? defaultBreadcrumb;
-  const headingPrefix = activeCategory ? activeCategory.name : "Shop";
+  const headingPrefix = categoryDisplayName || "Shop";
 
   return (
     <section className="relative overflow-visible">

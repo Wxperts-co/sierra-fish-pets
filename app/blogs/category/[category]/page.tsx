@@ -14,79 +14,87 @@ const CATEGORY_BLOG_META: Record<
   { title: string; description: string; keywords: string[] }
 > = {
   dog: {
-    title: "Dog Care & Nutrition Articles | Sierra Fish & Pets",
+    title: "Dogs Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Expert dog care advice, puppy training tips, canine nutrition guides, and health essentials from Sierra Fish & Pets in Renton, WA.",
+      "Sierra Fish and Pets provides expert dog services, premium nutritional food, durable toys, and essential grooming supplies for SeaTac area pet owners.",
     keywords: [
-      "dog care blog renton wa",
-      "canine nutrition tips",
-      "puppy training advice",
-      "dog health guides",
+      "Dogs Services SeaTac, WA",
+      "Best Dogs Services SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   cat: {
-    title: "Cat Care & Health Guides | Sierra Fish & Pets Renton",
+    title: "Cats Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Discover feline wellness tips, cat nutrition advice, behavior guides, and indoor cat care articles from Sierra Fish & Pets in Renton, WA.",
+      "Sierra Fish and Pets provides expert cat services, premium natural foods, litter solutions, and quality play accessories for SeaTac area cat owners.",
     keywords: [
-      "cat care blog renton",
-      "feline health guides",
-      "cat nutrition advice",
-      "indoor cat wellness",
+      "Cats Service SeaTac, WA",
+      "Best Cats Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   aquatic: {
-    title: "Aquarium & Fish Care Guides | Sierra Fish & Pets",
+    title: "Aquatic Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Master freshwater & marine tank maintenance, water chemistry, aquascaping, and fish health with guides from Sierra Fish & Pets Renton.",
+      "Sierra Fish and Pets provides expert aquatic services, custom aquarium installations, water testing, and healthy fish livestock for SeaTac area hobbyists.",
     keywords: [
-      "aquarium blog renton wa",
-      "fish care guides",
-      "tank water chemistry tips",
-      "aquascaping articles",
+      "Aquatic Service SeaTac, WA",
+      "Best Aquatic Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   fish: {
-    title: "Aquarium & Fish Care Guides | Sierra Fish & Pets",
+    title: "Aquatic Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Master freshwater & marine tank maintenance, water chemistry, aquascaping, and fish health with guides from Sierra Fish & Pets Renton.",
+      "Sierra Fish and Pets provides expert aquatic services, custom aquarium installations, water testing, and healthy fish livestock for SeaTac area hobbyists.",
     keywords: [
-      "fish care blog renton",
-      "aquarium guides",
-      "tropical fish care",
+      "Aquatic Service SeaTac, WA",
+      "Best Aquatic Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   reptile: {
-    title: "Reptile Habitat & Care Blog | Sierra Fish & Pets",
+    title: "Reptile Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Explore expert reptile care guides, terrarium setup advice, lighting, and nutrition tips for geckos, dragons, and snakes at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert reptile services, habitat heating solutions, live feeders, and specialized care advice for SeaTac area reptile enthusiasts.",
     keywords: [
-      "reptile care blog renton",
-      "terrarium setup advice",
-      "bearded dragon care",
-      "gecko care guides",
+      "Reptile Service SeaTac, WA",
+      "Best Reptile Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   bird: {
-    title: "Pet Bird Care & Avian Health | Sierra Fish & Pets",
+    title: "Birds Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Avian nutrition, cage setup, foraging, and pet bird wellness advice from certified pet care specialists at Sierra Fish & Pets in Renton, WA.",
+      "Sierra Fish and Pets in Renton, WA hosts community dog adoption and rescue events to help local shelter animals find loving homes.",
     keywords: [
-      "bird care blog renton",
-      "pet bird health",
-      "parrot care tips",
-      "avian nutrition",
+      "Birds Service SeaTac, WA",
+      "Best Birds Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
   "small-animal": {
-    title: "Small Animal Pet Care Guides | Sierra Fish & Pets",
+    title: "Small Animals Service SeaTac, WA | Sierra Fish & Pets",
     description:
-      "Care tips, diet advice, and habitat essentials for rabbits, guinea pigs, hamsters, and small pets in Renton, WA at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert bird services, nutritional avian diets, spacious cages, and gentle grooming care for SeaTac area pet owners.",
     keywords: [
-      "small animal blog renton",
-      "rabbit care tips",
-      "guinea pig diet",
-      "hamster care guide",
+      "Small Animals Service SeaTac, WA",
+      "Best Small Animals Service SeaTac, WA",
+      "Bird shop SeaTac, WA",
+      "pet food store SeaTac, WA",
+      "pet food supplies SeaTac, WA",
     ],
   },
 };

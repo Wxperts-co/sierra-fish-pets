@@ -27,36 +27,39 @@ const CATEGORY_META_CONFIG: Record<
     ],
   },
   freshwater: {
-    title: "New Freshwater Fish Arrivals | Sierra Fish & Pets",
+    title: "New Bird Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Discover newly arrived tropical freshwater fish, cichlids, tetras, bettas, and live aquarium plants in Renton, WA at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert new bird services, nutritional food, spacious cages, and gentle wing trimming for Kent area bird owners.",
     keywords: [
-      "new freshwater fish arrivals",
-      "tropical fish stock renton",
-      "cichlids renton wa",
-      "planted tank fish",
+      "New Freshwater Services Kent, WA",
+      "Freshwater Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
   saltwater: {
-    title: "New Saltwater Fish & Corals | Sierra Fish & Pets",
+    title: "Saltwater Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Browse new marine fish, saltwater invertebrates, and live coral arrivals in Renton, WA with expert care at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert saltwater maintenance, reef aquariums, high-grade marine salt, and healthy sea livestock for Kent area hobbyists.",
     keywords: [
-      "new saltwater fish arrivals",
-      "marine fish renton",
-      "live coral arrivals",
-      "reef tank invertebrates",
+      "Saltwater Services Kent, WA",
+      "Best Saltwater Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
   reptiles: {
-    title: "New Reptile & Amphibian Arrivals | Sierra Fish & Pets",
+    title: "New Reptile Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Meet new captive-bred reptiles, geckos, bearded dragons, and habitat supplies arriving weekly in Renton, WA at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert new reptile services, habitat design, specialized lighting, and feeder insects for Kent area reptile enthusiasts.",
     keywords: [
-      "new reptile arrivals renton",
-      "bearded dragon stock",
-      "geckos renton wa",
-      "exotic pet arrivals",
+      "New Reptile Services Kent, WA",
+      "Best Reptile Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
   "exotic-pets": {
@@ -70,25 +73,27 @@ const CATEGORY_META_CONFIG: Record<
     ],
   },
   birds: {
-    title: "New Pet Bird Arrivals Renton | Sierra Fish & Pets",
+    title: "New Bird Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Discover healthy pet birds, parrots, finches, and specialty avian supplies arriving at Sierra Fish & Pets in Renton, WA.",
+      "Sierra Fish and Pets provides expert new bird services, healthy diets, spacious cages, and wing trimming for pet owners around Kent.",
     keywords: [
-      "new pet bird arrivals",
-      "parrots renton wa",
-      "finches and canaries",
-      "avian pet care",
+      "New Bird Services Kent, WA",
+      "Bird Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
   "small-animals": {
-    title: "New Small Animal Arrivals | Sierra Fish & Pets Renton",
+    title: "New Small Animal Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Meet newly arrived rabbits, guinea pigs, hamsters, and small pet care supplies in Renton, WA at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert small animal services, nutritious food, comfortable cages, and health care advice for Kent area pet owners..",
     keywords: [
-      "new small animal arrivals",
-      "guinea pigs renton",
-      "pet rabbits renton",
-      "hamsters and small pets",
+      "New Small Animal Services Kent, WA",
+      "Best Reptile Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
   "small-pets": {
@@ -112,13 +117,15 @@ const CATEGORY_META_CONFIG: Record<
     ],
   },
   cats: {
-    title: "New Cat Supplies & Toys | Sierra Fish & Pets Renton",
+    title: "New Cat Services Kent, WA | Sierra Fish & Pets",
     description:
-      "Explore new arrivals of healthy cat food, treats, scratching posts, and feline supplies in Renton, WA at Sierra Fish & Pets.",
+      "Sierra Fish and Pets provides expert new cat services, premium feline nutrition, litter essentials,",
     keywords: [
-      "new cat supplies renton",
-      "cat food arrivals",
-      "cat toys and scratchers",
+      "New Cat Services Kent, WA",
+      "Best Cat Services Kent, WA",
+      "Bird shop Kent, WA",
+      "pet food store Kent WA",
+      "pet food supplies Kent WA",
     ],
   },
 };

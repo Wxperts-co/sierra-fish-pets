@@ -2,11 +2,20 @@ import type { Metadata } from "next";
 import ContactUsPageClient from "@/components/contact-us/ContactUsPageClient";
 
 export const metadata: Metadata = {
-  title: "About Sierra Fish & Pets | Pet Supplies Renton, WA ",
+  title: "Pet Supplies near Renton, WA | Sierra Fish & Pets",
   description:
-    "Sierra Fish and Pets in Renton, WA offers premium pet supplies, quality food, and expert care for all your pets.",
-  keywords:
-    "Pet Supplies Renton, WA, Renton, WA Pet Care Experts, Aquariums, Reptiles & Pet Supplies in Renton, family-owned pet store, Renton pet store, pet store Renton WA, aquarium experts, local pet shop Renton, aquarium pet store, freshwater aquarium supplies, saltwater aquarium store, pet supplies Renton, fish store Seattle, local pet shop, aquarium services, fish and pet store, pet care experts, aquarium maintenance, trusted pet store",
+    "Sierra Fish and Pets near Renton, WA, offers dog, puppy, fish aquarium, accessories, and pet food supplies. Call now!",
+  keywords: [
+    "pet shop Renton, WA",
+    "pet supplies Renton, WA",
+    "pet supplies near Renton, WA",
+    "fish aquarium Renton, WA",
+    "puppy supplies Renton, WA",
+    "aquarium accessories Renton, WA",
+    "dog supplies Renton, WA",
+    "pet food supplies Renton, WA",
+    "pet food store Renton, WA",
+  ],
   alternates: {
     canonical: "https://www.sierrafishandpets.com/contact-us",
   },

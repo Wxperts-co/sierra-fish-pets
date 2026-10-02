@@ -67,7 +67,11 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
   }, [dispatch]);
 
   // Read category, subcategory & brands from Redux
-  const selectedCategory = useAppSelector((state) => state.filters.category);
+  const selectedCategoryFromRedux = useAppSelector((state) => state.filters.category);
+  const selectedCategory =
+    selectedCategoryFromRedux ||
+    (initialCategory as CategorySlug | undefined) ||
+    ((typeof window !== "undefined" ? searchParams?.get("category") : null) as CategorySlug | null);
   const selectedSubcategory = useAppSelector(
     (state) => state.filters.subcategory,
   );

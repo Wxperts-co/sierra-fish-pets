@@ -2,23 +2,23 @@ import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pet & Aquarium Photo Gallery | Sierra Fish & Pets",
+  title: "Gallery Pet Shop Seattle WA | Sierra Fish & Pets",
   description:
-    "Explore our photo gallery featuring custom aquariums, tropical fish, reptiles, puppies, cats, and our Renton, WA store at Sierra Fish & Pets.",
+    "Sierra Fish and Pets invites Seattle families to explore their vibrant store gallery displaying healthy animals, custom aquariums, and quality supplies.",
   keywords: [
-    "pet store gallery renton wa",
-    "custom aquarium photos",
-    "tropical fish photos",
-    "reptiles and pets gallery",
-    "sierra fish and pets photos",
+    "Pet Shop Seattle WA",
+    "Best Pet Shop Seattle WA",
+    "Bird shop Seattle WA",
+    "pet food store Seattle WA",
+    "pet food supplies Seattle WA",
   ],
   alternates: {
     canonical: "https://sierrafishandpets.com/gallery",
   },
   openGraph: {
-    title: "Pet & Aquarium Photo Gallery | Sierra Fish & Pets",
+    title: "Gallery Pet Shop Seattle WA | Sierra Fish & Pets",
     description:
-      "Explore our photo gallery featuring custom aquariums, tropical fish, reptiles, puppies, cats, and our Renton, WA store at Sierra Fish & Pets.",
+      "Sierra Fish and Pets invites Seattle families to explore their vibrant store gallery displaying healthy animals, custom aquariums, and quality supplies.",
     url: "https://sierrafishandpets.com/gallery",
     siteName: "Sierra Fish & Pets",
     images: [
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pet & Aquarium Photo Gallery | Sierra Fish & Pets",
+    title: "Gallery Pet Shop Seattle WA | Sierra Fish & Pets",
     description:
-      "Explore our photo gallery featuring custom aquariums, tropical fish, reptiles, puppies, cats, and our Renton, WA store at Sierra Fish & Pets.",
+      "Sierra Fish and Pets invites Seattle families to explore their vibrant store gallery displaying healthy animals, custom aquariums, and quality supplies.",
     images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };

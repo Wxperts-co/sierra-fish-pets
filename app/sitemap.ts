@@ -262,7 +262,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
 
   // 8. Gallery Category Routes
-  const galleryCategories = ["store", "aquarium", "bird", "reptile", "dog", "cat"];
+  const galleryCategories = ["store", "dog-cat", "fish", "reptile", "bird", "small-pet"];
   const galleryCategoryRoutes: MetadataRoute.Sitemap = galleryCategories.map((cat) => ({
     url: `${baseUrl}/gallery/category/${cat}`,
     lastModified: new Date(),
