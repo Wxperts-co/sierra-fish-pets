@@ -1,3 +1,13 @@
+import { redirect } from "next/navigation";
+
+export default function GiftCardsPage() {
+  redirect("https://sierrafishandpets.webgiftcardsales.com");
+}
+
+/* =========================================================================
+   PREVIOUS GIFT CARDS PAGE IMPLEMENTATION (COMMENTED OUT FOR PRESERVATION)
+   =========================================================================
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -179,11 +189,11 @@ export default function GiftCardsPage() {
 
   return (
     <main className="relative text-slate-800 min-h-screen overflow-x-hidden pb-24 bg-slate-50">
-      {/* ─── HERO HEADER SECTION ─── */}
+      {/* ─── HERO HEADER SECTION ─── * /}
       <section className="relative overflow-hidden w-full h-[200px] sm:h-[260px] md:h-[420px] [clip-path:inset(0)]">
-        {/* Image — clipped to banner bounds */}
+        {/* Image — clipped to banner bounds * /}
         <div className="absolute md:fixed inset-x-0 top-0 w-full h-[200px] sm:h-[260px] md:h-[420px] pointer-events-none overflow-hidden z-0">
-          {/* Mobile image */}
+          {/* Mobile image * /}
           <Image
             src="/images/banner/shophero5.png"
             alt="Gift cards banner"
@@ -192,7 +202,7 @@ export default function GiftCardsPage() {
             className="object-cover object-[center_60%] block md:hidden"
             sizes="100vw"
           />
-          {/* Desktop image */}
+          {/* Desktop image * /}
           <Image
             src="/images/banner/shophero3.png"
             alt="Gift cards banner"
@@ -203,10 +213,10 @@ export default function GiftCardsPage() {
           />
         </div>
 
-        {/* Mobile overlay — darkens image so text is readable */}
+        {/* Mobile overlay — darkens image so text is readable * /}
         <div className="absolute inset-0 z-[2] block md:hidden bg-[linear-gradient(to_bottom,rgba(0,30,70,0.62)_0%,rgba(0,30,70,0.35)_60%,rgba(0,30,70,0.10)_100%)]" />
 
-        {/* Centered text block */}
+        {/* Centered text block * /}
         <div className="absolute inset-x-0 top-0 z-[3] flex h-full flex-col items-center justify-center px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -218,7 +228,7 @@ export default function GiftCardsPage() {
               Gift Cards
             </h1>
 
-            {/* Breadcrumb */}
+            {/* Breadcrumb * /}
             <nav
               aria-label="breadcrumb"
               className="flex flex-wrap items-center justify-center gap-0.5 text-sm font-medium text-white drop-shadow-md md:text-slate-500 md:drop-shadow-none"
@@ -240,7 +250,7 @@ export default function GiftCardsPage() {
         </div>
       </section>
 
-      {/* ─── GIFT CARDS DISPLAY SECTION ─── */}
+      {/* ─── GIFT CARDS DISPLAY SECTION ─── * /}
       <section className="container mx-auto px-6 max-w-3xl mt-12">
         <div className="text-center mb-8">
           <span className="text-xs font-bold uppercase tracking-widest text-[#005AA9] mb-2 block">Give the Perfect Gift</span>
@@ -309,7 +319,7 @@ export default function GiftCardsPage() {
       )}
       </section>
 
-      {/* ─── DETAILS OVERLAY MODAL ─── */}
+      {/* ─── DETAILS OVERLAY MODAL ─── * /}
       <AnimatePresence>
         {activeCard && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -369,7 +379,7 @@ export default function GiftCardsPage() {
         )}
       </AnimatePresence>
 
-      {/* ─── PURCHASE FORM MODAL ─── */}
+      {/* ─── PURCHASE FORM MODAL ─── * /}
       <AnimatePresence>
         {buyCard && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -382,7 +392,7 @@ export default function GiftCardsPage() {
               className="relative w-full max-w-md bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh] z-10 scrollbar-none"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal header with image */}
+              {/* Modal header with image * /}
               <div className="relative w-full aspect-[2.5/1] rounded-t-3xl overflow-hidden">
                 <Image src={buyCard.image} alt={buyCard.name} fill className="object-cover" sizes="100vw" priority />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
@@ -392,13 +402,13 @@ export default function GiftCardsPage() {
               </div>
 
               <div className="p-6 space-y-6">
-                {/* Title */}
+                {/* Title * /}
                 <div>
                   <h3 className="text-2xl font-black text-slate-900 tracking-tight">{buyCard.name}</h3>
                   <p className="text-xs text-slate-400 font-medium mt-0.5">{buyCard.tagline}</p>
                 </div>
 
-                {/* Amount selection */}
+                {/* Amount selection * /}
                 <div className="space-y-3">
                   <h4 className="text-sm font-bold text-slate-700">Set an amount</h4>
                   <div className="flex flex-wrap gap-2">
@@ -415,7 +425,7 @@ export default function GiftCardsPage() {
                         {opt}
                       </button>
                     ))}
-                    {/* Custom Amount toggle */}
+                    {/* Custom Amount toggle * /}
                     <button
                       onClick={() => {
                         if (selectedAmount === "custom") {
@@ -436,7 +446,7 @@ export default function GiftCardsPage() {
                     </button>
                   </div>
 
-                  {/* Custom amount input — shows only when custom is selected */}
+                  {/* Custom amount input — shows only when custom is selected * /}
                   <AnimatePresence>
                     {selectedAmount === "custom" && (
                       <motion.div
@@ -466,11 +476,11 @@ export default function GiftCardsPage() {
                   </AnimatePresence>
                 </div>
 
-                {/* Delivery Info */}
+                {/* Delivery Info * /}
                 <div className="space-y-4">
                   <h4 className="text-sm font-bold text-slate-700">Delivery Info</h4>
 
-                  {/* Recipient */}
+                  {/* Recipient * /}
                   <div className="space-y-2">
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Recipient Info</p>
                     <div>
@@ -497,7 +507,7 @@ export default function GiftCardsPage() {
                     )}
                   </div>
 
-                  {/* Sender */}
+                  {/* Sender * /}
                   <div className="space-y-2">
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Your Info</p>
                     <div>
@@ -523,7 +533,7 @@ export default function GiftCardsPage() {
                   </div>
                 </div>
 
-                {/* Quantity */}
+                {/* Quantity * /}
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-bold text-slate-700">Quantity:</span>
                   <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
@@ -543,7 +553,7 @@ export default function GiftCardsPage() {
                   </div>
                 </div>
 
-                {/* Add to Cart Button */}
+                {/* Add to Cart Button * /}
                 {addedToCart ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -564,7 +574,7 @@ export default function GiftCardsPage() {
                   </button>
                 )}
 
-                {/* Terms */}
+                {/* Terms * /}
                 <p className="text-[10px] text-slate-400 leading-relaxed text-center">{buyCard.terms}</p>
               </div>
             </motion.div>
@@ -574,3 +584,5 @@ export default function GiftCardsPage() {
     </main>
   );
 }
+
+*/
