@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Clock, User } from "lucide-react";
+import { ArrowLeft, Clock, User, Sparkles } from "lucide-react";
 import blogsData from "@/data/blogs.json";
 import { BlogItem } from "@/components/blogs/BlogCard";
 import BlogSidebar from "@/components/blogs/BlogSidebar";
@@ -214,7 +214,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
     : `${baseUrl}/images/blogs/responsible-pet-parent-guide.jpg`;
 
   // Schema.org BlogPosting Structured Data
-  const jsonLd = {
+  const jsonLd = post.schema || {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "mainEntityOfPage": {
@@ -329,6 +329,23 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
               </div>
             </div>
 
+            {/* Front-Loaded AEO Direct Answer Snippet Section */}
+            {(post.frontLoadedAeoDirectAnswerSnippet || (post as any)["FRONT-LOADED AEO DIRECT ANSWER SNIPPET"]) && (() => {
+              const snippet = post.frontLoadedAeoDirectAnswerSnippet || (post as any)["FRONT-LOADED AEO DIRECT ANSWER SNIPPET"];
+              return (
+                <section className="bg-gradient-to-br from-blue-50/70 via-white to-slate-50 border border-blue-100/90 rounded-2xl p-4 md:p-5 shadow-xs relative overflow-hidden">
+                  <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#005AA9]" />
+                  
+                  <h2 className="text-base md:text-xl font-bold text-slate-900 mb-1 tracking-tight leading-snug">
+                    {snippet.title}
+                  </h2>
+                  <p className="text-slate-600 text-sm md:text-sm italic leading-relaxed font-medium">
+                    {snippet.content}
+                  </p>
+                </section>
+              );
+            })()}
+
             {/* Formatted body contents with Drop Caps and Specialist blockquotes */}
             <div className="prose max-w-none text-slate-600 font-medium leading-relaxed">
               {renderContent(post.content, post.specialistQuote)}
@@ -399,12 +416,39 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
                             </div>
                           </li>
                         )}
+                        {post.nerTags.technicalSpecifications && post.nerTags.technicalSpecifications.length > 0 && (
+                          <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                            <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                            <div>
+                              <strong className="font-bold text-slate-900">TECHNICAL SPECIFICATIONS & CODE ENTITIES:</strong>{" "}
+                              <span>{post.nerTags.technicalSpecifications.join(", ")}</span>
+                            </div>
+                          </li>
+                        )}
                         {post.nerTags.conceptOrTheme && post.nerTags.conceptOrTheme.length > 0 && (
                           <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
                             <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
                             <div>
-                              <strong className="font-bold text-slate-900">CONCEPT / THEME (MISC):</strong>{" "}
+                              <strong className="font-bold text-slate-900">STRATEGIC & FUNCTIONAL CONCEPTS:</strong>{" "}
                               <span>{post.nerTags.conceptOrTheme.join(", ")}</span>
+                            </div>
+                          </li>
+                        )}
+                        {post.nerTags.infrastructure && post.nerTags.infrastructure.length > 0 && (
+                          <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                            <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                            <div>
+                              <strong className="font-bold text-slate-900">INFRASTRUCTURE & SECURITY ENTITIES:</strong>{" "}
+                              <span>{post.nerTags.infrastructure.join(", ")}</span>
+                            </div>
+                          </li>
+                        )}
+                        {post.nerTags.geographicData && post.nerTags.geographicData.length > 0 && (
+                          <li className="flex items-start gap-2.5 text-slate-700 leading-relaxed">
+                            <span className="text-slate-900 font-bold leading-none mt-1.5">•</span>
+                            <div>
+                              <strong className="font-bold text-slate-900">CONTACT, CHANNELS & GEOGRAPHIC DATA:</strong>{" "}
+                              <span>{post.nerTags.geographicData.join(", ")}</span>
                             </div>
                           </li>
                         )}

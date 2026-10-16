@@ -40,10 +40,24 @@ export interface BlogItem {
     description: string;
   }[];
   nerTags?: {
-    organization: string[];
-    productOrService: string[];
-    conceptOrTheme: string[];
+    organization?: string[];
+    person?: string[];
+    productOrService?: string[];
+    technicalSpecifications?: string[];
+    conceptOrTheme?: string[];
+    infrastructure?: string[];
+    geographicData?: string[];
+    [key: string]: any;
   };
+  frontLoadedAeoDirectAnswerSnippet?: {
+    title: string;
+    content: string;
+  };
+  "FRONT-LOADED AEO DIRECT ANSWER SNIPPET"?: {
+    title: string;
+    content: string;
+  };
+  schema?: Record<string, any>;
 }
 
 interface BlogCardProps {
