@@ -15,6 +15,8 @@ import { DEFAULT_MAX_PRICE } from "@/store/slices/filtersSlice";
 import ShopHero from "@/components/shop/ShopHero";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 import ProductGrid from "@/components/shop/ProductGrid";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import type { Product } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -462,6 +464,8 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
         setSelectedCategory={handleCategoryChange}
       />
 
+      <AeoDirectAnswerSnippet pageKey="shop" />
+
       {/* MOBILE FILTER ROW — hidden on desktop */}
       <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 flex items-center gap-2 sticky top-[96px] z-20 shadow-sm overflow-x-auto">
         {/* Full Filters Drawer Trigger Button */}
@@ -685,6 +689,8 @@ function ShopPageContent({ initialCategory, initialSubcategory }: ShopPageClient
           </div>
         </div>
       </div>
+
+      <DynamicSemanticAccordion pageKey="shop" />
     </>
   );
 }

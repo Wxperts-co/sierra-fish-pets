@@ -7,6 +7,8 @@ import ArrivalCategoryNav from "./ArrivalCategoryNav";
 import ArrivalGrid from "./ArrivalGrid";
 import ArrivalModal from "./ArrivalModal";
 import { ArrivalPet } from "./ArrivalCard";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 interface ArrivalsContainerProps {
   initialCategory?: string;
@@ -148,6 +150,8 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
         ]}
       />
 
+      <AeoDirectAnswerSnippet pageKey={activeCategory === "all" ? "arrivals" : `/arrivals/${activeCategory}`} />
+
       {/* Category Selection Filter & Search */}
       <ArrivalCategoryNav
         activeCategory={activeCategory}
@@ -169,6 +173,7 @@ export default function ArrivalsContainer({ initialCategory, initialArrivals }: 
         pet={selectedPet}
         onClose={() => setSelectedPet(null)}
       />
+      <DynamicSemanticAccordion pageKey={activeCategory === "all" ? "arrivals" : `/arrivals/${activeCategory}`} />
     </main>
   );
 }

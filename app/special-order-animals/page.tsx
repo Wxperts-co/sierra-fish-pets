@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -221,6 +223,8 @@ export default function SpecialOrderAnimalsPage() {
           </div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="/special-order-animals" />
 
       {/* Unlisted Species Request Banner Card */}
       <section className="pt-8">
@@ -502,6 +506,8 @@ export default function SpecialOrderAnimalsPage() {
           </div>
         )}
       </AnimatePresence>
+
+      <DynamicSemanticAccordion pageKey="/special-order-animals" />
     </main>
   );
 }

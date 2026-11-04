@@ -3,6 +3,7 @@ import { Geist_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 import Providers from "./provider";
 import LayoutSelector from "@/components/layouts/LayoutSelector";
+import { homeStructuredData } from "@/lib/homeSchema";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -33,11 +34,19 @@ export default function RootLayout({
       className={`${geistMono.variable} ${nunito.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(homeStructuredData),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-nunito)]">
-  <Providers>
-    <LayoutSelector>{children}</LayoutSelector>
-  </Providers>
-</body>
+        <Providers>
+          <LayoutSelector>{children}</LayoutSelector>
+        </Providers>
+      </body>
     </html>
   );
 }

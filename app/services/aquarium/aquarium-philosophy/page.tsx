@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 
 import type { Metadata } from "next";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 export const metadata: Metadata = {
   title: "Our Aquarium Philosophy | Sierra Fish & Pets Renton",
@@ -78,6 +80,8 @@ export default function AquariumPhilosophyPage() {
             </svg>
           </div>
         </section>
+
+        <AeoDirectAnswerSnippet pageKey="/services/aquarium/aquarium-philosophy" />
 
         {/* ─── Content Section (Philosophy Description & Mission) ─── */}
         <section className="relative py-20 bg-gradient-to-b from-[#eaf5ff] to-[#f4faff] text-slate-800 overflow-hidden border-b border-blue-100/50">
@@ -280,6 +284,7 @@ export default function AquariumPhilosophyPage() {
 
      
 
+        <DynamicSemanticAccordion pageKey="/services/aquarium/aquarium-philosophy" />
       </main>
     </>
   );

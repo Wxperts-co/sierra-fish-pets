@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tag, Copy, Check, Clock, Gift, ChevronRight } from "lucide-react";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 interface Coupon {
   _id: string;
@@ -123,6 +125,8 @@ export default function CouponsPage() {
         </div>
       </section>
 
+      <AeoDirectAnswerSnippet pageKey="coupons" />
+
       {/* Coupon Grid */}
       <section className="pt-12">
         <div className="container mx-auto px-6 max-w-6xl">
@@ -239,6 +243,8 @@ export default function CouponsPage() {
           )}
         </div>
       </section>
+
+      <DynamicSemanticAccordion pageKey="coupons" />
     </main>
   );
 }

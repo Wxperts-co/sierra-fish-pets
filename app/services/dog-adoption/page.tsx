@@ -3,6 +3,8 @@ import AdoptionHero from "@/components/dog-adoption/AdoptionHero";
 import AdoptionProcess from "@/components/dog-adoption/AdoptionProcess";
 import AdoptionGrid from "@/components/dog-adoption/AdoptionGrid";
 import RescuePartnerSection from "@/components/dog-adoption/RescuePartnerSection";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 export const metadata: Metadata = {
   title: "Dog Adoption Events Renton WA | Sierra Fish & Pets",
@@ -25,6 +27,8 @@ export default function DogAdoptionPage() {
       {/* Hero Section */}
       <AdoptionHero />
 
+      <AeoDirectAnswerSnippet pageKey="/services/dog-adoption" />
+
       {/* Primary Rescue Partner: Ginger's Pet Rescue */}
       <section id="partner">
         <RescuePartnerSection />
@@ -39,6 +43,8 @@ export default function DogAdoptionPage() {
       <section id="dogs">
         <AdoptionGrid />
       </section>
+
+      <DynamicSemanticAccordion pageKey="/services/dog-adoption" />
     </main>
   );
 }

@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import {
   Droplets,
   ShieldCheck,
@@ -174,6 +176,8 @@ export default function AquaJetSystemPage() {
         </div>
       </section>
 
+      <AeoDirectAnswerSnippet pageKey="/about-aqua-jet-water-cleaning-system" />
+
       {/* Feature Grid Section */}
       <section className="py-20 bg-slate-900 border-t border-slate-800">
         <div className="container mx-auto px-6 max-w-6xl">
@@ -225,6 +229,7 @@ export default function AquaJetSystemPage() {
           </Link>
         </div>
       </section>
+      <DynamicSemanticAccordion pageKey="/about-aqua-jet-water-cleaning-system" />
     </main>
   );
 }

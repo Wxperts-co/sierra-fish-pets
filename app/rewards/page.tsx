@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 import {
   Coins,
@@ -106,6 +108,8 @@ export default function RewardsHubPage() {
           </div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="rewards" />
 
       {/* ─── Quick Stats Strip ─── */}
       <section className="bg-[#005AA9] text-white">
@@ -359,6 +363,8 @@ export default function RewardsHubPage() {
 
         </div>
       </section>
+
+      <DynamicSemanticAccordion pageKey="rewards" />
     </main>
   );
 }

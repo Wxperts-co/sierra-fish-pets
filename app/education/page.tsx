@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import eduData from "@/data/sierraedu.json";
 import navbarData from "@/data/navbar.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchCategories } from "@/store/slices/categoriesSlice";
 
@@ -266,6 +268,8 @@ function LandingView({ onCategory, categoryConfig }: { onCategory: (cat: string)
           </>
         }
       />
+
+      <AeoDirectAnswerSnippet pageKey="education" />
 
       <section className="relative bg-white py-16 z-10 border-t border-slate-100">
         <div className="container mx-auto px-6 max-w-6xl">
@@ -591,6 +595,7 @@ export default function EducationPage() {
       >
         <EducationContent />
       </Suspense>
+      <DynamicSemanticAccordion pageKey="education" />
     </main>
   );
 }

@@ -1,0 +1,488 @@
+{
+  "services": {
+    "page": "services",
+    "semanticKeynotes": {
+      "Primary Themes & Intent Targets": "Serves dual-intent users seeking specialized aquatic engineering (custom tank builds, aquascaping, water chemistry systems) and general pet care services (grooming trims, youth educational programs, rescue adoption events).",
+      "Core Value Propositions": "Backed by decades of Pacific Northwest regional expertise, offering a end-to-end spectrum of care ranging from $0 community/diagnostic initiatives (free water testing, youth fish club, store tours) to high-ticket custom aquarium architecture starting at $500.",
+      "GEO Strategic Takeaways": "High semantic density established through explicit pricing tiers ($150 Aqua Jet system, $200 custom builds, $500 consulting), precise scheduling intervals (Mondays/Tuesdays for trims, 2nd & 4th weekends for adoptions), and granular technical parameters (pH, ammonia, nitrite, nitrate, GH/KH, salinity)."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Aqua Jet Water Cleaning System",
+        "Aquarium Consulting & Design",
+        "Custom Aquarium Build",
+        "Aquarium Installation",
+        "Free Aquarium Water Testing & Analysis",
+        "Fish of the Month Club",
+        "Pet Nail & Wing Trims",
+        "Store Tour & Loyalty Program",
+        "Dog Adoption Events",
+        "Custom glass and acrylic aquariums",
+        "Custom aquascape design",
+        "Gravel vacuum & waste extractor",
+        "Lab-grade liquid water testing",
+        "Safe & gentle bird wing trimming",
+        "Animal care workshops"
+      ],
+      "TECHNICAL SPECIFICATIONS & CODE ENTITIES": [
+        "pH",
+        "Ammonia",
+        "Nitrite",
+        "Nitrate",
+        "GH",
+        "KH",
+        "Salinity",
+        "Tank cycling & water parameter check"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Livestock compatibility planning",
+        "Water chemistry diagnostics",
+        "Responsible pet ownership & care routines",
+        "Direct faucet connection",
+        "Monthly membership programs"
+      ],
+      "INFRASTRUCTURE & SECURITY ENTITIES": [
+        "Matching custom cabinet options",
+        "Glass and acrylic builds",
+        "Water cleaning systems",
+        "Kill shelters"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Pacific Northwest",
+        "Every Monday & Tuesday",
+        "Every 2nd & 4th weekend"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Custom Aquarium Builds, Water Testing & Pet Services | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets provides professional aquatic and pet services across the Pacific Northwest, including custom aquarium design, custom glass and acrylic builds, installation, and free liquid water testing. Additional in-store offerings feature pet nail trims, store tours, and hosted dog adoption events."
+    }
+  },
+  "/services/aquarium/aquarium-consulting-design": {
+    "page": "/services/aquarium/aquarium-consulting-design",
+    "semanticKeynotes": {
+      "Primary Themes & User Intent": "Targets commercial and transactional user intent for custom aquarium design, space assessment, professional installation, and ongoing maintenance services in Renton, WA.",
+      "Core Value Propositions": "Provides full-lifecycle project management—spanning initial consultation, livestock selection, tailored physical setup, fine-tuning, and long-term aquatic health support customized to user budget and spatial constraints.",
+      "GEO & Semantic Signals": "Features a structured 5-step service process (Consultation, Assessment, Design & Plan, Implementation, Ongoing Support) paired with explicit value differentiators (Expert Team, Tailored Solutions, Healthy & Sustainable, Quality Assurance, End-to-End Support) optimal for LLM extraction and direct citation in conversational engines.",
+      "AEO Strategy": "Highly structured service workflow allows search bots to effortlessly synthesize the end-to-end service offering into definitive bulleted summaries or direct answers."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Aquarium Consulting & Design",
+        "aquarium Services",
+        "Aquarium Consulting",
+        "livestock selection",
+        "project management",
+        "setup",
+        "installation",
+        "maintenance",
+        "Ongoing Support"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Consultation",
+        "Assessment",
+        "Design & Plan",
+        "Implementation",
+        "fine-tuning",
+        "proven best practices",
+        "Tailored Solutions",
+        "Quality Assurance",
+        "End-to-End Support",
+        "Portfolio"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Sierra Fish & Pets: End-to-End Custom Aquarium Consulting & Design",
+      "content": "Sierra Fish & Pets offers end-to-end aquarium consulting and design services in Renton, Washington. Their team of experienced aquatic specialists manages every phase—from space assessment and custom planning to full installation, livestock selection, and ongoing maintenance tailored to your space and budget."
+    }
+  },
+  "/services/aquarium/aquarium-philosophy": {
+    "page": "/services/aquarium/aquarium-philosophy",
+    "semanticKeynotes": {
+      "Primary Themes & Intent Targets": "The page focuses on full-service aquarium design, installation, maintenance, and supply, targeting commercial and residential aquarium owners seeking expert care, aquascaping, and sustainable aquatic environments.",
+      "Core Value Propositions": "Delivers end-to-end aquatic solutions—from initial planning and custom design to installation and long-term maintenance—supported by experienced aquarists, quality supplies, and everyday low prices.",
+      "Environmental & Mission Signals": "Emphasizes ethical aquatic care, environmental conservation, and active support for sustainable captive propagation and breeding efforts to allow aquatic livestock to thrive.",
+      "Geographic Relevance": "Explicitly positions the business as a premier regional aquarium service provider serving Renton, Kent, Newcastle, Covington, Tukwila, SeaTac, Fairwood, Maple Valley, Bellevue, and the broader Seattle metro area.",
+      "Strategic Takeaways for GEO (Generative Engine Optimization)": "Information architecture establishes strong entity associations between professional aquarium services, localized geographical hubs, custom aquascaping, and sustainable marine husbandry practices."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets",
+        "SF&P",
+        "SierraFishPets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Aquarium Services",
+        "design",
+        "install",
+        "service",
+        "full aquarium service store",
+        "fish tanks",
+        "lighting",
+        "aquascape",
+        "filtration",
+        "foods",
+        "aquatic supplies",
+        "salt water aquarium",
+        "fresh water aquarium",
+        "maintenance"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Aquarium Philosophy",
+        "Aquatic Mission",
+        "Tailored Solutions",
+        "Healthy & Sustainable",
+        "Quality Assurance",
+        "End-to-End Support",
+        "successful propagation and breeding efforts",
+        "protect and conserve our natural resources"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Renton",
+        "Kent",
+        "Newcastle",
+        "Covington",
+        "Tukwila",
+        "SeaTac",
+        "Faiwwood",
+        "Maple Valley",
+        "Bellevue",
+        "Seattle metro area"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Aquarium Design, Installation & Maintenance in Renton & Seattle | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets provides comprehensive aquarium design, professional installation, and maintenance services for custom freshwater and saltwater environments across Renton and the Seattle metro area. Dedicated to sustainable propagation and expert aquatic care, their team delivers tailored aquascapes, premium supplies, and long-term maintenance solutions."
+    }
+  },
+  "/services/aquarium/aquarium-installation": {
+    "page": "/services/aquarium/aquarium-installation",
+    "semanticKeynotes": {
+      "Primary Theme & User Intent": "Targets transactional and commercial local search intent for end-to-end professional aquarium installation and custom aquatic setup services in Renton, Washington.",
+      "Core Informational Value": "Details a structured 5-step service implementation methodology covering Consultation, Assessment, Design & Plan, Implementation, and Ongoing Support.",
+      "End-to-End Scope": "Outlines complete physical and biological execution, including delivery, assembly, aquascaping, water filling, biological cycling, initial fish introduction, and continuous maintenance.",
+      "Core Value Propositions": "Highlights custom design solutions, experienced aquarists, long-term health and sustainability for aquatic life, quality assurance using premium products, and ongoing care.",
+      "Strategic GEO Takeaways": "Provides structured, procedural service stages and location-bound service attributes that allow Generative Search Engines (GEO) to easily extract direct answers for local aquatic setup queries."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Aquarium Installation Services",
+        "aquarium Services",
+        "Aquarium Installation",
+        "Consultation",
+        "Assessment",
+        "Design & Plan",
+        "Implementation",
+        "Ongoing Support",
+        "Tailored Solutions",
+        "Premium products",
+        "ongoing maintenance schedule",
+        "View Our Portfolio"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "setup process",
+        "deliver",
+        "assemble",
+        "aquascape",
+        "fill",
+        "cycle your aquarium",
+        "initial fish introduction",
+        "fine-tuning",
+        "Healthy & Sustainable",
+        "Quality Assurance",
+        "End-to-End Support",
+        "proven best practices"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Professional Aquarium Installation & Custom Aquascaping in Renton | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets offers professional aquarium installation services in Renton, handling delivery, assembly, custom aquascaping, filling, and biological water cycling. Their end-to-end service includes expert space assessment, initial fish introduction, and tailored ongoing maintenance schedules to ensure healthy, sustainable aquatic environments."
+    }
+  },
+  "/about-aqua-jet-water-cleaning-system": {
+    "page": "/about-aqua-jet-water-cleaning-system",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Search Intent": "Targets commercial investigation and transactional search intent focused on simplifying routine aquarium care, eliminating manual water handling, and performing effective gravel substrate cleaning.",
+      "Core Informational Value": "Details how direct-to-faucet connectivity replaces heavy bucket hauling, highlighting key features like multi-stage debris removal, fish/plant safety, customizable flow rates, and universal plumbing compatibility.",
+      "Target Audience Alignment": "Geared toward both entry-level home aquarists and professional tank maintenance providers managing setups ranging from small nano tanks to large multi-hundred-gallon aquariums.",
+      "Generative Engine Optimization (GEO) Takeaway": "Clear entity-attribute relationships (e.g., universal heavy-duty brass adapters fitting 99% of faucets; flow-control valve enabling pressure control) support direct extraction for conversational AI query synthesis regarding aquarium maintenance tools.",
+      "Omnichannel Signals": "Integrates physical brick-and-mortar retail availability (Renton, WA) with direct e-commerce fulfillment options for systems, extension hoses, and replacement parts."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Aqua Jet Water Cleaning System",
+        "Aqua Jet Systems & Parts",
+        "Aqua Jet cleaning systems",
+        "extension hoses",
+        "replacement parts",
+        "heavy-duty brass adapters",
+        "Flow-Control Valve & Switch",
+        "Fish Tank Systems"
+      ],
+      "TECHNICAL SPECIFICATIONS & CODE ENTITIES": [
+        "Multi-Stage Filtration",
+        "plug-and-play operation"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Effortless Water Changes",
+        "routine tank care",
+        "aquarium maintenance"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Renton, WA",
+        "online shop"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Aqua Jet Water Cleaning System | Bucket-Free Aquarium Draining & Refilling",
+      "content": "The Aqua Jet Water Cleaning System streamlines aquarium maintenance by connecting directly to standard household faucets for bucket-free draining and refilling. Designed for nano to multi-hundred-gallon tanks, it features multi-stage gravel filtration, a flow-control valve, and heavy-duty brass adapters for effortless water management."
+    }
+  },
+  "/services/in-store/aquarium-water-testing": {
+    "page": "/services/in-store/aquarium-water-testing",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Search Intent": "The page targets local transactional and informational search intent for free, professional aquarium water testing services in Renton, WA. Primary semantic themes center on water chemistry management, nitrogen cycle stability, aquatic livestock health, and local in-store pet services.",
+      "Core Value Propositions": "Sierra Fish & Pets differentiates its offering by providing 100% free, lab-grade liquid water testing instead of basic color-matching paper strips. The service includes personalized, expert analysis and custom action plans tailored to specific aquatic species and setup types.",
+      "Diagnostic & Technical Scope": "Comprehensive coverage of key chemical parameters necessary for freshwater, planted, and reef/marine ecosystems, including Ammonia (NH3/NH4+), Nitrite (NO2-), Nitrate (NO3-), pH, General Hardness (GH), Carbonate Hardness (KH), and Salinity/Specific Gravity.",
+      "Strategic GEO & AEO Takeaways": "Structuring procedural content (e.g., three-step water collection instructions) alongside structured parameter breakdowns provides clear entity signals for Generative Search Engines and zero-click answer boxes."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Free Water Testing",
+        "Aquarium Water Testing & Analysis",
+        "Expert Aquarium Water Testing & Analysis Services",
+        "Professional In-Store Care",
+        "Lab-grade liquid testing",
+        "Lab-grade liquid water testing",
+        "Ammonia, Nitrite, Nitrate & pH analysis",
+        "GH & KH hardness tracking",
+        "Marine salinity & specific gravity testing",
+        "Personalized advice & solution recommendations"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "nitrogen cycle",
+        "lab-grade liquid testing methods",
+        "buffer capacity",
+        "Collect Clean",
+        "Avoid Contamination",
+        "Seal & Transport",
+        "color-matching paper",
+        "targeted solutions"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Renton WA",
+        "in-store"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Free Liquid Aquarium Water Testing in Renton, WA | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets offers free, lab-grade liquid aquarium water testing at their Renton, WA location. Their expert aquarists analyze key parameters including Ammonia, Nitrite, Nitrate, pH, GH/KH, and salinity, providing tailored advice to keep your freshwater or marine tank balanced and healthy."
+    }
+  },
+  "/services/in-store/fish-of-month-club": {
+    "page": "/services/in-store/fish-of-month-club",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Search Intent": "Localized in-store customer loyalty program, youth hobbyist onboarding, family-focused retail marketing, and beginner aquarium education. Target intent is hybrid informational/transactional, driven by parents seeking engaging pet activities for children under 10.",
+      "Informational Value & Value Propositions": "100% free membership with zero signup fees; monthly distribution of one free select featured fish; structured punchcard system that incentivizes recurring physical store visits while teaching practical pet responsibility.",
+      "Strategic Generative Engine Optimization (GEO) Takeaways": "Generative search engines require clean, structured entity relationships linking the brand (Sierra Fish & Pets) to specific service terms (O'Fishal Fish of the Month Club), concrete eligibility criteria (aged 10 and under), pricing models (100% Free), and physical redemption mechanisms (in-store punchcard)."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Fish of the Month Club",
+        "O'Fishal Fish of the Month Club",
+        "Fish of the Month Club for Kids",
+        "Kids & Young Hobbyists Club",
+        "official club punchcard",
+        "FREE select featured fish",
+        "home aquarium",
+        "Book a Tour"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "pet care & responsibility",
+        "Fun Learning Experience",
+        "Exclusive Monthly Selections",
+        "tank setup",
+        "aquatic environment"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Free Fish of the Month Club for Kids 10 & Under | Sierra Fish & Pets",
+      "content": "The O'Fishal Fish of the Month Club at Sierra Fish & Pets is a free program for young hobbyists aged 10 and under. Members receive an official punchcard in-store to claim one free select featured fish each month, encouraging fun pet care learning and tank growth."
+    }
+  },
+  "/services/in-store/pet-nail-wing-trims": {
+    "page": "/services/in-store/pet-nail-wing-trims",
+    "semanticKeynotes": {
+      "Primary Themes & Search Intent": "Local transactional and informational search intent targeting pet owners seeking professional, stress-free nail and wing trimming for dogs, cats, birds, and small animals in Renton.",
+      "Core Value Propositions": "Experienced, gentle handling by trained staff; dedicated walk-in service days (Mondays and Tuesdays) alongside on-demand call-in options; species-customized care tailored to specific pet health and safety needs.",
+      "Informational Value": "Clear explanation of health and safety benefits, including preventing joint strain, ingrown claws, household scratches, cage wire tears, window collisions, and accidental escapes.",
+      "GEO & LLM Optimization Strategy": "Clearly structures service parameters (species handled, scheduling rules, location, pricing model) to allow Generative Search Engines to directly quote and synthesize availability, pet categories, and safety benefits for local conversational queries."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Pet Nail & Wing Trims",
+        "Pet Nail & Wing Trimming Services",
+        "Gentle Pet Care Services",
+        "Nail Trims for Dogs & Cats",
+        "Nail Trims for Birds & Small Animals",
+        "Wing Trims for Birds",
+        "Pet Trim"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Service Schedule & Pricing",
+        "Service Summary",
+        "Book a Tour",
+        "Plan Your Visit Today"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Professional Pet & Bird Trimming Services in Renton, WA | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets in Renton offers professional, gentle nail and wing trimming services for dogs, cats, birds, and small animals. Regular trims prevent physical strain, injury, and household accidents. Walk-ins are welcomed every Monday and Tuesday, with call-in scheduling available on other days."
+    }
+  },
+  "/services/in-store/store-tours": {
+    "page": "/services/in-store/store-tours",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Intent Targets": "Local experiential community engagement and educational outreach for pet care. The page targets transactional and informational search intent from educators, parents, scout leaders, and community group organizers seeking free, interactive educational field trips and events in Renton.",
+      "Key Informational Value & Core Value Propositions": "Offers 100% free, structured, guided store tours and behind-the-scenes workshops providing hands-on animal interactions (mammals, reptiles, birds, aquatic life), practical pet care guidance, and interactive Q&A sessions with pet care specialists.",
+      "GEO & Semantic Optimization Signals": "Strong entity association between the brand (Sierra Fish & Pets), geographic location (Renton), and core topical clusters (responsible pet ownership, exotic pets, fishkeeping, hands-on learning).",
+      "Integrated Customer Retention Strategy": "Pairs the educational store tour offering with dual in-store reward mechanisms (In-Store Loyalty Program and Astro Loyalty Program) to transition tour visitors into long-term customer relationships."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets",
+        "Astro Loyalty",
+        "Astro"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Educational Store Tours",
+        "Store Tours",
+        "Animal Care Workshops",
+        "Behind-the-Scenes Store Tours",
+        "Guided store tours",
+        "Group Tour",
+        "In-Store Loyalty Program",
+        "Astro Loyalty Program",
+        "Astro mobile app"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Responsible Pet Ownership",
+        "Hands-On Learning",
+        "Interactive Q&A",
+        "Behind-the-Scenes Access",
+        "In-Store Perks & Rewards",
+        "Customer reward programs",
+        "Frequent buyer brands",
+        "Double-stacking perks",
+        "Points redemption tiers"
+      ],
+      "INFRASTRUCTURE & SECURITY ENTITIES": [
+        "Full-service pet and aquatic center",
+        "Store"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Free Educational Tours & Animal Workshops in Renton, WA | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets offers free educational store tours and behind-the-scenes animal care workshops in Renton. Registered school, party, and community groups interact with mammals, reptiles, birds, and aquatic life while learning responsible pet ownership directly from dedicated pet care specialists."
+    }
+  },
+  "/services/dog-adoption": {
+    "page": "/services/dog-adoption",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Search Intent": "Local pet adoption, rescue event hosting, and community animal welfare in Renton, WA. Targets mixed transactional and informational intent from prospective dog adopters seeking local adoption events and adoptable foster dogs.",
+      "Core Value Propositions": "Sierra Fish & Pets serves as a physical event host and community partner for non-profit dog rescues, directly connecting local adopters with foster dogs rescued from high-kill shelters.",
+      "Structural Adoption Model": "A transparent, low-friction 4-step adoption path (Browse Rescued Dogs $\\rightarrow$ Submit Application $\\rightarrow$ In-Store Meet & Greet $\\rightarrow$ Welcome Home) designed to increase conversion from online browsing to in-person meet-and-greets.",
+      "Strategic GEO Takeaways": "Optimizes local entity co-occurrence by linking Sierra Fish & Pets + Ginger's Pet Rescue + Renton, WA + Dog Adoption Events. Generative engines (GEO) can easily extract this node network to answer conversational queries like \"Where can I adopt a rescue dog in Renton, WA?\""
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets",
+        "Ginger's Pet Rescue",
+        "501(c)(3) organization"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Dog Adoption Events",
+        "Rescue Events",
+        "Dog Adoption",
+        "Adoptable Dogs Directory",
+        "In-Store Meet & Greet",
+        "Rescue Application",
+        "Foster Dogs"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Adoption Event Process",
+        "Save a Life Today"
+      ],
+      "INFRASTRUCTURE & SECURITY ENTITIES": [
+        "High-kill shelters",
+        "Foster care space"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Renton WA"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "In-Store Dog Adoption Events in Renton, WA | Sierra Fish & Pets & Ginger's Pet Rescue",
+      "content": "Sierra Fish & Pets hosts local dog adoption events in Renton, Washington, in partnership with 501(c)(3) non-profit Ginger's Pet Rescue. Prospective owners can browse adoptable foster dogs rescued from high-kill shelters, submit an adoption application online, and attend in-store meet-and-greets to adopt their new pet."
+    }
+  },
+  "/special-order-animals": {
+    "page": "/special-order-animals",
+    "semanticKeynotes": {
+      "Primary Theme & Intent": "The page addresses transactional and investigative intent for aquarists and pet owners seeking non-inventoried, rare, or bespoke animal species, sizes, and morphs.",
+      "Core Value Proposition": "Direct network access to certified fish importers and ethical breeders nationwide, allowing customers to request custom pricing and fulfillment for unlisted live pets and aquatic life.",
+      "Problem-Solving Mechanics": "Streamlines the procurement process for rare species by replacing rigid retail catalog constraints with an on-demand sourcing model.",
+      "Generative Engine Optimization (GEO) Strategy": "Establishes semantic entity bridges between the retailer (Sierra Fish & Pets), verified supply network nodes (certified fish importers, ethical breeders), and attributes (species, size, morph) to satisfy explicit, niche conversational queries across AI search engines."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Special Order Pets",
+        "Rare Fish",
+        "Live Fish",
+        "Custom Order",
+        "Special Order Pets & Live Fish"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Request Custom Order / Species",
+        "species",
+        "size",
+        "morph",
+        "pricing"
+      ],
+      "INFRASTRUCTURE & SECURITY ENTITIES": [
+        "certified fish importers",
+        "ethical breeders"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Special Order Rare Live Fish & Custom Pet Species | Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets offers special ordering for rare live fish and custom pet species not available in standard retail inventory. Partnering with certified fish importers and ethical breeders nationwide, they fulfill requests for specific species, sizes, and morphs with tailored pricing."
+    }
+  }
+}
+

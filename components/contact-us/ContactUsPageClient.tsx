@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import {
   MapPin,
   Phone,
@@ -174,6 +176,8 @@ export default function ContactUsPageClient() {
           </motion.div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="contact-us" />
 
       {/* ─── CONTACT FORM & INFO CARDS SECTION ─── */}
       <section className="container mx-auto px-6 max-w-6xl py-8 md:py-16 relative ">
@@ -471,6 +475,8 @@ export default function ContactUsPageClient() {
           </div>
         </motion.div>
       </section>
+
+      <DynamicSemanticAccordion pageKey="contact-us" />
     </main>
   );
 }

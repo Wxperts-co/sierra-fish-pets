@@ -29,6 +29,8 @@ import {
   Fish,
 } from "lucide-react";
 import reviewsData from "@/data/reviews.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 // ─── Types & Data ─────────────────────────────────────────────────────────────
 interface ReviewItem {
@@ -227,6 +229,8 @@ export default function CustomerStoriesClient() {
           </motion.div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="customer-stories" />
 
       {/* ─── MAIN EDITORIAL STORYTELLING CONTENT ─── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 relative z-10">
@@ -1331,6 +1335,8 @@ export default function CustomerStoriesClient() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DynamicSemanticAccordion pageKey="customer-stories" />
     </div>
   );
 }

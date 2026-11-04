@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Download, FileText, ArrowLeft, Printer } from "lucide-react";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 export default function FlyersPage() {
   
@@ -73,6 +75,8 @@ export default function FlyersPage() {
         </div>
       </section>
 
+      <AeoDirectAnswerSnippet pageKey="flyers" />
+
       {/* ─── FLYERS CONTENT SECTION ─── */}
       <section className="container mx-auto px-6 max-w-5xl mt-12">
         
@@ -136,6 +140,7 @@ export default function FlyersPage() {
 
       </section>
 
+      <DynamicSemanticAccordion pageKey="flyers" />
     </main>
   );
 }

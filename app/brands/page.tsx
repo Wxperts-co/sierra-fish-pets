@@ -6,6 +6,8 @@ import BrandCTA from "@/components/brands/BrandCTA";
 import { connectDB } from "@/lib/mongodb";
 import BrandModel from "@/models/Brand";
 import defaultBrands from "@/data/brands.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 import type { Metadata } from "next";
 
@@ -106,6 +108,8 @@ export default async function BrandsPage({ searchParams }: BrandsPageProps) {
         breadcrumbs={breadcrumbs}
       />
 
+      <AeoDirectAnswerSnippet pageKey="brands" />
+
       <Suspense
         fallback={
           <div className="flex justify-center items-center py-20 bg-white">
@@ -117,6 +121,7 @@ export default async function BrandsPage({ searchParams }: BrandsPageProps) {
       </Suspense>
 
       <BrandCTA />
+      <DynamicSemanticAccordion pageKey="brands" />
     </main>
   );
 }

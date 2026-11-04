@@ -22,6 +22,8 @@ import {
   Footprints,
 } from "lucide-react";
 import servicesData from "@/data/services.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface ServiceItem {
@@ -167,6 +169,8 @@ export default async function ServiceDetailPage({
             </div>
           </div>
         </section>
+
+        <AeoDirectAnswerSnippet pageKey={`/services/in-store/${slug}`} />
 
         {/* ─── Service Description & Details Section ─── */}
         <section className="relative py-12 md:py-20 bg-slate-50 border-b border-slate-200">
@@ -842,6 +846,7 @@ export default async function ServiceDetailPage({
             </div>
           </div>
         </section>
+        <DynamicSemanticAccordion pageKey={`/services/in-store/${slug}`} />
       </main>
     </>
   );

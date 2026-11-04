@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import eduData from "@/data/sierraedu.json";
 import navbarData from "@/data/navbar.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchCategories } from "@/store/slices/categoriesSlice";
 
@@ -314,6 +316,8 @@ function ArticleDetailContent({ slug }: { slug: string }) {
         }
       />
 
+      <AeoDirectAnswerSnippet pageKey={`/education/${slug}`} />
+
       <div className="container mx-auto px-4 sm:px-6 max-w-5xl py-10 relative z-10">
         <div className="bg-white border border-slate-100 rounded-2xl shadow-lg px-6 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 mb-8">
           <button
@@ -414,6 +418,7 @@ export default function ArticlePage({
       >
         <ArticleDetailContent slug={slug} />
       </Suspense>
+      <DynamicSemanticAccordion pageKey={`/education/${slug}`} />
     </main>
   );
 }

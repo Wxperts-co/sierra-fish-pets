@@ -7,6 +7,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X, ZoomIn, Grid, Store, Dog, Fish, Bug, Bird, Rabbit, ChevronDown, Check } from "lucide-react";
 import galleryData from "@/data/gallery.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface GalleryItem {
@@ -174,6 +176,8 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
           </motion.div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="gallery" />
 
       {/* ─── CATEGORY FILTER TABS / MOBILE DROPDOWN ─── */}
       <section className="py-6 sm:py-12">
@@ -348,6 +352,8 @@ export function GalleryContent({ initialCat }: { initialCat?: string }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DynamicSemanticAccordion pageKey="gallery" />
     </main>
   );
 }

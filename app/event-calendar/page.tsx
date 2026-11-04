@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 
 import categoriesData from "@/data/eventCategories.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface Recurrence {
@@ -483,6 +485,8 @@ export default function EventCalendarPage() {
         </div>
       </section>
 
+      <AeoDirectAnswerSnippet pageKey="event-calendar" />
+
       {/* ─── 2. CALENDAR & SIDEBAR CONTENT ─── */}
       <section className="container mx-auto px-4 max-w-6xl mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -868,7 +872,7 @@ export default function EventCalendarPage() {
         )}
       </AnimatePresence>
 
-      
+      <DynamicSemanticAccordion pageKey="event-calendar" />
     </main>
   );
 }

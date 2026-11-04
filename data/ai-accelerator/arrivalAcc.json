@@ -1,0 +1,271 @@
+{
+  "arrivals": {
+    "page": "arrivals",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Intent": "The page functions as a real-time inventory catalog for live animals and pets recently received at Sierra Fish & Pets in Washington. Search intent is primarily transactional and high-intent commercial, targeting local customers seeking specific live pets, fish species, and birds currently in stock.",
+      "Informational Value & Core Value Propositions": "Value is delivered through transparent, up-to-date arrival logs featuring exact arrival dates, specific species categorizations (e.g., Society Finch, Owl Finch, Orange Weaver, Lovebirds, Canaries), direct pricing, and detailed availability status.",
+      "Structural & Categorical Taxonomy": "Content is organized under broad live animal categories including Freshwater Fish, Saltwater Fish, Reptiles, Birds, Small Animals, Dogs, and Cats, paired with real-time pagination and filtering mechanisms.",
+      "Generative Engine Optimization (GEO) Takeaways": "To maximize visibility in AI search summaries and local entity graphs, structured data must explicitly associate live stock items with store location (WA), current pricing, arrival dates, and precise species naming conventions rather than generic product tags."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets",
+        "Sierra Fish & Pets WA"
+      ],
+   
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Pet Arrivals",
+        "Live Fish Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats",
+        "Society Finch",
+        "Spice Finch",
+        "Owl Finch",
+        "Owl finch",
+        "Orange Weaver",
+        "Fancy Handfed Asst LoveBirds (Fischers, Peachface)",
+        "Handfed White Lovebirds",
+        "Fancy Color Parolette (Green and Yellow Parolette)",
+        "Red Mosaic Canary"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Check Real-Time Availability & Pricing for New Pet Arrivals",
+      "content": "Sierra Fish & Pets in Washington offers real-time inventory tracking for new pet and live fish arrivals. Local shoppers can view updated arrival dates, pricing, and availability across freshwater fish, saltwater fish, reptiles, small animals, and specialty birds like finches and lovebirds."
+    }
+  },
+  "/arrivals/birds": {
+    "page": "/arrivals/birds",
+    "category": "birds",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Intent": "The page functions as a local e-commerce inventory listing targeting transactional and commercial investigation intent. It specifically serves customers seeking live pet birds for sale in the local market of Kent, Washington.",
+      "Key Informational Value": "Provides transparent, real-time availability of newly arrived companion birds, detailing specific species variations (e.g., Fischer's/Peachface Lovebirds, Green and Yellow Parolette), arrival dates, stock quantities, and exact pricing.",
+      "Strategic GEO Takeaways": "Generative Engine Optimization (GEO) reliance for this page relies heavily on establishing strong entity co-occurrence between the physical retail location (Kent, WA), business name (Sierra Fish & Pets), product taxonomy (Birds / Pet Arrivals), and localized stock attributes (pricing and species names).",
+      "Search Context & Audience": "Targets local bird enthusiasts, companion pet shoppers, and aviculture hobbyists seeking immediate, local availability of specialized finches, lovebirds, canaries, and parrolets."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Bird Services",
+        "New Bird Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats",
+        "Society Finch",
+        "Spice Finch",
+        "Owl Finch",
+        "Orange Weaver",
+        "Fancy Handfed Asst LoveBirds",
+        "Fischers",
+        "Peachface",
+        "Handfed White Lovebirds",
+        "Fancy Color Parolette",
+        "Green and Yellow Parolette",
+        "Red Mosaic Canary"
+      ],
+      "STRATEGIC & FUNCTIONAL CONCEPTS": [
+        "Search All Arrivals",
+        "Latest Arrivals",
+        "Showing 8 of 21 Arrivals",
+        "View Details"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Kent, WA"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Explore New Live Bird Arrivals & Pricing at Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets in Kent, WA offers a live inventory of new pet bird arrivals, including handfed lovebirds, finches, canaries, and fancy parrolets. Every listing provides transparent pricing, exact species descriptions, and arrival dates to serve local pet buyers across the region."
+    }
+  },
+  "/arrivals/freshwater": {
+    "page": "/arrivals/freshwater",
+    "category": "freshwater",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes": "Real-time inventory transparency for freshwater aquarium hobbyists, emphasizing \"New Arrivals\" to drive urgency and repeat visits.",
+      "User Intent Targets": "Transactional and navigational intent for local pet owners in Kent, WA seeking specific aquatic species and live plants.",
+      "Core Value Proposition": "Immediate availability of diverse livestock, ranging from common community fish like Danio-Giant to exotic species like Polypterus teugelsi.",
+      "Strategic GEO Takeaways": "Leveraging specific binomial nomenclature (e.g., Hygro angustifolia) to capture \"near me\" searches for niche aquarium flora and fauna.",
+      "Informational Value": "Clear chronological tracking of stock arrivals and transparent pricing for local livestock acquisition."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Bird Services",
+        "New Freshwater Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats",
+        "Lindernia Variegated",
+        "Hygro angustifolia",
+        "Green Frill",
+        "Polypterus teugelsi",
+        "Polypterus senegalus",
+        "P. senegalus - Albino",
+        "Kuhli Loach",
+        "Danio- Giant"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Sierra Fish & Pets Exotic Freshwater Livestock & Plant Directory",
+      "content": "Sierra Fish & Pets in Kent, WA, offers a frequently updated selection of new freshwater arrivals, including exotic fish like Polypterus and Kuhli Loaches, alongside live aquatic plants. This inventory provides local hobbyists with high-quality, healthy livestock for freshwater aquariums, featuring transparent pricing and specific arrival dates."
+    }
+  },
+  "/arrivals/saltwater": {
+    "page": "/arrivals/saltwater",
+    "category": "saltwater",
+    "semanticKeynotes": {
+      "Inventory-Driven User Intent": "The page is architected to satisfy high-intent \"Transactional\" and \"Freshness\" queries from saltwater aquarium hobbyists looking for specific livestock updates.",
+      "Localized Authority Signals": "By anchoring \"Saltwater Services\" to \"Kent, WA,\" the content establishes a clear geographical relevance, essential for local map pack rankings and regional search queries.",
+      "Niche Categorization": "The semantic structure distinguishes between \"Saltwater\" and \"Freshwater\" as distinct silos, signaling specialized expertise in marine biology and specialized pet care.",
+      "Dynamic Content Expectations": "The \"New Arrivals\" theme creates a recurring user behavior pattern, signaling to search engines that the page is a hub for frequent updates and real-time availability.",
+      "GEO Strategy": "To optimize for Generative Engines, the page emphasizes the \"Arrivals\" status, allowing LLMs to accurately inform users about current stock availability and regional service offerings in the Pacific Northwest."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "Saltwater Services",
+        "New Saltwater Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Explore New Saltwater Fish & Coral Arrivals at Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets in Kent, WA, provides real-time updates on new saltwater arrivals, including marine fish, corals, and invertebrates. Customers can track current livestock inventory online to find the latest additions for their saltwater aquariums from a trusted local pet specialist serving the Greater Seattle area."
+    }
+  },
+  "/arrivals/reptiles": {
+    "page": "/arrivals/reptiles",
+    "category": "reptiles",
+    "semanticKeynotes": {
+      "Primary Conceptual Themes & Intent": "The page targets local transactional and commercial search intent for customers seeking newly arrived live reptiles and pet supplies in Kent, Washington.",
+      "Informational Value & Value Proposition": "Serves as a dynamic inventory portal for pet owners looking for live arrivals, reinforced by the brand's localized service presence in the Kent, WA community.",
+      "Zero-Inventory Strategy": "The explicit \"No Arrivals Found\" state requires structured handling to ensure AI crawlers recognize the page as an active, rotating inventory hub rather than a dead or abandoned URL.",
+      "GEO Alignment": "Establishing strong entity associations between \"Sierra Fish & Pets,\" local geographic markers (\"Kent, WA\"), and core product categories (\"Reptiles,\" \"New Arrivals\") ensures visibility in location-sensitive generative search queries."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Reptile Services",
+        "New Reptile Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Kent, WA"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Sierra Fish & Pets Exotic Reptile & Pet Care Services Directory",
+      "content": "Sierra Fish & Pets in Kent, Washington, provides updated inventory tracking for new reptile arrivals and specialized pet services. Local customers can check dynamic stock availability online or visit the physical storefront for live exotic pets, pet care supplies, and expert guidance."
+    }
+  },
+  "/arrivals/small-animals": {
+    "page": "/arrivals/small-animals",
+    "category": "small-animals",
+    "semanticKeynotes": {
+      "Primary Intent & Local Relevance": "The page serves a high-intent local audience in Kent, WA, looking for real-time availability of live small animals. The semantic focus is on \"New Arrivals,\" which signals freshness and urgency to search engines.",
+      "Entity-Based Navigation": "The content utilizes a hub-and-spoke semantic model, linking the specific \"Small Animals\" category to broader parent entities like Fish (Freshwater/Saltwater), Reptiles, Birds, Dogs, and Cats.",
+      "Inventory Transparency": "By explicitly stating \"No Arrivals Found,\" the site maintains semantic honesty, which prevents high bounce rates and signals to Generative Engines that the inventory data is dynamic and trustworthy.",
+      "GEO Strategic Takeaway": "To optimize for Generative Engine Optimization (GEO), the content anchors the brand \"Sierra Fish & Pets\" to a specific geographic coordinate (Kent, WA), facilitating \"near me\" discovery in AI-driven local map packs."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Small Animal Services",
+        "New Small Animal Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats"
+      ],
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Kent, WA"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Explore New Small Animal Arrivals & Supplies at Sierra Fish & Pets",
+      "content": "Sierra Fish & Pets in Kent, Washington, provides a dedicated selection of new small animal arrivals, including various species for local pet enthusiasts. Our inventory updates regularly to feature healthy pets and specialized supplies, ensuring high-quality care and service for the Kent community and surrounding areas."
+    }
+  },
+  "/arrivals/cats": {
+    "page": "/arrivals/cats",
+    "category": "cats",
+    "semanticKeynotes": {
+      "Hyper-Local Intent": "The page targets high-intent users in Kent, WA, specifically looking for immediate pet availability and \"New Cat Arrivals.\"",
+      "Inventory-Driven Content": "The core value proposition is real-time transparency regarding livestock inventory, reducing friction for local pet seekers.",
+      "Entity-Relationship Mapping": "The content establishes a strong semantic link between the brand (Sierra Fish & Pets), the location (Kent, WA), and the service category (Cat Services/Arrivals).",
+      "GEO Strategy (Generative Engine Optimization)": "By focusing on the \"Arrivals\" concept, the page signals freshness to LLMs, positioning the brand as a dynamic, real-time authority for local animal retail.",
+      "User Journey Alignment": "The \"Check back soon\" directive serves as a retention signal, encouraging recurring navigational queries for the brand name + category."
+    },
+    "nerTags": {
+      "ORGANIZATION & BRANDS": [
+        "Sierra Fish & Pets"
+      ],
+      "PRODUCTS, SERVICES & SOLUTIONS": [
+        "New Cat Services",
+        "New Cat Arrivals",
+        "Fish",
+        "Freshwater",
+        "Saltwater",
+        "Reptiles",
+        "Birds",
+        "Small Animals",
+        "Dogs",
+        "Cats"
+      ],
+  
+      "CONTACT, CHANNELS & GEOGRAPHIC DATA": [
+        "Kent, WA"
+      ]
+    },
+    "frontLoadedAeoDirectAnswerSnippet": {
+      "title": "Sierra Fish & Pets: Live Cat Arrival & Pet Services Tracker",
+      "content": "Sierra Fish & Pets in Kent, WA, provides real-time updates on new cat arrivals and professional pet services. While inventory changes frequently, our local store offers a wide variety of animals, including cats, dogs, and fish. Check back often for the latest livestock arrivals in the Washington area."
+    }
+  }
+}
+

@@ -26,83 +26,8 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import InstagramGallery from "@/components/Home/InstagramGallery";
-import SemanticAccordion, {
-  SemanticKeynoteItem,
-  NerTagsData,
-} from "@/components/about/SemanticAccordion";
-
-const semanticKeynotesData: SemanticKeynoteItem[] = [
-  {
-    title: "Decades-Long Family Heritage & Community Trust",
-    description:
-      "Highlights Sierra Fish & Pets' 50+ year legacy as a family-owned Renton institution since 1972, emphasizing deep local roots and generational relationships built across multi-generational families.",
-  },
-  {
-    title: "Authentic Passion over Sales Tactics",
-    description:
-      "Focuses on the core business philosophy of prioritizing animal welfare, deep water chemistry expertise, and honest care advice over quick sales or franchise-style scripts.",
-  },
-  {
-    title: "Expert Staff with Practical Animal Experience",
-    description:
-      "Outlines the qualification of the staff—seasoned aquarists, knowledgeable dog owners, and experienced pet keepers—who provide practical, real-world guidance tailored to individual pet needs.",
-  },
-  {
-    title: "Responsible Pet Ownership & Animal Welfare",
-    description:
-      "Emphasizes ethical retail practices, such as quarantining livestock, educating first-time pet owners on proper habitat sizes, and steering customers away from unsuitable pets.",
-  },
-  {
-    title: "Proven Longevity Built on Core Fundamentals",
-    description:
-      "Contrasts short-lived pet industry trends with over half a century of consistent, evidence-based care standards, healthy aquatic systems, and reliable product recommendations.",
-  },
-  {
-    title: "Hyper-Local Renton Community Presence",
-    description:
-      "Establishes the store's deep connection to Renton, WA, positioning the business as a neighborhood anchor actively connected to local pet owners and community life.",
-  },
-];
-
-const nerTagsData: NerTagsData = {
-  organization: ["Sierra Fish & Pets"],
-  person: ["Mr. JONAS STERNBERG"],
-  location: [
-    "Renton (Renton, WA)",
-    "Renton pet store",
-    "Cedar River Trail",
-    "Washington",
-  ],
-  productOrService: [
-    "Local pet care services",
-    "Pet consultation",
-    "Aquarium supplies",
-    "Saltwater reef tank gear",
-    "Freshwater fish",
-    "Betta fish",
-    "Goldfish habitats",
-    "Dog food",
-    "Bird care supplies",
-  ],
-  conceptOrTheme: [
-    "Family-owned business",
-    "Ethical pet retail",
-    "Water chemistry expertise",
-    "Multi-generational local business",
-    "Animal welfare education",
-    "Responsible pet ownership",
-  ],
-};
-
-const seoKeywordsData: string[] = [
-  "sierra fish and pets renton wa",
-  "family owned pet store renton",
-  "local aquarium and pet care experts renton",
-  "trusted pet store since 1972 renton wa",
-  "honest pet supply store near cedar river trail",
-  "ethical fish and pet supply shop renton",
-  "local dog and aquatic specialists renton wa",
-];
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 const testimonials = [
   {
@@ -280,6 +205,8 @@ export default function AboutPageClient() {
           </motion.div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="about" />
 
       {/* ─── OUR STORY / WELCOME SECTION ─── */}
       <section
@@ -647,11 +574,13 @@ export default function AboutPageClient() {
       </section>
 
   
+      <DynamicSemanticAccordion pageKey="about" />
 
       {/* ─── INSTAGRAM GALLERY ─── */}
       <div className="relative z-10">
         <InstagramGallery />
       </div>
+
     </main>
   );
 }

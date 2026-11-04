@@ -16,6 +16,8 @@ import {
   Wrench,
 } from "lucide-react";
 import servicesData from "@/data/services.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 export const metadata: Metadata = {
   title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
@@ -265,6 +267,8 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      <AeoDirectAnswerSnippet pageKey="services" />
+
       {/* ── Intro Section ── */}
       <section className="container mx-auto px-6 max-w-5xl pt-10 pb-4 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-[#edf6fc] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#005AA9] mb-4 shadow-2xs">
@@ -366,6 +370,8 @@ export default function ServicesPage() {
           })}
         </div>
       </section>
+
+      <DynamicSemanticAccordion pageKey="services" />
     </main>
   );
 }

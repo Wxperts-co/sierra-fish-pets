@@ -6,6 +6,8 @@ import BlogHero from "./BlogHero";
 import BlogGrid from "./BlogGrid";
 import { BlogItem } from "./BlogCard";
 import SoroBlogWidget from "./SoroBlogWidget";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 interface BlogsContainerProps {
   initialCategory?: string;
@@ -93,6 +95,8 @@ export default function BlogsContainer({ initialCategory, posts: propPosts }: Bl
         ]}
       />
 
+      <AeoDirectAnswerSnippet pageKey={activeCategory === "all" ? "blogs" : `/blogs/category/${activeCategory}`} />
+
       {/* Articles list with sidebar filter widgets */}
       <BlogGrid
         posts={posts}
@@ -104,6 +108,7 @@ export default function BlogsContainer({ initialCategory, posts: propPosts }: Bl
       <div className="container mx-auto px-4 pb-12">
         <SoroBlogWidget />
       </div>
+      <DynamicSemanticAccordion pageKey={activeCategory === "all" ? "blogs" : `/blogs/category/${activeCategory}`} />
     </main>
   );
 }

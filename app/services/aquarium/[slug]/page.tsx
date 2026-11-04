@@ -18,6 +18,8 @@ import {
   Handshake,
 } from "lucide-react";
 import servicesData from "@/data/services.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────
 interface ServiceItem {
@@ -124,6 +126,8 @@ export default async function ServiceDetailPage({
             </svg>
           </div>
         </section>
+
+        <AeoDirectAnswerSnippet pageKey={`/services/aquarium/${slug}`} />
 
         {/* ─── Our Process Section ─── */}
         <section className="relative py-20 bg-gradient-to-b from-[#eaf5ff] to-[#f4faff] text-slate-800 overflow-hidden border-b border-blue-100/50">
@@ -489,6 +493,7 @@ export default async function ServiceDetailPage({
           </div>
         </section>
 
+        <DynamicSemanticAccordion pageKey={`/services/aquarium/${slug}`} />
       </main>
     </>
   );

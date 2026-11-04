@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 
 import rawFaqData from "@/data/faq.json";
+import AeoDirectAnswerSnippet from "@/components/common/AeoDirectAnswerSnippet";
+import DynamicSemanticAccordion from "@/components/common/DynamicSemanticAccordion";
 
 interface FaqItem {
   id: string;
@@ -151,6 +153,8 @@ export default function FaqClient() {
           </motion.div>
         </div>
       </section>
+
+      <AeoDirectAnswerSnippet pageKey="faq" />
 
       {/* ─── HIGHLIGHT STATS STRIP ─── */}
       <section className="bg-[#005AA9] text-white shadow-inner">
@@ -391,6 +395,8 @@ export default function FaqClient() {
           
         </div>
       </section>
+
+      <DynamicSemanticAccordion pageKey="faq" />
     </main>
   );
 }
