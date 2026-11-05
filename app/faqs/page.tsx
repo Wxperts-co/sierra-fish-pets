@@ -1,6 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
-import FaqClient from "@/components/faq/FaqClient";
+import FaqClient from "@/components/faqs/FaqClient";
 import faqData from "@/data/faq.json";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "pet supplies renton wa",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/faq",
+    canonical: "https://sierrafishandpets.com/faqs",
   },
   robots: {
     index: true,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
     description:
       "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/faq",
+    url: "https://sierrafishandpets.com/faqs",
     siteName: "Sierra Fish & Pets",
     images: [
       {
@@ -62,8 +62,8 @@ export default function FaqPage() {
     "@graph": [
       {
         "@type": ["FAQPage", "WebPage"],
-        "@id": "https://sierrafishandpets.com/faq#webpage",
-        url: "https://sierrafishandpets.com/faq",
+        "@id": "https://sierrafishandpets.com/faqs#webpage",
+        url: "https://sierrafishandpets.com/faqs",
         name: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
         description:
           "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
@@ -86,7 +86,7 @@ export default function FaqPage() {
               "@type": "ListItem",
               position: 2,
               name: "FAQs",
-              item: "https://sierrafishandpets.com/faq",
+              item: "https://sierrafishandpets.com/faqs",
             },
           ],
         },

@@ -420,8 +420,8 @@
       "content": "Sierra Fish & Pets showcases documented customer success stories, detailing how bespoke web development and strategic digital planning elevate the online presence of pet retail businesses. These case studies highlight the measurable impact of customized, high-performance digital solutions on long-term brand growth and customer engagement within the industry."
     }
   },
-  "faq": {
-    "page": "faq",
+  "faqs": {
+    "page": "faqs",
     "semanticKeynotes": {
       "User Intent Alignment": "The page functions as a customer-support bridge, addressing transactional and navigational intent regarding pet availability, specialized aquatic services, and store operations.",
       "Core Value Proposition": "Sierra Fish & Pets positions itself as a local authority in aquatic maintenance and healthy pet sourcing, prioritizing animal welfare and hands-on professional expertise over generic retail.",
@@ -463,7 +463,7 @@
       ]
     },
     "frontLoadedAeoDirectAnswerSnippet": {
-      "title": "Sierra Fish & Pets FAQ - Aquarium Care, Livestock & Pet Guidance",
+      "title": "Sierra Fish & Pets FAQ's - Aquarium Care, Livestock & Pet Guidance",
       "content": "Sierra Fish & Pets in Folsom, California, provides professional guidance on aquarium maintenance, freshwater and saltwater fish care, and high-quality pet supplies. We assist pet owners with specialized water testing, livestock health, and equipment setup to ensure a thriving environment for all aquatic and household pets."
     }
   },

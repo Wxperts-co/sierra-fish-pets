@@ -154,7 +154,7 @@ export default function FaqClient() {
         </div>
       </section>
 
-      <AeoDirectAnswerSnippet pageKey="faq" />
+      <AeoDirectAnswerSnippet pageKey="faqs" />
 
       {/* ─── HIGHLIGHT STATS STRIP ─── */}
       <section className="bg-[#005AA9] text-white shadow-inner">
@@ -396,7 +396,7 @@ export default function FaqClient() {
         </div>
       </section>
 
-      <DynamicSemanticAccordion pageKey="faq" />
+      <DynamicSemanticAccordion pageKey="faqs" />
     </main>
   );
 }

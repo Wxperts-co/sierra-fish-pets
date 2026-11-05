@@ -186,7 +186,7 @@ export default function Header() {
   const isCustomerStories =
     pathname === "/customer-stories" ||
     (pathname ? pathname.startsWith("/customer-stories/") : false);
-  const isFaq = pathname === "/faq" || (pathname ? pathname.startsWith("/faq") : false);
+  const isFaq = pathname === "/faqs" || (pathname ? pathname.startsWith("/faqs") : false);
   const isServiceAreas =
     pathname === "/service-areas" ||
     (pathname ? pathname.startsWith("/service-areas/") : false);
