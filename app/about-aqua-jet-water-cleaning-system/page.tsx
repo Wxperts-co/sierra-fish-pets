@@ -96,6 +96,8 @@ export default function AquaJetSystemPage() {
           "price": "150.00",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
+          "url": "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+          "priceValidUntil": "2027-12-31",
           "seller": {
             "@type": "PetStore",
             "name": "Sierra Fish & Pets",
@@ -109,6 +111,11 @@ export default function AquaJetSystemPage() {
               "addressCountry": "US"
             }
           }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "84"
         }
       }
     ]
