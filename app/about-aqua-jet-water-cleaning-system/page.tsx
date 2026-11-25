@@ -93,6 +93,7 @@ export default function AquaJetSystemPage() {
         },
         "offers": {
           "@type": "Offer",
+          "price": "150.00",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
           "seller": {

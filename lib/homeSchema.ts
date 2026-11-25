@@ -63,7 +63,7 @@ export const homeStructuredData = {
         }
       ],
       "hasMap": "https://maps.app.goo.gl/48Q7dQBbespuFhX27",
-      "about": [
+      "knowsAbout": [
         {
           "@type": "Thing",
           "name": "Custom Aquarium Design, Installation & Maintenance",

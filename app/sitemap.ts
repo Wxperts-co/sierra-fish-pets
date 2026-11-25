@@ -6,7 +6,7 @@ import sierraEduData from "@/data/sierraedu.json";
 import { SERVICE_AREAS } from "@/data/serviceAreas";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.sierrafishandpets.com";
 
   // 1. Core Static Pages
   const staticPages: MetadataRoute.Sitemap = [
