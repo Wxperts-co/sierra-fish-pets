@@ -29,7 +29,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.sierrafishandpets.com";
   const canonicalUrl = `${baseUrl}/blogs/${post.slug}`;
   const rawTitle = post.seo?.title || post.title;
   const brandSuffix = " | Sierra Fish & Pets";
@@ -207,7 +207,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostProps) {
   // Format category name for tag layout
   const categoryHeader = [post.category, ...post.tags.slice(0, 2)].join(", ").toUpperCase();
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.sierrafishandpets.com";
   const canonicalUrl = `${baseUrl}/blogs/${post.slug}`;
   const fullImageUrl = post.coverImage
     ? (post.coverImage.startsWith("http") ? post.coverImage : `${baseUrl}${post.coverImage}`)

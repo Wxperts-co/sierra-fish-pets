@@ -2,38 +2,47 @@ export const homeStructuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": ["WebSite"],
-      "@id": "https://sierrafishandpets.com/#website",
-      "url": "https://sierrafishandpets.com",
+      "@type": "WebSite",
+      "@id": "https://www.sierrafishandpets.com/#website",
+      "url": "https://www.sierrafishandpets.com/",
       "name": "Sierra Fish & Pets",
-      "description": "Renton's Premier Local Pet Store & Custom Aquarium Specialists Since 1972",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://sierrafishandpets.com/shop?search={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
+      "publisher": {
+        "@id": "https://www.sierrafishandpets.com/#localbusiness"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Wxperts Inc.",
+        "url": "https://www.wxperts.co"
       }
     },
     {
-      "@type": ["PetStore", "LocalBusiness", "Store"],
-      "@id": "https://sierrafishandpets.com/#store",
-      "name": "Sierra Fish & Pets",
-      "alternateName": "Sierra Fish and Pets",
-      "url": "https://sierrafishandpets.com",
-      "logo": "https://sierrafishandpets.com/images/logo/sierra-logo.png",
-      "image": [
-        "https://sierrafishandpets.com/images/banner/shophero3.png",
-        "https://sierrafishandpets.com/images/banner/about2.png"
-      ],
-      "telephone": "+1-425-226-3215",
-      "priceRange": "$$",
-      "founder": {
-        "@type": "Person",
-        "name": "Mr. JONAS STERNBERG"
+      "@type": "WebPage",
+      "@id": "https://www.sierrafishandpets.com/#webpage",
+      "url": "https://www.sierrafishandpets.com/",
+      "name": "Sierra Fish & Pets | Renton Pet Store & Aquariums WA",
+      "description": "Shop premium pet supplies, tropical fish, dog & cat food, reptiles, and custom aquarium design & maintenance at Sierra Fish & Pets in Renton, WA.",
+      "isPartOf": {
+        "@id": "https://www.sierrafishandpets.com/#website"
       },
-      "foundingDate": "1972",
+      "about": {
+        "@id": "https://www.sierrafishandpets.com/#localbusiness"
+      },
+      "mainEntity": {
+        "@id": "https://www.sierrafishandpets.com/#localbusiness"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Wxperts Inc.",
+        "url": "https://www.wxperts.co"
+      }
+    },
+    {
+      "@type": "PetStore",
+      "@id": "https://www.sierrafishandpets.com/#localbusiness",
+      "name": "Sierra Fish & Pets",
+      "description": "Renton's premier local pet store and custom aquarium specialist, proudly serving the community with premium pet supplies and expert aquatic services since 1972.",
+      "url": "https://www.sierrafishandpets.com/",
+      "image": "https://www.sierrafishandpets.com/",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "601 S Grady Way",
@@ -42,40 +51,74 @@ export const homeStructuredData = {
         "postalCode": "98057",
         "addressCountry": "US"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 47.4727,
-        "longitude": -122.2135
-      },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "11:00",
-          "closes": "19:00"
-        }
-      ],
-      "hasMap": "https://maps.app.goo.gl/48Q7dQBbespuFhX27",
       "knowsAbout": [
-        {
-          "@type": "Thing",
-          "name": "Custom Aquarium Design, Installation & Maintenance",
-          "description": "Professional residential and commercial custom aquariums, live fish, and maintenance services in Renton, WA."
-        },
-        {
-          "@type": "Thing",
-          "name": "Full-Line Pet Supplies",
-          "description": "Premium foods and care supplies for dogs, cats, birds, reptiles, and small animals."
-        }
-      ]
+        "Pet Supplies",
+        "Tropical Fish",
+        "Dog Food",
+        "Cat Food",
+        "Reptiles",
+        "Custom Aquarium Design",
+        "Aquarium Maintenance",
+        "Aquarium Installation",
+        "Pet Grooming Services"
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@sierrafishpetsrenton",
+        "https://www.instagram.com/sierraspetswa/",
+        "https://www.facebook.com/SierraFishandPets/",
+        "https://www.youtube.com/channel/UCniMRwcin9mKyM7AKFc8pwA",
+        "https://www.yelp.com/biz/sierra-fish-and-pets-renton"
+      ],
+      "areaServed": {
+        "@type": "City",
+        "name": "Renton"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Pet Supplies and Aquarium Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Aquarium Consulting & Design",
+              "description": "Custom aquarium design and consulting for homes and offices."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Aquarium Installation",
+              "description": "Professional aquarium setup and installation services."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Aqua Jet Water Cleaning System",
+              "description": "Advanced cleaning and maintenance solutions for aquariums."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Aquarium Water Testing",
+              "description": "In-store water testing for freshwater and saltwater setups."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Pet Nails and Wing Trim",
+              "description": "Grooming services including pet nail and wing trimming."
+            }
+          }
+        ]
+      }
     }
   ]
 };
-

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "sustainable aquarium renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/services/aquarium/aquarium-philosophy",
+    canonical: "https://www.sierrafishandpets.com/services/aquarium/aquarium-philosophy",
   },
 };
 

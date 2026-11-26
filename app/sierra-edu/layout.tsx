@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Learn pet care, aquarium setup, nutrition tips, and reptile habitat management with Sierra Edu educational guides from Sierra Fish & Pets in Renton, WA.",
   alternates: {
-    canonical: "https://sierrafishandpets.com/education",
+    canonical: "https://www.sierrafishandpets.com/education",
   },
   robots: {
     index: false,

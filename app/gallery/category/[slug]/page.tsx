@@ -87,7 +87,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalUrl = `https://sierrafishandpets.com/gallery/category/${slug}`;
+  const canonicalUrl = `https://www.sierrafishandpets.com/gallery/category/${slug}`;
   const config = GALLERY_CATEGORY_META[slug.toLowerCase()];
 
   if (config) {
@@ -103,13 +103,13 @@ export async function generateMetadata({
         description: config.description,
         url: canonicalUrl,
         siteName: "Sierra Fish & Pets",
-        images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+        images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
       },
       twitter: {
         card: "summary_large_image",
         title: config.title,
         description: config.description,
-        images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+        images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
       },
     };
   }
@@ -133,13 +133,13 @@ export async function generateMetadata({
       description: fallbackDesc,
       url: canonicalUrl,
       siteName: "Sierra Fish & Pets",
-      images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+      images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
     },
     twitter: {
       card: "summary_large_image",
       title: fallbackTitle,
       description: fallbackDesc,
-      images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+      images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
     },
   };
 }

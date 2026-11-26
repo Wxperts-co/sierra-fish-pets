@@ -18,17 +18,17 @@ export const metadata: Metadata = {
     "sierra fish and pets new arrivals",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/arrivals",
+    canonical: "https://www.sierrafishandpets.com/arrivals",
   },
   openGraph: {
     title: "New Pet & Live Fish Arrivals | Sierra Fish & Pets WA",
     description:
       "Check new weekly arrivals of freshwater & saltwater fish, exotic reptiles, birds, small pets, and quality supplies at Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/arrivals",
+    url: "https://www.sierrafishandpets.com/arrivals",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "New Arrivals - Sierra Fish & Pets",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "New Pet & Live Fish Arrivals | Sierra Fish & Pets WA",
     description:
       "Check new weekly arrivals of freshwater & saltwater fish, exotic reptiles, birds, small pets, and quality supplies at Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

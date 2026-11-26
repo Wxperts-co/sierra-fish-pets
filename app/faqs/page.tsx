@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "pet supplies renton wa",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/faqs",
+    canonical: "https://www.sierrafishandpets.com/faqs",
   },
   robots: {
     index: true,
@@ -34,11 +34,11 @@ export const metadata: Metadata = {
     title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
     description:
       "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/faqs",
+    url: "https://www.sierrafishandpets.com/faqs",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Frequently Asked Questions - Sierra Fish & Pets Renton, WA",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
     description:
       "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 
@@ -62,15 +62,15 @@ export default function FaqPage() {
     "@graph": [
       {
         "@type": ["FAQPage", "WebPage"],
-        "@id": "https://sierrafishandpets.com/faqs#webpage",
-        url: "https://sierrafishandpets.com/faqs",
+        "@id": "https://www.sierrafishandpets.com/faqs#webpage",
+        url: "https://www.sierrafishandpets.com/faqs",
         name: "Pet Store & Aquarium FAQ | Sierra Fish & Pets Renton",
         description:
           "Get answers to FAQs on pet supplies, freshwater & saltwater fish, custom aquariums, water testing, and store hours at Sierra Fish & Pets in Renton, WA.",
         isPartOf: {
           "@type": "WebSite",
-          "@id": "https://sierrafishandpets.com/#website",
-          url: "https://sierrafishandpets.com",
+          "@id": "https://www.sierrafishandpets.com/#website",
+          url: "https://www.sierrafishandpets.com",
           name: "Sierra Fish & Pets",
         },
         breadcrumb: {
@@ -80,13 +80,13 @@ export default function FaqPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://sierrafishandpets.com",
+              item: "https://www.sierrafishandpets.com",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "FAQs",
-              item: "https://sierrafishandpets.com/faqs",
+              item: "https://www.sierrafishandpets.com/faqs",
             },
           ],
         },
@@ -101,14 +101,14 @@ export default function FaqPage() {
       },
       {
         "@type": ["PetStore", "LocalBusiness", "Store"],
-        "@id": "https://sierrafishandpets.com/#store",
+        "@id": "https://www.sierrafishandpets.com/#store",
         name: "Sierra Fish & Pets",
         alternateName: "Sierra Fish and Pets",
-        url: "https://sierrafishandpets.com",
-        logo: "https://sierrafishandpets.com/images/logo/sierra-logo.png",
+        url: "https://www.sierrafishandpets.com",
+        logo: "https://www.sierrafishandpets.com/images/logo/sierra-logo.png",
         image: [
-          "https://sierrafishandpets.com/images/banner/shophero3.png",
-          "https://sierrafishandpets.com/images/banner/shophero5.png",
+          "https://www.sierrafishandpets.com/images/banner/shophero3.png",
+          "https://www.sierrafishandpets.com/images/banner/shophero5.png",
         ],
         telephone: "+1-425-226-3215",
         priceRange: "$$",

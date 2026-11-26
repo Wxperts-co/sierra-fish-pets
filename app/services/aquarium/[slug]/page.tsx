@@ -53,7 +53,7 @@ export async function generateMetadata({
     description: meta.description,
     keywords: meta.keywords,
     alternates: {
-      canonical: `https://sierrafishandpets.com/services/aquarium/${slug}`,
+      canonical: `https://www.sierrafishandpets.com/services/aquarium/${slug}`,
     },
   };
 }

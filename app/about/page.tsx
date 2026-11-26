@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "Aquariums Reptiles & Pet Supplies in Renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/about",
+    canonical: "https://www.sierrafishandpets.com/about",
   },
   robots: {
     index: true,
@@ -31,11 +31,11 @@ export const metadata: Metadata = {
     title: "About Sierra Fish & Pets | Renton Pet Store Since 1972",
     description:
       "Family-owned local pet store in Renton, WA since 1972. Explore premium freshwater & saltwater aquariums, reptiles, quality pet foods, and expert pet care.",
-    url: "https://sierrafishandpets.com/about",
+    url: "https://www.sierrafishandpets.com/about",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/about2.png",
+        url: "https://www.sierrafishandpets.com/images/banner/about2.png",
         width: 1200,
         height: 630,
         alt: "About Sierra Fish & Pets - Renton, WA",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "About Sierra Fish & Pets | Renton Pet Store Since 1972",
     description:
       "Since 1972, Sierra Fish & Pets has served Renton, WA with expert aquarium services, healthy pets, and high-quality pet supplies.",
-    images: ["https://sierrafishandpets.com/images/banner/about2.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/about2.png"],
   },
 };
 
@@ -59,15 +59,15 @@ export default function AboutPage() {
     "@graph": [
       {
         "@type": ["AboutPage", "WebPage"],
-        "@id": "https://sierrafishandpets.com/about#webpage",
-        url: "https://sierrafishandpets.com/about",
+        "@id": "https://www.sierrafishandpets.com/about#webpage",
+        url: "https://www.sierrafishandpets.com/about",
         name: "About Sierra Fish & Pets | Renton's Trusted Family-Owned Pet Store Since 1972",
         description:
           "Since 1972, trusted Sierra Fish and Pets in Renton, WA provides quality aquariums, reptiles, pet supplies, and expert aquarium maintenance services.",
         isPartOf: {
           "@type": "WebSite",
-          "@id": "https://sierrafishandpets.com/#website",
-          url: "https://sierrafishandpets.com",
+          "@id": "https://www.sierrafishandpets.com/#website",
+          url: "https://www.sierrafishandpets.com",
           name: "Sierra Fish & Pets",
         },
         breadcrumb: {
@@ -77,13 +77,13 @@ export default function AboutPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://sierrafishandpets.com",
+              item: "https://www.sierrafishandpets.com",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "About Us",
-              item: "https://sierrafishandpets.com/about",
+              item: "https://www.sierrafishandpets.com/about",
             },
           ],
         },
@@ -104,15 +104,15 @@ export default function AboutPage() {
       },
       {
         "@type": ["PetStore", "LocalBusiness", "Store"],
-        "@id": "https://sierrafishandpets.com/#store",
+        "@id": "https://www.sierrafishandpets.com/#store",
         name: "Sierra Fish & Pets",
         alternateName: "Sierra Fish and Pets",
-        url: "https://sierrafishandpets.com",
-        logo: "https://sierrafishandpets.com/images/logo/sierra-logo.png",
+        url: "https://www.sierrafishandpets.com",
+        logo: "https://www.sierrafishandpets.com/images/logo/sierra-logo.png",
         image: [
-          "https://sierrafishandpets.com/images/banner/about2.png",
-          "https://sierrafishandpets.com/images/banner/about4.png",
-          "https://sierrafishandpets.com/images/banner/shophero3.png",
+          "https://www.sierrafishandpets.com/images/banner/about2.png",
+          "https://www.sierrafishandpets.com/images/banner/about4.png",
+          "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         ],
         telephone: "+1-425-226-3215",
         priceRange: "$$",

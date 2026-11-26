@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     "pet supply gift voucher",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/gift-cards",
+    canonical: "https://www.sierrafishandpets.com/gift-cards",
   },
   openGraph: {
     title: "Gift Cards: Digital & Physical | Sierra Fish & Pets Renton",
     description:
       "Buy digital e-gift cards and traditional mail gift cards for pet lovers, fish hobbyists, and aquarium setups at Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/gift-cards",
+    url: "https://www.sierrafishandpets.com/gift-cards",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Gift Cards - Sierra Fish & Pets",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Gift Cards: Digital & Physical | Sierra Fish & Pets Renton",
     description:
       "Buy digital e-gift cards and traditional mail gift cards for pet lovers, fish hobbyists, and aquarium setups at Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

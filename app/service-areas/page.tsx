@@ -9,13 +9,13 @@ export const metadata: Metadata = {
   keywords:
     "service areas Sierra Fish and Pets, King County pet shop, Kent WA pet supplies, Bellevue WA aquarium accessories, Seattle WA fish store, Tukwila WA pet food, SeaTac WA puppy supplies, Covington WA pet store, Newcastle WA dog supplies, Des Moines WA aquariums, Maple Valley WA pet food",
   alternates: {
-    canonical: "https://sierrafishandpets.com/service-areas",
+    canonical: "https://www.sierrafishandpets.com/service-areas",
   },
   openGraph: {
     title: "Service Areas & Pet Supply Locations | Sierra Fish & Pets",
     description:
       "Explore communities served by Sierra Fish & Pets across King County, WA including Kent, Tukwila, SeaTac, Covington, Newcastle, Bellevue, Seattle, Des Moines, and Maple Valley.",
-    url: "https://sierrafishandpets.com/service-areas",
+    url: "https://www.sierrafishandpets.com/service-areas",
     siteName: "Sierra Fish & Pets",
     locale: "en_US",
     type: "website",

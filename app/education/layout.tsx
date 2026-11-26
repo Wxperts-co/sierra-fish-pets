@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     "sierra fish and pets education",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/education",
+    canonical: "https://www.sierrafishandpets.com/education",
   },
   openGraph: {
     title: "Sierra Edu: Pet Care Guides & Tips | Sierra Fish & Pets",
     description:
       "Learn pet care, aquarium setup, nutrition tips, and reptile habitat management with Sierra Edu educational guides from Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/education",
+    url: "https://www.sierrafishandpets.com/education",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Sierra Edu - Sierra Fish & Pets",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Sierra Edu: Pet Care Guides & Tips | Sierra Fish & Pets",
     description:
       "Learn pet care, aquarium setup, nutrition tips, and reptile habitat management with Sierra Edu educational guides from Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

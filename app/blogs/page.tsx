@@ -16,17 +16,17 @@ export const metadata: Metadata = {
     "sierra fish and pets blog",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/blogs",
+    canonical: "https://www.sierrafishandpets.com/blogs",
   },
   openGraph: {
     title: "Pet & Aquarium Care Blog | Sierra Fish & Pets",
     description:
       "Expert pet care guides, aquarium tips, fish keeping advice, and reptile nutrition articles from Pacific Northwest specialists at Sierra Fish & Pets.",
-    url: "https://sierrafishandpets.com/blogs",
+    url: "https://www.sierrafishandpets.com/blogs",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Pet & Aquarium Care Blog - Sierra Fish & Pets",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Pet & Aquarium Care Blog | Sierra Fish & Pets",
     description:
       "Expert pet care guides, aquarium tips, fish keeping advice, and reptile nutrition articles from Pacific Northwest specialists at Sierra Fish & Pets.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     "pet store discounts renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/coupons",
+    canonical: "https://www.sierrafishandpets.com/coupons",
   },
   openGraph: {
     title: "Pet Coupons & Special Deals | Sierra Fish & Pets Renton",
     description:
       "Save on pet supplies, dog & cat food, aquarium tanks, and reptile care with exclusive online and in-store coupons from Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/coupons",
+    url: "https://www.sierrafishandpets.com/coupons",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Coupons & Deals - Sierra Fish & Pets",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Pet Coupons & Special Deals | Sierra Fish & Pets Renton",
     description:
       "Save on pet supplies, dog & cat food, aquarium tanks, and reptile care with exclusive online and in-store coupons from Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

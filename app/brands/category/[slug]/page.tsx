@@ -91,7 +91,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalUrl = `https://sierrafishandpets.com/brands/category/${slug}`;
+  const canonicalUrl = `https://www.sierrafishandpets.com/brands/category/${slug}`;
 
   const customMeta = CATEGORY_METADATA[slug];
   if (customMeta) {
@@ -107,7 +107,7 @@ export async function generateMetadata({
         description: customMeta.description,
         url: canonicalUrl,
         siteName: "Sierra Fish & Pets",
-        images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+        images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
       },
     };
   }

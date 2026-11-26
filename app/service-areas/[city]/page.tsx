@@ -25,7 +25,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sierrafishandpets.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.sierrafishandpets.com";
   const canonicalUrl = `${baseUrl}/service-areas/${area.slug}`;
 
   return {

@@ -33,17 +33,17 @@ export const metadata: Metadata = {
     "aquarium maintenance services renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/services",
+    canonical: "https://www.sierrafishandpets.com/services",
   },
   openGraph: {
     title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
     description:
       "Expert pet & aquarium services in Renton, WA: custom aquarium design, setup, water testing, pet nail trims & adoption events at Sierra Fish & Pets.",
-    url: "https://sierrafishandpets.com/services",
+    url: "https://www.sierrafishandpets.com/services",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Professional Pet & Aquarium Services - Sierra Fish & Pets",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: "Professional Pet & Aquarium Services | Sierra Fish & Pets",
     description:
       "Expert pet & aquarium services in Renton, WA: custom aquarium design, setup, water testing, pet nail trims & adoption events at Sierra Fish & Pets.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 
@@ -157,13 +157,13 @@ export default function ServicesPage() {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://sierrafishandpets.com"
+            "item": "https://www.sierrafishandpets.com"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Services",
-            "item": "https://sierrafishandpets.com/services"
+            "item": "https://www.sierrafishandpets.com/services"
           }
         ]
       },
@@ -173,7 +173,7 @@ export default function ServicesPage() {
         "provider": {
           "@type": "PetStore",
           "name": "Sierra Fish & Pets",
-          "url": "https://sierrafishandpets.com",
+          "url": "https://www.sierrafishandpets.com",
           "telephone": "+1-425-226-3215",
           "address": {
             "@type": "PostalAddress",
@@ -197,7 +197,7 @@ export default function ServicesPage() {
               "@type": "Service",
               "name": s.name,
               "description": s.shortDescription || s.description,
-              "url": `https://sierrafishandpets.com/services/${s.slug}`
+              "url": `https://www.sierrafishandpets.com/services/${s.slug}`
             }
           }))
         }

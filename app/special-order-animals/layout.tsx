@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     "special order tropical fish",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/special-order-animals",
+    canonical: "https://www.sierrafishandpets.com/special-order-animals",
   },
   openGraph: {
     title: "Special Order Pets & Rare Fish | Sierra Fish & Pets",
     description:
       "Special order rare freshwater & saltwater fish, exotic reptiles, and birds in Renton, WA with custom sourcing and healthy arrivals at Sierra Fish & Pets.",
-    url: "https://sierrafishandpets.com/special-order-animals",
+    url: "https://www.sierrafishandpets.com/special-order-animals",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/services/s1.png",
+        url: "https://www.sierrafishandpets.com/images/services/s1.png",
         width: 1200,
         height: 630,
         alt: "Special Order Pets & Rare Fish - Sierra Fish & Pets",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Special Order Pets & Rare Fish | Sierra Fish & Pets",
     description:
       "Special order rare freshwater & saltwater fish, exotic reptiles, and birds in Renton, WA with custom sourcing and healthy arrivals at Sierra Fish & Pets.",
-    images: ["https://sierrafishandpets.com/images/services/s1.png"],
+    images: ["https://www.sierrafishandpets.com/images/services/s1.png"],
   },
 };
 
@@ -57,19 +57,19 @@ export default function SpecialOrderAnimalsLayout({
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://sierrafishandpets.com"
+            "item": "https://www.sierrafishandpets.com"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Services",
-            "item": "https://sierrafishandpets.com/services"
+            "item": "https://www.sierrafishandpets.com/services"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Special Order Pets",
-            "item": "https://sierrafishandpets.com/special-order-animals"
+            "item": "https://www.sierrafishandpets.com/special-order-animals"
           }
         ]
       },
@@ -79,7 +79,7 @@ export default function SpecialOrderAnimalsLayout({
         "provider": {
           "@type": "PetStore",
           "name": "Sierra Fish & Pets",
-          "url": "https://sierrafishandpets.com",
+          "url": "https://www.sierrafishandpets.com",
           "telephone": "+1-425-226-3215",
           "address": {
             "@type": "PostalAddress",

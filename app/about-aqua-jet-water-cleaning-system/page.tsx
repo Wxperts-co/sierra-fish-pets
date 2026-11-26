@@ -27,17 +27,17 @@ export const metadata: Metadata = {
     "aquarium maintenance renton wa",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+    canonical: "https://www.sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
   },
   openGraph: {
     title: "Aqua Jet Water Cleaning System | Sierra Fish & Pets",
     description:
       "The Sierra Aqua Jet faucet-connected water changer and gravel cleaner eliminates heavy bucket lifting for effortless aquarium maintenance in Renton, WA.",
-    url: "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+    url: "https://www.sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/services/s1.png",
+        url: "https://www.sierrafishandpets.com/images/services/s1.png",
         width: 1200,
         height: 630,
         alt: "Aqua Jet Water Cleaning System - Sierra Fish & Pets",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: "Aqua Jet Water Cleaning System | Sierra Fish & Pets",
     description:
       "The Sierra Aqua Jet faucet-connected water changer and gravel cleaner eliminates heavy bucket lifting for effortless aquarium maintenance in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/services/s1.png"],
+    images: ["https://www.sierrafishandpets.com/images/services/s1.png"],
   },
 };
 
@@ -66,26 +66,26 @@ export default function AquaJetSystemPage() {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://sierrafishandpets.com"
+            "item": "https://www.sierrafishandpets.com"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Services",
-            "item": "https://sierrafishandpets.com/services"
+            "item": "https://www.sierrafishandpets.com/services"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Aqua Jet Water Cleaning System",
-            "item": "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system"
+            "item": "https://www.sierrafishandpets.com/about-aqua-jet-water-cleaning-system"
           }
         ]
       },
       {
         "@type": "Product",
         "name": "Sierra Aqua Jet Water Cleaning System",
-        "image": "https://sierrafishandpets.com/images/services/s1.png",
+        "image": "https://www.sierrafishandpets.com/images/services/s1.png",
         "description": "Effortless faucet-connected aquarium water changing and gravel cleaning system eliminating heavy bucket lifting.",
         "brand": {
           "@type": "Brand",
@@ -96,7 +96,7 @@ export default function AquaJetSystemPage() {
           "price": "150.00",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock",
-          "url": "https://sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
+          "url": "https://www.sierrafishandpets.com/about-aqua-jet-water-cleaning-system",
           "priceValidUntil": "2027-12-31",
           "seller": {
             "@type": "PetStore",

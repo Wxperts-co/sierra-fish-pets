@@ -13,17 +13,17 @@ export const metadata: Metadata = {
     "pet food supplies Seattle WA",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/gallery",
+    canonical: "https://www.sierrafishandpets.com/gallery",
   },
   openGraph: {
     title: "Gallery Pet Shop Seattle WA | Sierra Fish & Pets",
     description:
       "Sierra Fish and Pets invites Seattle families to explore their vibrant store gallery displaying healthy animals, custom aquariums, and quality supplies.",
-    url: "https://sierrafishandpets.com/gallery",
+    url: "https://www.sierrafishandpets.com/gallery",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Photo Gallery - Sierra Fish & Pets",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "Gallery Pet Shop Seattle WA | Sierra Fish & Pets",
     description:
       "Sierra Fish and Pets invites Seattle families to explore their vibrant store gallery displaying healthy animals, custom aquariums, and quality supplies.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

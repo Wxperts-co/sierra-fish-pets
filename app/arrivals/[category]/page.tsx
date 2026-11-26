@@ -134,7 +134,7 @@ export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
-  const canonicalUrl = `https://sierrafishandpets.com/arrivals/${category}`;
+  const canonicalUrl = `https://www.sierrafishandpets.com/arrivals/${category}`;
   const config = CATEGORY_META_CONFIG[category.toLowerCase()];
 
   if (config) {
@@ -150,7 +150,7 @@ export async function generateMetadata({
         description: config.description,
         url: canonicalUrl,
         siteName: "Sierra Fish & Pets",
-        images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+        images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
       },
     };
   }
@@ -174,7 +174,7 @@ export async function generateMetadata({
       description: fallbackDesc,
       url: canonicalUrl,
       siteName: "Sierra Fish & Pets",
-      images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+      images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
     },
   };
 }

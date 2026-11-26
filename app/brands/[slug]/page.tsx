@@ -52,15 +52,15 @@ export async function generateMetadata({
       "sierra fish and pets brands",
     ],
     alternates: {
-      canonical: `https://sierrafishandpets.com/brands/${slug}`,
+      canonical: `https://www.sierrafishandpets.com/brands/${slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://sierrafishandpets.com/brands/${slug}`,
+      url: `https://www.sierrafishandpets.com/brands/${slug}`,
       siteName: "Sierra Fish & Pets",
       images: [
-        brand.logo || "https://sierrafishandpets.com/images/banner/shophero3.png",
+        brand.logo || "https://www.sierrafishandpets.com/images/banner/shophero3.png",
       ],
     },
   };

@@ -247,12 +247,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalUrl = `https://sierrafishandpets.com/education/${slug}`;
+  const canonicalUrl = `https://www.sierrafishandpets.com/education/${slug}`;
 
   const exactMeta = EDUCATION_EXACT_META[slug.toLowerCase()];
   if (exactMeta) {
     const item = (eduData as any[]).find((e) => e.slug === slug);
-    const coverImage = item?.coverImage || "https://sierrafishandpets.com/images/banner/shophero3.png";
+    const coverImage = item?.coverImage || "https://www.sierrafishandpets.com/images/banner/shophero3.png";
     return {
       title: exactMeta.title,
       description: exactMeta.description,
@@ -319,7 +319,7 @@ export async function generateMetadata({
       url: canonicalUrl,
       siteName: "Sierra Fish & Pets",
       images: [
-        item.coverImage || "https://sierrafishandpets.com/images/banner/shophero3.png",
+        item.coverImage || "https://www.sierrafishandpets.com/images/banner/shophero3.png",
       ],
     },
     twitter: {
@@ -327,7 +327,7 @@ export async function generateMetadata({
       title,
       description,
       images: [
-        item.coverImage || "https://sierrafishandpets.com/images/banner/shophero3.png",
+        item.coverImage || "https://www.sierrafishandpets.com/images/banner/shophero3.png",
       ],
     },
   };

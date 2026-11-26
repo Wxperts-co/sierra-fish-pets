@@ -14,17 +14,17 @@ export const metadata: Metadata = {
     "pet deals renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/flyers",
+    canonical: "https://www.sierrafishandpets.com/flyers",
   },
   openGraph: {
     title: "Weekly Pet Store Flyers & Deals | Sierra Fish & Pets",
     description:
       "View weekly flyers, discounts, and sales on pet supplies, fish food, aquariums, and accessories at Sierra Fish & Pets in Renton, WA.",
-    url: "https://sierrafishandpets.com/flyers",
+    url: "https://www.sierrafishandpets.com/flyers",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Weekly Flyers & Specials - Sierra Fish & Pets",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Weekly Pet Store Flyers & Deals | Sierra Fish & Pets",
     description:
       "View weekly flyers, discounts, and sales on pet supplies, fish food, aquariums, and accessories at Sierra Fish & Pets in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 

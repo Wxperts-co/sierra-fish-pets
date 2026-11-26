@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "pet adoption day renton",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/services/dog-adoption",
+    canonical: "https://www.sierrafishandpets.com/services/dog-adoption",
   },
 };
 

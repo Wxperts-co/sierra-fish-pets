@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "king county pet store testimonials",
   ],
   alternates: {
-    canonical: "https://sierrafishandpets.com/customer-stories",
+    canonical: "https://www.sierrafishandpets.com/customer-stories",
   },
   robots: {
     index: true,
@@ -34,11 +34,11 @@ export const metadata: Metadata = {
     title: "Customer Stories & Reviews | Sierra Fish & Pets Renton",
     description:
       "Explore heartfelt customer stories, aquarium setups, and verified Google reviews from our Sierra Fish & Pets community in Renton, WA.",
-    url: "https://sierrafishandpets.com/customer-stories",
+    url: "https://www.sierrafishandpets.com/customer-stories",
     siteName: "Sierra Fish & Pets",
     images: [
       {
-        url: "https://sierrafishandpets.com/images/banner/shophero3.png",
+        url: "https://www.sierrafishandpets.com/images/banner/shophero3.png",
         width: 1200,
         height: 630,
         alt: "Sierra Fish & Pets Customer Stories and Community Reviews",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title: "Customer Stories & Reviews | Sierra Fish & Pets Renton",
     description:
       "Explore heartfelt customer stories, aquarium setups, and verified Google reviews from our Sierra Fish & Pets community in Renton, WA.",
-    images: ["https://sierrafishandpets.com/images/banner/shophero3.png"],
+    images: ["https://www.sierrafishandpets.com/images/banner/shophero3.png"],
   },
 };
 
@@ -122,16 +122,16 @@ export default function CustomerStoriesPage() {
     "@graph": [
       {
         "@type": ["WebPage", "CollectionPage"],
-        "@id": "https://sierrafishandpets.com/customer-stories#webpage",
-        "url": "https://sierrafishandpets.com/customer-stories",
+        "@id": "https://www.sierrafishandpets.com/customer-stories#webpage",
+        "url": "https://www.sierrafishandpets.com/customer-stories",
         "name": "Customer Stories & Community Reviews | Sierra Fish & Pets",
         "description":
           "Explore heartfelt customer stories, real aquarium setups, and verified Google reviews from our Sierra Fish & Pets family in Renton, WA.",
         "isPartOf": {
           "@type": "WebSite",
-          "@id": "https://sierrafishandpets.com/#website",
+          "@id": "https://www.sierrafishandpets.com/#website",
           "name": "Sierra Fish & Pets",
-          "url": "https://sierrafishandpets.com",
+          "url": "https://www.sierrafishandpets.com",
         },
         "about": semanticKeynotes.map((kn) => ({
           "@type": "Thing",
@@ -145,11 +145,11 @@ export default function CustomerStoriesPage() {
       },
       {
         "@type": "PetStore",
-        "@id": "https://sierrafishandpets.com/#store",
+        "@id": "https://www.sierrafishandpets.com/#store",
         "name": "Sierra Fish & Pets",
-        "url": "https://sierrafishandpets.com",
-        "image": "https://sierrafishandpets.com/images/banner/shophero3.png",
-        "logo": "https://sierrafishandpets.com/images/logo/logo.png",
+        "url": "https://www.sierrafishandpets.com",
+        "image": "https://www.sierrafishandpets.com/images/banner/shophero3.png",
+        "logo": "https://www.sierrafishandpets.com/images/logo/logo.png",
         "telephone": "+1-425-226-3215",
         "priceRange": "$$",
         "address": {
@@ -197,19 +197,19 @@ export default function CustomerStoriesPage() {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://sierrafishandpets.com/customer-stories#breadcrumbs",
+        "@id": "https://www.sierrafishandpets.com/customer-stories#breadcrumbs",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://sierrafishandpets.com",
+            "item": "https://www.sierrafishandpets.com",
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Customer Stories",
-            "item": "https://sierrafishandpets.com/customer-stories",
+            "item": "https://www.sierrafishandpets.com/customer-stories",
           },
         ],
       },

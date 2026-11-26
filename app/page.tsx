@@ -21,6 +21,9 @@ const InstagramGallery = dynamic(() => import('@/components/Home/InstagramGaller
 const DynamicSemanticAccordion = dynamic(() => import('@/components/common/DynamicSemanticAccordion'))
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.sierrafishandpets.com",
+  },
   title: "Sierra Fish & Pets | Renton Pet Store & Aquariums WA",
   description: "Shop premium pet supplies, tropical fish, dog & cat food, reptiles, and custom aquarium design & maintenance at Sierra Fish & Pets in Renton, WA.",
   keywords: "sierra fish and pets, pet store renton wa, aquariums renton wa, tropical fish, pet supplies, dog food, cat food, aquarium maintenance, custom aquariums renton, freshwater fish, saltwater fish, reptile supplies, online pet store",
